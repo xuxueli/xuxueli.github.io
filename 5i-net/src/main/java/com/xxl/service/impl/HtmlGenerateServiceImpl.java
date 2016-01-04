@@ -115,6 +115,7 @@ public class HtmlGenerateServiceImpl implements IHtmlGenerateService {
 				HtmlTemplateUtil.generate(params, templatePathName, filePath + fileName + ".html");
 			}
 		} else {
+			params.put("pageNumAll", 0);
 			HtmlTemplateUtil.generate(params, templatePathName, filePath + index + ".html");
 		}
 	}

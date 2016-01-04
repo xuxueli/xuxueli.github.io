@@ -1,3 +1,5 @@
+<#include "/net/common/common.host.ftl" >
+<#import "/net/common/common.macro.ftl" as netCommon>
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,11 +7,10 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>我爱</title>
 	
-	<#include "/net/common/common.style.ftl">
-	<#import "/net/net.common.ftl" as netCommon>
+	<@netCommon.common_style />
 	
-	<script type="text/javascript" src="${base_url}js/common/requestParam.js"></script>
-	<script type="text/javascript" src="${base_url}js/email.activite.1.js"></script>
+	<script type="text/javascript" src="${host_url}/js/common/requestParam.js"></script>
+	<script type="text/javascript" src="${host_url}/js/email.activite.1.js"></script>
 	
 </head>
 <body>

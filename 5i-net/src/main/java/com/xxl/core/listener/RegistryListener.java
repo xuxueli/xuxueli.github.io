@@ -16,6 +16,7 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfig;
 import com.xxl.core.thread.EmailSendConsumerThread;
 import com.xxl.core.thread.EmailSendProductThread;
 import com.xxl.service.IEmailSendService;
+import com.xxl.service.ITriggerService;
 import com.xxl.service.ResourceBundle;
 import com.xxl.socketio.ListenerServer;
 
@@ -40,6 +41,7 @@ public class RegistryListener implements ServletContextListener {
 		resource.setFreemarkerConfig((FreeMarkerConfig) context.getBean("freemarkerConfig"));
 		resource.setJavaMailSender((JavaMailSender) context.getBean("javaMailSender"));
 		resource.setEmailSendService((IEmailSendService) context.getBean("emailSendService"));
+		resource.setTriggerService((ITriggerService) context.getBean("triggerService"));
 		
 		// 开启多线程
 		ExecutorService exec = Executors.newCachedThreadPool();
@@ -50,6 +52,9 @@ public class RegistryListener implements ServletContextListener {
 		
 		// netty-socketio 服务器启动
 		ListenerServer.server = new ListenerServer();
+		
+		// 全站静态化
+		resource.getTriggerService().generateNetHtml();
 		
 		logger.info("[5i net registry listener finished...]");
 	}

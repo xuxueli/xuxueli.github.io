@@ -3,8 +3,6 @@ package com.xxl.controller.resolver;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,6 +14,7 @@ import com.xxl.core.constant.CommonDic.CommonViewName;
 import com.xxl.core.constant.CommonDic.ReturnCodeEnum;
 import com.xxl.core.exception.WebException;
 import com.xxl.core.result.ReturnT;
+import com.xxl.core.util.JacksonUtil;
 
 /**
  * 异常解析器
@@ -44,7 +43,11 @@ public class WebExceptionResolver implements HandlerExceptionResolver {
 		HandlerMethod method = (HandlerMethod)handler;
 		ResponseBody responseBody = method.getMethodAnnotation(ResponseBody.class);
 		if (responseBody != null) {
-			mv.addObject("result", JSONObject.fromObject(result).toString());
+			try {
+				mv.addObject("result", JacksonUtil.writeValueAsString(result));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			mv.setViewName(CommonViewName.COMMON_RESULT);
 		} else {
 			mv.addObject("exceptionMsg", result.getMsg());	

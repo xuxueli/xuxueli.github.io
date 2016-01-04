@@ -1,3 +1,5 @@
+<#include "/net/common/common.host.ftl" >
+<#import "/net/common/common.macro.ftl" as netCommon>
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,8 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>我爱</title>
 	
-	<#include "/net/common/common.style.ftl">
-	<#import "/net/net.common.ftl" as netCommon>
+	<@netCommon.common_style />
 
 </head>
 <body>
@@ -20,7 +21,7 @@
     
     	<!--左侧-->
     	
-        <div class="col-xs-8">
+        <div class="col-md-8">
         	<div class="well">
         		<div class="page-header">
 					<h4>${article.title}<small class="pull-right">${article.createTime?string('yyyy-MM-dd')}</small></h4>
@@ -30,7 +31,7 @@
         </div>
         
         <!--右侧-->
-		<div class="col-xs-4" >
+		<div class="col-md-4" >
 			<@netCommon.tips />
 		</div>
 		

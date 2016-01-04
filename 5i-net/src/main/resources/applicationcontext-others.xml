@@ -13,15 +13,11 @@
 	<bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">
 		<property name="config">
 			<bean class="com.google.code.kaptcha.util.Config">
-				<!--通过构造函数注入属性值 -->
 				<constructor-arg type="java.util.Properties">
 					<props>
-						<!-- 生成验证码内容范围 -->
-						<prop key="kaptcha.textproducer.char.string">10</prop>
-						<!-- 验证码个数 -->
-						<prop key="kaptcha.textproducer.char.length">1</prop>
-						<!-- 验证码文本字符间距 -->
-						<prop key="kaptcha.textproducer.char.space">10</prop>
+						<prop key="kaptcha.textproducer.char.string">10</prop>	<!-- 生成验证码内容范围 -->
+						<prop key="kaptcha.textproducer.char.length">1</prop>	<!-- 验证码个数 -->
+						<prop key="kaptcha.textproducer.char.space">10</prop>	<!-- 验证码文本字符间距 -->
 					</props>
 				</constructor-arg>
 			</bean>

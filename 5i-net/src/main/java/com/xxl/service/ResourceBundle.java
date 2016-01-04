@@ -18,6 +18,7 @@ public class ResourceBundle {
 	private FreeMarkerConfig freemarkerConfig;
 	private JavaMailSender javaMailSender;
 	private IEmailSendService emailSendService;
+	private ITriggerService triggerService;
 
 	public FreeMarkerConfig getFreemarkerConfig() {
 		return freemarkerConfig;
@@ -36,6 +37,12 @@ public class ResourceBundle {
 	}
 	public void setEmailSendService(IEmailSendService emailSendService) {
 		this.emailSendService = emailSendService;
+	}
+	public ITriggerService getTriggerService() {
+		return triggerService;
+	}
+	public void setTriggerService(ITriggerService triggerService) {
+		this.triggerService = triggerService;
 	}
 	
 }

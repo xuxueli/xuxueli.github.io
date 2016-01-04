@@ -9,12 +9,9 @@
            http://www.springframework.org/schema/util 
            http://www.springframework.org/schema/util/spring-util.xsd">
 
-	<!-- 启动Spring注解功能 -->
 	<context:annotation-config />
-	<!-- 配置bean作用域 -->
 	<context:component-scan base-package="com.xxl.service.impl, com.xxl.dao.impl" />
 
-	<!-- 加载多配置文件,占位符方式 -->
 	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="fileEncoding" value="utf-8" />
 		<property name="locations">
@@ -24,20 +21,20 @@
 			</list>
 		</property>
 	</bean>
-	
-	<!-- freeMarker配置文件 -->
-    <bean id="freemarkerPropertiesBean" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-        <property name="location" value="classpath:freemarker.properties" />
-    </bean>
-	<!-- FreeMarker配置 (用处：springMvc视图解析器/生成HTML文件/邮件模板.生成HTML字符串)  -->
+
 	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
-		<property name="freemarkerSettings" ref="freemarkerPropertiesBean" />	<!-- FreeMarker属性配置 -->
-		<property name="templateLoaderPath" value="/WEB-INF/template/" />		<!-- 模板文件所在目录 -->
-		<property name="freemarkerVariables">									<!-- FreeMarker全局变量 -->
+		<property name="freemarkerSettings">
 			<bean class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+				<property name="location" value="classpath:freemarker.properties" />
+			</bean>
+		</property>
+		<property name="templateLoaderPath" value="/WEB-INF/template/" />
+		<property name="freemarkerVariables">
+			<bean
+				class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 				<property name="location" value="classpath:freemarker.variables.properties" />
 			</bean>
-        </property> 
+		</property>
 	</bean>
 
 </beans>

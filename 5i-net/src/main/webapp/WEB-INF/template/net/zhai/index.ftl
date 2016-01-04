@@ -1,3 +1,5 @@
+<#include "/net/common/common.host.ftl" >
+<#import "/net/common/common.macro.ftl" as netCommon>
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,8 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>我爱</title>
 	
-	<#include "/net/common/common.style.ftl">
-	<#import "/net/net.common.ftl" as netCommon>
+	<@netCommon.common_style />
 
 </head>
 <body>
@@ -18,7 +19,7 @@
     <!--中央区域-->
     <div class="row">
     	<!--左侧-->
-        <div class="col-xs-8">
+        <div class="col-md-8">
         	<#if articleModule?exists>
         	<#list articleModule as module>
         	<div class="panel panel-default">
@@ -27,7 +28,7 @@
 					<#if module.children?exists>
 					<div class="row">
 					<#list module.children as group>
-		            	<div class="col-xs-3"><a href="${base_url}zhai/group/${group.menuId}.html">${group.name}</a></div>
+		            	<div class="col-md-3"><a href="${host_url}/zhai/group/${group.menuId}.html">${group.name}</a></div>
 		            </#list>
 		            </div>
 					</#if>
@@ -37,7 +38,7 @@
 			</#if>
         </div>
         <!--右侧-->
-		<div class="col-xs-4" >
+		<div class="col-md-4" >
 			<@netCommon.tips />
 		</div>
     </div>

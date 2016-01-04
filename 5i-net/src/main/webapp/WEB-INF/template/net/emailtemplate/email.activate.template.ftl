@@ -1,4 +1,6 @@
- <#assign toUrl="${base_url}safe/emailActivate.html?email=${userMain.email}&sendCode=${sendCode}">
+<#include "/net/common/common.host.ftl" >
+<#import "/net/common/common.macro.ftl" as netCommon>
+<#assign toUrl="${host_url}/safe/emailActivate.html?email=${userMain.email}&sendCode=${sendCode}">
 <html><head></head><body><p><strong>亲爱的《我爱》用户:</strong></p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;您正在操作您的《我爱》邮箱账号：<font color='red'>${userMain.email?if_exists}</font></p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;操作类型[<font color='red'>账号激活</font>]：<a href='${toUrl}' target="_blank" >确定</a>(请在72小时内完成)
