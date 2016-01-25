@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdminUserMapper">
+	
+	<resultMap id="AdminUser" type="com.xxl.core.model.main.AdminUser" >
+	    <id column="user_id" property="userId" jdbcType="INTEGER" />
+	    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+	    <result column="password" property="password" jdbcType="VARCHAR" />
+	    <result column="user_token" property="userToken" jdbcType="VARCHAR" />
+	    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		t.user_id,
+		t.user_name,
+		t.`password`,
+		t.user_token,
+		t.real_name
+	</sql>
+	
+	<select id="getByPwd"  parameterType="java.util.HashMap" resultMap="AdminUser">
+		SELECT	<include refid="Base_Column_List" />
+		FROM admin_user AS t
+		WHERE t.user_name = #{username, jdbcType=VARCHAR} and 
+			t.`password` = #{password, jdbcType=VARCHAR}
+	</select>
+	
+	<update id="modifyPwd" parameterType="java.util.HashMap" >
+		UPDATE admin_user SET `password` = #{newPwd, jdbcType=VARCHAR}
+		WHERE user_name = #{userName, jdbcType=VARCHAR} AND `password` = #{password, jdbcType=VARCHAR}
+	</update>
+
+	<select id="queryUser" parameterType="java.util.HashMap" resultMap="AdminUser" >
+		SELECT	<include refid="Base_Column_List" />
+		FROM admin_user AS t
+		<trim prefix="WHERE" prefixOverrides="and|or" >
+			<if test="userName != null and userName != '' ">
+				and t.user_name = #{userName, jdbcType=VARCHAR}
+			</if>
+			<if test="roleId > 0 ">
+				and EXISTS (
+					select t2.user_id
+					from admin_user_role t2 
+					where  t2.user_id = t.user_id
+						and t2.role_id = #{roleId}
+				)
+			</if>
+		</trim>
+		LIMIT #{offset, jdbcType=INTEGER}, #{pagesize, jdbcType=INTEGER}
+	</select>
+	<select id="queryUserCount" parameterType="java.util.HashMap" resultType="java.lang.Integer" >
+		SELECT	COUNT(1)
+		FROM admin_user AS t
+		<trim prefix="WHERE" prefixOverrides="and|or" >
+			<if test="userName != null and userName != '' ">
+				and t.user_name = #{userName, jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</select>
+	
+	<insert id="userAdd" parameterType="java.util.HashMap" keyProperty="userId" >
+		INSERT INTO admin_user(user_name, `password`)
+		VALUES (#{userName, jdbcType=VARCHAR}, #{password, jdbcType=VARCHAR} )
+	</insert>
+	
+	<delete id="userDel" parameterType="java.util.HashMap" >
+		DELETE FROM admin_user
+		WHERE user_id in
+		<foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
+	        #{item}
+	    </foreach>
+	</delete>
+
+	<update id="userUpdate" parameterType="java.util.HashMap">
+		UPDATE admin_user 
+		SET user_name = #{userName, jdbcType=VARCHAR},
+			`password` = #{password, jdbcType=VARCHAR}
+		WHERE user_id = #{userId, jdbcType=VARCHAR}
+	</update>
+	
+	<select id="getById" parameterType="java.lang.Integer" resultMap="AdminUser">
+		SELECT	<include refid="Base_Column_List" />
+		FROM admin_user AS t
+		WHERE t.user_id = #{userId, jdbcType=INTEGER}
+	</select>
+	
+	<delete id="userRoleAllDel" parameterType="java.util.HashMap" >
+		delete from admin_user_role 
+		where user_id in
+		<foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
+	        #{item}
+	    </foreach>
+	</delete>
+	
+	<insert id="userRoleAdd" parameterType="java.util.HashMap" >
+		INSERT INTO admin_user_role(user_id, role_id)
+		VALUES
+		<foreach collection="addRoldIds" item="item" index="index" separator="," >  
+        	(#{userId}, #{item})  
+    	</foreach>
+	</insert>
+	
+	<delete id="userRoleDel" parameterType="java.util.HashMap" >
+		DELETE FROM admin_user_role
+		WHERE user_id = #{userId} and 
+			role_id in
+			<foreach collection="delRoldIds" index="index" item="item" open="(" separator="," close=")">
+		        #{item}
+		    </foreach>
+	</delete>
+	
+</mapper>

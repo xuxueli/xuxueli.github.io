@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdminMenuMapper">
+	
+	<resultMap id="AdminMenu" type="com.xxl.core.model.main.AdminMenu" >
+	    <id column="menu_id" property="menuId" jdbcType="INTEGER" />
+	    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+	    <result column="order" property="order" jdbcType="INTEGER" />
+	    <result column="name" property="name" jdbcType="VARCHAR" />
+	    <result column="url" property="url" jdbcType="VARCHAR" />
+	    <result column="permession_num" property="permessionNum" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		t.menu_id,
+		t.parent_id,
+		t.`order`,
+		t.`name`,
+		t.url,
+		t.permession_num
+	</sql>
+	
+	<select id="getMyMenus" parameterType="java.util.HashMap" resultMap="AdminMenu">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM
+			admin_menu AS t
+		WHERE t.menu_id in (
+			SELECT 
+				menu_id 
+			FROM 
+				admin_role_menu 
+			WHERE role_id = #{roleId, jdbcType=INTEGER}
+		)
+		ORDER BY t.`order`
+	</select>
+	
+	<select id="getAllMenus" resultMap="AdminMenu">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM
+			admin_menu AS t
+		ORDER BY t.`order`
+	</select>
+	
+	<select id="getEffectParent" parameterType="java.util.HashMap" resultMap="AdminMenu">
+		SELECT <include refid="Base_Column_List" />
+		FROM admin_menu AS t
+		WHERE menu_id = #{parentId} 
+			and (
+				#{moduleId} = (	select parent_id from admin_menu where menu_id = #{parentId}	) 
+				or #{moduleId} = (	select parent_id from admin_menu where menu_id = (	
+					select parent_id from admin_menu where menu_id = #{parentId}	)	
+				)
+			)
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO admin_menu(parent_id, `order`, `name`, url, permession_num)
+		VALUES(#{parentId}, #{order}, #{name}, #{url}, #{permessionNum})
+	</insert>
+	
+	<delete id="menuDel" parameterType="java.lang.Integer" >
+		delete from admin_menu
+		where menu_id = #{menuId}
+	</delete>
+	
+	<select id="getSubMenus" parameterType="java.lang.Integer" resultMap="AdminMenu">
+		SELECT <include refid="Base_Column_List" />
+		FROM admin_menu t
+		where t.parent_id = #{menuId}
+	</select>
+	
+	<select id="ifRelRole" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+		select count(1) from admin_role_menu where menu_id = #{menuId}
+	</select>
+	
+	<update id="update">
+		UPDATE admin_menu
+		SET parent_id = #{parentId},
+			`order` = #{order},
+			`name` = #{name},
+			url = #{url},
+			permession_num = #{permessionNum}
+		WHERE menu_id = #{menuId}
+	</update>
+	
+</mapper>
