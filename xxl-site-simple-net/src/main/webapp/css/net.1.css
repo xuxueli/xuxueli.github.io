@@ -1,0 +1,27 @@
+@CHARSET "UTF-8";
+/** bootstrap-固定导航,内补 */
+body{padding-top: 50px;color:#000000;background-color:#ffffff;line-height:1.428571429;font-size:14px;font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;}
+/** bootstrap-主体,最大宽度 */
+.container{max-width:960px;}
+
+/* 导航栏.hover弹出 
+.navbar .nav > li .dropdown-menu {margin: 0;}
+.navbar .nav > li:hover .dropdown-menu {display: block;}
+*/
+
+/** 固定导航,高度 */
+.navbar {min-height: 40px;}
+.navbar-nav>li>a {padding-top: 10px;padding-bottom: 10px;}
+.navbar-toggle {margin-top: 10px;margin-bottom: 10px;}
+.navbar-brand {height: 40px;padding-top: 10px;}
+
+/* footer */
+.footer { margin-top:10px }
+.footer .info { float:left; margin-top:5px;width: 100%; }
+.footerlinks { padding:22px 0 18px; background:#3a3a3a; color:#969ba4 }
+.footerlinks ul { margin:0px; padding:0px; list-style:none }
+.footerlinks ul li { display:inline-block ;list-style:none}
+.footerlinks ul li:first-child a { padding-left:0px }
+.footerlinks ul li a { color:#969ba4; padding:5px 10px 5px 10px; }
+.footerlinks ul li a:hover { color:#f9f9f9 }
+.copyrightbottom {  padding:15px 0;background:#303030; color:#969ba4 }

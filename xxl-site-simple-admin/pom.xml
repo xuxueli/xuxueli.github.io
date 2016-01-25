@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.xxl</groupId>
-		<artifactId>xxl-site</artifactId>
+		<artifactId>xxl-site-simple</artifactId>
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>xxl-site-simple-admin</artifactId>

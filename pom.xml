@@ -2,13 +2,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.xxl</groupId>
-	<artifactId>xxl-site</artifactId>
+	<artifactId>xxl-site-simple</artifactId>
 	<version>1.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>xxl-site-admin</module>
-		<module>xxl-site-net</module>
+		<module>xxl-site-simple-admin</module>
+		<module>xxl-site-simple-net</module>
 	</modules>
 
 	<properties>
