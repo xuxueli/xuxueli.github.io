@@ -66,7 +66,7 @@ $(function(){
 	// query
 	$("#search").click(function(){
 		if ($("#queryForm").form('validate')) {
-			var url = 'wallQuery.do?' + encodeURI( $("#queryForm").serialize() );
+			var url = 'wallQuery?' + encodeURI( $("#queryForm").serialize() );
 			$("#dg").datagrid("load", url);
 		}
 	});
@@ -90,7 +90,7 @@ $(function(){
 		}
 		
 		$.ajax({
-	    	url : 'wallAdd.do',
+	    	url : 'wallAdd',
 		    type : 'post',
 		    async : true,
 		    data : $("#addForm").serialize(),
@@ -137,7 +137,7 @@ $(function(){
 		$.messager.confirm('确认对话框', '您确定要删除选中项？', function(r){
 			if (r){
 				$.ajax({
-			    	url : 'wallDel.do',
+			    	url : 'wallDel',
 				    type : 'post',
 				    async : true,
 				    data : {
@@ -189,7 +189,7 @@ $(function(){
 		}
 		
 		$.ajax({
-	    	url : 'wallUpdate.do',
+	    	url : 'wallUpdate',
 		    type : 'post',
 		    async : true,
 		    data : $("#editForm").serialize(),

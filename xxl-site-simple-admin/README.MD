@@ -5,15 +5,15 @@
 -----------------------------------------------
 ---通用---
 后台权限管理
-后台用户管理:1000100:userPermission/userMain.do
-后台角色管理:1000200:userPermission/roleMain.do
-后台菜单管理:1000300:userPermission/menuMain.do
+后台用户管理:1000100:userPermission/userMain
+后台角色管理:1000200:userPermission/roleMain
+后台菜单管理:1000300:userPermission/menuMain
 ---官网---
 文章管理
-文章菜单管理:1000400:article/articleMenuMain.do
-文章内容管理:1000500:article/articleMain.do
+文章菜单管理:1000400:article/articleMenuMain
+文章内容管理:1000500:article/articleMain
 一面墙管理
-一面墙内容管理:1000600:wall/wallMain.do
+一面墙内容管理:1000600:wall/wallMain
 ---内嵌---
 
 -----------------------------------------------

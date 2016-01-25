@@ -5,8 +5,6 @@
 	<title>登陆后台</title>
 	<#include "./common/common.param.ftl">
 	<#include "./common/common.style.ftl">
-	<script type="text/javascript" src="${request.contextPath}/static/js/login.1.js"></script>
-	
 </head>
 <body style="background:url(static/images/login_bg.jpg) repeat top center;" >
 
@@ -55,4 +53,6 @@
 	</div>
 	
 </body>
+<script>var base_url="${request.contextPath}/";</script>
+<script type="text/javascript" src="${request.contextPath}/static/js/login.1.js"></script>
 </html>

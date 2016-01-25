@@ -32,34 +32,34 @@ public class ArticleController {
 	private IArticleService articleService;
 	
 	//-----------------------文章菜单相关-----------------------
-	@RequestMapping("/articleMenuMain.do")
+	@RequestMapping("/articleMenuMain")
 	@PermessionType(permessionNum = 1000400)
 	public String articleMenuMain() {
 		return "article/article.menu.main";
 	}
 	
-	@RequestMapping("/articleMenuQuery.do")
+	@RequestMapping("/articleMenuQuery")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000400)
 	public List<ArticleMenu> articleMenuQuery() {
 		return articleService.articleMenuQuery();
 	}
 	
-	@RequestMapping("/articleMenuAdd.do")
+	@RequestMapping("/articleMenuAdd")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000400)
 	public ReturnT<Integer> articleMenuAdd(ArticleMenu menu) {
 		return articleService.articleMenuAdd(menu);
 	}
 	
-	@RequestMapping("/articleMenuDel.do")
+	@RequestMapping("/articleMenuDel")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000400)
 	public ReturnT<Integer> articleMenuDel(int menuId) {
 		return articleService.articleMenuDel(menuId);
 	}
 	
-	@RequestMapping("/articleMenuUpdate.do")
+	@RequestMapping("/articleMenuUpdate")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000400)
 	public ReturnT<Integer> articleMenuUpdate(ArticleMenu menu) {
@@ -67,7 +67,7 @@ public class ArticleController {
 	}
 	
 	//-----------------------文章相关-----------------------
-	@RequestMapping("/articleMain.do")
+	@RequestMapping("/articleMain")
 	@PermessionType(permessionNum = 1000500)
 	public String articleMain(HttpServletRequest request,HttpServletResponse response, ModelMap model) {
 		// 文章菜单
@@ -80,7 +80,7 @@ public class ArticleController {
 		return "article/article.main";
 	}
 	
-	@RequestMapping("/articleQuery.do")
+	@RequestMapping("/articleQuery")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000500)
 	public Map<String, Object> articleQuery(@RequestParam(required=false, defaultValue="0")int page,
@@ -91,21 +91,21 @@ public class ArticleController {
 		return resultMap;
 	}
 	
-	@RequestMapping("/articleAdd.do")
+	@RequestMapping("/articleAdd")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000500)
 	public ReturnT<Integer> articleAdd(ArticleInfo article) {
 		return articleService.articleAdd(article);
 	}
 	
-	@RequestMapping("/articleDel.do")
+	@RequestMapping("/articleDel")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000500)
 	public ReturnT<Integer> articleDel(@RequestParam("articleIds[]") int[] articleIds) {
 		return articleService.articleAdd(articleIds);
 	}
 	
-	@RequestMapping("/articleEdit.do")
+	@RequestMapping("/articleEdit")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000500)
 	public ReturnT<Integer> articleEdit(ArticleInfo article) {

@@ -68,7 +68,7 @@ $(function(){
 	// query
 	$("#search").click(function(){
 		if ($("#queryForm").form('validate')) {
-			var url = 'articleQuery.do?' + encodeURI( $("#queryForm").serialize() );
+			var url = 'articleQuery?' + encodeURI( $("#queryForm").serialize() );
 			$("#dg").datagrid("load", url);
 		}
 	});
@@ -99,7 +99,7 @@ $(function(){
 		}
 		
 		$.ajax({
-	    	url : 'articleAdd.do',
+	    	url : 'articleAdd',
 		    type : 'post',
 		    async : true,
 		    data : $("#addForm").serialize(),
@@ -146,7 +146,7 @@ $(function(){
 		$.messager.confirm('确认对话框', '您确定要删除选中文章吗？', function(r){
 			if (r){
 				$.ajax({
-			    	url : 'articleDel.do',
+			    	url : 'articleDel',
 				    type : 'post',
 				    async : true,
 				    data : {
@@ -209,7 +209,7 @@ $(function(){
 		}
 		
 		$.ajax({
-	    	url : 'articleEdit.do',
+	    	url : 'articleEdit',
 		    type : 'post',
 		    async : true,
 		    data : $("#editForm").serialize(),

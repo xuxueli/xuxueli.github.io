@@ -232,7 +232,7 @@ function initLogout(){
 			if (r) {
 				// 退出登录
 				$.ajax({
-					url : 'logout.do',
+					url : 'logout',
 					type : 'post',
 					async : true,
 					dataType : 'json',
@@ -244,7 +244,7 @@ function initLogout(){
 					},
 					success : function(data) {
 						if (data.code == "S") {
-							window.location.href = "./loginCheck.do";
+							window.location.href = base_url;
 						} else {
 							alert(data.msg);
 						}
@@ -291,9 +291,9 @@ function initModifyPwd(){
 		}
 		$.messager.confirm('确认','密码修改后将注销登录，请确认？',function(r){    
 		    if (r){    
-		    	$.post("./modifyPwd.do", $('#modifyPwdForm').serialize(), function(data){
+		    	$.post("./modifyPwd", $('#modifyPwdForm').serialize(), function(data){
 					if (data.code == "S") {
-						window.location.href = "./loginCheck.do";
+						window.location.href = base_url;
 					} else {
 						$.messager.alert('系统提示', data.msg, 'warning');
 					}

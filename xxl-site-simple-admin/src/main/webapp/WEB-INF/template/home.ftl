@@ -5,15 +5,7 @@
 	<title>控制中心</title>
 	<#include "./common/common.param.ftl">
 	<#include "./common/common.style.ftl">
-	
 	<link rel="stylesheet" type="text/css" href="${request.contextPath}/static/css/home.1.css">
-	<script type="text/javascript" src="${request.contextPath}/static/js/home.1.js"></script>
-	
-	<script>
-		// 权限菜单
-		var _menus = JSON.parse('${Session['login_identity'].menuModuleJson?if_exists}');
-	</script>
-	
 </head>
 <body class="easyui-layout" style="overflow-y: hidden"  scroll="no">
 
@@ -34,7 +26,7 @@
 			<a href="#" id="modifyPwdOpen">修改密码</a>
 			<a href="#" id="logout">安全退出</a>
 		</span>
-		<span style="padding-left:10px;float:left;margin-top:0px;">【我爱】</span>
+		<span style="padding-left:10px;float:left;margin-top:0px;">→</span>
 		<ul class="north_menu" id="menuModule" style="padding-left:10px;float:left;margin-top:0px;">
 			<!-- <li><a name="basic" href="javascript:;" title="基础数据">基础数据</a></li> -->
 		</ul>
@@ -104,4 +96,10 @@
 	</div>
 
 </body>
+<script>
+	// 权限菜单
+	var _menus = JSON.parse('${Session['login_identity'].menuModuleJson?if_exists}');
+	var base_url = "${request.contextPath}/";
+</script>
+<script type="text/javascript" src="${request.contextPath}/static/js/home.1.js"></script>
 </html>

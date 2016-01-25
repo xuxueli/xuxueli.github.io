@@ -74,7 +74,7 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
 		// 01：登陆拦截
 		if (loginState) {
 			if (identity == null) {
-				//response.sendRedirect(request.getContextPath() + "/loginCheck.do");
+				//response.sendRedirect(request.getContextPath() + "/");
 				//return false;
 				throw new WebException(ReturnCodeEnum.FAIL.code(), "登录失效,请重新登录");
 			}

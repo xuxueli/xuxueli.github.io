@@ -22,8 +22,8 @@
 
 /** north：菜单li */
 .north_menu li{float:left;padding-right:10px;list-style-type:none;}
-.north_menu li a{color:#fff;text-decoration:none;}
-.north_menu li a.active{color:black;text-decoration:none;}
+.north_menu li a{color:#000000;text-decoration:none;}
+.north_menu li a.active{color:#ffffff;text-decoration:none;}
 
 /** north：功能*/
 .north_fun a{ color:#fff; text-decoration:none;}

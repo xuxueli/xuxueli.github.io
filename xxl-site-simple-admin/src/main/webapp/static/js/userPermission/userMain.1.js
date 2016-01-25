@@ -52,7 +52,7 @@ $(function() {
 	// query
 	$("#search").click(function(){
 		if ($("#queryForm").form('validate')) {
-			var url = 'userQuery.do';
+			var url = 'userQuery';
 			$("#dg").datagrid("load", url + "?" + $("#queryForm").serialize());	//将searchForm表单内的元素序
 		}
 	});
@@ -76,7 +76,7 @@ $(function() {
 		}
 		
 		$.ajax({
-	    	url : 'userAdd.do',
+	    	url : 'userAdd',
 		    type : 'post',
 		    async : true,
 		    data : $("#addForm").serialize(),
@@ -123,7 +123,7 @@ $(function() {
 		$.messager.confirm('确认对话框', '您确定要删除选中用户吗？', function(r){
 			if (r){
 				$.ajax({
-			    	url : 'userDel.do',
+			    	url : 'userDel',
 				    type : 'post',
 				    async : true,
 				    data : {
@@ -174,7 +174,7 @@ $(function() {
 		}
 		
 		$.ajax({
-	    	url : 'userUpdate.do',
+	    	url : 'userUpdate',
 		    type : 'post',
 		    async : true,
 		    data : $("#editForm").serialize(),
@@ -212,7 +212,7 @@ $(function() {
 		
 		$("#editRoleWindow").window("open");
 		$("#roles").combobox({    
-			url:'userRoleQuery.do?userId=' + userId,
+			url:'userRoleQuery?userId=' + userId,
 			method:'get',
 		    valueField:'roleId',    
 		    textField:'name',
@@ -232,7 +232,7 @@ $(function() {
 		// 选中角色ID
 		var roleIds = $('#roles').combobox('getValues');
 		
-		$.post("userRoleUpdate.do", "userId=" + userId + "&roleIds[]=" + roleIds
+		$.post("userRoleUpdate", "userId=" + userId + "&roleIds[]=" + roleIds
 		,function(data) {
 			if (data.code == "S") {
 				$.messager.alert('系统提示', '用户角色更新成功', 'info');

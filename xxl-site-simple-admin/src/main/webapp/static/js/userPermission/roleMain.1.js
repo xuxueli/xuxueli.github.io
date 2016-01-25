@@ -1,6 +1,6 @@
 $(function() {
 	
-	var url = 'roleQuery.do';
+	var url = 'roleQuery';
 
 	// datagrid 属性
 	$('#dg').datagrid({ 
@@ -58,7 +58,7 @@ $(function() {
 		}
 		
 		$.ajax({
-	    	url : 'roleAdd.do',
+	    	url : 'roleAdd',
 		    type : 'post',
 		    async : true,
 		    data : $("#addForm").serialize(),
@@ -105,7 +105,7 @@ $(function() {
 		$.messager.confirm('确认对话框', '您确定要删除选中角色吗？', function(r){
 			if (r){
 				$.ajax({
-			    	url : 'roleDel.do?roleIds[]=' + roleIds,
+			    	url : 'roleDel?roleIds[]=' + roleIds,
 				    type : 'post',
 				    async : true,
 				    dataType:'json',
@@ -153,7 +153,7 @@ $(function() {
 		}
 		
 		$.ajax({
-	    	url : 'roleUpdate.do',
+	    	url : 'roleUpdate',
 		    type : 'post',
 		    async : true,
 		    data : $("#editForm").serialize(),
@@ -190,7 +190,7 @@ $(function() {
 		var roleId = item.roleId;
 		
 		$('#tt').tree({    
-			url: 'roleMenuQuery.do?roleId=' + roleId,
+			url: 'roleMenuQuery?roleId=' + roleId,
 			method:'get',
 			checkbox:true,
 			cascadeCheck:false,
@@ -216,7 +216,7 @@ $(function() {
 			menuIds.push(nodes[i].id);
 		}
 
-		$.post("roleMenuUpdate.do", "roleId=" + roleId + "&menuIds[]=" + menuIds
+		$.post("roleMenuUpdate", "roleId=" + roleId + "&menuIds[]=" + menuIds
 		,function(data) {
 			if (data.code == "S") {
 				$.messager.alert('系统提示', '角色菜单更新成功', 'info');

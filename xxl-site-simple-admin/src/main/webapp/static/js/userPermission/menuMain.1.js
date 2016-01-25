@@ -1,6 +1,6 @@
 $(function(){
 	$('#tg').treegrid({
-	    url:'menuQuery.do',
+	    url:'menuQuery',
 		method: 'get',
 	    idField:'menuId',    
 	    treeField:'name', 
@@ -59,7 +59,7 @@ $(function(){
 		}
 		
 		$.ajax({
-	    	url : 'menuAdd.do',
+	    	url : 'menuAdd',
 		    type : 'post',
 		    async : true,
 		    data : $("#addForm").serialize(),
@@ -99,7 +99,7 @@ $(function(){
 		$.messager.confirm('确认对话框', '您确定要删除选中菜单吗？', function(r){
 			if (r){
 				$.ajax({
-			    	url : 'menuDel.do',
+			    	url : 'menuDel',
 				    type : 'post',
 				    async : true,
 				    data : {
@@ -150,7 +150,7 @@ $(function(){
 		}
 		
 		$.ajax({
-	    	url : 'menuUpdate.do',
+	    	url : 'menuUpdate',
 		    type : 'post',
 		    async : true,
 		    data : $("#editForm").serialize(),

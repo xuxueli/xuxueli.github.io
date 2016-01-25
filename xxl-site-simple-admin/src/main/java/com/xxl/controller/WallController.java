@@ -25,13 +25,13 @@ public class WallController {
 	@Autowired
 	private IWallService wallService;
 
-	@RequestMapping("/wallMain.do")
+	@RequestMapping("/wallMain")
 	@PermessionType(permessionNum = 1000600)
 	public String wallMain() {
 		return "wall/wall.main";
 	}
 
-	@RequestMapping("/wallQuery.do")
+	@RequestMapping("/wallQuery")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000600)
 	public Map<String, Object> wallQuery(@RequestParam(required=false, defaultValue="0")int page,
@@ -40,21 +40,21 @@ public class WallController {
 		return wallService.wallQuery(page, rows, content);
 	}
 
-	@RequestMapping("/wallAdd.do")
+	@RequestMapping("/wallAdd")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000600)
 	public ReturnT<Integer> wallAdd(WallInfo wallInfo) {
 		return wallService.wallAdd(wallInfo);
 	}
 
-	@RequestMapping("/wallDel.do")
+	@RequestMapping("/wallDel")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000600)
 	public ReturnT<Integer> wallDel(@RequestParam("ids[]") int[] ids) {
 		return wallService.wallDel(ids);
 	}
 
-	@RequestMapping("/wallUpdate.do")
+	@RequestMapping("/wallUpdate")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000600)
 	public ReturnT<Integer> wallUpdate(WallInfo wallInfo) {

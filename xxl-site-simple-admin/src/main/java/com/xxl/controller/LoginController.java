@@ -40,23 +40,19 @@ public class LoginController {
 	@Autowired
 	private IAdminRoleDao adminRoleDao;
 	
-	
 	/**
-	 * 登陆Check
-	 * @param request
-	 * @param response
-	 * @param resultMap
+	 * 首页
 	 * @return
 	 */
-	@RequestMapping("/loginCheck.do")
+	@RequestMapping("")
 	@PermessionType(loginState = false)
-	public String loginCheck(HttpServletRequest request, HttpServletResponse response, 
+	public String index(HttpServletRequest request, HttpServletResponse response, 
 			ModelMap resultMap, HttpSession session, RedirectAttributes redirect) {
 		
 		LoginIdentity identity = (LoginIdentity) HttpSessionUtil.get(session, HttpSessionKeyDic.LOGIN_IDENTITY);
 		if (identity != null) {
 			redirect.addAttribute("from", "sessionLogin");
-			return "redirect:/home.do";
+			return "redirect:/home";
 		}
 		
 		// 全局.角色列表
@@ -72,15 +68,20 @@ public class LoginController {
 	}
 	
 	/**
-	 * 登陆
-	 * @param request
-	 * @param response
-	 * @param resultMap
-	 * @param username
-	 * @param password
+	 * 主界面
 	 * @return
 	 */
-	@RequestMapping("/login.do")
+	@RequestMapping("/home")
+	@PermessionType()
+	public String home(HttpServletRequest request, HttpServletResponse response, ModelMap resultMap) {
+		return "home";
+	}
+	
+	/**
+	 * 登陆
+	 * @return
+	 */
+	@RequestMapping("/login")
 	@ResponseBody
 	@PermessionType(loginState = false, randCode=true)
 	public ReturnT<String> login(HttpServletRequest request, HttpServletResponse response, 
@@ -88,40 +89,12 @@ public class LoginController {
 		ReturnT<String> result = loginService.login(session, username, password, role_id);
 		return result;
 	}
-	/*@RequestMapping("/login.do")
-	@PermessionType(type = PermessionTypeDic.LOGIN_PERMISSION_EXCLUDE)
-	public String login(HttpServletRequest request, HttpServletResponse response, HttpSession session, 
-			ModelMap resultMap, String username, String password,@RequestParam(defaultValue="-1") int role_id) {
-		
-		ReturnT<String> result = loginService.login(session, username, password, role_id);
-		
-		resultMap.put("result", JSONObject.fromObject(result).toString());
-		return CommonViewName.COMMON_RESULT;
-	}*/
-	/*@RequestMapping("/login.do")
-	@PermessionType(loginState = false, randCode=true)
-	public ResponseEntity<ReturnT<String>> login(HttpServletRequest request, HttpServletResponse response, 
-			ModelMap resultMap, HttpSession session, String username, String password,@RequestParam(defaultValue="-1") int role_id) {
-		
-		ReturnT<String> result = loginService.login(session, username, password, role_id);
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.TEXT_PLAIN);
-		ResponseEntity<ReturnT<String>> resEn = new ResponseEntity<ReturnT<String>>(result, headers, HttpStatus.OK);
-		return resEn;
-	}*/
-	
 	
 	/**
 	 * 注销登陆
-	 * @param request
-	 * @param response
-	 * @param resultMap
-	 * @param username
-	 * @param password
 	 * @return
 	 */
-	@RequestMapping("/logout.do")
+	@RequestMapping("/logout")
 	@ResponseBody
 	@PermessionType()
 	public ReturnT<String> logout(HttpServletRequest request, HttpServletResponse response, 
@@ -133,14 +106,9 @@ public class LoginController {
 	
 	/**
 	 * 修改密码
-	 * @param request
-	 * @param response
-	 * @param resultMap
-	 * @param password
-	 * @param rePassword
 	 * @return
 	 */
-	@RequestMapping("/modifyPwd.do")
+	@RequestMapping("/modifyPwd")
 	@ResponseBody
 	@PermessionType()
 	public ReturnT<String> modifyPwd(HttpServletRequest request, HttpServletResponse response, 
@@ -148,19 +116,6 @@ public class LoginController {
 		
 		ReturnT<String> result =loginService.modifyPwd(session, password, newPwd, reNewPwd);
 		return result;
-	}
-	
-	/**
-	 * 主界面
-	 * @param request
-	 * @param response
-	 * @param resultMap
-	 * @return
-	 */
-	@RequestMapping("/home.do")
-	@PermessionType()
-	public String home(HttpServletRequest request, HttpServletResponse response, ModelMap resultMap) {
-		return "home";
 	}
 	
 }

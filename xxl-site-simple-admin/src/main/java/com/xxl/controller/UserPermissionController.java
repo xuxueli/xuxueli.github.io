@@ -35,7 +35,7 @@ public class UserPermissionController {
 	private IAdminRoleDao adminRoleDao;
 	
 	//-----------------------后台用户相关-----------------------
-	@RequestMapping("/userMain.do")
+	@RequestMapping("/userMain")
 	@PermessionType(permessionNum = 1000100)
 	public String userMain(ModelMap model) {
 		
@@ -50,7 +50,7 @@ public class UserPermissionController {
 		return "userPermission/userMain";
 	}
 	
-	@RequestMapping("/userQuery.do")
+	@RequestMapping("/userQuery")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000100)
 	public Map<String, Object> userQuery(@RequestParam(required=false, defaultValue="0")int page,@RequestParam(required=false, defaultValue="0")int rows, String userName, int roleId) {
@@ -58,35 +58,35 @@ public class UserPermissionController {
 		return resultMap;
 	}
 	
-	@RequestMapping("/userAdd.do")
+	@RequestMapping("/userAdd")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000100)
 	public ReturnT<Integer> userAdd(String userName, String password) {
 		return userPermissionService.userAdd(userName, password);
 	}
 	
-	@RequestMapping("/userDel.do")
+	@RequestMapping("/userDel")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000100)
 	public ReturnT<Integer> userDel(HttpSession session, @RequestParam("userIds[]") int[] userIds) {
 		return userPermissionService.userDel(session, userIds);
 	}
 	
-	@RequestMapping("/userUpdate.do")
+	@RequestMapping("/userUpdate")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000100)
 	public ReturnT<Integer> userUpdate(int userId, String userName, String password) {
 		return userPermissionService.userUpdate(userId, userName, password);
 	}
 	
-	@RequestMapping("/userRoleQuery.do")
+	@RequestMapping("/userRoleQuery")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000100)
 	public String userRoleQuery(int userId) {
 		return userPermissionService.userRoleQuery(userId);
 	}
 	
-	@RequestMapping("/userRoleUpdate.do")
+	@RequestMapping("/userRoleUpdate")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000100)
 	public ReturnT<Integer> userRoleUpdate(HttpSession session, int userId, @RequestParam("roleIds[]") int[] roleIds) {
@@ -94,13 +94,13 @@ public class UserPermissionController {
 	}
 	
 	//-----------------------后台角色相关-----------------------
-	@RequestMapping("/roleMain.do")
+	@RequestMapping("/roleMain")
 	@PermessionType(permessionNum = 1000200)
 	public String roleMain() {
 		return "userPermission/roleMain";
 	}
 	
-	@RequestMapping("/roleQuery.do")
+	@RequestMapping("/roleQuery")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000200)
 	public Map<String, Object> roleQuery() {
@@ -108,7 +108,7 @@ public class UserPermissionController {
 		return resultMap;
 	}
 	
-	@RequestMapping("/roleAdd.do")
+	@RequestMapping("/roleAdd")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000200)
 	public ReturnT<Integer> roleAdd(HttpSession session, String name, int order) {
@@ -116,7 +116,7 @@ public class UserPermissionController {
 		return userPermissionService.roleAdd(name, order);
 	}
 	
-	@RequestMapping("/roleDel.do")
+	@RequestMapping("/roleDel")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000200)
 	public ReturnT<Integer> roleDel(HttpSession session, @RequestParam("roleIds[]") int[] roleIds) {
@@ -124,7 +124,7 @@ public class UserPermissionController {
 		return userPermissionService.roleDel(roleIds);
 	}
 	
-	@RequestMapping("/roleUpdate.do")
+	@RequestMapping("/roleUpdate")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000200)
 	public ReturnT<Integer> roleUpdate(HttpSession session, int roleId, String name, int	order) {
@@ -132,14 +132,14 @@ public class UserPermissionController {
 		return userPermissionService.roleUpdate(roleId, name, order);
 	}
 	
-	@RequestMapping("/roleMenuQuery.do")
+	@RequestMapping("/roleMenuQuery")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000200)
 	public String roleMenuQuery(int roleId) {
 		return userPermissionService.roleMenuQuery(roleId);
 	}
 	
-	@RequestMapping("/roleMenuUpdate.do")
+	@RequestMapping("/roleMenuUpdate")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000200)
 	public ReturnT<String> roleMenuUpdate(int roleId, @RequestParam(value="menuIds[]") int[] menuIds) {
@@ -147,13 +147,13 @@ public class UserPermissionController {
 	}
 	
 	//-----------------------后台菜单相关-----------------------
-	@RequestMapping("/menuMain.do")
+	@RequestMapping("/menuMain")
 	@PermessionType(permessionNum = 1000300)
 	public String menuMain() {
 		return "userPermission/menuMain";
 	}
 	
-	@RequestMapping("/menuQuery.do")
+	@RequestMapping("/menuQuery")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000300)
 	public Map<String, Object> menuQuery() {
@@ -161,21 +161,21 @@ public class UserPermissionController {
 		return resultMap;
 	}
 	
-	@RequestMapping("/menuAdd.do")
+	@RequestMapping("/menuAdd")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000300)
 	public ReturnT<Integer> menuAdd(int parentId, int order, String name, String url, int permessionNum) {
 		return userPermissionService.menuAdd(parentId, order, name, url, permessionNum);
 	}
 	
-	@RequestMapping("/menuDel.do")
+	@RequestMapping("/menuDel")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000300)
 	public ReturnT<Integer> menuDel(int menuId) {
 		return userPermissionService.menuDel(menuId);
 	}
 	
-	@RequestMapping("/menuUpdate.do")
+	@RequestMapping("/menuUpdate")
 	@ResponseBody
 	@PermessionType(permessionNum = 1000300)
 	public ReturnT<Integer> menuUpdate(int menuId, int parentId, int order, String name, String url, int permessionNum) {
