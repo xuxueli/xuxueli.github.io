@@ -1,18 +1,11 @@
+<#import "/common/common.macro.ftl" as common>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
 	<title>文章管理</title>
-	<#include "./common/common.param.ftl">
-	<#include "./common/common.style.ftl">
-	<#include "./common/common.style.ueditor.ftl">
-	<script type="text/javascript" src="${request.contextPath}/static/js/article/article.main.1.js"></script>
-	
-	<script type="text/javascript" >
-		// 文章菜单
-		var articleMenuJson = eval( '${articleMenuJson?if_exists}' );
-	</script>
-	
+	<@common.common_style />
+	<@common.common_style_ueditor />
 </head>
 <body class="easyui-layout" fit="true">  
 	<!-- toolbar -->
@@ -89,4 +82,11 @@
 	<div id="viewWindow" class="easyui-window" title="预览文章" data-options="modal:true,closed:true,resizable:true,maximized:true" style="width:90%;height:90%; text-align:center;"></div>
 	
 </body>
+
+<script type="text/javascript" >
+	// 文章菜单
+	var articleMenuJson = eval( '${articleMenuJson?if_exists}' );
+</script>
+<@common.hostUrl />
+<script type="text/javascript" src="${request.contextPath}/static/js/article/article.main.1.js"></script>
 </html>

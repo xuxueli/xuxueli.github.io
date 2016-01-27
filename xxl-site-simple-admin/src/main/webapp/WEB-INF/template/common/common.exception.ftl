@@ -14,8 +14,7 @@
             border-bottom-color: #999;
         }
         h1 { font-size: 100%; color: #f00; line-height: 1.5em; }
-    </style> 
-    <#include "./common/common.param.ftl">
+    </style>
     
 </head> 
 </head>

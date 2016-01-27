@@ -1,10 +1,10 @@
+<#import "/common/common.macro.ftl" as common>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
 	<title>登陆后台</title>
-	<#include "./common/common.param.ftl">
-	<#include "./common/common.style.ftl">
+	<@common.common_style />
 </head>
 <body style="background:url(static/images/login_bg.jpg) repeat top center;" >
 
@@ -39,7 +39,7 @@
 		    		<tr>
 		    			<td>验证码:</td>
 		    			<td>
-		    				<input class="easyui-validatebox" type="text" name="randCode" data-options="required:true,validType:['length[1,4]']" style="width:70px;" value="1" ></input>
+		    				<input class="easyui-validatebox" type="text" name="randCode" data-options="required:true,validType:['length[1,4]']" style="width:70px;" value="8888" ></input>
 		    				<img id="randCodeImg" style="width:70px;height:21px;margin-bottom: -5px;" alt="点击更换" title="点击更换" src=""/>
 		    			</td>
 		    		</tr>
@@ -53,6 +53,6 @@
 	</div>
 	
 </body>
-<script>var base_url="${request.contextPath}/";</script>
+<@common.hostUrl />
 <script type="text/javascript" src="${request.contextPath}/static/js/login.1.js"></script>
 </html>

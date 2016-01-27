@@ -1,10 +1,10 @@
+<#import "/common/common.macro.ftl" as common>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
 	<title>控制中心</title>
-	<#include "./common/common.param.ftl">
-	<#include "./common/common.style.ftl">
+	<@common.common_style />
 	<link rel="stylesheet" type="text/css" href="${request.contextPath}/static/css/home.1.css">
 </head>
 <body class="easyui-layout" style="overflow-y: hidden"  scroll="no">

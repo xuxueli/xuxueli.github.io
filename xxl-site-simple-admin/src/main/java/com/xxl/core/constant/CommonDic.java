@@ -11,8 +11,8 @@ public class CommonDic {
 	 * Controller,通用视图
 	 */
 	public class CommonViewName {
-		public static final String COMMON_RESULT = "common.result";			// 通用返回
-		public static final String COMMON_EXCEPTION = "common.exception"; 	// 通用错误页
+		public static final String COMMON_RESULT = "common/common.result";			// 通用返回
+		public static final String COMMON_EXCEPTION = "common/common.exception"; 	// 通用错误页
 	}
 	
 	/**

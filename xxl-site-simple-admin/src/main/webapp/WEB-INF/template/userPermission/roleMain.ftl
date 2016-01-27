@@ -1,10 +1,10 @@
+<#import "/common/common.macro.ftl" as common>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
 	<title>后台角色管理</title>
-	<#include "./common/common.param.ftl">
-	<#include "./common/common.style.ftl">
+	<@common.common_style />
 	<script type="text/javascript" src="${request.contextPath}/static/js/userPermission/roleMain.1.js"></script>
 		
 </head>

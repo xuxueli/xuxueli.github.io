@@ -1,11 +1,10 @@
+<#import "/common/common.macro.ftl" as common>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
 	<title>文章管理</title>
-	<#include "./common/common.param.ftl">
-	<#include "./common/common.style.ftl">
-	<script type="text/javascript" src="${request.contextPath}/static/js/wall/wall.main.1.js"></script>
+	<@common.common_style />
 </head>
 <body class="easyui-layout" fit="true">  
 	<!-- toolbar -->
@@ -82,4 +81,5 @@
 	</div>
 	
 </body>
+<script type="text/javascript" src="${request.contextPath}/static/js/wall/wall.main.1.js"></script>
 </html>
