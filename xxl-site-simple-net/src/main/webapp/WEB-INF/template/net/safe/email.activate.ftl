@@ -5,13 +5,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>我爱</title>
-	
 	<@netCommon.common_hosturl />
 	<@netCommon.common_style />
-	
-	<script type="text/javascript" src="${host_url}/js/common/requestParam.js"></script>
-	<script type="text/javascript" src="${host_url}/js/email.activite.1.js"></script>
-	
 </head>
 <body>
 <@netCommon.header />
@@ -46,4 +41,6 @@
 
 <@netCommon.footer />
 </body>
+<script type="text/javascript" src="${host_url}/static/js/common/requestParam.js"></script>
+<script type="text/javascript" src="${host_url}/static/js/email.activite.1.js"></script>
 </html>

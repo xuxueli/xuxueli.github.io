@@ -19,7 +19,7 @@
 	<!--中央区域-->
     <div class="row">
     	<!--左侧-->
-        <div class="col-md-8">
+        <div class="col-md-9">
 
 			<#if pageList?exists >        
 	        	<#list pageList as item>
@@ -40,7 +40,7 @@
 			
         </div>
         <!--右侧-->
-		<div class="col-md-4" >
+		<div class="col-md-3" >
 			<@netCommon.tips />
 		</div>
     </div>

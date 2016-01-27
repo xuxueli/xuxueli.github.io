@@ -1,8 +1,8 @@
 @CHARSET "UTF-8";
 /** bootstrap-固定导航,内补 */
-body{padding-top: 50px;color:#000000;background-color:#ffffff;line-height:1.428571429;font-size:14px;font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;}
+body{padding-top: 70px;color:#000000;background-color:#e2e2e2;line-height:1.428571429;font-size:14px;font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;}
 /** bootstrap-主体,最大宽度 */
-.container{max-width:960px;}
+.container{max-width:1050px;}
 
 /* 导航栏.hover弹出 
 .navbar .nav > li .dropdown-menu {margin: 0;}

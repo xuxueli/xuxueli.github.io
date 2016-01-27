@@ -5,10 +5,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>我爱</title>
-	
 	<@netCommon.common_hosturl />
 	<@netCommon.common_style />
-
 </head>
 <body>
 <@netCommon.header />
@@ -21,7 +19,7 @@
     
     	<!--左侧-->
     	
-        <div class="col-md-8">
+        <div class="col-md-9">
         	<div class="well">
         		<div class="page-header">
 					<h4>${article.title}<small class="pull-right">${article.createTime?string('yyyy-MM-dd')}</small></h4>
@@ -31,7 +29,7 @@
         </div>
         
         <!--右侧-->
-		<div class="col-md-4" >
+		<div class="col-md-3" >
 			<@netCommon.tips />
 		</div>
 		

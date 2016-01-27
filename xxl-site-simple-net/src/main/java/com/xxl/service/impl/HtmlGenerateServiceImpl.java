@@ -33,31 +33,34 @@ public class HtmlGenerateServiceImpl implements IHtmlGenerateService {
 	 * 全站静态化
 	 */
 	public void generateNetHtml() {
-		Map<String, Object> params = new HashMap<String, Object>();
 
-		// 首页 (文章模块-组,结构)
+		// 文章结构：模块-组-文章
 		List<ArticleMenu> articleModule = articleService.articleModule();
+		
+		// HTML：首页
+		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("articleModule", articleModule);
 		HtmlTemplateUtil.generate(params, "net/index.ftl", "/index.html");
 		
-		// 文章列表更新
+		//HTML： 文章列表
 		if (CollectionUtils.isNotEmpty(articleModule)) {
 			for (ArticleMenu module : articleModule) {
 				if (CollectionUtils.isNotEmpty(module.getChildren())) {
 					for (ArticleMenu group : module.getChildren()) {
 						
-						// 组页面,html分页
+						// 组页面（	需分页）
 						List<ArticleInfo> groupList = articleService.articlePageList(0, 1000, group.getMenuId());
-						Map<String, Object> paramMap = new HashMap<String, Object>();
-						paramMap.put("module", module);
-						paramMap.put("group", group);
-						
-						generateHtmlPagination(groupList, paramMap, 5, "net/article/article.group.ftl", "article/group/", String.valueOf(group.getMenuId()));	// 组html分页
+						params.clear();
+						params.put("articleModule", articleModule);
+						params.put("module", module);
+						params.put("group", group);
+						HtmlGenerateServiceImpl.generateHtmlPagination(groupList, params, 20, "net/article/article.group.ftl", "article/group/", String.valueOf(group.getMenuId()));	// 组html分页
 						
 						// 文章详情页
 						if (CollectionUtils.isNotEmpty(groupList)) {
 							for (ArticleInfo article : groupList) {
-								params = new HashMap<String, Object>();
+								params.clear();
+								params.put("articleModule", articleModule);
 								params.put("article", article);
 								HtmlTemplateUtil.generate(params, "net/article/article.info.ftl", "/article/article/" + article.getArticleId() + ".html");	// 文章.detail
 							}
@@ -68,11 +71,15 @@ public class HtmlGenerateServiceImpl implements IHtmlGenerateService {
 			}
 		}
 
-		// 一面墙,html分页
+		// HTML：一面墙（	需分页）
 		List<WallInfo> wallInfoList = wallInfoDao.getPageList(0, 10000);
-		generateHtmlPagination(wallInfoList, null, 20, "net/wall/index.ftl", "wall/", "index");
+		params.clear();
+		params.put("articleModule", articleModule);
+		HtmlGenerateServiceImpl.generateHtmlPagination(wallInfoList, params, 20, "net/wall/index.ftl", "wall/", "index");
 		
-		// 安全中心
+		// HTNL：安全中心
+		params.clear();
+		params.put("articleModule", articleModule);
 		HtmlTemplateUtil.generate(params, "net/safe/email.activate.ftl", "/safe/emailActivate.html");	// 邮箱激活
 		HtmlTemplateUtil.generate(params, "net/safe/email.find.pwd.ftl", "/safe/emailFindPwd.html");	// 找回密码
 		
@@ -86,7 +93,7 @@ public class HtmlGenerateServiceImpl implements IHtmlGenerateService {
 	 * @param filePath			:	html文件,路径目录	--/-/
 	 * @param index				:	html文件,默认前缀	index
 	 */
-	private void generateHtmlPagination(List<?> allList, Map<String, Object> paramMap,int pagesize, String templatePathName , String filePath , String index){
+	private static void generateHtmlPagination(List<?> allList, Map<String, Object> paramMap,int pagesize, String templatePathName , String filePath , String index){
 		int allCount = allList!=null?allList.size():0;
 		
 		Map<String, Object> params = new HashMap<String, Object>();
