@@ -1,7 +1,7 @@
 $(function(){
 	
 	$("#emailActivate").click(function(){
-		$.post(base_url + "/user/emailActivate.do", $("#emailActivateForm").serialize(), function(data, status) {
+		$.post(base_url + "/user/emailActivate", $("#emailActivateForm").serialize(), function(data, status) {
 			if (data.code == "S") {
 				ComAlert.show(1, "激活成功");
 				ComAlert.callback = function (){

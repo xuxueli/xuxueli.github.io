@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50544
 File Encoding         : 65001
 
-Date: 2016-01-06 22:22:36
+Date: 2016-01-28 22:24:01
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -146,7 +146,7 @@ CREATE TABLE `article_info` (
 -- ----------------------------
 -- Records of article_info
 -- ----------------------------
-INSERT INTO `article_info` VALUES ('6', '0', '16', '0', '这是一篇文章', '<p>内容6<img src=\"http://img.baidu.com/hi/jx2/j_0025.gif\"/></p>', '2015-04-25 22:40:21', '0');
+INSERT INTO `article_info` VALUES ('6', '0', '16', '0', '这是一篇文章', '<p>内容666<img src=\"http://img.baidu.com/hi/jx2/j_0025.gif\"/></p>', '2015-04-25 22:40:21', '0');
 INSERT INTO `article_info` VALUES ('7', '0', '16', '0', '标题7', '内容7', '2015-04-25 22:40:21', '0');
 INSERT INTO `article_info` VALUES ('8', '0', '16', '0', '标题8', '内容8', '2015-04-25 22:40:21', '0');
 INSERT INTO `article_info` VALUES ('9', '0', '16', '0', '标题9', '内容9', '2015-04-25 22:40:21', '0');
@@ -188,13 +188,13 @@ CREATE TABLE `article_menu` (
 -- ----------------------------
 -- Records of article_menu
 -- ----------------------------
-INSERT INTO `article_menu` VALUES ('11', '0', '1', '文章模块', '模块位顶级菜单', '0');
-INSERT INTO `article_menu` VALUES ('16', '11', '1', '第一模块', '', '0');
-INSERT INTO `article_menu` VALUES ('17', '11', '3', '第三模块', '', '0');
-INSERT INTO `article_menu` VALUES ('18', '11', '2', '第二模块', '', '0');
-INSERT INTO `article_menu` VALUES ('19', '11', '4', '第四模块', '', '0');
-INSERT INTO `article_menu` VALUES ('20', '11', '5', '第五模块', '', '0');
-INSERT INTO `article_menu` VALUES ('21', '0', '1', '分享模块', '', '0');
+INSERT INTO `article_menu` VALUES ('11', '0', '1', '灌水', '模块位顶级菜单', '0');
+INSERT INTO `article_menu` VALUES ('16', '11', '1', '精华', '', '0');
+INSERT INTO `article_menu` VALUES ('17', '11', '3', '问答', '', '0');
+INSERT INTO `article_menu` VALUES ('18', '11', '2', '分享', '', '0');
+INSERT INTO `article_menu` VALUES ('19', '11', '4', '二手', '', '0');
+INSERT INTO `article_menu` VALUES ('20', '11', '5', '无节操', '', '0');
+INSERT INTO `article_menu` VALUES ('21', '0', '1', '咨询', '', '0');
 INSERT INTO `article_menu` VALUES ('22', '21', '1', '第一模块', '', '0');
 INSERT INTO `article_menu` VALUES ('23', '21', '2', '第二模块', '', '0');
 INSERT INTO `article_menu` VALUES ('24', '21', '3', '第三模块', '', '0');

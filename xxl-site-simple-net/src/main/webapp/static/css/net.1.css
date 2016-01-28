@@ -1,7 +1,7 @@
 @CHARSET "UTF-8";
 /** bootstrap-固定导航,内补 */
 body{
-	padding-top: 70px;
+	padding-top: 51px;
 	color:#000000;
 	background-color:#e2e2e2;
 	line-height:1.428571429;
@@ -9,8 +9,14 @@ body{
 	font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", "Microsoft Yahei", sans-serif;
 }
 
-/** bootstrap-主体,最大宽度 */
+/** 超链接 */
+a:link, a:visited, a:active {color: #778087;text-decoration: none;word-break: break-all;}
+a:hover {color: #4d5256;text-decoration: underline;}
+
+/** bootstrap定制 */
 .container{max-width:1050px;}
+.col-md-9 {padding-right: 0;}
+.panel {margin-bottom: 10px;}
 
 /* 导航栏.hover弹出 
 .navbar .nav > li .dropdown-menu {margin: 0;}

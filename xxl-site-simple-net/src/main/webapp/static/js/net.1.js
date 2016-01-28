@@ -1,7 +1,7 @@
 $(function(){
 	// 导航栏,选中样式处理
 	$(".nav-click").each(function(){
-		if( window.location.href.indexOf( $(this).find("a").attr("href") ) > -1){
+		if( $('body').attr('navKey') == $(this).attr('navKey')){
 			$(this).siblings().removeClass("active");  
 			if (!$(this).hasClass("active")) {
 				$(this).addClass("active");
@@ -16,8 +16,8 @@ $(function(){
 		scrollImg: true
 	});
 	
-	// 图片视屏样式处理,响应式、圆角
-	$("img,video").addClass("carousel-inner img-responsive img-rounded");
+	// 图片视频，圆角
+	$("img,video").addClass("img-rounded");	// 响应式 : "carousel-inner img-responsive img-rounded"
 	
 	// 排版样式,手动自适应
 	if (nPlatform != 0) {
@@ -63,7 +63,7 @@ $(function(){
             element.parent('div').append(error);  
         },
         submitHandler : function(form) {
-			$.post(base_url + "/user/login.do", $("#loginForm").serialize(), function(data, status) {
+			$.post(base_url + "/user/login", $("#loginForm").serialize(), function(data, status) {
 				if (data.code == "S") {
 					$('#loginModal').modal('hide');
 					
@@ -128,7 +128,7 @@ $(function(){
             element.parent('div').append(error);  
         },
         submitHandler : function(form) {
-			$.post(base_url + "/user/reg.do", $("#regForm").serialize(), function(data, status) {
+			$.post(base_url + "/user/reg", $("#regForm").serialize(), function(data, status) {
 				if (data.code == "S") {
 					$('#regModal').modal('hide');
 					ComAlert.show(1, "恭喜您注册成功,请前往邮箱激活账号");
@@ -147,18 +147,18 @@ $(function(){
 	$(".login-true").hide();
 	$(".login-false").show();
 	if ($.cookie('login_identity')) {
-		$.post(base_url + "/user/loginCheck.do", function(data, status) {
+		$.post(base_url + "user/loginCheck", function(data, status) {
 			if (data.code == "S") {
 				$(".login-false").hide();
 				$(".login-true").show();
-				$(".login-true .loginEmail").html(data.returnContent.email);
+				$(".login-true .loginEmail").html(data.returnContent.email + '<b class="caret"></b>');
 			}
 		}, 'json');
 	}
 	
 	// 注销登陆
 	$(".logout").click(function(){
-		$.post(base_url + "/user/logout.do", function(data, status) {
+		$.post(base_url + "/user/logout", function(data, status) {
 			if (data.code == "S") {
 				ComAlert.show(1, "注销登陆成功");
 				window.location.reload();

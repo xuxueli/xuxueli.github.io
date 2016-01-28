@@ -8,7 +8,7 @@
 	<@netCommon.common_hosturl />
 	<@netCommon.common_style />
 </head>
-<body>
+<body navKey="module_${module.menuId}" >
 <@netCommon.header />
 
 <!-- content -->
@@ -30,7 +30,7 @@
         
         <!--右侧-->
 		<div class="col-md-3" >
-			<@netCommon.tips />
+			<@netCommon.right />
 		</div>
 		
     </div>

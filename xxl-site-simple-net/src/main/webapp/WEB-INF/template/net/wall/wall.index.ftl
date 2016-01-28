@@ -10,7 +10,7 @@
 	<@netCommon.common_style />
 
 </head>
-<body>
+<body navKey="wall" >
 <@netCommon.header />
 
 <!-- content -->
@@ -23,7 +23,7 @@
 
 			<#if pageList?exists >        
 	        	<#list pageList as item>
-				<div class="well text-justify">${item.content}</div>
+				<div class="well text-justify wall-content">${item.content}</div>
 			    </#list>
 			    
 			    <!--html分页-->
@@ -41,7 +41,7 @@
         </div>
         <!--右侧-->
 		<div class="col-md-3" >
-			<@netCommon.tips />
+			<@netCommon.right />
 		</div>
     </div>
     

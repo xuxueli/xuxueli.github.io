@@ -73,7 +73,7 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
 		if (loginState) {
 			LoginIdentity identity = LoginIdentityHelper.cacheCheck(request, session);
 			if (identity == null) {
-				//response.sendRedirect(request.getContextPath() + "/loginCheck.do");
+				//response.sendRedirect(request.getContextPath() + "/loginCheck");
 				//return false;
 				throw new WebException(ReturnCodeEnum.FAIL.code(), "登录失效,请重新登录");
 			}

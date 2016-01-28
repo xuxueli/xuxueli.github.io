@@ -8,7 +8,7 @@
 	<@netCommon.common_hosturl />
 	<@netCommon.common_style />
 </head>
-<body>
+<body navKey="module_${module.menuId}" >
 <@netCommon.header />
 
 <!-- content -->
@@ -20,45 +20,64 @@
         <div class="col-md-9">
         
 			<div class="panel panel-default">
-		        <div class="panel-heading ot-tab-heading">
+		        <div class="panel-heading" style="background-color: #FFF;padding-top: 15px;padding-bottom: 15px;" >
 		            <ul class="nav nav-pills">
 		            	<#if module?exists && module.children?exists && module.children?size gt 0>
 		            		<#list module.children as groupItem>
-								<li style="margin-right: 8px;" <#if groupItem.name == group.name>class="active"</#if> ><a href="${host_url}article/group/${groupItem.menuId}.html">${groupItem.name}</a></li>		            			
+								<li style="margin-right: 8px;" <#if groupItem.name == group.name>class="active"</#if> >
+									<a style="padding: 0 5px 0 5px;" href="${host_url}article/group/${groupItem.menuId}.html">${groupItem.name}</a>
+								</li>		            			
 		            		</#list>
 		            	</#if>
 		            </ul>
 		        </div>
 		        
 		        <div class="panel-body">
-		        	<ul class="list-group">
 		        	<#if pageList?exists>
 		        	<#list pageList as article>
-						<li class="list-group-item">
-							<a href="${host_url}/article/article/${article.articleId}.html" target="_blank" >${article.title}.</a>
-							<span class="pull-right" >${article.createTime?string('yyyy-MM-dd')}</span>
-						</li>
-						<div class="divide"></div>
+						<div class="media">
+		                    <div class="media-body">
+		                        <div class="media-heading">
+		                            <a href="${host_url}/article/article/${article.articleId}.html" target="_blank" >
+		                            	${article.title}
+		                            	<span class="pull-right" >${article.createTime?string('yyyy-MM-dd')}</span>
+		                            </a>
+		                        </div>
+		                        <p style="color: #ccc;font-size: 11px;" >• 47 个赞 • 47 个回复 • 3835 次浏览 </p>
+		                    </div>
+	                        
+		                </div>
+						<div style="margin-top: 10px;border-top: 1px solid #f5f5f5;" ></div>
 					</#list>
 					</#if>
-					</ul>
 					
 					<!--html分页-->
 				    <#import "/net/common/common.html.pagination.ftl" as pagination>
 					<@pagination.htmlPaging pageNumAll=pageNumAll pageNum=pageNum html_base_url=host_url + filePath index=index/>
-		                 
 		        </div>
 		        
 		    </div>
-		    
         </div>
         <!--右侧-->
 		<div class="col-md-3" >
-			<@netCommon.tips />
+			<@netCommon.right />
 		</div>
     </div>
-	<!--大标题-->
-	<div class="jumbotron"><h4>Hey Boy.</h4></div>
+    
+	<!--百度新闻-->
+	<div class="panel panel-default">
+	  	<div class="panel-heading">
+	    	<span class="glyphicon glyphicon-th-list"></span>新闻
+	  	</div>
+	  	<div class="panel-body">
+	    	<style type=text/css> 
+	    		.baidu{font-size:14px;line-height:24px;font-family:arial} 
+				.baidu span{color:#6f6f6f;font-size:12px} a.more{color:#008000;}a.blk{color:#000;font-weight:bold;}
+			</style>
+			<script language="JavaScript" type="text/JavaScript" src="http://news.baidu.com/n?cmd=1&class=internet&pn=1&tn=newsbrofcu"></script>
+	  	</div>
+	</div>
+
 </div>
 <@netCommon.footer />
 </body>
