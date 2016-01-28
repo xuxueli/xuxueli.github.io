@@ -37,6 +37,10 @@ public class WebExceptionResolver implements HandlerExceptionResolver {
 		} else {
 			result.setCode(ReturnCodeEnum.FAIL.code());
 			result.setMsg(ex.toString().replaceAll("\n", "<br/>"));
+			
+			logger.info("==============异常开始=============");
+			logger.info("system catch exception:{}", ex);
+			logger.info("==============异常结束=============");
 		}
 				
 		// 是否JSON返回
@@ -54,9 +58,6 @@ public class WebExceptionResolver implements HandlerExceptionResolver {
 			mv.setViewName(CommonViewName.COMMON_EXCEPTION);
 		}
 		
-		logger.info("==============异常开始=============");
-		logger.info("system catch exception:{}", ex);
-		logger.info("==============异常结束=============");
 		return mv;
 	}
 

@@ -61,6 +61,8 @@ public class HtmlGenerateServiceImpl implements IHtmlGenerateService {
 							for (ArticleInfo article : groupList) {
 								params.clear();
 								params.put("articleModule", articleModule);
+								params.put("module", module);
+								params.put("group", group);
 								params.put("article", article);
 								HtmlTemplateUtil.generate(params, "net/article/article.info.ftl", "/article/article/" + article.getArticleId() + ".html");	// 文章.detail
 							}
@@ -75,7 +77,7 @@ public class HtmlGenerateServiceImpl implements IHtmlGenerateService {
 		List<WallInfo> wallInfoList = wallInfoDao.getPageList(0, 10000);
 		params.clear();
 		params.put("articleModule", articleModule);
-		HtmlGenerateServiceImpl.generateHtmlPagination(wallInfoList, params, 20, "net/wall/index.ftl", "wall/", "index");
+		HtmlGenerateServiceImpl.generateHtmlPagination(wallInfoList, params, 20, "net/wall/wall.index.ftl", "wall/", "index");
 		
 		// HTNL：安全中心
 		params.clear();

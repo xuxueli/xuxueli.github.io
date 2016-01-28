@@ -39,6 +39,7 @@
 <#macro header>
 <!-- header导航栏default  -->
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	
 	<div class="container">
 		<!-- 折叠 -->
 		<div class="navbar-header">
@@ -48,8 +49,9 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 	      	</button>
-			<a class="navbar-brand" href="${host_url}" ><span class="glyphicon glyphicon-home"></span></a>
+			<a class="navbar-brand" style="color:#fff;" href="${host_url}" ><span class="glyphicon glyphicon-home"></span></a>
 		</div>
+        
 		<!-- 响应式特性 -->
 		<div class="collapse navbar-collapse" id="net-navbar-collapse">
 			<!-- 左对齐 -->
@@ -60,31 +62,49 @@
 					<#if module.children?exists>
 					<#list module.children as group>
 					<#if group_index = 0>
-					<li class="nav-click" ><a href="${host_url}article/group/${group.menuId}.html" >${module.name}</a></li>
+					<li class="nav-click" navKey="module_${module.menuId}" ><a href="${host_url}article/group/${group.menuId}.html" >${module.name}</a></li>
 					</#if>
 					</#list>
 					</#if>
 				</#list>
 				</#if>
-				<li class="nav-click" ><a href="${host_url}wall/" >一面墙</a></li>
+				<li class="nav-click" navKey="wall" ><a href="${host_url}wall/" >一面墙</a></li>
 			</ul>
 			<!--右对齐-->
-			<ul class="nav navbar-nav navbar-right">
-				<li class="dropdown login-false">
-				    <a href="#" class="dropdown-toggle" data-toggle="dropdown">个人中心<b class="caret"></b></a>
+			<ul class="nav navbar-nav navbar-right login-false">
+                <li><a href="#" data-toggle="modal" data-target="#loginModal" >登陆</a></li>
+                <li><a href="#" data-toggle="modal" data-target="#regModal" >注册</a></li>
+        	</ul>
+        	<ul class="nav navbar-nav navbar-right login-true">
+				<li>
+				    <a href="#" class="dropdown-toggle loginEmail" data-toggle="dropdown">个人中心<b class="caret"></b></a>
 				    <ul class="dropdown-menu">
-				       <li><a href="#" data-toggle="modal" data-target="#loginModal" >登陆</a></li>
 				       <li class="divider"></li>
-				       <li><a href="#" data-toggle="modal" data-target="#regModal" >注册</a></li>
-				    </ul>
-				</li>
-				<li class="dropdown login-true">
-				    <a href="#" class="dropdown-toggle loginEmail" data-toggle="dropdown">小窝 <b class="caret"></b></a>
-				    <ul class="dropdown-menu">
 				       <li><a href="javascript:;" class="logout" >注销登陆</a></li>
 				    </ul>
 				</li>
 			</ul>
+			<!--右对齐
+			<ul class="nav navbar-nav navbar-right">
+				<form class="navbar-form" role="search" method="get" action="${host_url}">
+	                <div class="input-group input-group-sm has-feedback">
+					  	<input type="text" class="form-control" placeholder="回车搜索" onkeypress="enterSearch(event)" aria-describedby="sizing-addon3">
+					  	<span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
+					</div>
+	            </form>
+
+	            <script type="text/javascript">
+	                function enterSearch(e) {
+	                    var e = e || window.event;
+	                    if(e.keyCode == 13) {
+	                        if($.trim($("input[name='q']").val()) != "") {
+	                            $("#search_form").submit();
+	                        }
+	                    }
+	                }
+	            </script>
+			</ul>
+			-->
 	   </div>
 	</div>
 </nav>
@@ -176,8 +196,8 @@
 		<div class="container">
 			<div class="info">
 				<ul>
-					<li><b>关于:</b></li>
-	          		<li><a href="#">5i我爱</a></li>
+					<li><b><span class="glyphicon glyphicon-leaf"></span></b></li>
+	          		<li><a href="#">关于我们</a></li>
 			    	<li><a href="#">在线反馈</a></li>
 			   		<li><a href="#">用户协议</a></li>
 			        <li><a href="#">隐私政策</a></li>
@@ -188,22 +208,41 @@
 	<!-- copyrightbottom -->
 	<section class="copyrightbottom">
 		<div class="container">
-			<div class="info">《5i我爱》所有内容来源自网络和网友提供。如站内内容涉及版权、著作权等问题,请您联系管理员进行处理。</div>
+			<div class="info">《我爱》所有内容来源自网络和网友提供。如站内内容涉及版权、著作权等问题,请及时联系管理员进行处理。</div>
 			<div class="info">Copyright © 2015 XXL</div>
 		</div>
 	</section>
 </footer>
 </#macro>
 
-<#macro tips>
-<div class="panel-group" id="accordion">
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse1">欢迎来到“我爱”</a></h4>
-	    </div>
-	    <div id="collapse1" class="panel-collapse collapse in">
-			<div class="panel-body">“我爱”是一个原创分享糗事的平台，遵循UGC原则，网友可以自由投稿、投票、评论、审核内容，并与其它网友互动。糗事内容真实，文字简洁、清晰、口语化，适合随时随地观看，缓解生活压力。</div>
-	    </div>
-	</div>
+<#macro right>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h5>热米饭里拌什么最好吃？</h5>
+        <p>土豆烧牛肉。赫鲁晓夫说土豆烧牛肉是共产主义，此言不虚。</p>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <span class="glyphicon glyphicon-th-list"></span>友情链接
+    </div>
+    <div class="panel-body">
+        <div class="media" style="width: 100%;height: 20px;line-height: 20px;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-orient: vertical;" >
+            <a href="http://www.qiushibaike.com/" target="_blank" >糗事百科</a>
+        </div>
+        <div class="media" style="width: 100%;height: 20px;line-height: 20px;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-orient: vertical;" >
+            <a href="http://www.mop.com/" target="_blank" >猫扑社区</a>
+        </div>
+        <div class="media" style="width: 100%;height: 20px;line-height: 20px;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-orient: vertical;" >
+            <a href="http://tu.duowan.com/m/bxgif/" target="_blank" >爆笑GIT图</a>
+        </div>
+        <div class="media" style="width: 100%;height: 20px;line-height: 20px;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-orient: vertical;" >
+            <a href="http://news.baidu.com/" target="_blank" >百度新闻</a>
+        </div>
+        <div class="media" style="width: 100%;height: 20px;line-height: 20px;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-orient: vertical;" >
+            <a href="http://www.qiushibaike.com/" target="_blank" >糗事百科</a>
+        </div>
+    </div>
 </div>
 </#macro>
