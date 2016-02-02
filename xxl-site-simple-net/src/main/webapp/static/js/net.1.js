@@ -152,6 +152,7 @@ $(function(){
 				$(".login-false").hide();
 				$(".login-true").show();
 				$(".login-true .loginEmail").html(data.returnContent.email + '<b class="caret"></b>');
+				ifLogin = true;
 			}
 		}, 'json');
 	}
@@ -167,6 +168,9 @@ $(function(){
 	});
 	
 });
+
+// 全局变量
+var ifLogin = false;
 
 //通用提示
 var ComAlert = {

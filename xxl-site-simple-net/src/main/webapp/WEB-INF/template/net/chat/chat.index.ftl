@@ -1,34 +1,60 @@
+<#import "/net/common/common.macro.ftl" as netCommon>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8" />
-<title>即时通讯</title>
-
-<link rel="stylesheet" href="http://localhost:8080/static/plugin/bootstrap-3.3.4/static/css/bootstrap.min.css" >
-<script type="text/javascript" src="http://localhost:8080/static/plugin/jquery/jquery-1.11.2.min.js"></script>
-<script type="text/javascript" src="http://localhost:8080/static/plugin/socketio/socket.io-1.3.5.js"></script>
-
-<style>
-body {padding: 20px;}
-#console {height: 100%;overflow: auto;}
-.username-msg {color: orange;}
-.connect-msg {color: green;}
-.disconnect-msg {color: red;}
-.send-msg {color: #888}
-</style>
-
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>我爱</title>
+	<@netCommon.common_hosturl />
+	<@netCommon.common_style />
+	<script type="text/javascript" src="${host_url}/static/plugin/socketio/socket.io-1.3.5.js"></script>
+	<style>
+	#console {height: 100%;overflow: auto;}
+	.username-msg {color: orange;}
+	.connect-msg {color: green;}
+	.disconnect-msg {color: red;}
+	.send-msg {color: #888}
+	</style>
+	
 </head>
+<body navKey="chat" >
+<@netCommon.header />
 
-<body>
-	<form class="well form-inline" onsubmit="return false;">
-		<input id="msg" class="input-xlarge" type="text" placeholder="请输入..." />
-		<button type="button" onClick="sendMessage()" class="btn">发送</button>
-	</form>
-	<div id="console" class="well"></div>
+<!-- content -->
+<div class="container">
+
+	<!--中央区域-->
+    <div class="row">
+    	<!--左侧-->
+        <div class="col-md-9">
+
+			<body navKey="chat" >
+				<form class="well form-inline" onsubmit="return false;">
+					<input id="msg" class="input-xlarge" type="text" placeholder="请输入..." />
+					<button type="button" onClick="sendMessage()" class="btn">发送</button>
+				</form>
+				<div id="console" class="well"></div>
+			</body>
+			
+        </div>
+        <!--右侧-->
+		<div class="col-md-3" >
+			<@netCommon.right />
+		</div>
+    </div>
+    
+</div>
+
+<@netCommon.footer />
 </body>
-
-
 <script>
+
+	// 校验登陆状态
+	if (!ifLogin) {
+		ComAlert.show(2, "聊天室仅针对注册用户开放");
+		return;
+	}
+
 	var userName = 'user' + Math.floor((Math.random() * 1000) + 1);
 	var socket = io.connect('http://localhost:9999', {
 		'reconnection delay' : 2000,
@@ -100,4 +126,5 @@ body {padding: 20px;}
 		return format;
 	}
 </script>
+
 </html>

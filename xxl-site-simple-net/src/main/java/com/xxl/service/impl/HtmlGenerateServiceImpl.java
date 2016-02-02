@@ -79,6 +79,9 @@ public class HtmlGenerateServiceImpl implements IHtmlGenerateService {
 		params.put("articleModule", articleModule);
 		HtmlGenerateServiceImpl.generateHtmlPagination(wallInfoList, params, 20, "net/wall/wall.index.ftl", "wall/", "index");
 		
+		// HTML：聊天室
+		HtmlTemplateUtil.generate(params, "net/chat/chat.index.ftl", "/chat/chat.index.html");
+		
 		// HTNL：安全中心
 		params.clear();
 		params.put("articleModule", articleModule);
