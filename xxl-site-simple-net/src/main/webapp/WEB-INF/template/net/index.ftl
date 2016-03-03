@@ -1,16 +1,8 @@
 Loading...
 <script>
-	<#if articleModule?exists>
-	<#list articleModule as module>
-		<#if module.children?exists>
-		<#list module.children as group>
-		<#if group_index = 0>
-			window.location.href = "${host_url}article/group/${group.menuId}.html";
-			return;	
-		</#if>
-		</#list>
-		</#if>
-	</#list>
+	<#if articleModule?exists && articleModule?size gt 0 && articleModule[0].children?exists && articleModule[0].children?size gt 0>
+		window.location.href = "${host_url}article/group/${articleModule[0].children[0].menuId}.html";
+	<#else>
+		window.location.href = "${host_url}wall/";
 	</#if>
-	window.location.href = "${host_url}wall/";
 </script>
