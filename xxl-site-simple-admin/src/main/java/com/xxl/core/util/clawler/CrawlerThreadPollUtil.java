@@ -37,6 +37,5 @@ public class CrawlerThreadPollUtil {
 	
 	public static void main(String[] args) {
 		execQiubaiStart(true);
-		//execQiubaiStart(0);
 	}
 }

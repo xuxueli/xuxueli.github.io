@@ -1,9 +1,7 @@
 package com.xxl.controller;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -12,36 +10,32 @@ import com.xxl.core.result.ReturnT;
 import com.xxl.service.ITriggerService;
 
 /**
- * 用户操作
+ * 爬虫管理
  * @author xuxueli
  */
 @Controller
-@RequestMapping("/demo")
+@RequestMapping("/net")
 public class DemoController {
 	
 	@Autowired
     private ITriggerService triggerService;
 	
-	@RequestMapping(value="/{secretKey}/{funCode}")
+	@RequestMapping("/netMain")
+	@PermessionType(permessionNum = 1000700)
+	public String wallMain() {
+		return "net/net.main";
+	}
+	
+	@RequestMapping("/wallClaw")
 	@ResponseBody
-	@PermessionType
-	public ReturnT<String> test(@PathVariable("secretKey")String secretKey, @PathVariable("funCode")int funCode){
-		if (!StringUtils.equals("xuxueli", secretKey)) {
-			return null;
-		}
-
-		switch (funCode) {
-		case 5000:
+	@PermessionType(permessionNum = 1000700)
+	public ReturnT<Integer> wallClawRun(boolean runType) {
+		if (runType) {
 			triggerService.wallClawlerStart();
-			break;
-		case 5001:
+		} else {
 			triggerService.wallClawlerStop();
-			break;
-		default:
-			break;
 		}
-		
-		return new ReturnT<String>();
+		return new ReturnT<Integer>();
 	}
 	
 }

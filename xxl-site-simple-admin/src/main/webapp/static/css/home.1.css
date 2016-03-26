@@ -8,7 +8,6 @@
 /** west:系统图标 */
 .icon{ background:url(../images/tabicons.png) no-repeat;width:18px; line-height:18px; display:inline-block;}
 .icon-sys{ background-position:0px -200px;}
-.icon-set{ background-position:-380px -200px;}
 .icon-add{background-position: -20px 0px;}
 .icon-nav{background-position: -100px -20px; }
 .icon-users{background-position: -100px -480px;}
