@@ -74,4 +74,18 @@ public class CommonDic {
 		}
 	}
 	
+	/**
+	 * 系统配置
+	 */
+	public enum SystemParamEnum {
+		NET_ADDRESS("官网地址");
+		String title;
+		private SystemParamEnum(String title){
+			this.title = title;
+		}
+		public String getTitle() {
+			return title;
+		}
+	}
+	
 }

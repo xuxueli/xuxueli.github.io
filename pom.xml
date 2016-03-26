@@ -157,13 +157,6 @@
 			<version>2.4</version>
 		</dependency>
 		
-		<!-- xxl-rpc-core -->
-		<dependency>
-			<groupId>com.xxl</groupId>
-			<artifactId>xxl-rpc-core</artifactId>
-			<version>1.0.3</version>
-		</dependency>
-
 	</dependencies>
 
 	<build>
