@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50544
 File Encoding         : 65001
 
-Date: 2016-01-28 22:24:01
+Date: 2016-03-26 23:23:31
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -27,7 +27,7 @@ CREATE TABLE `admin_menu` (
   `url` varchar(50) DEFAULT NULL,
   `permession_num` int(11) DEFAULT NULL,
   PRIMARY KEY (`menu_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of admin_menu
@@ -40,9 +40,11 @@ INSERT INTO `admin_menu` VALUES ('6', '4', '2', '后台角色管理', 'userPermi
 INSERT INTO `admin_menu` VALUES ('7', '4', '3', '后台菜单管理', 'userPermission/menuMain.do', '1000300');
 INSERT INTO `admin_menu` VALUES ('16', '20', '1', '文章内容管理', 'article/articleMain.do', '1000500');
 INSERT INTO `admin_menu` VALUES ('19', '20', '2', '文章菜单管理', 'article/articleMenuMain.do', '1000400');
-INSERT INTO `admin_menu` VALUES ('20', '2', '1', '文章管理', '', '0');
-INSERT INTO `admin_menu` VALUES ('21', '2', '2', '一面墙内容管理', '', '0');
+INSERT INTO `admin_menu` VALUES ('20', '2', '2', '文章管理', '', '0');
+INSERT INTO `admin_menu` VALUES ('21', '2', '3', '一面墙内容管理', '', '0');
 INSERT INTO `admin_menu` VALUES ('22', '21', '1', '一面墙内容管理', 'wall/wallMain.do', '1000600');
+INSERT INTO `admin_menu` VALUES ('23', '2', '1', '官网管理', '', '0');
+INSERT INTO `admin_menu` VALUES ('24', '23', '1', '官网控制面板', 'net/netMain', '1000700');
 
 -- ----------------------------
 -- Table structure for admin_role
@@ -146,7 +148,7 @@ CREATE TABLE `article_info` (
 -- ----------------------------
 -- Records of article_info
 -- ----------------------------
-INSERT INTO `article_info` VALUES ('6', '0', '16', '0', '这是一篇文章', '<p>内容666<img src=\"http://img.baidu.com/hi/jx2/j_0025.gif\"/></p>', '2015-04-25 22:40:21', '0');
+INSERT INTO `article_info` VALUES ('6', '0', '16', '0', '这是一篇文章3', '<p>内容666<img src=\"http://img.baidu.com/hi/jx2/j_0025.gif\"/></p>', '2015-04-25 22:40:21', '0');
 INSERT INTO `article_info` VALUES ('7', '0', '16', '0', '标题7', '内容7', '2015-04-25 22:40:21', '0');
 INSERT INTO `article_info` VALUES ('8', '0', '16', '0', '标题8', '内容8', '2015-04-25 22:40:21', '0');
 INSERT INTO `article_info` VALUES ('9', '0', '16', '0', '标题9', '内容9', '2015-04-25 22:40:21', '0');
@@ -229,12 +231,30 @@ CREATE TABLE `email_send_info` (
   `send_code` varchar(50) DEFAULT NULL,
   `send_content` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of email_send_info
 -- ----------------------------
-INSERT INTO `email_send_info` VALUES ('3', '9', '100', '1', '2015-05-09 14:33:11', 'tnfomc', null);
+INSERT INTO `email_send_info` VALUES ('4', '10', '100', '1', '2016-02-02 15:55:21', 'ytqdzp', null);
+INSERT INTO `email_send_info` VALUES ('5', '11', '100', '1', '2016-02-02 15:58:09', 'khlvnj', null);
+
+-- ----------------------------
+-- Table structure for system_param
+-- ----------------------------
+DROP TABLE IF EXISTS `system_param`;
+CREATE TABLE `system_param` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `key` varchar(255) NOT NULL,
+  `value` varchar(255) NOT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of system_param
+-- ----------------------------
+INSERT INTO `system_param` VALUES ('1', 'NET_ADDRESS', 'http://127.0.0.1:8080/xxl-site-simple-net/manage/generateHtml, http://127.0.0.1:8080/xxl-site-simple-net/manage/generateHtml2', '官网地址');
 
 -- ----------------------------
 -- Table structure for user_main
@@ -249,12 +269,12 @@ CREATE TABLE `user_main` (
   `state` int(11) NOT NULL,
   `reg_time` datetime NOT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user_main
 -- ----------------------------
-INSERT INTO `user_main` VALUES ('9', '931591021@qq.com', 'e10adc3949ba59abbe56e057f20f883e', null, null, '100', '2015-05-09 14:33:11');
+INSERT INTO `user_main` VALUES ('11', '931591021@qq.com', 'e10adc3949ba59abbe56e057f20f883e', null, null, '100', '2016-02-02 15:58:09');
 
 -- ----------------------------
 -- Table structure for wall_info
@@ -269,8 +289,12 @@ CREATE TABLE `wall_info` (
   `image` varchar(100) DEFAULT NULL,
   `create_time` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=501 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of wall_info
 -- ----------------------------
+INSERT INTO `wall_info` VALUES ('1', '0', '0', '0', '今天在火车上，饿了拿巧克力蛋糕出来吃，旁边一小孩盯着我看(⊙o⊙)眼馋，这时他妈妈跟他说，别看，他吃的是屎！大姐，我…… \n<!--1459010871-->', null, '2016-03-26 21:22:05');
+INSERT INTO `wall_info` VALUES ('2', '0', '0', '0', '近视400。等公交时把眼镜摘下来擦，一姑娘过来跟我说你不带眼镜的样子很帅，如果你可以不带眼镜我就追你，我默默的带上眼镜看了一眼还没来及开口，姑娘说好啦我懂了转身走了。我只是想看清楚你一点啊 \n<!--1459002092-->', null, '2016-03-26 21:22:05');
+INSERT INTO `wall_info` VALUES ('3', '0', '0', '0', '“妈妈！为什么我长得这么丑？”\n<br />“你去问我妈！”\n<br />\n<br />“外婆！为什么我长得这么丑？”\n<br />“你去问我妈！”\n<br />\n<br />对着祖宗的灵位牌，她没敢再问下去…… \n<!--1459005765-->', null, '2016-03-26 21:22:05');
+INSERT INTO `wall_info` VALUES ('4', '0', '0', '0', '做完事找老板结账，侄子在家无聊，陪着一起去了。结账时，态度卑谦，对老板递烟奉承，溜须拍马。回家途中，侄子一脸鄙夷：叔叔，我以后绝不会想你一样。心里暗暗感叹：是堕落了，可是又能怎么办，像你这么大的时候，我也是这么想的，可是进入社会才发现：太美的承诺是因为太年轻。 \n<!--1459010256-->', null, '2016-03-26 21:22:05');
