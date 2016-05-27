@@ -8,7 +8,6 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
 /**
@@ -39,7 +38,7 @@ public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextW
 	@Override
 	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
 		ctx.flush();
-		logger.info("channelReadComplete at: {}", ctx.channel().remoteAddress());
+		logger.debug("channelReadComplete at: {}", ctx.channel().remoteAddress());
 	}
 	
 	@Override
@@ -49,11 +48,9 @@ public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextW
 	
 	@Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-		// 握手成功
-		ctx.pipeline().remove(FullHttpRequestHandler.class);
-        group.writeAndFlush(new TextWebSocketFrame("[SERVER] - " + ctx.channel() + " 加入"));
+		// ctx.pipeline().remove(FullHttpRequestHandler.class);	// 握手成功
+        //group.writeAndFlush(new TextWebSocketFrame("[SERVER] - " + ctx.channel().remoteAddress() + " 加入"));
         group.add(ctx.channel());
-     			
         logger.info("Client 加入, remoteAddress: {}", ctx.channel().remoteAddress());
     }
 	
@@ -62,7 +59,7 @@ public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextW
         /*for (Channel channel : group) {
             channel.writeAndFlush(new TextWebSocketFrame("[SERVER] - " + ctx.channel().remoteAddress() + " 离开"));
         }*/
-        group.writeAndFlush(new TextWebSocketFrame("[SERVER] - " + ctx.channel().remoteAddress() + " 离开"));
+        //group.writeAndFlush(new TextWebSocketFrame("[SERVER] - " + ctx.channel().remoteAddress() + " 离开"));
         group.remove(ctx.channel());
         logger.info("Client 离开, remoteAddress: {}", ctx.channel().remoteAddress());
     }

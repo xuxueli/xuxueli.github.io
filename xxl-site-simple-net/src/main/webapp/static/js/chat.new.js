@@ -55,6 +55,12 @@ WebChat = function(me) {
 			}
 			$('#msg').val('');
 			WebChat.socket.send(message);
+			
+			/*WebChat.socket.send({
+				userName : WebChat.userName,
+				message : message
+			});*/
+			 
 		}
 	};
 }();
