@@ -1,18 +1,18 @@
-package com.xxl.socketio.data;
+package com.xxl.core.chat.socketio.data;
 
 /**
  * 通讯类
  * @author xuxueli
  */
-public class ChatObject {
+public class SioChatObject {
 
     private String userName;
     private String message;
 
-    public ChatObject() {
+    public SioChatObject() {
     }
 
-    public ChatObject(String userName, String message) {
+    public SioChatObject(String userName, String message) {
         super();
         this.userName = userName;
         this.message = message;

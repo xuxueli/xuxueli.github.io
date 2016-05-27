@@ -13,12 +13,13 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfig;
 
+import com.xxl.core.chat.netty.NettyChatServer;
+import com.xxl.core.chat.socketio.SioChatServer;
 import com.xxl.core.thread.EmailSendConsumerThread;
 import com.xxl.core.thread.EmailSendProductThread;
 import com.xxl.service.IEmailSendService;
 import com.xxl.service.ITriggerService;
 import com.xxl.service.ResourceBundle;
-import com.xxl.socketio.ListenerServer;
 
 /**
  * 注册监听器
@@ -51,7 +52,9 @@ public class RegistryListener implements ServletContextListener {
 		exec.execute(new Thread(new EmailSendConsumerThread()));
 		
 		// netty-socketio 服务器启动
-		ListenerServer.server = new ListenerServer();
+		new SioChatServer().init();
+		// netty websocket 服务器启动
+		new NettyChatServer().init();
 		
 		// 全站静态化
 		resource.getTriggerService().generateNetHtml();

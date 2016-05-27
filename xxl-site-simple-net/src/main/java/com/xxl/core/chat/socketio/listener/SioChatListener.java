@@ -1,4 +1,4 @@
-package com.xxl.socketio.listener;
+package com.xxl.core.chat.socketio.listener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,18 +11,18 @@ import com.corundumstudio.socketio.annotation.OnDisconnect;
 import com.corundumstudio.socketio.annotation.OnEvent;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
-import com.xxl.socketio.data.ChatObject;
+import com.xxl.core.chat.socketio.data.SioChatObject;
 
 /**
  * 消息处理
  * @author xuxueli
  */
-public class ChatListener implements ConnectListener, DisconnectListener{
-	private static Logger logger = LoggerFactory.getLogger(ChatListener.class);
+public class SioChatListener implements ConnectListener, DisconnectListener{
+	private static Logger logger = LoggerFactory.getLogger(SioChatListener.class);
 	
 	private SocketIOServer server;
 
-	public ChatListener(SocketIOServer server) {
+	public SioChatListener(SocketIOServer server) {
 		this.server = server;
 	}
 	
@@ -38,7 +38,7 @@ public class ChatListener implements ConnectListener, DisconnectListener{
 	}
 	
 	@OnEvent("chatevent")
-	public void onEvent(SocketIOClient client, ChatObject data, AckRequest ackSender) {
+	public void onEvent(SocketIOClient client, SioChatObject data, AckRequest ackSender) {
 		logger.info("中转消息：{}", data.toString());
 		server.getBroadcastOperations().sendEvent("chatevent", data);
 	}

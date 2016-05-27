@@ -81,6 +81,7 @@ public class HtmlGenerateServiceImpl implements IHtmlGenerateService {
 		
 		// HTML：聊天室
 		HtmlTemplateUtil.generate(params, "net/chat/chat.index.ftl", "/chat/chat.index.html");
+		HtmlTemplateUtil.generate(params, "net/chat/chat.new.ftl", "/chat/chat.new.html");
 		
 		// HTNL：安全中心
 		params.clear();
