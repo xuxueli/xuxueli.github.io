@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EmailSendInfoMapper">
+	
+	<resultMap id="EmailSendInfo" type="com.xxl.core.model.main.EmailSendInfo" >
+		<id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="user_id" property="userId" jdbcType="INTEGER" />
+	    <result column="email_type" property="emailType" jdbcType="INTEGER" />
+	    <result column="email_status" property="emailStatus" jdbcType="INTEGER" />
+	    <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+	    <result column="send_code" property="sendCode" jdbcType="VARCHAR" />
+	    <result column="send_content" property="sendContent" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		t.id,
+		t.user_id,
+		t.email_type,
+		t.email_status,
+		t.send_time,
+		t.send_code,
+		t.send_content
+	</sql>
+
+	<insert id="insert" parameterType="com.xxl.core.model.main.EmailSendInfo">
+		INSERT INTO email_send_info (user_id, email_type, email_status, send_time, send_code, send_content)
+		VALUES (#{userId}, #{emailType}, #{emailStatus}, SYSDATE(), #{sendCode}, #{sendContent} )
+	</insert>
+	
+	<select id="getListByStatus" parameterType="java.util.HashMap" resultMap="EmailSendInfo" >
+		SELECT <include refid="Base_Column_List" />
+		FROM email_send_info AS t
+		WHERE t.email_status = #{emailStatus}
+		ORDER BY t.send_time
+		LIMIT 0, #{pagesize}
+	</select>
+	
+	<update id="updateStatus" parameterType="java.util.HashMap" >
+		update email_send_info
+		set email_status = #{emailStatus}
+		where email_status != #{emailStatus}
+	</update>
+	
+	<select id="getEmail" parameterType="java.util.HashMap" resultMap="EmailSendInfo" >
+		SELECT <include refid="Base_Column_List" />
+		FROM email_send_info AS t
+		WHERE t.user_id = #{userId} 
+			and t.email_type = #{emailType}
+			and SYSDATE() <![CDATA[ < ]]> DATE_ADD(t.send_time,INTERVAL 3 DAY)
+		ORDER BY t.send_time desc
+		LIMIT 0, 1
+	</select>
+	
+</mapper>
