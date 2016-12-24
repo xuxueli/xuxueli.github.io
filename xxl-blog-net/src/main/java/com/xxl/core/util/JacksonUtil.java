@@ -1,10 +1,11 @@
 package com.xxl.core.util;
 
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Jackson工具类
@@ -43,7 +44,7 @@ public class JacksonUtil {
     	return getInstance().readValue(jsonStr, clazz);
     }
     public static <T> T readValueRefer(String jsonStr, Class<T> clazz) throws Exception {
-    	return getInstance().readValue(jsonStr, new TypeReference<T>() { });	
+    	return getInstance().readValue(jsonStr, new TypeReference<T>() { });
     }
 
     public static void main(String[] args) {
