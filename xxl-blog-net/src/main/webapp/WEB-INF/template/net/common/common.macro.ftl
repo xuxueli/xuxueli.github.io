@@ -69,7 +69,6 @@
 				</#list>
 				</#if>
 				<li class="nav-click" navKey="wall" ><a href="${host_url}wall/" >一面墙</a></li>
-				<li class="nav-click" navKey="chat" ><a href="${host_url}chat/chat.index.html" >聊天室</a></li>
 			</ul>
 			<!--右对齐-->
 			<ul class="nav navbar-nav navbar-right login-false">

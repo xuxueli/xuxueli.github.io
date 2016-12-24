@@ -1,14 +1,5 @@
 package com.xxl.service.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.xxl.core.model.main.ArticleInfo;
 import com.xxl.core.model.main.ArticleMenu;
 import com.xxl.core.model.main.WallInfo;
@@ -16,6 +7,14 @@ import com.xxl.core.util.HtmlTemplateUtil;
 import com.xxl.dao.IWallInfoDao;
 import com.xxl.service.IArticleService;
 import com.xxl.service.IHtmlGenerateService;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * html generate
@@ -78,11 +77,7 @@ public class HtmlGenerateServiceImpl implements IHtmlGenerateService {
 		params.clear();
 		params.put("articleModule", articleModule);
 		HtmlGenerateServiceImpl.generateHtmlPagination(wallInfoList, params, 20, "net/wall/wall.index.ftl", "wall/", "index");
-		
-		// HTML：聊天室
-		HtmlTemplateUtil.generate(params, "net/chat/chat.index.ftl", "/chat/chat.index.html");
-		HtmlTemplateUtil.generate(params, "net/chat/chat.new.ftl", "/chat/chat.new.html");
-		
+
 		// HTNL：安全中心
 		params.clear();
 		params.put("articleModule", articleModule);
