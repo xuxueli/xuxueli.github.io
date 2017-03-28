@@ -1,0 +1,26 @@
+
+<!--index.wxml-->
+<view class="container">
+
+  <!--头像-->
+  <view bindtap="bindViewTap" class="userinfo">
+    <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+  </view>
+
+  <!--用户名-->
+  <view>
+    <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+  </view>
+
+  <!--工具入口-->
+  <view class="usermotto">
+    <button type="default" size="{{primarySize}}" plain="{{plain}}" hover-class="button-hover" disabled="{{disabled}}" bindtap="toCalc"> {{motto}} </button>
+  </view>
+
+  <!--github-->
+  <view>
+    <navigator url="view" class="github" hover-class="navigator-hover">
+      <icon type="{{iconType}}" class="icon" size="20" />GitHub:xuxueli
+    </navigator>
+  </view>
+</view>
