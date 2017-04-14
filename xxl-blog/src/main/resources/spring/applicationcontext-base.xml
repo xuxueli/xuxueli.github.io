@@ -10,14 +10,13 @@
            http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<context:annotation-config />
-	<context:component-scan base-package="com.xxl.service.impl, com.xxl.dao.impl" />
+	<context:component-scan base-package="com.xxl.blog.service.impl, com.xxl.blog.dao.impl" />
 
 	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="fileEncoding" value="utf-8" />
 		<property name="locations">
 			<list>
 				<value>classpath*:jdbc.properties</value>
-				<value>classpath*:mail.properties</value>
 			</list>
 		</property>
 	</bean>

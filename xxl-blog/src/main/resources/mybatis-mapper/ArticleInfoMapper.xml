@@ -3,33 +3,70 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ArticleInfoMapper">
 	
-	<resultMap type="com.xxl.core.model.main.ArticleInfo" id="ArticleInfo" >
+	<resultMap id="ArticleInfo" type="com.xxl.blog.core.model.ArticleInfo" >
 	    <id column="article_id" property="articleId" jdbcType="INTEGER" />
-	    <result column="user_id" property="userId" jdbcType="INTEGER" />
-	    <result column="menu_id" property="menuId" jdbcType="INTEGER" />
-	    <result column="state" property="state" jdbcType="INTEGER" />
+	    <result column="id" property="id" jdbcType="INTEGER" />
+	    <result column="group_id" property="groupId" jdbcType="INTEGER" />
+	    <result column="status" property="status" jdbcType="INTEGER" />
 	    <result column="title" property="title" jdbcType="VARCHAR" />
 	    <result column="content" property="content" jdbcType="TIMESTAMP" />
-	    <result column="create_time" property="createTime" jdbcType="INTEGER" />
-	    <result column="click_count" property="clickCount" jdbcType="INTEGER" />
+	    <result column="add_time" property="addTime" jdbcType="INTEGER" />
+	    <result column="update_time" property="updateTime" jdbcType="INTEGER" />
 	</resultMap>
 	
 	<sql id="Base_Column_List">
-		t.article_id,
-		t.user_id,
-		t.menu_id,
-		t.state,
+		t.id,
+		t.group_id,
+		t.status,
 		t.title,
 		t.content,
-		t.create_time,
-		t.click_count
+		t.add_time,
+		t.update_time
 	</sql>
+
+	<insert id="add" parameterType="com.xxl.blog.core.model.ArticleInfo" >
+		INSERT INTO xxl_blog_article_info (
+			group_id,
+			status,
+			title,
+			content,
+			add_time,
+			update_time
+		)
+		VALUES
+		(
+			#{groupId},
+			#{status},
+			#{title},
+			#{content},
+			NOW(),
+			NOW()
+		)
+	</insert>
+
+	<update id="update" parameterType="com.xxl.blog.core.model.ArticleInfo" >
+		UPDATE xxl_blog_article_info
+		SET group_id = #{groupId},
+			status = #{status},
+			title = #{title},
+			content = #{content},
+			update_time = NOW()
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete" parameterType="java.lang.Integer" >
+		DELETE FROM xxl_blog_article_info
+		WHERE id = #{id}
+	</delete>
 	
 	<select id="pageList" parameterType="java.util.HashMap" resultMap="ArticleInfo">
 		SELECT <include refid="Base_Column_List" />
-		FROM article_info AS t
-		WHERE t.menu_id = #{menuId}
-		ORDER BY t.create_time desc
+		FROM xxl_blog_article_info AS t
+		WHERE t.group_id = #{groupId}
+		<if test="status gt -1" >
+			AND t.status = #{status}
+		</if>
+		ORDER BY t.add_time desc
 		LIMIT #{offset, jdbcType=INTEGER}, #{pagesize, jdbcType=INTEGER}
 	</select>
 	

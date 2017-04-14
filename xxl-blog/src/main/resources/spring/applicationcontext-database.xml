@@ -29,7 +29,7 @@
 	
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="mapperLocations" value="classpath:mybatis-mapper/ArticleMenuMapper.xml"/>
+		<property name="mapperLocations" value="classpath:mybatis-mapper/*Mapper.xml"/>
 	</bean>
     
     <!-- Template在Junit测试的时候，必须使用scope="prototype"，不可使用默认单例 -->
@@ -63,7 +63,7 @@
 	<!-- AOP配置 -->
 	<aop:config>
 		<!-- 定义一个切入点 -->
-		<aop:pointcut id="txoperation" expression="execution(* com.xxl.service.imp.*.*(..))" />
+		<aop:pointcut id="txoperation" expression="execution(* com.xxl.blog.service.imp.*.*(..))" />
 		<!-- 切入点事务通知 -->
 		<aop:advisor pointcut-ref="txoperation" advice-ref="txAdvice" />
 	</aop:config>
