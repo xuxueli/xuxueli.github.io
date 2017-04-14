@@ -1,16 +1,14 @@
 package com.xxl.service.impl;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.xxl.core.constant.CommonDic;
 import com.xxl.core.model.main.ArticleInfo;
 import com.xxl.core.model.main.ArticleMenu;
 import com.xxl.dao.IArticleInfoDao;
 import com.xxl.dao.IArticleMenuDao;
 import com.xxl.service.IArticleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 文章菜单-文章
@@ -18,6 +16,8 @@ import com.xxl.service.IArticleService;
  */
 @Service
 public class ArticleServiceImpl implements IArticleService {
+
+	public static final int ARTICLE_MENU = 0;	// 模块类型
 
 	@Autowired
 	private IArticleMenuDao articleMenuDao;
@@ -30,7 +30,7 @@ public class ArticleServiceImpl implements IArticleService {
 	 */
 	@Override
 	public List<ArticleMenu> articleModule() {
-		List<ArticleMenu> list = articleMenuDao.getByParentId(CommonDic.ArticleMenuDic.MENU_MODULE_ID);
+		List<ArticleMenu> list = articleMenuDao.getByParentId(ARTICLE_MENU);
 		return list;
 	}
 

@@ -29,12 +29,43 @@
 	
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="mapperLocations" value="classpath:mybatis-mapper/*.xml"/>
+		<property name="mapperLocations" value="classpath:mybatis-mapper/ArticleMenuMapper.xml"/>
 	</bean>
     
     <!-- Template在Junit测试的时候，必须使用scope="prototype"，不可使用默认单例 -->
     <bean id="sqlSessionTemplate"  class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">  
           <constructor-arg index="0" ref="sqlSessionFactory" />  
-    </bean> 
+    </bean>
+
+
 	
+	<!-- 事务管理器（声明式事务） -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- 启动事务注解（方式1：注解方式） -->
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
+	<!-- 事务通知（方式2：XML事务管理） -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="detail*" propagation="SUPPORTS" />
+			<tx:method name="visit*" propagation="SUPPORTS" />
+			<tx:method name="get*" propagation="SUPPORTS" />
+			<tx:method name="find*" propagation="SUPPORTS" />
+			<tx:method name="check*" propagation="SUPPORTS" />
+			<tx:method name="list*" propagation="SUPPORTS" />
+			<tx:method name="*" propagation="REQUIRED" rollback-for="exception" />
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- AOP配置 -->
+	<aop:config>
+		<!-- 定义一个切入点 -->
+		<aop:pointcut id="txoperation" expression="execution(* com.xxl.service.imp.*.*(..))" />
+		<!-- 切入点事务通知 -->
+		<aop:advisor pointcut-ref="txoperation" advice-ref="txAdvice" />
+	</aop:config>
+
 </beans>

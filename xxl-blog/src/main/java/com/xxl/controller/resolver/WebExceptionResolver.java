@@ -1,8 +1,8 @@
 package com.xxl.controller.resolver;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.xxl.core.exception.WebException;
+import com.xxl.core.result.ReturnT;
+import com.xxl.core.util.JacksonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -10,11 +10,8 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.xxl.core.constant.CommonDic.CommonViewName;
-import com.xxl.core.constant.CommonDic.ReturnCodeEnum;
-import com.xxl.core.exception.WebException;
-import com.xxl.core.result.ReturnT;
-import com.xxl.core.util.JacksonUtil;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 异常解析器
@@ -35,7 +32,7 @@ public class WebExceptionResolver implements HandlerExceptionResolver {
 			result.setCode(((WebException) ex).getExceptionKey());
 			result.setMsg(((WebException) ex).getExceptionMsg());
 		} else {
-			result.setCode(ReturnCodeEnum.FAIL.code());
+			result.setCode(ReturnT.FAIL);
 			result.setMsg(ex.toString().replaceAll("\n", "<br/>"));
 			
 			logger.info("==============异常开始=============");
@@ -52,10 +49,10 @@ public class WebExceptionResolver implements HandlerExceptionResolver {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			mv.setViewName(CommonViewName.COMMON_RESULT);
+			mv.setViewName("net/common/common.result.body");
 		} else {
 			mv.addObject("exceptionMsg", result.getMsg());	
-			mv.setViewName(CommonViewName.COMMON_EXCEPTION);
+			mv.setViewName("net/common/common.result.exception");
 		}
 		
 		return mv;

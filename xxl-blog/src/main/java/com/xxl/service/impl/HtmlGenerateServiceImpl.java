@@ -2,16 +2,15 @@ package com.xxl.service.impl;
 
 import com.xxl.core.model.main.ArticleInfo;
 import com.xxl.core.model.main.ArticleMenu;
-import com.xxl.core.model.main.WallInfo;
 import com.xxl.core.util.HtmlTemplateUtil;
-import com.xxl.dao.IWallInfoDao;
 import com.xxl.service.IArticleService;
 import com.xxl.service.IHtmlGenerateService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,14 +19,14 @@ import java.util.Map;
  * html generate
  * @author xuxueli
  */
-@Service
+@Service("htmlGenerateService")
 public class HtmlGenerateServiceImpl implements IHtmlGenerateService {
-	
-	@Autowired
-    private IWallInfoDao wallInfoDao;
-	@Autowired
+
+	@Resource
     private IArticleService articleService;
-	
+	@Resource
+	private FreeMarkerConfigurer freemarkerConfig;
+
 	/**
 	 * 全站静态化
 	 */
@@ -39,7 +38,7 @@ public class HtmlGenerateServiceImpl implements IHtmlGenerateService {
 		// HTML：首页
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("articleModule", articleModule);
-		HtmlTemplateUtil.generate(params, "net/index.ftl", "/index.html");
+		HtmlTemplateUtil.generate(freemarkerConfig, params, "net/index.ftl", "/index.html");
 		
 		//HTML： 文章列表
 		if (CollectionUtils.isNotEmpty(articleModule)) {
@@ -53,7 +52,7 @@ public class HtmlGenerateServiceImpl implements IHtmlGenerateService {
 						params.put("articleModule", articleModule);
 						params.put("module", module);
 						params.put("group", group);
-						HtmlGenerateServiceImpl.generateHtmlPagination(groupList, params, 20, "net/article/article.group.ftl", "article/group/", String.valueOf(group.getMenuId()));	// 组html分页
+						HtmlGenerateServiceImpl.generateHtmlPagination(freemarkerConfig, groupList, params, 20, "net/article/article.group.ftl", "article/group/", String.valueOf(group.getMenuId()));	// 组html分页
 						
 						// 文章详情页
 						if (CollectionUtils.isNotEmpty(groupList)) {
@@ -63,7 +62,7 @@ public class HtmlGenerateServiceImpl implements IHtmlGenerateService {
 								params.put("module", module);
 								params.put("group", group);
 								params.put("article", article);
-								HtmlTemplateUtil.generate(params, "net/article/article.info.ftl", "/article/article/" + article.getArticleId() + ".html");	// 文章.detail
+								HtmlTemplateUtil.generate(freemarkerConfig, params, "net/article/article.info.ftl", "/article/article/" + article.getArticleId() + ".html");	// 文章.detail
 							}
 						}
 						
@@ -72,17 +71,11 @@ public class HtmlGenerateServiceImpl implements IHtmlGenerateService {
 			}
 		}
 
-		// HTML：一面墙（	需分页）
-		List<WallInfo> wallInfoList = wallInfoDao.getPageList(0, 10000);
-		params.clear();
-		params.put("articleModule", articleModule);
-		HtmlGenerateServiceImpl.generateHtmlPagination(wallInfoList, params, 20, "net/wall/wall.index.ftl", "wall/", "index");
-
 		// HTNL：安全中心
 		params.clear();
 		params.put("articleModule", articleModule);
-		HtmlTemplateUtil.generate(params, "net/safe/email.activate.ftl", "/safe/emailActivate.html");	// 邮箱激活
-		HtmlTemplateUtil.generate(params, "net/safe/email.find.pwd.ftl", "/safe/emailFindPwd.html");	// 找回密码
+		HtmlTemplateUtil.generate(freemarkerConfig, params, "net/safe/email.activate.ftl", "/safe/emailActivate.html");	// 邮箱激活
+		HtmlTemplateUtil.generate(freemarkerConfig, params, "net/safe/email.find.pwd.ftl", "/safe/emailFindPwd.html");	// 找回密码
 		
 	}
 	
@@ -94,7 +87,7 @@ public class HtmlGenerateServiceImpl implements IHtmlGenerateService {
 	 * @param filePath			:	html文件,路径目录	--/-/
 	 * @param index				:	html文件,默认前缀	index
 	 */
-	private static void generateHtmlPagination(List<?> allList, Map<String, Object> paramMap,int pagesize, String templatePathName , String filePath , String index){
+	private static void generateHtmlPagination(FreeMarkerConfigurer freemarkerConfig, List<?> allList, Map<String, Object> paramMap,int pagesize, String templatePathName , String filePath , String index){
 		int allCount = allList!=null?allList.size():0;
 		
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -118,11 +111,11 @@ public class HtmlGenerateServiceImpl implements IHtmlGenerateService {
 				params.put("pageList", allList.subList(from, to));
 				
 				String fileName = (pageNum==1) ? index : (index + "_" + pageNum);
-				HtmlTemplateUtil.generate(params, templatePathName, filePath + fileName + ".html");
+				HtmlTemplateUtil.generate(freemarkerConfig, params, templatePathName, filePath + fileName + ".html");
 			}
 		} else {
 			params.put("pageNumAll", 0);
-			HtmlTemplateUtil.generate(params, templatePathName, filePath + index + ".html");
+			HtmlTemplateUtil.generate(freemarkerConfig, params, templatePathName, filePath + index + ".html");
 		}
 	}
 	

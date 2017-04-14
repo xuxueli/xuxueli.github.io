@@ -1,7 +1,5 @@
 package com.xxl.core.result;
 
-import com.xxl.core.constant.CommonDic.ReturnCodeEnum;
-
 /**
  * 封装返回
  * 
@@ -9,7 +7,9 @@ import com.xxl.core.constant.CommonDic.ReturnCodeEnum;
  * @param <T>
  */
 public class ReturnT<T> {
-	
+	public static final String SUCCESS = "S";
+	public static final String FAIL = "E";
+
 	/** 状态码 */
 	private String code;
 	/** 状态提示 */
@@ -19,11 +19,11 @@ public class ReturnT<T> {
 	
 	public ReturnT() {
 		super();
-		this.code = ReturnCodeEnum.SUCCESS.code();
+		this.code = SUCCESS;
 	}
 	public ReturnT(T returnContent) {
 		super();
-		this.code = ReturnCodeEnum.SUCCESS.code();
+		this.code = SUCCESS;
 		this.returnContent = returnContent;
 	}
 	public ReturnT(String code, String msg) {

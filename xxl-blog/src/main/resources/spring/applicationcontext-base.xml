@@ -29,12 +29,6 @@
 			</bean>
 		</property>
 		<property name="templateLoaderPath" value="/WEB-INF/template/" />
-		<property name="freemarkerVariables">
-			<bean
-				class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-				<property name="location" value="classpath:freemarker.variables.properties" />
-			</bean>
-		</property>
 	</bean>
 
 </beans>
