@@ -19,8 +19,8 @@ $(function(){
 	$(".login-true").hide();
 	$(".login-false").show();
 	//if ($.cookie('login_identity')) {
-	$.post(base_url + "user/loginCheck", function(data, status) {
-		if (data.code == "S") {
+	$.post(base_url + "admin/loginCheck", function(data, status) {
+		if (data.code == 200) {
 			$(".login-false").hide();
 			$(".login-true").show();
 			$(".login-true .loginEmail").html(data.returnContent.userName + '<b class="caret"></b>');
@@ -32,26 +32,21 @@ $(function(){
 		errorElement : 'span',  
         errorClass : 'help-block',
         focusInvalid : true,  
-        rules : {  
-        	email : {  
-                required : true ,
-                email: true
+        rules : {
+			userName : {
+                required : true
             },  
             password : {  
-            	required : true ,
-                minlength: 6,
-                maxlength: 18
+            	required : true
             } 
         }, 
-        messages : {  
-        	email : {  
-                required :"请输入邮箱账号."  ,
-                email: "请输入格式正确的邮箱账号"
+        messages : {
+			userName : {
+                required :"请输入登录账号."
             },  
             password : {
-            	required :"请输入密码."  ,
-                minlength:"密码不应低于6位",
-                maxlength:"密码不应超过18位",}
+            	required :"请输入登录密码"
+            }
         }, 
 		highlight : function(element) {  
             $(element).closest('.form-group').addClass('has-error');  
@@ -64,16 +59,15 @@ $(function(){
             element.parent('div').append(error);  
         },
         submitHandler : function(form) {
-			$.post(base_url + "/user/login", $("#loginForm").serialize(), function(data, status) {
-				if (data.code == "S") {
+			$.post(base_url + "/admin/login", $("#loginForm").serialize(), function(data, status) {
+				if (data.code == 200) {
 					$('#loginModal').modal('hide');
 					
-					ComAlert.show(1, "登陆成功,《XXL-BLOG》致力于为您提供最精致的服务");
-					ComAlert.callback = function (){
+					ComAlert.show(1, "登陆成功,《XXL-BLOG》致力于为您提供最精致的服务", function () {
 						window.location.reload();
-					}
+					});
 				} else {
-					ComAlert.show(0, "登陆失败:" + data.msg);
+					ComAlert.show(0, "登陆失败" || data.msg);
 				}
 			});
 		}
@@ -85,10 +79,11 @@ $(function(){
 	
 	// 注销登陆
 	$(".logout").click(function(){
-		$.post(base_url + "/user/logout", function(data, status) {
-			if (data.code == "S") {
-				ComAlert.show(1, "注销登陆成功");
-				window.location.reload();
+		$.post(base_url + "/admin/logout", function(data, status) {
+			if (data.code == 200) {
+				ComAlert.show(1, "注销登陆成功", function () {
+					window.location.reload()
+				});
 			}
 		}, 'json');
 	});
@@ -97,7 +92,7 @@ $(function(){
 
 //通用提示
 var ComAlert = {
-	show:function(type, msg){
+	show:function(type, msg, callback){
 		// 弹框初始
 		if (type == 1) {
 			$('#comAlert .alert').attr('class', 'alert alert-success');
@@ -108,13 +103,10 @@ var ComAlert = {
 		$('#comAlert').modal('show');
 		// 监听关闭
 		$("#comAlert").on('hide.bs.modal', function () {
-			ComAlert.callback();
+			callback();
 		});
 	},
 	hide:function(){
 		$('#comAlert').modal('hide');
-	},
-	callback:function(){
-		// TODO
 	}
 };

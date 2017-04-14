@@ -5,7 +5,6 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>XXL-BLOG</title>
-	<@netCommon.common_hosturl />
 	<@netCommon.common_style />
 </head>
 <body navKey="module_${module.menuId}" >

@@ -35,13 +35,23 @@ public class ArticleInfoDaoImpl implements IArticleInfoDao {
 	}
 
 	@Override
-	public List<ArticleInfo> pageList(int offset, int pagesize, int groupId, int status) {
+	public List<ArticleInfo> pageList(int offset, int pagesize, List<Integer> groupIds, int status) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("offset", offset);
 		params.put("pagesize", pagesize);
-		params.put("groupId", groupId);
+		params.put("groupIds", groupIds);
 		params.put("status", status);
 		return sqlSessionTemplate.selectList("ArticleInfoMapper.pageList", params);
+	}
+
+	@Override
+	public int pageListCount(int offset, int pagesize, List<Integer> groupIds, int status) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("offset", offset);
+		params.put("pagesize", pagesize);
+		params.put("groupIds", groupIds);
+		params.put("status", status);
+		return sqlSessionTemplate.selectOne("ArticleInfoMapper.pageListCount", params);
 	}
 
 }

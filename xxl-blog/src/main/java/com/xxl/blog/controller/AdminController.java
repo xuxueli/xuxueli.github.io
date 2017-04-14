@@ -1,6 +1,5 @@
 package com.xxl.blog.controller;
 
-import com.xxl.blog.controller.annotation.PermessionLimit;
 import com.xxl.blog.core.model.User;
 import com.xxl.blog.core.result.ReturnT;
 import com.xxl.blog.core.util.HttpSessionUtil;
@@ -18,21 +17,19 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * 用户操作
  * @author xuxueli
  */
 @Controller
-@RequestMapping("/user")
-public class UserController {
-	private static transient Logger logger = LoggerFactory.getLogger(UserController.class);
+@RequestMapping("/admin")
+public class AdminController {
+	private static transient Logger logger = LoggerFactory.getLogger(AdminController.class);
 
 	@Resource
 	private IUserDao userDao;
 
 	@RequestMapping("/login")
 	@ResponseBody
-	@PermessionLimit
-	public ReturnT<String> login(HttpServletResponse response, HttpSession session, String userName, String password){
+	public ReturnT<String> login(HttpSession session, String userName, String password){
 
 		if (StringUtils.isBlank(userName)) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, "请输入登录账号");
@@ -56,7 +53,6 @@ public class UserController {
 	
 	@RequestMapping("/logout")
 	@ResponseBody
-	@PermessionLimit
 	public ReturnT<String> logout(HttpServletRequest request, HttpServletResponse response, HttpSession session){
 		HttpSessionUtil.remove(session, "login_user");
 		return ReturnT.SUCCESS;
@@ -64,7 +60,6 @@ public class UserController {
 	
 	@RequestMapping("/loginCheck")
 	@ResponseBody
-	@PermessionLimit
 	public ReturnT<User> loginCheck(HttpSession session){
 		User user = (User) HttpSessionUtil.get(session, "login_user");
 		return user!=null?new ReturnT<User>(user):new ReturnT<User>(ReturnT.FAIL_CODE, "登录失效");

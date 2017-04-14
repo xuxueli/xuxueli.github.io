@@ -1,45 +1,42 @@
-<#macro common_hosturl>
-	<#if request.contextPath?exists && request.contextPath?length gt 0 >
-		<#assign host_url = request.contextPath>
-	</#if>
-	<script type="text/javascript">
-		var base_url = "${host_url}";
-	</script>
-</#macro>
-
 <#macro common_style>
 <!-- jquery -->
-<script type="text/javascript" src="${host_url}/static/plugin/jquery/jquery-1.11.2.min.js"></script>
-<script type="text/javascript" src="${host_url}/static/plugin/jquery/jquery.validate.min.js"></script>
-<script type="text/javascript" src="${host_url}/static/plugin/jquery/jquery.cookie.js"></script>
+<script type="text/javascript" src="${request.contextPath}/static/plugin/jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/static/plugin/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/static/plugin/jquery/jquery.cookie.js"></script>
 
 <!-- bootstrap -->
-<link rel="stylesheet" href="${host_url}/static/plugin/bootstrap-3.3.4/css/bootstrap.min.css" >
-<!--	<link rel="stylesheet" href="${host_url}/static/plugin/bootstrap-3.3.4/static/css/bootstrap-theme.min.css" >	-->
+<link rel="stylesheet" href="${request.contextPath}/static/plugin/bootstrap-3.3.4/css/bootstrap.min.css" >
+<!--	<link rel="stylesheet" href="${request.contextPath}/static/plugin/bootstrap-3.3.4/static/css/bootstrap-theme.min.css" >	-->
 <!-- HTML5 Shim 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
 <!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
 <!--[if lt IE 9]>
    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
 <![endif]-->
-<script type="text/javascript" src="${host_url}/static/plugin/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/static/plugin/bootstrap-3.3.4/js/bootstrap.min.js"></script>
 
 <!-- scrollup -->
-<link rel="stylesheet" href="${host_url}/static/plugin/jquery/scrollup/image.css" >
-<script type="text/javascript" src="${host_url}/static/plugin/jquery/scrollup/jquery.scrollUp.min.js"></script>
+<link rel="stylesheet" href="${request.contextPath}/static/plugin/jquery/scrollup/image.css" >
+<script type="text/javascript" src="${request.contextPath}/static/plugin/jquery/scrollup/jquery.scrollUp.min.js"></script>
 
 <!-- net -->
-<link rel="stylesheet" href="${host_url}/static/css/net.1.css" >
-<script type="text/javascript" src="${host_url}/static/js/net.1.js"></script>
+<link rel="stylesheet" href="${request.contextPath}/static/css/net.1.css" >
+<script type="text/javascript" src="${request.contextPath}/static/js/net.1.js"></script>
+
+<script type="text/javascript">
+    var base_url = "${request.contextPath}";
+</script>
 
 </#macro>
 
+
+
 <#macro header pageName >
-<!-- header导航栏default  -->
+<!-- 顶部导航：default  -->
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 	
 	<div class="container">
-		<!-- 折叠 -->
+		<!-- ICON -->
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#net-navbar-collapse">
 				<span class="sr-only"></span>
@@ -47,34 +44,26 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 	      	</button>
-			<a class="navbar-brand" style="color:#fff;" href="${host_url}" ><span class="glyphicon glyphicon-home"></span></a>
+			<a class="navbar-brand" style="color:#fff;" href="${request.contextPath}" ><span class="glyphicon glyphicon-home"></span></a>
 		</div>
         
-		<!-- 响应式特性 -->
+		<!-- 导航内容 -->
 		<div class="collapse navbar-collapse" id="net-navbar-collapse">
 			<!-- 左对齐 -->
 			<ul class="nav navbar-nav navbar-left active-nav" >
-				
-				<#if articleModule?exists>
-				<#list articleModule as module>
-					<#if module.children?exists>
-					<#list module.children as group>
-					<#if group_index = 0>
-					<li class="nav-click " ><a href="${host_url}article/group/${group.menuId}.html" >${module.name}</a></li>
-					</#if>
-					</#list>
-					</#if>
+				<#if groupList?exists>
+				<#list groupList as groupA >
+                    <li class="nav-click <#if groupA.id == pageName >active</#if> " ><a href="${request.contextPath}/group?g=${groupA.id}" >${groupA.name}</a></li>
 				</#list>
 				</#if>
-				<li class="nav-click <#if pageName == "wallPage">active</#if>  ><a href="${host_url}wall/" >一面墙</a></li>
 			</ul>
 			<!--右对齐-->
-			<ul class="nav navbar-nav navbar-right login-false">
-                <li><a href="#" data-toggle="modal" data-target="#loginModal" >登陆</a></li>
+			<ul class="nav navbar-nav navbar-right login-false" >
+                <li><a href="javascript:;" data-toggle="modal" data-target="#loginModal" >登陆</a></li>
         	</ul>
-        	<ul class="nav navbar-nav navbar-right login-true">
+        	<ul class="nav navbar-nav navbar-right login-true" style="display: none" >
 				<li>
-				    <a href="#" class="dropdown-toggle loginEmail" data-toggle="dropdown">个人中心<b class="caret"></b></a>
+				    <a href="javascript:;" class="dropdown-toggle loginEmail" data-toggle="dropdown">个人中心<b class="caret"></b></a>
 				    <ul class="dropdown-menu">
 				       <li class="divider"></li>
 				       <li><a href="javascript:;" class="logout" >注销登陆</a></li>
@@ -97,50 +86,17 @@
 				<form class="form-horizontal" role="form" id="loginForm">
 					<div class="form-group">
 						<label for="firstname" class="col-sm-2 control-label">邮箱</label>
-						<div class="col-sm-10"><input type="text" class="form-control" name="email" placeholder="请输入邮箱" minlength="6" maxlength="18" ></div>
+						<div class="col-sm-10"><input type="text" class="form-control" name="userName" placeholder="请输入登录账号" minlength="4" maxlength="20" ></div>
 					</div>
 					<div class="form-group">
 						<label for="lastname" class="col-sm-2 control-label">密码</label>
-						<div class="col-sm-10"><input type="password" class="form-control" name="password" placeholder="请输入密码" minlength="6" maxlength="18" ></div>
+						<div class="col-sm-10"><input type="password" class="form-control" name="password" placeholder="请输入登录密码" minlength="4" maxlength="20" ></div>
 					</div>
 					<div class="form-group">
 						<div class="col-sm-offset-2 col-sm-10">
 							<button type="submit" class="btn btn-primary"  >登陆</button>
 							<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-							<label><a href="${host_url}/safe/emailFindPwd.html">忘记密码</a></label>
-						</div>
-					</div>
-				</form>
-         	</div>
-		</div>
-	</div>
-</div>
-
-<!-- 注册.模态框 -->
-<div class="modal fade" id="regModal" tabindex="-1" role="dialog"  aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-            	<h4 class="modal-title" >用户注册</h4>
-         	</div>
-         	<div class="modal-body">
-				<form class="form-horizontal" role="form" id="regForm">
-					<div class="form-group">
-						<label for="firstname" class="col-sm-2 control-label">邮箱</label>
-						<div class="col-sm-10"><input type="text" class="form-control" name="email" placeholder="请输入邮箱" maxlength="50" ></div>
-					</div>
-					<div class="form-group">
-						<label for="lastname" class="col-sm-2 control-label">密码</label>
-						<div class="col-sm-10"><input type="password" class="form-control" name="password" placeholder="请输入密码" minlength="6" maxlength="18" ></div>
-					</div>
-					<div class="form-group">
-						<label for="lastname" class="col-sm-2 control-label">确认</label>
-						<div class="col-sm-10"><input type="password" class="form-control" name="rePassword" placeholder="请输入密码" minlength="6" maxlength="18" ></div>
-					</div>
-					<div class="form-group">
-						<div class="col-sm-offset-2 col-sm-10">
-							<button type="submit" class="btn btn-primary"  >注册</button>
-							<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+							<#--<label><a href="${request.contextPath}/safe/emailFindPwd.html">忘记密码</a></label>-->
 						</div>
 					</div>
 				</form>
@@ -164,6 +120,8 @@
 	</div>
 </div>
 </#macro>
+
+
 
 <#macro footer>
 <footer class="footer" >
@@ -191,7 +149,10 @@
 </footer>
 </#macro>
 
+
+
 <#macro right>
+<#--公告板-->
 <div class="panel panel-default">
     <div class="panel-body">
         <h5>热米饭里拌什么最好吃？</h5>
@@ -199,6 +160,7 @@
     </div>
 </div>
 
+<#--友链-->
 <div class="panel panel-default">
     <div class="panel-heading">
         <span class="glyphicon glyphicon-th-list"></span>友情链接
@@ -221,4 +183,61 @@
         </div>
     </div>
 </div>
+</#macro>
+
+
+<#--
+html分页模板,文件名称
+------------------
+pageNum			:	当前页数、(1-max)
+html_base_url	:	html文件路径、
+-->
+<#macro htmlPagingName pageNum html_base_url index  >
+	<#if pageNum == 1 >${html_base_url}${index}.html
+	<#else>${html_base_url}${index}_${pageNum}.html</#if>
+</#macro>
+<#--
+html分页模板
+------------------
+pageNumAll		:	总页数、
+pageNum			:	当前页数、
+html_base_url	:	html文件路径、
+-->
+<#macro htmlPaging pageNumAll pageNum html_base_url index >
+	<#if pageNumAll gt 0 >
+    <ul class="pagination">
+        <!--pre-->
+		<#if pageNum-1 gte 1><li><a href="<@htmlPagingName pageNum=pageNum-1 html_base_url=html_base_url index=index />" >上一页</a></li>
+		<#else><li class="disabled"><a>上一页</a></li></#if>
+        <!--every pre-->
+		<#if pageNum-1 gte 5>
+            <li><a href="<@htmlPagingName pageNum=1 html_base_url=html_base_url index=index />" >1</a></li>
+            <li><a href="<@htmlPagingName pageNum=2 html_base_url=html_base_url index=index />" >2</a></li>
+            <li><a>...</a></li>
+            <li><a href="<@htmlPagingName pageNum=pageNum-2 html_base_url=html_base_url index=index />" >${pageNum-2}</a></li>
+            <li><a href="<@htmlPagingName pageNum=pageNum-1 html_base_url=html_base_url index=index />" >${pageNum-1}</a></li>
+		<#elseif 1 lte (pageNum-1) >
+			<#list 1..(pageNum-1) as item>
+                <li><a href="<@htmlPagingName pageNum=item html_base_url=html_base_url index=index />" >${item}</a></li>
+			</#list>
+		</#if>
+        <!--every now-->
+        <li class="active" ><a href="<@htmlPagingName pageNum=pageNum html_base_url=html_base_url index=index />" >${pageNum}</a></li>
+        <!--every next-->
+		<#if pageNumAll-pageNum gte 5>
+            <li><a href="<@htmlPagingName pageNum=pageNum+1 html_base_url=html_base_url index=index />" >${pageNum+1}</a></li>
+            <li><a href="<@htmlPagingName pageNum=pageNum+2 html_base_url=html_base_url index=index />" >${pageNum+2}</a></li>
+            <li><a>...</a></li>
+            <li><a href="<@htmlPagingName pageNum=pageNumAll-1 html_base_url=html_base_url index=index />" >${pageNumAll-1}</a></li>
+            <li><a href="<@htmlPagingName pageNum=pageNumAll html_base_url=html_base_url index=index />" >${pageNumAll}</a></li>
+		<#elseif (pageNum+1) lte pageNumAll >
+			<#list (pageNum+1)..pageNumAll as item>
+                <li><a href="<@htmlPagingName pageNum=item html_base_url=html_base_url index=index />" >${item}</a></li>
+			</#list>
+		</#if>
+        <!--next-->
+		<#if pageNum+1 lte pageNumAll><li><a href="<@htmlPagingName pageNum=pageNum+1 html_base_url=html_base_url index=index  />" >下一页</a></li>
+		<#else><li class="disabled"><a>下一页</a></li></#if>
+    </ul>
+	</#if>
 </#macro>

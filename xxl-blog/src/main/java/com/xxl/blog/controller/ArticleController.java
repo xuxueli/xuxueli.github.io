@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -30,18 +31,14 @@ public class ArticleController {
     @Autowired
     private IArticleInfoDao articleInfoDao;
 
-
-
-    // ---------------------- article group ----------------------
-
-    @RequestMapping("/groupList")
+    @RequestMapping("")
     @PermessionLimit
     public String groupList(Model model) {
 
         List<ArticleGroup> groupList = articleGroupDao.getByParentId(ARTICLE_GROUP_TOP);
         model.addAttribute("groupList", groupList);
 
-        return "article/groupList";
+        return "article/articleInfo";
     }
 
     @RequestMapping("/addGroup")
@@ -99,7 +96,7 @@ public class ArticleController {
         if (CollectionUtils.isNotEmpty(groupList)) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, "存在子分组，不可删除");
         }
-        List<ArticleInfo> articleInfoList = articleInfoDao.pageList(0, 1, id, -1);
+        List<ArticleInfo> articleInfoList = articleInfoDao.pageList(0, 1, Arrays.asList(id), -1);
         if (CollectionUtils.isNotEmpty(articleInfoList)) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, "该分组下存在文章，不可删除");
         }

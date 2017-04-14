@@ -4,14 +4,13 @@
 <mapper namespace="ArticleInfoMapper">
 	
 	<resultMap id="ArticleInfo" type="com.xxl.blog.core.model.ArticleInfo" >
-	    <id column="article_id" property="articleId" jdbcType="INTEGER" />
-	    <result column="id" property="id" jdbcType="INTEGER" />
-	    <result column="group_id" property="groupId" jdbcType="INTEGER" />
-	    <result column="status" property="status" jdbcType="INTEGER" />
-	    <result column="title" property="title" jdbcType="VARCHAR" />
-	    <result column="content" property="content" jdbcType="TIMESTAMP" />
-	    <result column="add_time" property="addTime" jdbcType="INTEGER" />
-	    <result column="update_time" property="updateTime" jdbcType="INTEGER" />
+	    <id column="id" property="id" />
+	    <result column="group_id" property="groupId" />
+	    <result column="status" property="status" />
+	    <result column="title" property="title"/>
+	    <result column="content" property="content" />
+	    <result column="add_time" property="addTime" />
+	    <result column="update_time" property="updateTime" />
 	</resultMap>
 	
 	<sql id="Base_Column_List">
@@ -62,12 +61,27 @@
 	<select id="pageList" parameterType="java.util.HashMap" resultMap="ArticleInfo">
 		SELECT <include refid="Base_Column_List" />
 		FROM xxl_blog_article_info AS t
-		WHERE t.group_id = #{groupId}
+		WHERE t.group_id in
+		<foreach collection="groupIds" item="item" open="(" close=")" separator="," >
+			#{item}
+		</foreach>
 		<if test="status gt -1" >
 			AND t.status = #{status}
 		</if>
 		ORDER BY t.add_time desc
 		LIMIT #{offset, jdbcType=INTEGER}, #{pagesize, jdbcType=INTEGER}
+	</select>
+
+	<select id="pageListCount" parameterType="java.util.HashMap" resultType="java.lang.Integer" >
+		SELECT count(1)
+		FROM xxl_blog_article_info AS t
+		WHERE t.group_id in
+		<foreach collection="groupIds" item="item" open="(" close=")" separator="," >
+			#{item}
+		</foreach>
+		<if test="status gt -1" >
+			AND t.status = #{status}
+		</if>
 	</select>
 	
 </mapper>

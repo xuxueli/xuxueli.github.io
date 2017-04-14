@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +53,7 @@ public class HtmlGenerateServiceImpl implements IHtmlGenerateService {
 					for (ArticleGroup group : module.getChildren()) {
 						
 						// 组页面（	需分页）
-						List<ArticleInfo> groupList = articleInfoDao.pageList(0, 1000, group.getId(), -1);
+						List<ArticleInfo> groupList = articleInfoDao.pageList(0, 1000, Arrays.asList(group.getId()), -1);
 						params.clear();
 						params.put("articleModule", articleModule);
 						params.put("module", module);

@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 @Controller
 @RequestMapping("/manage")
 public class ManageController {
-    private static transient Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static transient Logger logger = LoggerFactory.getLogger(AdminController.class);
 
     @Resource
     private IHtmlGenerateService htmlGenerateService;

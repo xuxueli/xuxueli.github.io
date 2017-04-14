@@ -12,8 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,6 +27,7 @@ import java.util.List;
 public class GroupController {
 
     public static final int ARTICLE_GROUP_TOP = 0;	// 顶级分组
+    public static final int ARTICLE_PAGESIZE = 2;
 
     @Autowired
     private IArticleGroupDao articleGroupDao;
@@ -31,12 +35,73 @@ public class GroupController {
     private IArticleInfoDao articleInfoDao;
 
 
-    @RequestMapping("/groupList")
-    @PermessionLimit
-    public String groupList(Model model) {
+    @RequestMapping("")
+    public String groupList(Model model, @RequestParam(required = false, defaultValue = "-1") int g
+            , @RequestParam(required = false, defaultValue = "1") int p) {
 
+        // group list
         List<ArticleGroup> groupList = articleGroupDao.getByParentId(ARTICLE_GROUP_TOP);
         model.addAttribute("groupList", groupList);
+
+        // selected groupA + groupB
+        int groupAId = -1;
+        int groupBId = -1;
+        if (CollectionUtils.isNotEmpty(groupList)) {
+            for (ArticleGroup groupA: groupList) {
+                if (groupA.getId() == g) {
+                    groupAId = groupA.getId();
+                    break;
+                } else {
+                    if (CollectionUtils.isNotEmpty(groupA.getChildren())) {
+                        for (ArticleGroup groupB: groupA.getChildren()) {
+                            if (groupB.getId() == g) {
+                                groupAId = groupA.getId();
+                                groupBId = groupB.getId();
+                            }
+                        }
+                    }
+                    if (groupAId > 0 && groupBId > 0) {
+                        break;
+                    }
+                }
+            }
+
+            if (groupAId == -1) {
+                groupAId = groupList.get(0).getId();
+                groupBId = -1;
+            }
+        }
+        model.addAttribute("groupAId", groupAId);
+        model.addAttribute("groupBId", groupBId);
+
+        // article under group
+        List<Integer> groupIds = new ArrayList<Integer>();
+        if (groupBId > -1) {
+            groupIds.add(groupBId);
+        } else if (groupAId > -1) {
+            for (ArticleGroup item: groupList) {
+                if (item.getId() == groupAId && item.getChildren()!=null && item.getChildren().size() > 0) {
+                    for (ArticleGroup itemB: item.getChildren()) {
+                        groupIds.add(itemB.getId());
+                    }
+                }
+            }
+        }
+
+        // article list
+        List<ArticleInfo> pageList = null;
+        int pageTotal = 0;
+        if (CollectionUtils.isNotEmpty(groupIds)) {
+            int offset = (p-1)*ARTICLE_PAGESIZE;
+
+            pageList = articleInfoDao.pageList(offset, ARTICLE_PAGESIZE, groupIds, 0);
+            int total = articleInfoDao.pageListCount(offset, ARTICLE_PAGESIZE, groupIds, 0);
+
+            pageTotal = (total%ARTICLE_PAGESIZE==0)?(total/ARTICLE_PAGESIZE):(total/ARTICLE_PAGESIZE+1);
+        }
+        model.addAttribute("pageList", pageList);
+        model.addAttribute("pageTotal", pageTotal);
+        model.addAttribute("pageNum", p);
 
         return "article/groupList";
     }
@@ -96,7 +161,7 @@ public class GroupController {
         if (CollectionUtils.isNotEmpty(groupList)) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, "存在子分组，不可删除");
         }
-        List<ArticleInfo> articleInfoList = articleInfoDao.pageList(0, 1, id, -1);
+        List<ArticleInfo> articleInfoList = articleInfoDao.pageList(0, 1, Arrays.asList(id), -1);
         if (CollectionUtils.isNotEmpty(articleInfoList)) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, "该分组下存在文章，不可删除");
         }
