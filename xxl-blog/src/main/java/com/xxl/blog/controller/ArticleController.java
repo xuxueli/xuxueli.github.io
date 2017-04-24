@@ -33,10 +33,13 @@ public class ArticleController {
 
     @RequestMapping("")
     @PermessionLimit
-    public String groupList(Model model) {
+    public String groupList(Model model, int a) {
 
         List<ArticleGroup> groupList = articleGroupDao.getByParentId(ARTICLE_GROUP_TOP);
         model.addAttribute("groupList", groupList);
+
+        ArticleInfo articleInfo = articleInfoDao.load(a);
+        model.addAttribute("articleInfo", articleInfo);
 
         return "article/articleInfo";
     }

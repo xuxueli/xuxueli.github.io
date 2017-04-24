@@ -16,4 +16,5 @@ public interface IArticleInfoDao {
 	public List<ArticleInfo> pageList(int offset, int pagesize, List<Integer> groupIds, int status);
 	public int pageListCount(int offset, int pagesize, List<Integer> groupIds, int status);
 
+	public ArticleInfo load(int id);
 }

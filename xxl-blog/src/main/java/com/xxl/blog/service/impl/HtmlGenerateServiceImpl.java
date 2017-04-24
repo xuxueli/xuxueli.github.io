@@ -77,12 +77,6 @@ public class HtmlGenerateServiceImpl implements IHtmlGenerateService {
 			}
 		}
 
-		// HTNL：安全中心
-		params.clear();
-		params.put("articleModule", articleModule);
-		HtmlTemplateUtil.generate(freemarkerConfig, params, "safe/email.activate.ftl", "/safe/emailActivate.html");	// 邮箱激活
-		HtmlTemplateUtil.generate(freemarkerConfig, params, "safe/email.find.pwd.ftl", "/safe/emailFindPwd.html");	// 找回密码
-		
 	}
 	
 	/**

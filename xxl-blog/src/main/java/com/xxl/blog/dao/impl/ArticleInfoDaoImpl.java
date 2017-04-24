@@ -54,4 +54,9 @@ public class ArticleInfoDaoImpl implements IArticleInfoDao {
 		return sqlSessionTemplate.selectOne("ArticleInfoMapper.pageListCount", params);
 	}
 
+	@Override
+	public ArticleInfo load(int id) {
+		return sqlSessionTemplate.selectOne("ArticleInfoMapper.load", id);
+	}
+
 }

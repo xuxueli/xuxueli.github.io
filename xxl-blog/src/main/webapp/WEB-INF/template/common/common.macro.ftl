@@ -167,9 +167,6 @@
     </div>
     <div class="panel-body">
         <div class="media" style="width: 100%;height: 20px;line-height: 20px;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-orient: vertical;" >
-            <a href="http://www.qiushibaike.com/" target="_blank" >糗事百科</a>
-        </div>
-        <div class="media" style="width: 100%;height: 20px;line-height: 20px;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-orient: vertical;" >
             <a href="http://www.mop.com/" target="_blank" >猫扑社区</a>
         </div>
         <div class="media" style="width: 100%;height: 20px;line-height: 20px;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-orient: vertical;" >
