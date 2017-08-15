@@ -6,4 +6,4 @@
 
 - 语言
  - <a href="./" >中文</a>
- - <a href="./en" >English</a>
+ - <a href="./en/" >English</a>
