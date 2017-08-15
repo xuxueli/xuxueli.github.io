@@ -98,6 +98,11 @@ XXL-JOB是一个轻量级分布式任务调度框架，其核心设计目标是�
 
 ### 1.4 下载
 
+#### 文档地址
+
+- [中文文档](http://www.xuxueli.com/xxl-job/)
+- [English Documentation](http://www.xuxueli.com/xxl-job/en/)
+
 #### 源码仓库地址
 
 源码仓库地址 | Release Download
@@ -116,11 +121,6 @@ XXL-JOB是一个轻量级分布式任务调度框架，其核心设计目标是�
     <version>1.8.1</version>
 </dependency>
 ```
-
-#### 博客地址
-
-- [oschina地址](http://my.oschina.net/xuxueli/blog/690978)
-- [cnblogs地址](http://www.cnblogs.com/xuxueli/p/5021979.html)
 
 #### 技术交流
 
@@ -1008,5 +1008,5 @@ Tips: 历史版本(V1.3.x)目前已经Release至稳定版本, 进入维护阶段
 ### 捐赠
 支持的话可以扫一扫，请作者喝杯咖啡吧：）
 
-微信：![输入图片说明](https://static.oschina.net/uploads/img/201707/07214300_qhxT.png "在这里输入图片标题")
-支付宝：![输入图片说明](http://images2015.cnblogs.com/blog/554415/201605/554415-20160513183306234-1939652116.png "在这里输入图片标题")
+微信：<img src="https://github.com/xuxueli/xxl-job/blob/master/doc/images/donate-wechat.png" width="200">
+支付宝：<img src="https://github.com/xuxueli/xxl-job/blob/master/doc/images/donate-alipay.jpg" width="200">

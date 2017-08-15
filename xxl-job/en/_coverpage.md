@@ -7,4 +7,4 @@
 - Simple、Lightweight、Extensibility
 
 [GitHub](https://github.com/xuxueli/xxl-job/)
-[Get Started](#distributed-task-scheduling-framework-xxl-job)
+[Get Started](#_1-brief-introduction)
