@@ -6,78 +6,48 @@
     <title>Welcome to xuxueli's website</title>
 
     <!-- CSS  -->
+    <link href="//cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.css" rel="stylesheet">
     <link href="//cdn.bootcss.com/materialize/0.100.1/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-    <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 
     <style>
-        /* Custom Stylesheet */
-        /**
-         * Use this file to override Materialize files so you can update
-         * the core Materialize files in the future
-         *
-         * Made By MaterializeCSS.com
-         */
+        .icon-block {
+            padding: 0 15px;
+        }
+        .icon-block .material-icons {
+            font-size: inherit;
+        }
 
         nav ul a,
         nav .brand-logo {
             color: #444;
         }
-
-        p {
-            line-height: 2rem;
-        }
-
-        .button-collapse {
-            color: #26a69a;
-        }
-
-        .parallax-container {
-            min-height: 380px;
-            line-height: 0;
-            height: auto;
-            color: rgba(255,255,255,.9);
-        }
-        .parallax-container .section {
-            width: 100%;
-        }
-
-        @media only screen and (max-width : 992px) {
-            .parallax-container .section {
-                position: absolute;
-                top: 40%;
-            }
-            #index-banner .section {
-                top: 10%;
-            }
-        }
-
-        @media only screen and (max-width : 600px) {
-            #index-banner .section {
-                top: 0;
-            }
-        }
-
-
-        .icon-block {
-            padding: 0 15px;
-        }
-
-        footer.page-footer {
-            margin: 0;
-        }
     </style>
 </head>
 <body>
+
+<!-- Nav -->
+<ul id="follow-me" class="dropdown-content">
+    <li><a href="https://github.com/xuxueli" target="_blank" >Github</a></li>
+    <li><a href="http://weibo.com/xuxueli0323" target="_blank" >微博</a></li>
+    <li><a href="https://www.zhihu.com/people/xuxueli" target="_blank" >知乎</a></li>
+    <li class="divider"></li>
+    <li><a href="https://my.oschina.net/xuxueli" target="_blank" >oschina</a></li>
+    <li><a href="http://www.cnblogs.com/xuxueli/" target="_blank" >cnblog</a></li>
+</ul>
 <nav class="white" role="navigation">
     <div class="nav-wrapper container">
         <a id="logo-container" href="#" class="brand-logo">许雪里 & Jack Xu</a>
-        <!--<ul class="right hide-on-med-and-down">
-            <li><a href="#">#</a></li>
-        </ul>-->
-        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+
+        <ul class="right hide-on-med-and-down">
+            <!--<li><a href="#">Components</a></li>-->
+            <!-- Dropdown Trigger -->
+            <li><a class="dropdown-button" href="#!" data-activates="follow-me">Follow me<i class="material-icons right">arrow_drop_down</i></a></li>
+        </ul>
+
     </div>
 </nav>
 
+<!-- content -->
 <div class="section no-pad-bot">
     <div class="container">
         <br><br>
@@ -86,7 +56,7 @@
         <div class="row center">
             <img src="https://raw.githubusercontent.com/xuxueli/xxl-job/master/doc/images/xxl-logo.jpg" style="width: 100px;" >
             <h5 class="header col s12 light">
-                Welcome to xuxueli's website, hoping it can help you.
+                Welcome to xuxueli's website, hoping i can help you.
                 <!--<iframe src="https://ghbtns.com/github-btn.html?user=xuxueli&type=follow&count=true&size=large" frameborder="0" scrolling="0" width="220px" height="30px"></iframe>-->
             </h5>
         </div>
@@ -113,8 +83,7 @@
                         </p>
                     </div>
                     <div class="card-action">
-                        <a href="https://github.com/xuxueli/xxl-job/">GitHub</a>
-                        <a href='https://github.com/xuxueli/xxl-job/releases'>Downloads</a>
+                        <a style="color: #65bd93;" href="http://www.xuxueli.com/xxl-job/">Homepage</a>
                     </div>
                 </div>
             </div>
@@ -267,10 +236,11 @@
     </div>
 </div>
 
+<!-- footer -->
 <footer class="page-footer teal">
     <div class="container">
         <div class="row">
-            <div class="col l6 s12">
+            <div class="col l9 s12">
                 <h5 class="white-text">Author's words.</h5>
                 <p class="grey-text text-lighten-4">
                     Hi, I am the author of XXL series open source software, and thanks for your attention and trust.
@@ -283,19 +253,7 @@
                 <ul>
                     <li><a class="white-text" href="http://www.infoq.com/">Infoq</a></li>
                     <li><a class="white-text" href="https://stackoverflow.com/">Stackoverflow</a></li>
-                    <li><a class="white-text" href="https://segmentfault.com/">Segmentfault</a></li>
-                    <li><a class="white-text" href="https://www.google.com">Google</a></li>
                     <li><a class="white-text" href="https://www.v2ex.com/">V2ex</a></li>
-                </ul>
-            </div>
-            <div class="col l3 s12">
-                <h5 class="white-text">Follow Me</h5>
-                <ul>
-                    <li><a class="white-text" href="https://my.oschina.net/xuxueli">Blog</a></li>
-                    <li><a class="white-text" href="http://www.cnblogs.com/xuxueli/">Blog2</a></li>
-                    <li><a class="white-text" href="https://github.com/xuxueli">Github</a></li>
-                    <li><a class="white-text" href="http://weibo.com/xuxueli0323">微博</a></li>
-                    <li><a class="white-text" href="https://www.zhihu.com/people/xuxueli">知乎</a></li>
                 </ul>
             </div>
         </div>
@@ -307,8 +265,20 @@
     </div>
 </footer>
 
-<!-- fork me -->
+<!-- fork me
 <a href="https://github.com/xuxueli"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
+-->
 
 </body>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/materialize/0.100.1/js/materialize.min.js"></script>
+<script>
+    $(function () {
+        $(".dropdown-button").dropdown();
+
+        $('.button-collapse').sideNav();
+    });
+</script>
+
 </html>
