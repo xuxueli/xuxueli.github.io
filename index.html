@@ -10,6 +10,53 @@
     <link href="//cdn.bootcss.com/materialize/0.100.1/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 
     <style>
+        /* Custom Stylesheet */
+        /**
+         * Use this file to override Materialize files so you can update
+         * the core Materialize files in the future
+         *
+         * Made By MaterializeCSS.com
+         */
+
+        nav ul a,
+        nav .brand-logo {
+            color: #444;
+        }
+
+        p {
+            line-height: 2rem;
+        }
+
+        .button-collapse {
+            color: #26a69a;
+        }
+
+        .parallax-container {
+            min-height: 380px;
+            line-height: 0;
+            height: auto;
+            color: rgba(255,255,255,.9);
+        }
+        .parallax-container .section {
+            width: 100%;
+        }
+
+        @media only screen and (max-width : 992px) {
+            .parallax-container .section {
+                position: absolute;
+                top: 40%;
+            }
+            #index-banner .section {
+                top: 10%;
+            }
+        }
+
+        @media only screen and (max-width : 600px) {
+            #index-banner .section {
+                top: 0;
+            }
+        }
+
         .icon-block {
             padding: 0 15px;
         }
@@ -17,9 +64,8 @@
             font-size: inherit;
         }
 
-        nav ul a,
-        nav .brand-logo {
-            color: #444;
+        footer.page-footer {
+            margin: 0;
         }
     </style>
 </head>
@@ -34,16 +80,25 @@
     <li><a href="https://my.oschina.net/xuxueli" target="_blank" >oschina</a></li>
     <li><a href="http://www.cnblogs.com/xuxueli/" target="_blank" >cnblog</a></li>
 </ul>
+
 <nav class="white" role="navigation">
     <div class="nav-wrapper container">
-        <a id="logo-container" href="#" class="brand-logo">许雪里 & Jack Xu</a>
-
+        <a id="logo-container" href="#" class="brand-logo">许雪里</a>
+        <!-- pc-nav -->
         <ul class="right hide-on-med-and-down">
-            <!--<li><a href="#">Components</a></li>-->
-            <!-- Dropdown Trigger -->
             <li><a class="dropdown-button" href="#!" data-activates="follow-me">Follow me<i class="material-icons right">arrow_drop_down</i></a></li>
         </ul>
-
+        <!-- mobile-nav -->
+        <ul id="nav-mobile" class="side-nav">
+            <li><a href="https://github.com/xuxueli" target="_blank" >Github</a></li>
+            <li><a href="http://weibo.com/xuxueli0323" target="_blank" >微博</a></li>
+            <li><a href="https://www.zhihu.com/people/xuxueli" target="_blank" >知乎</a></li>
+            <li class="divider"></li>
+            <li><a href="https://my.oschina.net/xuxueli" target="_blank" >oschina</a></li>
+            <li><a href="http://www.cnblogs.com/xuxueli/" target="_blank" >cnblog</a></li>
+        </ul>
+        <!-- menu icon -->
+        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
     </div>
 </nav>
 
