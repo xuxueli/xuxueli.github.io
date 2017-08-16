@@ -1,4 +1,4 @@
-- [Home](/)
+- <a href="../../" >Home</a>
 
 - Download
  - [Github](https://github.com/xuxueli/xxl-job/releases)
