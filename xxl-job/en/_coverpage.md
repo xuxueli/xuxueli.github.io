@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/xuxueli/xxl-job/master/doc/images/xxl-logo.png" width="200" >
+<img src="https://raw.githubusercontent.com/xuxueli/xxl-job/master/doc/images/xxl-logo.png" width="40%" >
 
 # XXL-JOB
 
