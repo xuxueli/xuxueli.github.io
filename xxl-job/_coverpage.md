@@ -8,4 +8,5 @@
 
 
 [GitHub](https://github.com/xuxueli/xxl-job/)
+[Gitee](http://git.oschina.net/xuxueli0323/xxl-job)
 [Get Started](#《分布式任务调度平台XXL-JOB》)
