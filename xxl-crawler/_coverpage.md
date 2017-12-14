@@ -4,7 +4,7 @@
 
 > 面向对象的分布式爬虫框架
 
-- 灵活、高效、面向对象
+- 多线程、异步、动态代理、分布式
 
 
 [GitHub](https://github.com/xuxueli/xxl-crawler/)
