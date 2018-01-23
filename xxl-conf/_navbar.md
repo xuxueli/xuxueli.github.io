@@ -2,4 +2,4 @@
 
 - 下载
  - [Github](https://github.com/xuxueli/xxl-conf/releases)
- - [OSChina](http://git.oschina.net/xuxueli0323/xxl-conf/releases)
+ - [OSChina](http://gitee.com/xuxueli0323/xxl-conf/releases)
