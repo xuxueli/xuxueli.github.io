@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Welcome to xuxueli's website</title>
+
+    <!-- CSS  -->
+    <link href="//cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.css" rel="stylesheet">
+    <link href="//cdn.bootcss.com/materialize/0.100.1/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+
+    <style>
+        /* Custom Stylesheet */
+        /**
+         * Use this file to override Materialize files so you can update
+         * the core Materialize files in the future
+         *
+         * Made By MaterializeCSS.com
+         */
+
+        nav ul a,
+        nav .brand-logo {
+            color: #444;
+        }
+
+        p {
+            line-height: 2rem;
+        }
+
+        .button-collapse {
+            color: #26a69a;
+        }
+
+        .parallax-container {
+            min-height: 380px;
+            line-height: 0;
+            height: auto;
+            color: rgba(255,255,255,.9);
+        }
+        .parallax-container .section {
+            width: 100%;
+        }
+
+        @media only screen and (max-width : 992px) {
+            .parallax-container .section {
+                position: absolute;
+                top: 40%;
+            }
+            #index-banner .section {
+                top: 10%;
+            }
+        }
+
+        @media only screen and (max-width : 600px) {
+            #index-banner .section {
+                top: 0;
+            }
+        }
+
+        .icon-block {
+            padding: 0 15px;
+        }
+        .icon-block .material-icons {
+            font-size: inherit;
+        }
+
+        footer.page-footer {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- header start -->
+<nav class="white" role="navigation">
+    <div class="nav-wrapper container">
+        <a id="logo-container" href="../index.html" class="brand-logo">许雪里</a>
+        <!-- pc-nav -->
+        <ul class="right hide-on-med-and-down">
+            <li class="active"><a href="../page/projects.html">项目列表</a></li>
+            <li><a href="../page/community.html">社区交流</a></li>
+            <li><a href="../page/donate.html" >捐赠</a></li>
+        </ul>
+        <!-- mobile-nav -->
+        <ul id="nav-mobile" class="side-nav">
+            <li class="active"><a href="../page/projects.html">项目列表</a></li>
+            <li><a href="../page/community.html">社区交流</a></li>
+            <li><a href="../page/donate.html" >捐赠</a></li>
+            <li class="divider"></li>
+        </ul>
+        <!-- menu icon -->
+        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+</nav>
+<!-- header end -->
+
+<!-- content -->
+<div class="section no-pad-bot">
+    <div class="container">
+
+        <br>
+        <div>
+            <h5>项目列表</h5>
+            <ul>
+                <li>
+                    XXL是一系列开源软件的集合，涉及分布式、基础中间件、效率工具、Web框架等多个领域。
+                    包含项目有：任务调度、配置中心、消息队列、RPC通讯、API管理、Web框架、爬虫、Excel工具、搜索……等等。
+                </li>
+                <li>
+                    希望有一个XXL系列项目可以帮助到您，欢迎体验！
+                </li>
+            </ul>
+        </div>
+
+        <div class="row">
+            <div class="col s12 m6 l4">
+                <div class="card">
+                    <!--<div class="card-image">
+                        <img src="https://raw.githubusercontent.com/xuxueli/xxl-job/master/doc/images/xxl-logo.jpg">
+                        <span class="card-title">Card Title</span>
+                    </div>-->
+                    <div class="card-content">
+                        <p>
+                            XXL-JOB | 分布式任务调度平台
+                            <br>
+                            <iframe src="https://ghbtns.com/github-btn.html?user=xuxueli&repo=xxl-job&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+                            <!--<iframe src="https://ghbtns.com/github-btn.html?user=xuxueli&repo=xxl-job&type=fork&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>-->
+                        </p>
+                    </div>
+                    <div class="card-action">
+                        <a style="color: #65bd93;" href="http://www.xuxueli.com/xxl-job/">Homepage</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6 l4">
+                <div class="card">
+                    <div class="card-content">
+                        <p>
+                            XXL-API | API管理平台
+                            <br>
+                            <iframe src="https://ghbtns.com/github-btn.html?user=xuxueli&repo=xxl-api&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+                        </p>
+                    </div>
+                    <div class="card-action">
+                        <a style="color: #65bd93;" href="http://www.xuxueli.com/xxl-api/">Homepage</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6 l4">
+                <div class="card">
+                    <div class="card-content">
+                        <p>
+                            XXL-CONF | 分布式配置管理平台
+                            <br>
+                            <iframe src="https://ghbtns.com/github-btn.html?user=xuxueli&repo=xxl-conf&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+                        </p>
+                    </div>
+                    <div class="card-action">
+                        <a style="color: #65bd93;" href="http://www.xuxueli.com/xxl-conf/">Homepage</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6 l4">
+                <div class="card">
+                    <div class="card-content">
+                        <p>
+                            XXL-MQ | 分布式消息队列
+                            <br>
+                            <iframe src="https://ghbtns.com/github-btn.html?user=xuxueli&repo=xxl-mq&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+                        </p>
+                    </div>
+                    <div class="card-action">
+                        <a style="color: #65bd93;" href="http://www.xuxueli.com/xxl-mq/">Homepage</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6 l4">
+                <div class="card">
+                    <div class="card-content">
+                        <p>
+                            XXL-RPC | 分布式服务通讯框架
+                            <br>
+                            <iframe src="https://ghbtns.com/github-btn.html?user=xuxueli&repo=xxl-rpc&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+                        </p>
+                    </div>
+                    <div class="card-action">
+                        <a href="https://github.com/xuxueli/xxl-rpc/">GitHub</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6 l4">
+                <div class="card">
+                    <div class="card-content">
+                        <p>
+                            XXL-CACHE | 分布式缓存管理平台
+                            <br>
+                            <iframe src="https://ghbtns.com/github-btn.html?user=xuxueli&repo=xxl-cache&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+                        </p>
+                    </div>
+                    <div class="card-action">
+                        <a href="https://github.com/xuxueli/xxl-cache/">GitHub</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6 l4">
+                <div class="card">
+                    <div class="card-content">
+                        <p>
+                            XXL-GLUE | 分布式逻辑管理平台
+                            <br>
+                            <iframe src="https://ghbtns.com/github-btn.html?user=xuxueli&repo=xxl-glue&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+                        </p>
+                    </div>
+                    <div class="card-action">
+                        <a style="color: #65bd93;" href="http://www.xuxueli.com/xxl-glue/">Homepage</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6 l4">
+                <div class="card">
+                    <div class="card-content">
+                        <p>
+                            XXL-HEX | Web Api框架
+                            <br>
+                            <iframe src="https://ghbtns.com/github-btn.html?user=xuxueli&repo=xxl-hex&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+                        </p>
+                    </div>
+                    <div class="card-action">
+                        <a href="https://github.com/xuxueli/xxl-hex/">GitHub</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6 l4">
+                <div class="card">
+                    <div class="card-content">
+                        <p>
+                            XXL-SEARCH | 搜索应用参考示例
+                            <br>
+                            <iframe src="https://ghbtns.com/github-btn.html?user=xuxueli&repo=xxl-search&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+                        </p>
+                    </div>
+                    <div class="card-action">
+                        <a href="https://github.com/xuxueli/xxl-search/">GitHub</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6 l4">
+                <div class="card">
+                    <div class="card-content">
+                        <p>
+                            XXL-EXCEL | Java对象和Excel转换工具
+                            <br>
+                            <iframe src="https://ghbtns.com/github-btn.html?user=xuxueli&repo=xxl-excel&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+                        </p>
+                    </div>
+                    <div class="card-action">
+                        <a style="color: #65bd93;" href="http://www.xuxueli.com/xxl-excel/">Homepage</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col s12 m6 l4">
+                <div class="card">
+                    <div class="card-content">
+                        <p>
+                            XXL-CRAWLER | 面向对象的分布式爬虫框架
+                            <br>
+                            <iframe src="https://ghbtns.com/github-btn.html?user=xuxueli&repo=xxl-crawler&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+                        </p>
+                    </div>
+                    <div class="card-action">
+                        <a style="color: #65bd93;" href="http://www.xuxueli.com/xxl-crawler/">Homepage</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="center col s12 m12 l12">
+                <a href="https://github.com/xuxueli/" class="btn-large waves-effect waves-light" target="_blank">查看更多……</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- footer start -->
+<footer class="page-footer teal">
+    <div class="container">
+        <div class="row">
+            <div class="col l9 s9">
+                <h5 class="white-text">Author's words.</h5>
+                <p class="grey-text text-lighten-4">
+                    Hi, I am the author of XXL series open source software, and thanks for your attention and trust.
+                    XXL series open source software will keep open source free, and we will continue to provide free community technical support.
+                </p>
+
+            </div>
+            <div class="col l3 s3">
+                <h5 class="white-text">Contact Author</h5>
+                <ul>
+                    <li><a class="white-text" href="https://github.com/xuxueli" target="_blank" >Github</a></li>
+                    <li><a class="white-text" href="http://weibo.com/xuxueli0323" target="_blank" >微博</a></li>
+                    <li><a class="white-text" href="https://www.zhihu.com/people/xuxueli" target="_blank" >知乎</a></li>
+                    <li><a class="white-text" href="https://my.oschina.net/xuxueli" target="_blank" >oschina</a></li>
+                    <li><a class="white-text" href="http://www.cnblogs.com/xuxueli/" target="_blank" >cnblog</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <div class="container">
+            Copyright (c) 2015-present, xuxueli.
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+<!-- fork me
+<a href="https://github.com/xuxueli"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
+-->
+
+</body>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/materialize/0.100.1/js/materialize.min.js"></script>
+<script>
+    $(function () {
+        $('.button-collapse').sideNav();
+    });
+</script>
+
+
+<!-- google start -->
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-105336587-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+<!-- google end -->
+
+<!-- baidu start -->
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?2a4e116e8983ca87e083a41b552fe6a2";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+<!-- baidu end -->
+
+<!-- cnzz start -->
+<script type="text/javascript">
+    /*var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1263800177'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s13.cnzz.com/z_stat.php%3Fid%3D1263800177' type='text/javascript'%3E%3C/script%3E"));*/
+    var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cspan style='display:none;' id='cnzz_stat_icon_1263800177'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s13.cnzz.com/z_stat.php%3Fid%3D1263800177' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<!-- cnzz end -->
+
+</html>
