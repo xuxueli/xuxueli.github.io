@@ -8,4 +8,5 @@
 
 
 [GitHub](https://github.com/xuxueli/xxl-glue/)
+[Gitee](http://gitee.com/xuxueli0323/xxl-glue)
 [Get Started](#《分布式逻辑管理平台XXL-GLUE》)

@@ -1,5 +1,3 @@
 - <a href="../" >主页</a>
 
-- 下载
- - [Github](https://github.com/xuxueli/xxl-excel/releases)
- - [OSChina](http://gitee.com/xuxueli0323/xxl-excel/releases)
+- [下载](https://github.com/xuxueli/xxl-excel/releases)

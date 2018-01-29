@@ -8,4 +8,5 @@
 
 
 [GitHub](https://github.com/xuxueli/xxl-crawler/)
+[Gitee](http://gitee.com/xuxueli0323/xxl-crawler)
 [Get Started](#《面向对象的分布式爬虫框架XXL-CRAWLER》)

@@ -8,4 +8,5 @@
 
 
 [GitHub](https://github.com/xuxueli/xxl-conf/)
+[Gitee](http://gitee.com/xuxueli0323/xxl-conf)
 [Get Started](#《分布式配置管理平台XXL-CONF》)

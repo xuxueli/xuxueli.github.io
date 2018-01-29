@@ -8,4 +8,5 @@
 
 
 [GitHub](https://github.com/xuxueli/xxl-api/)
+[Gitee](http://gitee.com/xuxueli0323/xxl-api)
 [Get Started](#《API管理平台XXL-API》)
