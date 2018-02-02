@@ -7,7 +7,7 @@
 - baiduyun（master-slave, backup）
 
 > notebook（master-slave-index）
-- https://github.com/xuxueli/xxl-incubator#notebook
+- https://github.com/xuxueli/xuxueli.github.io#notebook
 - http://my.oschina.net/xuxueli/blog （仅同步）
 - http://www.cnblogs.com/xuxueli （仅同步）
 
@@ -46,11 +46,6 @@
 - 13、[xxl-rpc](https://github.com/xuxueli/xxl-rpc)              分布式服务通讯框架 (V1.1)
 - 14、[xxl-search](https://github.com/xuxueli/xxl-search)        搜索应用参考示例 (V1.0)
 - 15、[xxl-web](https://github.com/xuxueli/xxl-web)              Java Web Framework (V1.0)
-
-
-> 老实说，做开源两年多，从钱上看真的是入不敷出，唯一收入来源于捐赠，一共几百块，还不够域名和之前的服务器续费花的。更不要说，时间和精力上的投入了。
-
-> 不过，开源目的也不在于此，一方面是兴趣，另一方面是满足感，而且因此认识了一些志同道合的朋友。从这方面来讲，还是很有意义的，也是我会一致坚持下去的动力。
 
 
 ### 书籍
