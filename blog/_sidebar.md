@@ -1,6 +1,6 @@
-- 目录1
-    - [b11.md](目录1/b11.md)
-    - [b12.md](目录1/b12.md)
+- ENV
+    - [Windows，Mac环境下，GIT、SVN安装](notebook/ENV/ENV-GIT：Windows，Mac环境下，GIT、SVN安装.md)
+    - [Eclipse和Intellij](notebook/ENV/ENV-IDE：Eclipse和Intellij.md)
 - 目录2
     - [b21.md](目录2/b21.md)
     - [b22.md](目录2/b22.md)

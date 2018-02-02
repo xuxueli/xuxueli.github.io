@@ -1,0 +1,13 @@
+- AdobeFlash：关键字搜索“Adobe Flash CS5 简体中文版（绿色精简版）”；
+- Dreamweaver：关键字搜索“AdobeDreamweaver-CS5”；百度搜索“序列号”
+- Photoshop：关键字搜索“photoshop cs5 官方中文正式原版下载”；百度搜索“Adobe Photoshop CS5序列号”
+- WebStorm：
+    - 1、WebStorm-8.0.5.exe
+    - 2、WebStorm-8.0.5注册
+    - 3、谷歌浏览器插件JetBrains IDE Support 2.0.4_0.zip
+    
+- Chrome:
+    - 1、EditThisCookie
+    - 2、JSONView
+    - 3、Jquery Selector Helper
+    
