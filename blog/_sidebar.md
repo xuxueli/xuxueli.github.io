@@ -2,7 +2,7 @@
     - [ENV-GIT：Windows，Mac环境下，GIT、SVN安装.md](notebook/ENV/ENV-GIT：Windows，Mac环境下，GIT、SVN安装.md)
     - [ENV-IDE：Eclipse和Intellij.md](notebook/ENV/ENV-IDE：Eclipse和Intellij.md)
     - [ENV-JDK：Windows，Mac和CentOS环境下JDK安装.md](notebook/ENV/ENV-JDK：Windows，Mac和CentOS环境下JDK安装.md)
-    - [ENV-Linux-CentOS：CentOS-win server）：配置 + 虚拟机安装 + SecureFX和SecureCRT配置.md](notebook/ENV/ENV-Linux-CentOS：CentOS-win server）：配置 + 虚拟机安装 + SecureFX和SecureCRT配置.md)
+    - [ENV-CentOS：CentOS-WinServer配置,虚拟机安装,SecureFX--SecureCRT配置.md](notebook/ENV/ENV-CentOS：CentOS-WinServer配置,虚拟机安装,SecureFX--SecureCRT配置.md)
     - [ENV-Linux：linux目录，yum和apt-get，内核启动错误解决.md](notebook/ENV/ENV-Linux：linux目录，yum和apt-get，内核启动错误解决.md)
     - [ENV-Maven：Windows，Mac环境下，maven安装.md](notebook/ENV/ENV-Maven：Windows，Mac环境下，maven安装.md)
 - ETC
@@ -93,7 +93,7 @@
     - [SKILL-Spring-AOP-IOC：AOP实现三种方式，IOC.md](notebook/框架/SKILL-Spring-AOP-IOC：AOP实现三种方式，IOC.md)
     - [SKILL-SpringBoot：SpringBoot使用.md](notebook/框架/SKILL-SpringBoot：SpringBoot使用.md)
     - [SKILL-SpringMVC：spring mvc小结.md](notebook/框架/SKILL-SpringMVC：spring mvc小结.md)
-    - [SKILL-SpringMVC：SpringMVC vs Struts2](notebook/框架/SKILL-SpringMVC：SpringMVC vs Struts2)
+    - [SKILL-SpringMVC：SpringMVC-VS-Struts2.md](notebook/框架/SKILL-SpringMVC：SpringMVC-VS-Struts2.md)
     - [SKILL-Spring：Spring小结.md](notebook/框架/SKILL-Spring：Spring小结.md)
     - [SKILL-Struts2：Struts2小结.md](notebook/框架/SKILL-Struts2：Struts2小结.md)
     - [SKILL-Struts2：一次struts2的action动态传参问题的排查和解决.md](notebook/框架/SKILL-Struts2：一次struts2的action动态传参问题的排查和解决.md)
