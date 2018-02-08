@@ -21,7 +21,7 @@
 - 2、[xxl-api](https://github.com/xuxueli/xxl-api)               API管理平台（V1.0）
 - 3、[xxl-cache](https://github.com/xuxueli/xxl-cache)           分布式缓存管理平台（V1.0）
 - 4、[xxl-conf](https://github.com/xuxueli/xxl-conf)             分布式配置管理平台 (V1.1)
-- 5、[xxl-crawler](https://github.com/xuxueli/xxl-crawler)       面向对象的爬虫框架 (V1.1)
+- 5、[xxl-crawler](https://github.com/xuxueli/xxl-crawler)       分布式爬虫框架  (V1.1)
 - 6、[xxl-excel](https://github.com/xuxueli/xxl-excel)           Java对象和Excel转换工具 (V1.0)
 - 7、[xxl-glue](https://github.com/xuxueli/xxl-glue)             分布式逻辑管理平台（V1.1）
 - 8、[xxl-hex](https://github.com/xuxueli/xxl-hex)               Web Api框架 (V1.1)
