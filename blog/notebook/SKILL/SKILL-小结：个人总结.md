@@ -1,3 +1,7 @@
+### 流close
+- 在代码块finally里主动close；
+- jdk之后，支持在 "try (OutputStream out = new FileOutputStream("")) { ..." 里创建流，将会自动close；
+
 ### Arrays.asList 返回的 Arrays.ArrayList 固定长度；
 Arrays.asList 返回 Arrays.ArrayList 并不是常规 new ArrayList()；并没有新增和删除方法；
 
