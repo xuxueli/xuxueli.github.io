@@ -207,3 +207,15 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd
 // --声明式事务
 @Transactional 
 ```
+
+### 修改对象Field属性值
+```
+... java reflect
+field.setAccessible(true);
+field.set(object, value);
+
+... spring invoke set method
+final MutablePropertyValues mpvs = beanFactoryToProcess.getBeanDefinition(beanName).getPropertyValues();
+field.setAccessible(true);
+MutablePropertyValues.addPropertyValue(field.getName(), value);
+```
