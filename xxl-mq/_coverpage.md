@@ -8,5 +8,5 @@
 
 
 [GitHub](https://github.com/xuxueli/xxl-mq/)
-[Gitee](http://gitee.com/xuxueli0323/xxl-job)
+[Gitee](http://gitee.com/xuxueli0323/xxl-mq)
 [Get Started](#《分布式消息队列XXL-MQ》)
