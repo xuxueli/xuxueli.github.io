@@ -55,7 +55,7 @@
     - [CORE-静态内部类.md](notebook/基础/CORE-静态内部类.md)
     - [JVM-内存模型：Java内存模型、内存可见性和指令重排序.md](notebook/基础/JVM-内存模型：Java内存模型、内存可见性和指令重排序.md)
     - [JVM-内存溢出：内存泄露、内存溢出.md](notebook/基础/JVM-内存溢出：内存泄露、内存溢出.md)
-    - [JVM-参数：JVM内存模型以及参数配置.md](notebook/基础/JVM-参数：JVM内存模型以及参数配置.md)
+    - [JVM：JVM内存模型以及参数配置.md](notebook/基础/JVM：JVM内存模型以及参数配置.md)
     - [JVM：Jvm工作原理.md](notebook/基础/JVM：Jvm工作原理.md)
     - [JVM：一次FULL GC问题的排查.md](notebook/基础/JVM：一次FULL GC问题的排查.md)
 - 大数据
