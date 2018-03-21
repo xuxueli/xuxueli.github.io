@@ -5,7 +5,7 @@
 ## Zookeeper介绍
 Zookeeper是一个树形数据结构的高性能的分布式应用程序的协调服务。
 
-![输入图片说明](https://static.oschina.net/uploads/img/201609/22154508_PeVb.jpg "在这里输入图片标题")
+![输入图片说明](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img_PeVb.jpg "在这里输入图片标题")
 
 拥有以下功能：
 
@@ -23,7 +23,7 @@ Zookeeper是一个树形数据结构的高性能的分布式应用程序的协�
 
 - 4、集群管理（group services）:
 
-![输入图片说明](https://static.oschina.net/uploads/img/201609/22153843_o7SQ.jpg "在这里输入图片标题")
+![输入图片说明](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img_o7SQ.jpg "在这里输入图片标题")
 
 多台 Server 组成一个服务集群，那么必须要一个“总管”知道当前集群中每台机器的服务状态，一旦有机器不能提供服务，集群中其它集群必须知道，从而做出调整重新分配服务策略。同样当增加集群的服务能力时，就会增加一台或多台 Server，同样也必须让“总管”知道。
 
@@ -105,7 +105,7 @@ ZK集群情况: 3台ZooKeeper服务器。8核64位jdk1.6；log和snapshot放在�
 ## Zookeeper几种经典使用场景
 #### 1、ZK在 "服务注册（XXL-RPC）" 中的应用
 
-![输入图片说明](https://static.oschina.net/uploads/img/201609/22155519_cK09.png "在这里输入图片标题")
+![输入图片说明](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img_cK09.png "在这里输入图片标题")
 
 - 1、服务注册节点：每个服务在ZK中对应一个唯一注册节点，如图"iface name"节点。
 - 2、注册服务：每个服务提供者接入ZK后，将会在对应的服务注册节点下，新建一个子节点，如图中"192.168.0.1:9999"、"192.168.0.2:9999"和"192.168.0.3:9999"。EPHMERAL类型节点有个特点，当client和zookeeper集群断掉连接后节点将会被移除。可以实现服务的自动注册和自动注销。
@@ -129,7 +129,7 @@ if ((event.getType() == Event.EventType.NodeChildrenChanged && event.getPath()!=
 ```
 
 #### 2、ZK在 "配置推送（XXL-CONF）" 中的应用
-![输入图片说明](https://static.oschina.net/uploads/img/201609/22154150_fM68.png "在这里输入图片标题")
+![输入图片说明](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img_fM68.png "在这里输入图片标题")
 
 - 1、配置项节点：配置系统在ZK集群中占用一个根目录, 每新增一条配置项, 将会在该目录下新增一个子节点，如上图 "redis.address" 节点。
 - 2、配置更新：当需要更新一个配置项的配置信息时，需要对该配置相对应的节点进行赋值操作，该操作将会触发该节点的数据变更通知，如"NodeDataChanged"。
@@ -181,7 +181,7 @@ return znodeValue;
 
 #### 3、ZK在 "分布式锁（XXL-MQ）" 中的应用
 
-![输入图片说明](https://static.oschina.net/uploads/img/201609/22154508_PeVb.jpg "在这里输入图片标题")
+![输入图片说明](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img_PeVb.jpg "在这里输入图片标题")
 
 - 1、竞争者：分布式锁，目的是为了解决分布式环境下资源访问冲突的问题。每个进行资源竞争的对象，可以视为一个竞争者。如一个秒杀队列的消费者机器。
 - 2、竞争者注册路径：需要为多个竞争者一个竞争者注册路径，每个新加入的竞争者都会在该路径下自动注册一个EPHEMERAL节点。竞争者离线后将会自动注销节点。
