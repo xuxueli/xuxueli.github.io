@@ -1,20 +1,20 @@
  ### SpringMVC vs Struts2S
 
 #### 性能
-![输入图片说明](https://static.oschina.net/uploads/img/201703/27180357_LUj5.png "在这里输入图片标题")
+![输入图片说明](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img_LUj5.png "在这里输入图片标题")
 
 MVC框架性能比较几篇文章：
 [Link1](http://lib.csdn.net/article/javaee/45332 )
 [Link2](http://wenku.baidu.com/view/148d7e34eefdc8d376ee32ac.html)
 
 #### 开发效率/体验
-![输入图片说明](https://static.oschina.net/uploads/img/201703/27180921_q4mQ.png "在这里输入图片标题")
+![输入图片说明](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img_q4mQ.png "在这里输入图片标题")
 
 >提高springmvc可读性的一个建议：规定Controller的 package 路径和 URL 路径一致；
 如 “/aaa/bbb”页面对应Controller的包名为："***.mvc.aaa.Controller#bbb"
 
 #### 漏洞大事件
-![输入图片说明](https://static.oschina.net/uploads/img/201703/27181556_funw.png "在这里输入图片标题")
+![输入图片说明](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img_funw.png "在这里输入图片标题")
 
 >1、京东12G： 
 2016-12-10晚间，京东被媒体爆料有12G的数据遭泄漏，外泄数据包括用户名、密码、邮箱、QQ号、电话号码、身份证等多种信息。京东集团回应称初步判断该数据源于2013年Struts2的安全漏洞问题；
@@ -29,12 +29,12 @@ MVC框架性能比较几篇文章：
 >3、 “乌云知识库查询-乌云公开漏洞”，基本是一年之前的历史漏洞；因为“SJJY-白帽子事件”之后，乌云网已经基本关闭了。
 
 #### 漏洞攻击工具
-![输入图片说明](https://static.oschina.net/uploads/img/201703/27182248_jI5x.png "在这里输入图片标题")
+![输入图片说明](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img_jI5x.png "在这里输入图片标题")
 
 > 网络上流传着许多针对struts2流行漏洞的共计工具，攻击成本非常低。
 
 #### 官方纰漏漏洞
-![输入图片说明](https://static.oschina.net/uploads/img/201703/27182620_pTBk.png "在这里输入图片标题")
+![输入图片说明](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img_pTBk.png "在这里输入图片标题")
 
 #### ONGL漏洞浅析
 
@@ -55,13 +55,13 @@ MVC框架性能比较几篇文章：
 问题来了：假如参数中包含攻击代码如“rm -rf /*”呢？
 (ParametersInterceptor可以拦截部分非法参数，但是将参数转码为unicode可绕过)
 
-![输入图片说明](https://static.oschina.net/uploads/img/201703/27183009_hxnF.png "在这里输入图片标题")
+![输入图片说明](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img_hxnF.png "在这里输入图片标题")
 
 感兴趣的同学参照以下代码体验一下OGNL语句；
-![输入图片说明](https://static.oschina.net/uploads/img/201703/27183037_8Hl6.png "在这里输入图片标题")
+![输入图片说明](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img_8Hl6.png "在这里输入图片标题")
 
 #### 迭代、文档资料
-![输入图片说明](https://static.oschina.net/uploads/img/201703/27183329_VOyn.png "在这里输入图片标题")
+![输入图片说明](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img_VOyn.png "在这里输入图片标题")
 
 #### 趋势、社区
     1、spring boot：开箱即用，库的集合；
@@ -72,4 +72,4 @@ MVC框架性能比较几篇文章：
         d、… … 
         （ spring cloud对于中小型互联网公司来说是一颗惊雷）
 
-![输入图片说明](https://static.oschina.net/uploads/img/201703/27183607_oRH1.png "在这里输入图片标题") 
+![输入图片说明](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img_oRH1.png "在这里输入图片标题") 
