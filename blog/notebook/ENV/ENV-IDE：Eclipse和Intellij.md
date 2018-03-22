@@ -287,7 +287,10 @@ Windows》Preferences》Validation，只保留Manual一列，Build一列取消�
     >Editor》Editor Tabs》Mark modifyied tabs with asterisk（勾选）
 * 12、快捷键冲突：
     >Ctrl + Space：和Win7输入法冲突；语言栏》高级键设置》编辑“在输入语言之间”不修改点击确认》编辑“中文-输入法/非输入法切换”Ctrl+Space修改为如Ctrl+Home等即可》保存，重启即可；
-    
+- idea热部署
+    >1.Build,Excution,Deployment>>Make project automatically（勾选）
+    >2.CTRL + SHIFT + A --> 查找Registry;  勾选  compiler.automake.allow.when.app.running;
+    springboot自动部署参考文档：https://blog.csdn.net/a1273022039/article/details/79590681
 
 ##### 2.3 Compile、Make和Build的区别
     >针对Java的开发工具，一般都有Compile、Make和Build三个菜单项，完成的功能的都差不多，但是又有区别。
