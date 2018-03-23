@@ -4,8 +4,7 @@
 
 > API管理平台
 
-- 开发迅速、学习简单、轻量级、易扩展
-
+- 接口、文档、管理、Mock、测试
 
 [GitHub](https://github.com/xuxueli/xxl-api/)
 [Gitee](http://gitee.com/xuxueli0323/xxl-api)
