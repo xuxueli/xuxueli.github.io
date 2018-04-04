@@ -8,4 +8,5 @@
 
 
 [GitHub](https://github.com/xuxueli/xxl-sso/)
+[Gitee](http://gitee.com/xuxueli0323/xxl-sso)
 [Get Started](#《分布式单点登录框架XXL-SSO》)
