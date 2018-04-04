@@ -2,6 +2,7 @@
 
 - docker官网：http://www.docker.com/    
 - 中文文档：http://www.widuu.com/docker/  
+- 教程：http://www.runoob.com/docker/docker-tutorial.html
 
 ---
 >Docker是什么？
@@ -121,4 +122,22 @@ Docker 前景很明确，采用 Docker 只会让开发变得更方便。果你�
         或者：
         brew update
         brew upgrade docker
+    3、下载DMG镜像安装；
+    
+## 常用命令
+```
+docker --version
+docker images
+docker ps
+docker start redis
+docker stop redis
+docker run -p 6379:6379 -v $PWD/data:/data  -d redis:4.0 redis-server --appendonly yes
+/*
+-p 6379:6379 : 将容器的6379端口映射到主机的6379端口
+-v $PWD/data:/data : 将主机中当前目录下的data挂载到容器的/data
+redis-server --appendonly yes : 在容器执行redis-server启动命令，并打开redis持久化配置
+*/
+
+
+```
     
