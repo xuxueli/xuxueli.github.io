@@ -4,7 +4,7 @@
 
 > 分布式单点登录框架
 
-- 开发迅速、学习简单、轻量级、易扩展
+- 轻量级、易扩展、分布式、跨域、Web+APP均支持接入
 
 
 [GitHub](https://github.com/xuxueli/xxl-sso/)
