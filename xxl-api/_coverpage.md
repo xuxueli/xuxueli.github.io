@@ -4,7 +4,7 @@
 
 > API管理平台
 
-- 接口、文档、管理、Mock、测试
+- 强大易用、接口管理、文档、Mock、测试
 
 [GitHub](https://github.com/xuxueli/xxl-api/)
 [Gitee](http://gitee.com/xuxueli0323/xxl-api)
