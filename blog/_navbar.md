@@ -6,5 +6,5 @@
 
 - <a href="../page/community.html">关于社区</a>
 
-- <a href="../page/donate.html" >捐赠</a>
+- <a href="../page/donate.html" >赞助</a>
           
