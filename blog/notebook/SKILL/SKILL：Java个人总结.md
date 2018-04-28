@@ -1,3 +1,23 @@
+### 编程建议
+源码如下：
+```
+ConcurrentMap<String, LocalCacheData> cacheRepository = new ConcurrentHashMap<String, LocalCacheData>();
+……
+for (String key: cacheRepository.keySet()) {
+……
+}
+```
+操作：JDK7编译，运行在JDK9报错；
+报错如下：
+```
+java.lang.NoSuchMethodError: java.util.concurrent.ConcurrentHashMap.keySet() 
+Ljava/util/concurrent/ConcurrentHashMap$KeySetView;
+```
+原因：不同版本，对 "ConcurrentHashMap.keySet" 实现不一致。
+修改方案：代码左侧类型从实现类 "ConcurrentHashMap" 改为抽象父类 "ConcurrentMap"；
+结论：越抽象、越基础，兼容性越好；反之，越具体、越封装，兼容性越差；
+
+
 ### 流close
 - 在代码块finally里主动close；
 - jdk之后，支持在 "try (OutputStream out = new FileOutputStream("")) { ..." 里创建流，将会自动close；
