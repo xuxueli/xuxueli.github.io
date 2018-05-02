@@ -1,4 +1,17 @@
-### 编程建议
+### 封箱、拆箱的陷阱
+```
+Integer tmp_id = null;
+……
+public void test(int id){
+}
+……
+
+// 这样会发生NPE，拆箱时无法完整类型转换，需要判空
+test(tmp_id)
+```
+
+
+### 编程建议：越抽象、越基础，兼容性越好
 源码如下：
 ```
 ConcurrentMap<String, LocalCacheData> cacheRepository = new ConcurrentHashMap<String, LocalCacheData>();
