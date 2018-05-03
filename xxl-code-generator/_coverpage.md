@@ -2,7 +2,7 @@
 
 # Xxl-Code-Generator
 
-> 代码生成平台
+> XXL代码生成平台
 
 - 简洁、轻量级、多层代码生成（controller/service/dao/mybatis/model）、高效、在线预览
 
