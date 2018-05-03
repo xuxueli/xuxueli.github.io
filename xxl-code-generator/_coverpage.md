@@ -4,7 +4,7 @@
 
 > 代码生成平台
 
-- 简洁、轻量级、多层代码生成（controller/service/dao/mybatis/model）、生产力、在线预览
+- 简洁、轻量级、多层代码生成（controller/service/dao/mybatis/model）、高效、在线预览
 
 
 [GitHub](https://github.com/xuxueli/xxl-code-generator/)
