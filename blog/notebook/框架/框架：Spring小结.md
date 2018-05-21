@@ -19,10 +19,21 @@ IOC：
     - 实现 "InitializingBean.afterPropertiesSet/DisposableBean.destroy" 接口
     - <bean> 元素的 init-method/destroy-method属性指定方法；
     - 指定方法上加上@PostConstruct或@PreDestroy注解；
+    - BeanPostProcessor实现 postProcessBeforeInitialization/postProcessAfterInitialization 方法；
 
 
-        Bean在实例化的过程中，执行顺序：Constructor > @PostConstruct >InitializingBean > init-method
-        Bean在销毁的过程中，执行顺序：@PreDestroy > DisposableBean > destroy-method
+        Bean在实例化的过程中，执行顺序：
+            Constructor 
+            @PostConstruct
+            BeanPostProcessor.postProcessBeforeInitialization 
+            InitializingBean 
+            init-method
+            BeanPostProcessor.postProcessAfterInitialization
+            
+        Bean在销毁的过程中，执行顺序：
+            @PreDestroy
+            DisposableBean
+            destroy-method
 
 ##### @RequestBody 请求体中传递JSON数据
 ```
