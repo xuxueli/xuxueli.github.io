@@ -129,14 +129,48 @@ Docker 前景很明确，采用 Docker 只会让开发变得更方便。果你�
 docker --version
 docker images
 docker ps
+docker ps -a
+docker rm second-mysql
+
+
+// redis
+
 docker start redis
 docker stop redis
-docker run -p 6379:6379 -v $PWD/data:/data  -d redis:4.0 redis-server --appendonly yes
+docker run -p 6379:6379 --name redis -v $PWD/data:/data  -d redis:4.0 redis-server --appendonly yes
 /*
 -p 6379:6379 : 将容器的6379端口映射到主机的6379端口
 -v $PWD/data:/data : 将主机中当前目录下的data挂载到容器的/data
 redis-server --appendonly yes : 在容器执行redis-server启动命令，并打开redis持久化配置
 */
+
+
+// mysql
+cd /Users/xuxueli/programfils/plugin/docker/mysql
+
+mkdir -p ~/mysql/data ~/mysql/logs ~/mysql/conf
+/*
+data目录将映射为mysql容器配置的数据文件存放路径
+logs目录将映射为mysql容器的日志目录
+conf目录里的配置文件将映射为mysql容器的配置文件
+*/
+
+// 参考文档：https://www.cnblogs.com/zqifa/p/mysql-6.html
+docker run -p 3306:3306 --name mysql -v $PWD/conf:/etc/mysql/conf.d -v $PWD/logs:/var/log/mysql -v $PWD/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root_pwd -d mysql:5.6
+
+
+cd /Users/xuxueli/programfils/plugin/docker/mysql
+mkdir -p ./mysql/data
+docker run -p 3306:3306 --name mysql -v $PWD/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root_pwd -d mysql:5.6
+
+/*
+-p 3306:3306：将容器的3306端口映射到主机的3306端口
+-v -v $PWD/conf:/etc/mysql/conf.d：将主机当前目录下的conf/my.cnf挂载到容器的/etc/mysql/my.cnf
+-v $PWD/logs:/logs：将主机当前目录下的logs目录挂载到容器的/logs
+-v $PWD/data:/mysql_data：将主机当前目录下的data目录挂载到容器的/mysql_data
+-e MYSQL_ROOT_PASSWORD=123456：初始化root用户的密码
+*/
+
 
 
 ```
