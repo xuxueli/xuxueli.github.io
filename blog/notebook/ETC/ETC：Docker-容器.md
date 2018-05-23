@@ -148,7 +148,7 @@ redis-server --appendonly yes : 在容器执行redis-server启动命令，并打
 // mysql
 cd /Users/xuxueli/programfils/plugin/docker/mysql
 
-mkdir -p ~/mysql/data ~/mysql/logs ~/mysql/conf
+mkdir -p ./data ./logs ./conf
 /*
 data目录将映射为mysql容器配置的数据文件存放路径
 logs目录将映射为mysql容器的日志目录
@@ -160,7 +160,7 @@ docker run -p 3306:3306 --name mysql -v $PWD/conf:/etc/mysql/conf.d -v $PWD/logs
 
 
 cd /Users/xuxueli/programfils/plugin/docker/mysql
-mkdir -p ./mysql/data
+mkdir -p ./data
 docker run -p 3306:3306 --name mysql -v $PWD/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root_pwd -d mysql:5.6
 
 /*
