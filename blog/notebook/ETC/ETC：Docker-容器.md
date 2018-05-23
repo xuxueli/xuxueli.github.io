@@ -134,6 +134,8 @@ docker ps
 docker ps -a
 docker rm second-mysql
 
+docker logs -f zookeeper
+
 
 // redis
 
@@ -190,7 +192,7 @@ syncLimit=5
 dataDir=/opt/zookeeper/data
 clientPort=2181
 
-docker run --name zookeeper --net host -v $PWD/conf/zoo.cfg:/opt/zookeeper/conf/zoo.cfg  -v $PWD/data:/opt/zookeeper/data  --restart=always -d zookeeper:3.4.12
+docker run -p 2181:2181 --name zookeeper -v $PWD/conf/zoo.cfg:/opt/zookeeper/conf/zoo.cfg  -v $PWD/data:/opt/zookeeper/data  --restart=always -d zookeeper:3.4.12
 
 ```
     
