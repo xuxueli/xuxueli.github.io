@@ -167,7 +167,7 @@ docker run -p 3306:3306 --name mysql -v $PWD/conf:/etc/mysql/conf.d -v $PWD/logs
 
 cd /Users/xuxueli/programfils/plugin/docker/mysql
 mkdir -p ./data
-docker run -p 3306:3306 --name mysql -v $PWD/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root_pwd -d mysql:5.6
+docker run -p 3306:3306 --name mysql -v $PWD/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root_pwd -d mysql:5.6  --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci 
 
 /*
 -p 3306:3306：将容器的3306端口映射到主机的3306端口
