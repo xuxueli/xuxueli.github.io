@@ -128,6 +128,8 @@ Docker 前景很明确，采用 Docker 只会让开发变得更方便。果你�
 ```
 docker --version
 docker images
+docker rmi images_id
+
 docker ps
 docker ps -a
 docker rm second-mysql
@@ -145,7 +147,9 @@ redis-server --appendonly yes : 在容器执行redis-server启动命令，并打
 */
 
 
+
 // mysql
+
 cd /Users/xuxueli/programfils/plugin/docker/mysql
 
 mkdir -p ./data ./logs ./conf
@@ -172,6 +176,21 @@ docker run -p 3306:3306 --name mysql -v $PWD/data:/var/lib/mysql -e MYSQL_ROOT_P
 */
 
 
+
+// zookeeper
+docker pull zookeeper:3.4.12
+
+cd /Users/xuxueli/programfils/plugin/docker/zookeeper 
+mkdir -p ./conf ./data
+
+// touch conf/zoo.cfg
+tickTime=2000
+initLimit=10
+syncLimit=5
+dataDir=/opt/zookeeper/data
+clientPort=2181
+
+docker run --name zookeeper --net host -v $PWD/conf/zoo.cfg:/opt/zookeeper/conf/zoo.cfg  -v $PWD/data:/opt/zookeeper/data  --restart=always -d zookeeper:3.4.12
 
 ```
     
