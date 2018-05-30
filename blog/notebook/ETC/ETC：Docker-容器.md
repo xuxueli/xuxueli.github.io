@@ -177,6 +177,9 @@ docker run -p 3306:3306 --name mysql -v $PWD/data:/var/lib/mysql -e MYSQL_ROOT_P
 -e MYSQL_ROOT_PASSWORD=123456：初始化root用户的密码
 */
 
+// 同步时区
+docker cp /etc/localtime mysql:/etc/localtime
+
 
 
 // zookeeper
