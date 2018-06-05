@@ -197,5 +197,11 @@ clientPort=2181
 
 docker run -p 2181:2181 --name zookeeper -v $PWD/conf/zoo.cfg:/opt/zookeeper/conf/zoo.cfg  -v $PWD/data:/opt/zookeeper/data  --restart=always -d zookeeper:3.4.12
 
+
+// springboot
+// maven配置 + DockerFile 
+mvn clean package docker:build
+
+docker run -p 8080:8080 --name xxl-code-generator-admin-0.0.2-SNAPSHOT -v /tmp:/data/applogs -d xxl-code-generator-admin:0.0.2-SNAPSHOT
 ```
     
