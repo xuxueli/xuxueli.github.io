@@ -291,6 +291,7 @@ Windows》Preferences》Validation，只保留Manual一列，Build一列取消�
     >1.Build,Excution,Deployment>>Make project automatically（勾选）
     >2.CTRL + SHIFT + A --> 查找Registry;  勾选  compiler.automake.allow.when.app.running;
     springboot自动部署参考文档：https://blog.csdn.net/a1273022039/article/details/79590681
+    >3. Edit Configurations --> 'On Update Action' 勾 'update classes and resources'
 
 ##### 2.3 Compile、Make和Build的区别
     >针对Java的开发工具，一般都有Compile、Make和Build三个菜单项，完成的功能的都差不多，但是又有区别。
