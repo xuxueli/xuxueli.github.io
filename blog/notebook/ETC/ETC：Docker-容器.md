@@ -202,6 +202,6 @@ docker run -p 2181:2181 --name zookeeper -v $PWD/conf/zoo.cfg:/opt/zookeeper/con
 // maven配置 + DockerFile 
 mvn clean package docker:build
 
-docker run -p 8080:8080 --name xxl-code-generator-admin-0.0.2-SNAPSHOT -v /tmp:/data/applogs -d xxl-code-generator-admin:0.0.2-SNAPSHOT
+docker run -p 8080:8080 -v /tmp:/data/applogs --name xxl-code-generator-admin-0.0.2-SNAPSHOT  -d xxl-code-generator-admin:0.0.2-SNAPSHOT
 ```
     
