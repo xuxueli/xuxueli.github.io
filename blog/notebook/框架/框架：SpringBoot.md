@@ -107,3 +107,57 @@ public class DemoRestController {
 ```
 
 
+##### 配置方式和优先级
+
+- 1.配置方式和优先级
+
+        a. 命令行参数
+        b. 来自java:comp/env的JNDI属性
+        b. Java系统属性（System.getProperties()）
+        d. 操作系统环境变量
+        e. RandomValuePropertySource配置的random.*属性值
+        f. jar外部的application-{profile}.properties或application.yml(带spring.profile)配置文件
+        g. jar内部的application-{profile}.properties或application.yml(带spring.profile)配置文件
+        h. jar外部的application.properties或application.yml(不带spring.profile)配置文件
+        i. jar内部的application.properties或application.yml(不带spring.profile)配置文件
+        j. @Configuration注解类上的@PropertySource
+        k. 通过SpringApplication.setDefaultProperties指定的默认属性
+
+- 2.命令行参数
+
+```
+java -jar ***.jar --key="value"
+
+// 可通过以下代码禁用
+SpringApplication.setAddCommandLineProperties(false);
+```
+可通过 application.properties 中占位符，@Value 等方式获取，覆盖现有配置；
+
+
+- 3. application-{profile}.properties参数加载
+
+```
+java -jar  ***.jar  --spring.profiles.active=dev
+```
+application.properties 会首先被加载；然后从 application-{profile}.properties 中获取替换；   
+所以，一些基本配置可以写在 前者 中，个性化配置写在 后者 中。
+
+- 4.application.properties 参数加载
+
+默认从 application.properties 文件加载参数，application.properties只会被加载一次。
+
+    a、加载的优先级：
+
+        1、file:./config/ 当前jar目录的config
+        2、file:./ 当前jar目录
+        3、classpath:/config/ jar包中classpath的 config目录下
+        4、classpath:/ jar包中classpath 路径下
+        
+    b、使用自定义文件
+    
+        // 方式1：这时就会加载myproject.propertie并且 application.properties不会被加载的.
+        java -jar  ***.jar --spring.config.name=myproject
+        
+        // 方式2：这种情况下 application.properties也是会被加载，使用方式application-{profile}.properties相同.
+        java -jar  ***.jar  spring.config.location=classpath:/myproject.properties
+
