@@ -136,6 +136,11 @@ docker rm second-mysql
 
 docker logs -f zookeeper
 
+docker exec -it 47fec42abbb7 /bin/sh
+docker exec -it 47fec42abbb7 /bin/bash
+
+docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)
+
 
 // redis
 
