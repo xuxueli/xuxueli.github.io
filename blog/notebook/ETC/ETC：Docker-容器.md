@@ -210,5 +210,13 @@ mvn clean package docker:build
 // docker run
 docker run -p 8080:8080 -v /tmp:/data/applogs --name xxl-code-generator-admin-0.0.2-SNAPSHOT  -d xxl-code-generator-admin:0.0.2-SNAPSHOT
 docker run -e PARAMS="--mysqladdress=172.17.0.2:3306 --zkaddress=172.17.0.3:2181" -p 8080:8080 -v /tmp:/data/applogs --name xxl-conf-admin-1.5.0-SNAPSHOT  -d xxl-conf-admin:1.5.0-SNAPSHOT
+
+
+// 推送镜像至docker-hub仓库
+1、锁定镜像：docker images
+2、登陆Hub：docker login
+3、tag镜像：docker tag <imageID> <namespace>/<image name>:<version tag eg latest>
+4、push镜像：docker push <namespace>/<image name>:<tag>
+
 ```
     
