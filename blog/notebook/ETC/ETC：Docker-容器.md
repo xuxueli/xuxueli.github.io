@@ -114,6 +114,10 @@ Docker 前景很明确，采用 Docker 只会让开发变得更方便。果你�
         # yum -y install docker-io
     3、************* 虚拟机找不到docker.io的yum源，安装卡住了******
     
+## win 安装 docker
+- 方式1：Win10 Pro（Hyper-V） + Docker-for-Windows-Installer.exe
+- 方式2：Win（CPU 虚拟） + DockerToolbox.exe
+    
 ## mac安装docker
 
     1、准备一台Mac，环境要求；https://docs.docker.com/docker-for-mac/install/#what-to-know-before-you-install
