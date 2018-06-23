@@ -196,8 +196,10 @@ docker run -p 3306:3306 --name mysql -v $PWD/data:/var/lib/mysql -e MYSQL_ROOT_P
 
 // 同步时区
 docker cp /etc/localtime mysql:/etc/localtime
-
-
+// 同步时区2，重启后确认，参考：https://blog.csdn.net/zhangchao19890805/article/details/52690473
+docker exec -it <image-id> /bin/bash  
+cp /usr/share/zoneinfo/PRC /etc/localtime
+date -R
 
 // zookeeper
 docker pull zookeeper:3.4.12
