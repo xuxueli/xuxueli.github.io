@@ -3,6 +3,7 @@
 - docker官网：http://www.docker.com/    
 - 中文文档：http://www.widuu.com/docker/  
 - 教程：http://www.runoob.com/docker/docker-tutorial.html
+- Docker 中国官方镜像加速：http://www.docker-cn.com/registry-mirror
 
 ---
 >Docker是什么？
@@ -117,7 +118,14 @@ Docker 前景很明确，采用 Docker 只会让开发变得更方便。果你�
 ## win 安装 docker
 - 方式1：Win10 Pro（Hyper-V） + Docker-for-Windows-Installer.exe
 - 方式2：Win（CPU 虚拟） + DockerToolbox.exe
-    
+
+- DockerToolbox 更换官方的中国区加速器
+```
+docker-machine ssh default
+// DOCKER_OPTS新增一行参数
+--registry-mirror https://registry.docker-cn.com
+docker-machine restart default
+```
 ## mac安装docker
 
     1、准备一台Mac，环境要求；https://docs.docker.com/docker-for-mac/install/#what-to-know-before-you-install
