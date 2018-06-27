@@ -1,3 +1,17 @@
+### Emoji 表情处理，编解码
+https://github.com/vdurmont/emoji-java
+
+```
+String str = "An 😀awesome 😃string with a few 😉emojis!";
+String result = EmojiParser.parseToAliases(str);
+System.out.println(result);
+
+
+String str = "An :grinning:awesome :smiley:string &#128516;with a few :wink:emojis!";
+String result = EmojiParser.parseToUnicode(str);
+System.out.println(result);
+```
+
 ### 封箱、拆箱的陷阱
 ```
 Integer tmp_id = null;
