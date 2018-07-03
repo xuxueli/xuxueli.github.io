@@ -3,7 +3,7 @@ ThreadPoolExecutor作为java.util.concurrent包对外提供基础实现，以内
 
 ##### 构造方法参数讲解
 参数名 | 作用
---|--
+--- | ---
 corePoolSize    |   核心线程池大小
 maximumPoolSize |	最大线程池大小
 keepAliveTime	|   线程池中超过corePoolSize数目的空闲线程最大存活时间；可以allowCoreThreadTimeOut(true)使得核心线程有效时间
