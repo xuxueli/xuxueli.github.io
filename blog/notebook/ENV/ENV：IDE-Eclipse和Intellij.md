@@ -200,7 +200,7 @@ Windows》Preferences》Validation，只保留Manual一列，Build一列取消�
 ***
 ##### 2.1 安装注册
 - [下载地址](http://www.jetbrains.com/idea/) 
-- [IntelliJ IDEA授权服务器](http://idea.qinxi1992.cn/)   (推荐使用正版哈)
+- IntelliJ IDEA授权服务器   (供学习使用，推荐使用正版哈)
 - [授权服务器](http://idea.lanyus.com/)
 
 > Community Edition社区免费版功能有精简，推荐使用Ultimate Edition商业版本，可免费用30天，需要注册激活。
