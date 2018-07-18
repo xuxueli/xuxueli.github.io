@@ -6,14 +6,10 @@ Navicat Premium
 
 [Navicate官网](https://www.navicat.com.cn/download/navicat-premium)
 
-- Windows注册
-    - [方式1：绿色，复制文件即可](http://download.csdn.net/download/yuzhouneng/9960916)
-- Mac注册
-    - [方式1：Mac定制版本](http://xclient.info/s/navicat-premium.html) （提示已损坏，其实是因为权限导致，页面有解决方案）
-    - [方式2.1：Mac注册1](http://blog.csdn.net/sunnyboy9/article/details/44704415)
-    - [方式2.2：Mac注册2](http://bbs.feng.com/read-htm-tid-8156171.html)
-
-（推荐使用正版，上述内容来源网络仅作为学习使用）
+- Windows
+    - 方式1：绿色版，复制文件即可（csdn，navicat）
+- Mac：
+    - 方式1：Mac定制版(xclient，navicat-premium) （提示已损坏，其实是因为权限导致，页面有解决方案）
 
 # 1. Win7环境
 ---
