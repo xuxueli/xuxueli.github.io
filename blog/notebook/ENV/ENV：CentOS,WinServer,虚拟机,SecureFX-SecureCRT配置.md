@@ -373,7 +373,7 @@ sudo ./startup.sh    管理员权限执行
 - terminal.app （个人比较喜欢，简单）
 - scp
 ```
-scp xueli.xue@10.3.18.142:/data/applogs/wed-job-service/logs/WedHotelPicUpload-1459248088557.xlsx /tmp
+scp xueli.xue@10.3.18.142:/data/applogs/service/logs/WedHotelPicUpload-1459248088557.xlsx /tmp
 ```
 ##### SecureFX + SecureCRT
 
