@@ -114,3 +114,9 @@ Young Generation由于对象产生的比较多并且大都是朝生夕灭的，�
 
 ![image](http://img.blog.csdn.net/20140101114509375?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQva2luZ29md29ybGQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
+### 实用命令
+```
+// 查看线程栈大小
+java -XX:+PrintFlagsFinal -version | grep ThreadStackSize
+
+```
