@@ -63,10 +63,11 @@ maven | maven3 | maven3
 git | git | git
 web server | tomcat7 | tomcat7
 ide | idea | idea
-database | mysql5.5 + navicat(oracle11g + pl/sql) | mysql5.5 + navicat
-linux | secureFX + secureCRT + vbox + centos6.5 | secureFX + secureCRT + vbox + centos6.5（terminal + scp）
+database | mysql5.5 + navicat | mysql5.5 + navicat
+-- | -- | --
+linux | docker(centos6.5) + secureFX + secureCRT |  docker(centos6.5) + terminal(scp) 
 etc | Sublime | Sublime, Brew
-（搜狗输入法，有道笔记，谷歌浏览器+书签，百度云，office/WPS, RAR）
+（搜狗输入法，有道笔记，谷歌浏览器，百度云，office/WPS, RAR）
 
 
 
