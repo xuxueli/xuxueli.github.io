@@ -67,7 +67,7 @@ database | mysql5.5 + navicat | mysql5.5 + navicat
 -- | -- | --
 linux | docker(centos6.5) + secureFX + secureCRT |  docker(centos6.5) + terminal(scp) 
 etc | Sublime | Sublime, Brew
-（谷歌浏览器 + 搜狗输入法 + 百度云 + 有道笔记 + office/WPS + RAR）
+（Chrome + 搜狗输入法 + 7Z + 百度云 + 有道笔记 + office/WPS）
 
 
 
