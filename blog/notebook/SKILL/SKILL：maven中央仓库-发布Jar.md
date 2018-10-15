@@ -46,6 +46,15 @@ gpg --help
 </server>
 <!-- oss -->
 
+// profile 配置 （windows 可选配置，id 需要和pom一致，指定 gpg.exe目录）
+<profile>
+    <id>release</id>
+    <properties>
+        <gpg.executable>D:/ProgramFiles/gpg/GnuPG/bin/gpg.exe</gpg.executable>
+        <!-- <gpg.passphrase>***</gpg.passphrase> -->
+        </properties>
+</profile>
+
 // 默认使用环境变量配置的maven下的默认配置，修改器setting即可
 mvn clean deploy -P release -Dgpg.keyname=F7771387 -Dgpg.passphrase=Passphase
 
