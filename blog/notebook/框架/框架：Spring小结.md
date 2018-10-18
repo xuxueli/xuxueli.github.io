@@ -26,6 +26,7 @@ IOC：
             Constructor 
             @PostConstruct
             BeanPostProcessor.postProcessBeforeInitialization 
+            ApplicationContextAware.setApplicationContext
             InitializingBean 
             init-method
             BeanPostProcessor.postProcessAfterInitialization
