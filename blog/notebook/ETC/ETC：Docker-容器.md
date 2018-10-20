@@ -214,8 +214,8 @@ syncLimit=5
 dataDir=/opt/zookeeper/data
 clientPort=2181
 
-docker run -p 2181:2181 --name zookeeper -v $PWD/conf/zoo.cfg:/opt/zookeeper/conf/zoo.cfg  -v $PWD/data:/opt/zookeeper/data  --restart=always -d zookeeper:3.4.12
-
+docker run -p 2181:2181 --name zookeeper -v $PWD/conf/zoo.cfg:/opt/zookeeper/conf/zoo.cfg  -v $PWD/data:/opt/zookeeper/data  -d zookeeper:3.4.12
+// --restart=always ：开机启动
 
 // springboot
 // maven配置 + DockerFile 
