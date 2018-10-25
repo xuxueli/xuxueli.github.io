@@ -230,7 +230,7 @@ docker run -e PARAMS="--mysqladdress=172.17.0.2:3306 --zkaddress=172.17.0.3:2181
 1、锁定镜像：docker images
 2、登陆Hub：docker login
 3、tag镜像：docker tag <imageID> <namespace>/<image name>:<version tag eg latest>
-4、push镜像：docker push <namespace>/<image name>:<tag>
+4、push镜像：docker push <namespace>/<image name>:<version tag eg latest>
 
 ```
     
