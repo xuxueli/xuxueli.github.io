@@ -229,6 +229,8 @@ Windows》Preferences》Validation，只保留Manual一列，Build一列取消�
     User settings file：setting文件目录 (Override)
     Local repository： 默认即可
     ```
+    
+    Tips：推荐依赖树查看插件 Maven Helper
 
 * 3、Git配置：
     >配置GIT：安装Git，配置Git：File》Setting》Version Control》Git》Path to Git executable选择git.exe地址；
