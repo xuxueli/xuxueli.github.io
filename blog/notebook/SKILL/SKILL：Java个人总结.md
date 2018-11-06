@@ -1,3 +1,13 @@
+### HTML5添加 "data-*"，元素携带数据；
+data-*可以解决自定义属性混乱无管理;
+```
+<div data-bigimg="big.jpg" ></div>
+// 存取
+$("div").data("bigimg");
+$("div").data("bigimg","newBig.jpg");
+```
+
+
 ### Emoji 表情处理，编解码
 https://github.com/vdurmont/emoji-java
 
