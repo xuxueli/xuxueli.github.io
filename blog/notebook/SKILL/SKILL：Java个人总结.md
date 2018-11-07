@@ -1,3 +1,17 @@
+### freemarker.properties : 推荐配置
+```
+template_update_delay=0
+default_encoding=UTF-8
+output_encoding=UTF-8
+locale=zh_CN
+number_format=0.##########
+date_format=yyyy-MM-dd
+time_format=HH:mm:ss
+datetime_format=yyyy-MM-dd HH:mm:s
+classic_compatible=true
+template_exception_handler=ignore
+```
+
 ### HTML5添加 "data-*"，元素携带数据；
 data-*可以解决自定义属性混乱无管理;
 ```
