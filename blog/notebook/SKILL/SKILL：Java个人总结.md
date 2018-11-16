@@ -1,3 +1,7 @@
+### SQL性能优化
+状况：大表、尤其只关注大表中少量数据；或者多表关联SQL复杂；导致的性能较低；
+方案：搜索引擎、新建宽表；
+
 ### freemarker.properties : 推荐配置
 ```
 template_update_delay=0
