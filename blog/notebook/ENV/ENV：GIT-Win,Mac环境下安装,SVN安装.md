@@ -73,7 +73,10 @@ commit
 git reset --soft HEAD~1
 
 // 生成公钥，默认位置：~/.ssh
-ssh-keygen
+$ ssh-keygen -t rsa -C "xxx@gmail.com"
+cat .\.ssh\id_rsa.pub
+》》New SSH key
+ssh -T git@github.com
 
 // 更新仓库地址
 git remote set-url origin remote_git_address
