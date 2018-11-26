@@ -1,6 +1,6 @@
 <img src="https://raw.githubusercontent.com/xuxueli/xxl-job/master/doc/images/xxl-logo.png" width="100" >
 
-# Xxl-Code-Generator
+# XXL-CODE-GENERATOR
 
 > 代码生成平台
 
@@ -9,4 +9,4 @@
 
 [GitHub](https://github.com/xuxueli/xxl-code-generator/)
 [Gitee](http://gitee.com/xuxueli0323/xxl-code-generator)
-[Get Started](#《代码生成平台Xxl-Code-Generator》)
+[Get Started](#《代码生成平台XXL-CODE-GENERATOR》)
