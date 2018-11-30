@@ -4,7 +4,7 @@
 
 > 轻量级分布式服务注册中心XXL-REGISTRY
 
-- 高性能、分布式、注册中心、软负载、服务治理
+- 轻量级、秒级注册上线、多环境、跨语言、跨机房
 
 
 [GitHub](https://github.com/xuxueli/xxl-registry/)
