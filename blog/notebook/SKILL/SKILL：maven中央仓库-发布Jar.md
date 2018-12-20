@@ -24,15 +24,16 @@ gpg --list-keys
 // 输出如下
 /Users/***user***/.gnupg/pubring.gpg
 ---------------------------------
-pub   2048R/F7771387 2016-09-05
-uid       [ultimate] x****** <9********@qq.com>
-sub   2048R/A677949D 2016-09-05
+pub   rsa2048 2016-09-05 [SC]
+      {用户ID}
+uid           [ 绝对 ] x****** <9********@qq.com>
+sub   rsa2048 2016-09-05 [E]
 
-// 将公钥发布到 PGP 密钥服务器
-gpg --keyserver hkp://pool.sks-keyservers.net --send-keys F7771387
+// 将公钥发布到 PGP 密钥服务器，公钥服务器配置地址 "~/.gnupg/gpg.conf"，可使用默认值也可自定义；
+gpg --keyserver hkp://keys.gnupg.net --send-keys {用户ID}
 
 // 查询公钥是否发布成功
-gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys F7771387
+gpg --keyserver hkp://keys.gnupg.net --recv-keys {用户ID}
 
 // 帮助，如修改密码等
 gpg --help
