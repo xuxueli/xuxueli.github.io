@@ -81,6 +81,9 @@ mvn clean //清除目标目录中的生成结果
 mvn package //依据项目生成 jar 文件
 mvn install //在本地 Repository 中安装 jar
 mvn eclipse:eclipse //生成 Eclipse 项目文件
+
+// etc
+mvn -Dhttps.protocols=TLSv1.2   // 启用 TLSv1.2 协议，maven仓库要求
 ```
 
 ##### Maven 参数 
