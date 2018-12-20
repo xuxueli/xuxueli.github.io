@@ -86,6 +86,16 @@ $ gpg --recipient 标识名 --encrypt 文件名
 $ gpg --output 新文件名 --decrypt 加密文件名
 十一、修改密钥
 $ gpg --edit-key 标识名
+
+---
+报错处理 "gpg: signing failed: Inappropriate ioctl for device"： 
+gpg版本较新，需要额外配置，在gpg安装目录（mac的是~/.gnup）下建立两个配置文件：gpg.conf、gpg-agent.conf；
+    - 在gpg.conf添加：
+        use-agent
+        pinentry-mode loopback
+    - 在gpg-agent.conf添加：
+        allow-loopback-pinentry
+
 ```
 
 
