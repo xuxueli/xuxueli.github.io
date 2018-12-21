@@ -50,7 +50,8 @@
 - 16、[xxl-rpc](https://github.com/xuxueli/xxl-rpc)
 - 17、[xxl-search](https://github.com/xuxueli/xxl-search)
 - 18、[xxl-sso](https://github.com/xuxueli/xxl-sso)
-- 19、[xxl-web](https://github.com/xuxueli/xxl-web)
+- 19、[xxl-trace](https://github.com/xuxueli/xxl-trace)
+- 20、[xxl-web](https://github.com/xuxueli/xxl-web)
 
 
 
