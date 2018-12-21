@@ -57,7 +57,7 @@ gpg --help
 </profile>
 
 // 默认使用环境变量配置的maven下的默认配置，修改器setting即可
-mvn clean deploy -P release -Dgpg.keyname=F7771387 -Dgpg.passphrase=Passphase
+mvn clean deploy -P release -Dgpg.keyname={用户ID} -Dgpg.passphrase=Passphase
 
 // oss
 登录OSS，close，release，等2小时同步即可；
