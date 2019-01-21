@@ -80,6 +80,10 @@
 - bootstrap-datetimepicker（Bootstrap插件 ）
     - 日历
     - http://www.bootcss.com/p/bootstrap-datetimepicker/
+    
+- datetimepicker（Jquery插件 ）
+    - 日历
+    - https://github.com/xdan/datetimepicker
 
 - bootstrap3-dialog（Bootstrap插件 ）
     - 弹框
