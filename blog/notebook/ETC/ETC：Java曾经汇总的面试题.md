@@ -2,11 +2,14 @@
 
 
 ```
-多路复用，tcp拥塞控制，qps限流算法，netty解决粘包，零拷贝
+- 多路复用：单线程管理多个IO，根据IO状态处理；select/poll=轮训状态，epoll=事件、仅处理有效IO、有效率低时更优；（https://www.jianshu.com/p/6a6845464770）
+- synchronized、CAS：分布式锁；
+
+tcp拥塞控制，qps限流算法，netty解决粘包，零拷贝
+
 
 底层代理，amqp，jms实现。
 
-json，null不序列化
 
 手写堆排序
 分库分表后，怎么提升性能
