@@ -1,3 +1,15 @@
+### 小目标
+- java基础；
+- 开源：迭代维护XXL系列；为底层依赖项目贡献输出。
+- reactor，reactor-netty，了解rscoket；
+- spring、netty、jetty、openjdk、dubbo 等(争取贡献pr)
+- sofastack、fescar；
+- k8s、istio以及sofamosn，实践servicemesh架构（备选）
+- 架构深入：
+    - 高可用性泳道隔离：比如百度红包，泳道+redis，缓存与DB异步同步。可水平部署多套，多泳道高可用；
+    - 异地多中心：就近路由。
+
+
 ### hashmap并发问题
 多线程时，扩容会导致闭环，cpu飙升；并发时推荐currenthashmap;
 
