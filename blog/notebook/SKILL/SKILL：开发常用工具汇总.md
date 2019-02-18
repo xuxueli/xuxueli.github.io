@@ -9,7 +9,7 @@
 - EditThisCookie ： chrom下cookie插件
 - GAuth Authenticator：chrom下谷歌身份验证器插件；
 - [jprofiler](http://www.ej-technologies.com/) ： Java剖析工具
-- (MemoryAnalyzer + Jconsole + jmap) ： 内存分析，(1、jconsole监控;2、jmap -dump:format=b,file=文件名.bin [pid];3、MemoryAnalyzer打开dump的bin文件 )
+- (MemoryAnalyzer + Jconsole + jmap) ： 内存分析，(1、jconsole监控;2、jmap -dump:format=b,file=文件名.bin [pid];3、MemoryAnalyzer打开dump的bin文件 (或：jhat -J-Xmx1024M [file] )； )
 - [WPS Office](http://www.wps.cn/) ： word/excel/ppt/pdf
 - [Foxmail](http://www.foxmail.com/) ： 一款优秀的国产电子邮件客户端
 - [极速PDF](http://www.jisupdf.com/) ： 一款闪电般好用的PDF阅读器
