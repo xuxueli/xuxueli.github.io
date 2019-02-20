@@ -6,6 +6,7 @@
 
 - 开发迅速、学习简单、轻量级、易扩展
 
+<a href="https://e.coding.net/?utm_source=xuxueli&utm_content=xxl-job-document" target="_blank" style="font-size: 0.95em;color: #fff;background-color: var(--theme-color,#42b983);border: 1px solid #42b983;border-radius: 3px;padding: 2px 6px;margin-left: 1em;" >Coding.net（赞助）</a>
 <a href="https://www.upyun.com/" target="_blank" style="font-size: 0.95em;color: #fff;background-color: var(--theme-color,#42b983);border: 1px solid #42b983;border-radius: 3px;padding: 2px 6px;margin-left: 1em;" >又拍云（提供CDN赞助）</a>
 
 [GitHub](https://github.com/xuxueli/xxl-job/)
