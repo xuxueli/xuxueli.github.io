@@ -44,9 +44,17 @@
 - [方法论：日常总结](notebook/4-方法论/方法论：日常总结.md )
 
 
+### 五、《Java并发》专题
 
-
-
+- [并发：ConcurrentMap-线程安全Map.md](notebook/5-Java并发/并发：ConcurrentMap-线程安全Map.md )
+- [并发：CountDownLatch-同步工具类.md](notebook/5-Java并发/并发：CountDownLatch-同步工具类.md )
+- [并发：Future模式-FutureTask,Callable-Runnable异步获取多线程执行结果.md](notebook/5-Java并发/并发：Future模式-FutureTask,Callable-Runnable异步获取多线程执行结果.md )
+- [并发：LinkedBlockingQueue-线程安全队列.md](notebook/5-Java并发/并发：LinkedBlockingQueue-线程安全队列.md )
+- [并发：ReentrantLock-可重入锁,使用场景.md](notebook/5-Java并发/并发：ReentrantLock-可重入锁,使用场景.md )
+- [并发：Semaphore-信号量.md](notebook/5-Java并发/并发：Semaphore-信号量.md )
+- [并发：线程安全与锁机制.md](notebook/5-Java并发/并发：线程安全与锁机制.md )
+- [并发：线程池-生产者消费者模式,两种实现方式-FILO队列,多线程.md](notebook/5-Java并发/并发：线程池-生产者消费者模式,两种实现方式-FILO队列,多线程.md )
+- [并发：高并发架构建议.md](notebook/5-Java并发/并发：高并发架构建议.md )
 
 
 ---
