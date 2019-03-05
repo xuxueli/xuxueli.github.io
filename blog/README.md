@@ -10,7 +10,7 @@
 - [基础架构与中间件图谱](notebook/0-基础架构与中间件图谱/架构：基础架构与中间件图谱.md )
 
 
-### 一、《基础》
+### 一、基础
 
 - [基础：Annotation概念](notebook/1-基础/基础：Annotation概念.md )
 - [基础：GIT-Win,Mac环境下安装,SVN安装](notebook/1-基础/基础：GIT-Win,Mac环境下安装,SVN安装.md )
@@ -35,7 +35,7 @@
 - [基础：静态内部类](notebook/1-基础/基础：静态内部类.md )
 
 
-### 二、《并发》
+### 二、并发
 - [并发：ConcurrentMap-线程安全Map](notebook/2-并发/并发：ConcurrentMap-线程安全Map.md )
 - [并发：CountDownLatch-同步工具类](notebook/2-并发/并发：CountDownLatch-同步工具类.md )
 - [并发：Future模式-FutureTask,Callable-Runnable异步获取多线程执行结果](notebook/2-并发/并发：Future模式-FutureTask,Callable-Runnable异步获取多线程执行结果.md )
@@ -47,7 +47,7 @@
 - [并发：高并发架构建议](notebook/2-并发/并发：高并发架构建议.md )
 
 
-### 三、《高级》
+### 三、高级
 - [系统设计：全景图](notebook/3-高级/系统设计：全景图.md )
 - [系统设计：分布式登陆系统cookie-memcached](notebook/3-高级/系统设计：分布式登陆系统cookie-memcached.md )
 - [系统设计：注解-RBAC权限系统](notebook/3-高级/系统设计：注解-RBAC权限系统.md )
@@ -77,7 +77,7 @@
 - [集群：Nginx-Tomcat](notebook/3-高级/集群：Nginx-Tomcat.md )
 
 
-### 四、《框架》
+### 四、框架
 - [框架：Hibernate-使用小结](notebook/4-框架/框架：Hibernate-使用小结.md )
 - [框架：iBatis-小结](notebook/4-框架/框架：iBatis-小结.md )
 - [框架：Jfinal](notebook/4-框架/框架：Jfinal.md )
@@ -92,7 +92,7 @@
 - [框架：一次Struts2的action动态传参问题的排查和解决](notebook/4-框架/框架：一次Struts2的action动态传参问题的排查和解决.md )
 
 
-### 五、《数据库》
+### 五、数据库
 - [数据库：Mysql-Navicat-Win、MAC、CentOS环境下安装](notebook/5-数据库/数据库：Mysql-Navicat-Win、MAC、CentOS环境下安装.md )
 - [数据库：Mysql-小结](notebook/5-数据库/数据库：Mysql-小结.md )
 - [数据库：Oracle-PLSQL,Win环境安装使用](notebook/5-数据库/数据库：Oracle-PLSQL,Win环境安装使用.md )
@@ -104,7 +104,7 @@
 - [数据库：连接池-dbcp、c3p0配置](notebook/5-数据库/数据库：连接池-dbcp、c3p0配置.md )
 
 
-### 六、《前端》
+### 六、前端
 - [前端：HTML编辑器](notebook/6-前端/前端：HTML编辑器.md )
 - [前端：小结CSS](notebook/6-前端/前端：小结CSS.md )
 - [前端：小结HTML](notebook/6-前端/前端：小结HTML.md )
@@ -114,17 +114,17 @@
 - [前端：框架UI](notebook/6-前端/前端：框架UI.md )
 
 
-### 七、《架构》
+### 七、架构
 - [架构：QCon2016参会感悟：微服务架构演进](notebook/7-架构/架构：QCon2016参会感悟：微服务架构演进.md )
 - [架构：架构演进](notebook/7-架构/架构：架构演进.md )
 - [架构：项目管理,Team Leader,PM,scrum](notebook/7-架构/架构：项目管理,Team Leader,PM,scrum.md )
 
 
-### 八、《方法论》
+### 八、方法论
 - [方法论：日常总结](notebook/8-方法论/方法论：日常总结.md )
 
 
-### 九、《SKILL》
+### 九、SKILL
 - [SKILL：Activiti-Spring整合,diagram-viewer跟踪流程](notebook/9-SKILL/SKILL：Activiti-Spring整合,diagram-viewer跟踪流程.md )
 - [SKILL：Elasticsearch-搜索](notebook/9-SKILL/SKILL：Elasticsearch-搜索.md )
 - [SKILL：GitHubPages-搭建个人站,绑定万网域名](notebook/9-SKILL/SKILL：GitHubPages-搭建个人站,绑定万网域名.md )
@@ -141,7 +141,7 @@
 - [SKILL：算法-一致性Hash算法](notebook/9-SKILL/SKILL：算法-一致性Hash算法.md )
 
 
-### 十、《OTHER》
+### 十、OTHER
 - [OTHER：Android](notebook/10-OTHER/OTHER：Android.md )
 - [OTHER：CentOS,WinServer,虚拟机,SecureFX-SecureCRT配置](notebook/10-OTHER/OTHER：CentOS,WinServer,虚拟机,SecureFX-SecureCRT配置.md )
 - [OTHER：cocos2d-js](notebook/10-OTHER/OTHER：cocos2d-js.md )
