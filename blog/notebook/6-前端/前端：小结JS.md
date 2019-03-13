@@ -1,3 +1,37 @@
+### H5复制到剪切板
+```
+function copyTextToClipboard(text) {
+    var textArea = document.createElement("textarea")
+
+    textArea.style.position = 'fixed'
+    textArea.style.top = 0
+    textArea.style.left = 0
+    textArea.style.width = '2em'
+    textArea.style.height = '2em'
+    textArea.style.padding = 0
+    textArea.style.border = 'none'
+    textArea.style.outline = 'none'
+    textArea.style.boxShadow = 'none'
+    textArea.style.background = 'transparent'
+    textArea.value = text
+
+    document.body.appendChild(textArea)
+
+    textArea.select()
+
+    try {
+        var msg = document.execCommand('copy') ? '成功' : '失败'
+        console.log('复制内容 ' + msg)
+    } catch (err) {
+        console.log('不能使用这种方法复制内容')
+    }
+
+    document.body.removeChild(textArea)
+}
+```
+
+
+
 ### 当前页面post方式下载文件
 ```
 // HTML标准规定如果form表单没有被添加到document里，那么form表单提交将会被终止。Chrome56之后执行了此标准；
