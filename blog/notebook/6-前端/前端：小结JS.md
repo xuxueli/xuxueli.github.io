@@ -1,32 +1,32 @@
 ### H5复制到剪切板
 ```
 function copyTextToClipboard(text) {
-    var textArea = document.createElement("textarea")
+    var textArea = document.createElement("textarea");
 
-    textArea.style.position = 'fixed'
-    textArea.style.top = 0
-    textArea.style.left = 0
-    textArea.style.width = '2em'
-    textArea.style.height = '2em'
-    textArea.style.padding = 0
-    textArea.style.border = 'none'
-    textArea.style.outline = 'none'
-    textArea.style.boxShadow = 'none'
-    textArea.style.background = 'transparent'
-    textArea.value = text
+    textArea.style.position = 'fixed';
+    textArea.style.top = 0;
+    textArea.style.left = 0;
+    textArea.style.width = '2em';
+    textArea.style.height = '2em';
+    textArea.style.padding = 0;
+    textArea.style.border = 'none';
+    textArea.style.outline = 'none';
+    textArea.style.boxShadow = 'none';
+    textArea.style.background = 'transparent';
+    textArea.value = text;
 
-    document.body.appendChild(textArea)
+    document.body.appendChild(textArea);
+    textArea.select();
 
-    textArea.select()
-
+    var result = true;
     try {
-        var msg = document.execCommand('copy') ? '成功' : '失败'
-        console.log('复制内容 ' + msg)
+        result = document.execCommand('copy');
     } catch (err) {
-        console.log('不能使用这种方法复制内容')
+        result = false;
     }
 
-    document.body.removeChild(textArea)
+    document.body.removeChild(textArea);
+    return result;
 }
 ```
 
