@@ -690,7 +690,7 @@ import java.util.List;
 /**
  * 1、位与运算（两个数组，求所有组合）
  * 2、用与计算方法，给定数字数组，求相加得到指定结果的一种组合方案
- * at 波克城市
+ * at POOK
  * @author xuxueli 2016-6-30 19:37:55
  */
 public class AndCalculate {
