@@ -369,4 +369,35 @@ class TestTheadRunable implements Runnable{
 
 ```
 
+### 实例D：Callable + newFixedThreadPool 模式下，获取多线程执行结果
+
+```
+List<Callable<CalculateResponse>> callableList = new ArrayList<>();
+for (int i=0; i< 3; i++) {
+
+    Callable<CalculateResponse> callableItem = new Callable<CalculateResponse>() {
+        @Override
+        public CalculateResponse call() throws Exception {
+            CalculateResponse response = new CalculateResponse();;
+            // ---
+            return response;
+        }
+    };
+
+    callableList.add(callableItem);
+}
+
+ExecutorService executor = Executors.newFixedThreadPool(callableList.size());
+try {
+    List<Future<CalculateResponse>> calculateResponseList = executor.invokeAll(callableList, 2000L, TimeUnit.MILLISECONDS);
+    for(Future<CalculateResponse> calculateResponseItem : calculateResponseList){
+        calculateResponseItem.get(2000L, TimeUnit.MILLISECONDS);
+    }
+} catch (Exception e) {
+    logger.error("并行计算异常：", e);
+} finally {
+    executor.shutdown();
+}
+```
+
 [参考](http://www.2cto.com/kf/201411/351903.html)
