@@ -57,18 +57,12 @@
 
 ### 开发环境
 
--- | windows | mac
---- | --- | ---
-jdk | jdk7 | jdk7
-maven | maven3 | maven3
-git | git | git
-web server | tomcat7 | tomcat7
-ide | idea | idea
-database | mysql5.5 + navicat | mysql5.5 + navicat
--- | -- | --
-linux | docker(centos6.5) + secureFX + secureCRT |  docker(centos6.5) + terminal(scp) 
-etc | Sublime | Sublime, Brew
-（Chrome + 搜狗输入法 + 7Z + 百度云 + 有道笔记 + office/WPS）
+- OS：mac（win）
+- Java：jdk7 + maven3 + git + idea
+- DB：mysql5.6 + navicat（idea-database） 
+- Linux：docker(centos6.5) + terminal(scp)（secureFX + secureCRT）  
+- Etc：Sublime + Brew
+- Other：Chrome + 搜狗输入法 + 7Z + 百度云 + 有道笔记 + office/WPS
 
 
 
