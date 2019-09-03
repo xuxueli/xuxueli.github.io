@@ -97,7 +97,7 @@ select t_user_seq.nextval from dual;
 select t_user_seq.currval from dual;
 ---------插入
 insert into t_user( t_id, username, password, name, log_time )
-       values( T_USER_SEQ.nextval, 'xuxueli', '123456', '许雪里', sysdate)
+       values( T_USER_SEQ.nextval, 'xuxueli', '123456', 'zhangsan', sysdate)
 ---------查询
 select t.*, t.rowid from t_user t
 ```
