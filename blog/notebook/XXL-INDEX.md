@@ -32,7 +32,6 @@
         xxl-glue
         xxl-code-generator
     计划废弃：
-        xxl-web     ( remove to incubator )
         xxl-hex     ( remove to incubator )
         xxl-search  ( remove to incubator )
     其他:
@@ -40,6 +39,7 @@
             blog/notebook
         xxl-incubator
             - /project
+                - xxl-web
                 - xxl-admin：后台模板
                 - xxl-app : 个人APP
                 - xxl-blog : 个人博客
