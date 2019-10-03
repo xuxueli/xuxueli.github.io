@@ -216,3 +216,11 @@
     - 一个JS实现的日期选择工具，支持单选，多选；
     - 地址：https://github.com/ChiperSoft/Kalendae
 
+- pannellum
+    - 全景图组件
+    - 地址：https://github.com/mpetroff/pannellum （推荐）
+    
+- jRoom
+    - 全景图组件
+    - 地址： https://github.com/justinzzc/jRoom
+

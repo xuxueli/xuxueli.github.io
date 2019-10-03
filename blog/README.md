@@ -31,7 +31,6 @@
 
 
 ### 三、高级
-- [系统设计：全景图](notebook/3-高级/系统设计：全景图.md )
 - [系统设计：分布式登陆系统cookie-memcached](notebook/3-高级/系统设计：分布式登陆系统cookie-memcached.md )
 - [系统设计：注解-RBAC权限系统](notebook/3-高级/系统设计：注解-RBAC权限系统.md )
 - [系统设计：流程控制-ReturnT-WebException](notebook/3-高级/系统设计：流程控制-ReturnT-WebException.md )
