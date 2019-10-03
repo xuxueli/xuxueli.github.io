@@ -60,13 +60,8 @@
 
 
 ### 四、框架
-- [框架：Hibernate-使用小结](notebook/4-框架/框架：Hibernate-使用小结.md )
-- [框架：iBatis-小结](notebook/4-框架/框架：iBatis-小结.md )
-- [框架：Jfinal](notebook/4-框架/框架：Jfinal.md )
-- [框架：mybatis-generator自动生成代码](notebook/4-框架/框架：mybatis-generator自动生成代码.md )
 - [框架：Mybatis小结](notebook/4-框架/框架：Mybatis小结.md )
 - [框架：Spring-AOP三种方式-IOC](notebook/4-框架/框架：Spring-AOP三种方式-IOC.md )
-- [框架：SpringBoot](notebook/4-框架/框架：SpringBoot.md )
 - [框架：SpringMVC-VS-Struts2](notebook/4-框架/框架：SpringMVC-VS-Struts2.md )
 - [框架：SpringMVC小结](notebook/4-框架/框架：SpringMVC小结.md )
 - [框架：Spring小结](notebook/4-框架/框架：Spring小结.md )
