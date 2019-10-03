@@ -14,27 +14,27 @@
 
 ### 开源产品汇总
 
-    核心：
+    中间件：
         xxl-job
         xxl-conf
         xxl-rpc
         xxl-registry
         xxl-mq
         xxl-sso
-        xxl-cache   ( >> proxy or manage )
-        xxl-apm     ( >> improve )
-        xxl-push    ( >> im )
+        xxl-cache   ( >> proxy or manage, TODO )
+        xxl-apm     ( >> improve, TODO )
+        xxl-im      ( >> im and push, TODO )
+    实用工具：
         xxl-api
         xxl-crawler
-    非核心：
         xxl-excel
         xxl-emoji
         xxl-glue
         xxl-code-generator
     计划废弃：
-        xxl-web    
-        xxl-hex
-        xxl-search
+        xxl-web     ( remove to incubator )
+        xxl-hex     ( remove to incubator )
+        xxl-search  ( remove to incubator )
     其他:
         xuxueli.github.io
             blog/notebook
