@@ -31,8 +31,6 @@
         xxl-emoji
         xxl-glue
         xxl-code-generator
-    计划废弃：
-        xxl-search  ( remove to incubator )
     其他:
         xuxueli.github.io
             blog/notebook
@@ -41,6 +39,7 @@
                 【level A】
                 - xxl-web
                 - xxl-hex
+                - xxl-search
                 【level B】
                 - xxl-admin：后台模板
                 - xxl-app : 个人APP
