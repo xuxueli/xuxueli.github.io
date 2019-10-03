@@ -12,13 +12,9 @@
 
 ### 一、基础
 
+- [基础：Java环境](notebook/1-基础/基础：Java环境.md )
 - [基础：Java基础](notebook/1-基础/基础：Java基础.md )
 
-
-- [基础：GIT-Win,Mac环境下安装,SVN安装](notebook/1-基础/基础：GIT-Win,Mac环境下安装,SVN安装.md )
-- [基础：IDE-Eclipse和Intellij](notebook/1-基础/基础：IDE-Eclipse和Intellij.md )
-- [基础：Maven-Win,Mac环境下配置](notebook/1-基础/基础：Maven-Win,Mac环境下配置.md )
-- [基础：JDK-Win,Mac和CentOS环境下安装](notebook/1-基础/基础：JDK-Win,Mac和CentOS环境下安装.md )
 
 - [基础：Java内存模型、内存可见性和指令重排序](notebook/1-基础/基础：Java内存模型、内存可见性和指令重排序.md )
 - [基础：JVM内存模型以及参数配置](notebook/1-基础/基础：JVM内存模型以及参数配置.md )
