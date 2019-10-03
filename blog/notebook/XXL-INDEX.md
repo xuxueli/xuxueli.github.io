@@ -32,14 +32,16 @@
         xxl-glue
         xxl-code-generator
     计划废弃：
-        xxl-hex     ( remove to incubator )
         xxl-search  ( remove to incubator )
     其他:
         xuxueli.github.io
             blog/notebook
         xxl-incubator
             - /project
+                【level A】
                 - xxl-web
+                - xxl-hex
+                【level B】
                 - xxl-admin：后台模板
                 - xxl-app : 个人APP
                 - xxl-blog : 个人博客
