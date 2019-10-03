@@ -13,15 +13,19 @@
 ### 一、基础
 
 - [基础：Java基础](notebook/1-基础/基础：Java基础.md )
+
+
 - [基础：GIT-Win,Mac环境下安装,SVN安装](notebook/1-基础/基础：GIT-Win,Mac环境下安装,SVN安装.md )
 - [基础：IDE-Eclipse和Intellij](notebook/1-基础/基础：IDE-Eclipse和Intellij.md )
-- [基础：Java内存模型、内存可见性和指令重排序](notebook/1-基础/基础：Java内存模型、内存可见性和指令重排序.md )
+- [基础：Maven-Win,Mac环境下配置](notebook/1-基础/基础：Maven-Win,Mac环境下配置.md )
 - [基础：JDK-Win,Mac和CentOS环境下安装](notebook/1-基础/基础：JDK-Win,Mac和CentOS环境下安装.md )
+
+- [基础：Java内存模型、内存可见性和指令重排序](notebook/1-基础/基础：Java内存模型、内存可见性和指令重排序.md )
 - [基础：JVM内存模型以及参数配置](notebook/1-基础/基础：JVM内存模型以及参数配置.md )
 - [基础：JVM工作原理](notebook/1-基础/基础：JVM工作原理.md )
-- [基础：Maven-Win,Mac环境下配置](notebook/1-基础/基础：Maven-Win,Mac环境下配置.md )
-- [基础：Thread的中断机制,interrupt](notebook/1-基础/基础：Thread的中断机制,interrupt.md )
+
 - [基础：一次FULL GC问题的排查](notebook/1-基础/基础：一次FULL GC问题的排查.md )
+
 - [基础：设计模式-代理模式：代理模式，jdk和cglib实现代理、动态代理](notebook/1-基础/基础：设计模式-代理模式：代理模式，jdk和cglib实现代理、动态代理.md )
 - [基础：设计模式-创建型模式-建造者模式](notebook/1-基础/基础：设计模式-创建型模式-建造者模式.md )
 - [基础：设计模式-策略模式-模板模式](notebook/1-基础/基础：设计模式-策略模式-模板模式.md )
@@ -37,6 +41,7 @@
 - [并发：线程安全与锁机制](notebook/2-并发/并发：线程安全与锁机制.md )
 - [并发：线程池-生产者消费者模式,两种实现方式-FILO队列,多线程](notebook/2-并发/并发：线程池-生产者消费者模式,两种实现方式-FILO队列,多线程.md )
 - [并发：高并发架构建议](notebook/2-并发/并发：高并发架构建议.md )
+- [并发：Thread的中断机制,interrupt](notebook/2-并发/并发：Thread的中断机制,interrupt.md )
 
 
 ### 三、高级
