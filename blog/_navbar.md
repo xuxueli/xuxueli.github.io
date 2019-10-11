@@ -1,3 +1,6 @@
-- <a href="../blog/" >博客首页</a>
-
-- <a href="../index.html" >前往社区</a>
+- <a href="../index.html">首页</a>
+- <a href="../page/projects.html">项目列表</a>
+- <a href="../blog" style="text-decoration: underline;font-weight: bold;" >博客</a>
+- <a href="../page/donate.html" >赞助</a>
+- <a href="../page/community.html">关于社区</a>
+- <a href="../page/job.html" >工作内推</a>
