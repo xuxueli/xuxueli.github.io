@@ -3,4 +3,4 @@
 - <a href="../blog" style="text-decoration: underline;font-weight: bold;" >博客</a>
 - <a href="../page/donate.html" >赞助</a>
 - <a href="../page/community.html">关于社区</a>
-- <a href="../page/job.html" >工作内推</a>
+- <!-- <a href="../page/job.html" >工作内推</a> -->
