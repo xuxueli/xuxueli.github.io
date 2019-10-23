@@ -116,15 +116,11 @@
 
 
 ### 十、OTHER
-- [OTHER：Android](notebook/10-OTHER/OTHER：Android.md )
 - [OTHER：CentOS,WinServer,虚拟机,SecureFX-SecureCRT配置](notebook/10-OTHER/OTHER：CentOS,WinServer,虚拟机,SecureFX-SecureCRT配置.md )
-- [OTHER：cocos2d-js](notebook/10-OTHER/OTHER：cocos2d-js.md )
-- [OTHER：Docker-容器](notebook/10-OTHER/OTHER：Docker-容器.md )
 - [OTHER：Hadoop部署](notebook/10-OTHER/OTHER：Hadoop部署.md )
 - [OTHER：Java曾经汇总的面试题](notebook/10-OTHER/OTHER：Java曾经汇总的面试题.md )
 - [OTHER：Linux-目录,yum和apt-get,内核启动错误解决](notebook/10-OTHER/OTHER：Linux-目录,yum和apt-get,内核启动错误解决.md )
 - [OTHER：nodejs-环境和博客搭建](notebook/10-OTHER/OTHER：nodejs-环境和博客搭建.md )
-- [OTHER：php](notebook/10-OTHER/OTHER：php.md )
 - [OTHER：Storm部署](notebook/10-OTHER/OTHER：Storm部署.md )
 - [OTHER：Zookeeper部署](notebook/10-OTHER/OTHER：Zookeeper部署.md )
 
