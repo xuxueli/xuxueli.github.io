@@ -1,15 +1,14 @@
 ### 资源汇总
 
 ---
-> src:（master-slave-backup）
+> src
 - https://github.com/xuxueli
-- http://git.oschina.net/xuxueli0323 （仅同步）
-- baiduyun（master-slave, backup）
+- http://git.oschina.net/xuxueli0323 （backup）
 
-> notebook（master-slave-index）
+> notebook
 - https://github.com/xuxueli/xuxueli.github.io#notebook
-- http://my.oschina.net/xuxueli/blog （仅同步）
-- http://www.cnblogs.com/xuxueli （仅同步）
+- http://my.oschina.net/xuxueli/blog （backup）
+- http://www.cnblogs.com/xuxueli （backup）
 
 
 ### 开源产品汇总
@@ -21,7 +20,7 @@
         xxl-registry
         xxl-mq
         xxl-sso
-        xxl-cache   ( >> proxy or manage, TODO )
+        xxl-cache   ( >> proxy and manage, TODO )
         xxl-apm     ( >> improve, TODO )
         xxl-im      ( >> im and push, TODO )
     实用工具：
@@ -62,7 +61,7 @@
 
 - OS：mac（win）
 - Java：jdk7 + maven3 + git + idea
-- DB：mysql5.6 + navicat（idea-database） 
+- DB：mysql5.6 + idea-database（navicat） 
 - Linux：docker(centos6.5) + terminal(scp)（secureFX + secureCRT）  
 - Etc：Sublime + Brew
 - Other：Chrome + 搜狗输入法 + 7Z + 百度云 + 有道笔记 + office/WPS
