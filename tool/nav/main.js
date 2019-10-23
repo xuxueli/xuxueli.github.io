@@ -16,6 +16,7 @@
         localStorage.searchEngine = 'https://www.baidu.com/s?wd='
         localStorage[86] = 'https://www.v2ex.com'
         localStorage[88] = 'http://www.xuxueli.com'
+        localStorage[90] = 'https://www.zhihu.com/hot'
     }
 
     for (var i in $keys) {
