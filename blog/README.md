@@ -26,13 +26,10 @@
 - [并发：Semaphore-信号量](notebook/2-并发/并发：Semaphore-信号量.md )
 - [并发：线程安全与锁机制](notebook/2-并发/并发：线程安全与锁机制.md )
 - [并发：线程池-生产者消费者模式,两种实现方式-FILO队列,多线程](notebook/2-并发/并发：线程池-生产者消费者模式,两种实现方式-FILO队列,多线程.md )
-- [并发：高并发架构建议](notebook/2-并发/并发：高并发架构建议.md )
 - [并发：Thread的中断机制,interrupt](notebook/2-并发/并发：Thread的中断机制,interrupt.md )
 
 
 ### 三、高级
-- [系统设计：分布式登陆系统cookie-memcached](notebook/3-高级/系统设计：分布式登陆系统cookie-memcached.md )
-- [系统设计：注解-RBAC权限系统](notebook/3-高级/系统设计：注解-RBAC权限系统.md )
 - [系统设计：流程控制-ReturnT-WebException](notebook/3-高级/系统设计：流程控制-ReturnT-WebException.md )
 - [缓存：Encache页面缓存、本地缓存（也可实现分布式缓存）](notebook/3-高级/缓存：Encache页面缓存、本地缓存（也可实现分布式缓存）.md )
 - [缓存：Freemarker实现Html静态化](notebook/3-高级/缓存：Freemarker实现Html静态化.md )
