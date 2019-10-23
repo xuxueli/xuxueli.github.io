@@ -3,86 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <title>XXL社区 | 工具 | 一键导航</title>
-    <link rel="icon" href="favicon.ico" type="image/gif">
+    <link rel="icon" href="./favicon.ico" type="image/gif">
     <link rel="stylesheet" type="text/css" href="main.css"/>
 </head>
 <body tabindex="2">
-<input id="search" type="text" placeholder="Tab 键切换至搜索框 输入设置打开设置" tabindex="1">
-<div id="keyboard">
-    <ul>
-        <li data-key="49"><span>1</span></li>
-        <li data-key="50"><span>2</span></li>
-        <li data-key="51"><span>3</span></li>
-        <li data-key="52"><span>4</span></li>
-        <li data-key="53"><span>5</span></li>
-        <li data-key="54"><span>6</span></li>
-        <li data-key="55"><span>7</span></li>
-        <li data-key="56"><span>8</span></li>
-        <li data-key="57"><span>9</span></li>
-        <li data-key="48"><span>0</span></li>
-    </ul>
-    <ul>
-        <li data-key="81"><span>Q</span></li>
-        <li data-key="87"><span>W</span></li>
-        <li data-key="69"><span>E</span></li>
-        <li data-key="82"><span>R</span></li>
-        <li data-key="84"><span>T</span></li>
-        <li data-key="89"><span>Y</span></li>
-        <li data-key="85"><span>U</span></li>
-        <li data-key="73"><span>I</span></li>
-        <li data-key="79"><span>O</span></li>
-        <li data-key="80"><span>P</span></li>
-    </ul>
-    <ul>
-        <li data-key="65"><span>A</span></li>
-        <li data-key="83"><span>S</span></li>
-        <li data-key="68"><span>D</span></li>
-        <li data-key="70"><span>F</span></li>
-        <li data-key="71"><span>G</span></li>
-        <li data-key="72"><span>H</span></li>
-        <li data-key="74"><span>J</span></li>
-        <li data-key="75"><span>K</span></li>
-        <li data-key="76"><span>L</span></li>
-    </ul>
-    <ul>
-        <li data-key="90"><span>Z</span></li>
-        <li data-key="88"><span>X</span></li>
-        <li data-key="67"><span>C</span></li>
-        <li data-key="86"><span>V</span></li>
-        <li data-key="66"><span>B</span></li>
-        <li data-key="78"><span>N</span></li>
-        <li data-key="77"><span>M</span></li>
-    </ul>
-</div>
-<div id="setting">
-    <div align="right"><span class="close">ㄨ</span></div>
-    <table>
-        <tr>
-            <td>新窗口打开网页</td>
-            <td><span id="newWindow" class="slideSwitch"></span></td>
-        </tr>
-        <tr>
-            <td>搜索引擎</td>
-            <td>
-                <select id="searchEngine">
-                    <option value="https://www.google.com/search?q=">Google</option>
-                    <option value="https://www.baidu.com/s?wd=">Baidu</option>
-                    <option value="https://www.bing.com/search?q=">Bing</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>默认设置</td>
-            <td><input type="button" value="恢复" onclick="localStorage.clear() || location.reload()"></td>
-        </tr>
-        <tr>
-            <td colspan="2" style="text-align:center">鼠标点击按键即可设置对应网址</td>
-        </tr>
-        <tr>
-            <td colspan="2" style="text-align:center"><a href="http://www.xuxueli.com">XXL社区</a><a> ∙ </a></td>
-        </tr>
-    </table>
-</div>
+
+
+    <div style="text-align: center;position: absolute;top: 10%;left: 50%;">
+        <a id="logo-container" href="../../index.html" class="brand-logo">
+            <img src="https://raw.githubusercontent.com/xuxueli/xxl-job/master/doc/images/xxl-logo.png" style="width: 50px;margin-left: -25px;;vertical-align:middle;" >
+        </a>
+    </div>
+
+    <input id="search" type="text" placeholder="Tab 键切换至搜索框 输入设置打开设置" tabindex="1">
+    <div id="keyboard">
+        <ul>
+            <li data-key="49"><span>1</span></li>
+            <li data-key="50"><span>2</span></li>
+            <li data-key="51"><span>3</span></li>
+            <li data-key="52"><span>4</span></li>
+            <li data-key="53"><span>5</span></li>
+            <li data-key="54"><span>6</span></li>
+            <li data-key="55"><span>7</span></li>
+            <li data-key="56"><span>8</span></li>
+            <li data-key="57"><span>9</span></li>
+            <li data-key="48"><span>0</span></li>
+        </ul>
+        <ul>
+            <li data-key="81"><span>Q</span></li>
+            <li data-key="87"><span>W</span></li>
+            <li data-key="69"><span>E</span></li>
+            <li data-key="82"><span>R</span></li>
+            <li data-key="84"><span>T</span></li>
+            <li data-key="89"><span>Y</span></li>
+            <li data-key="85"><span>U</span></li>
+            <li data-key="73"><span>I</span></li>
+            <li data-key="79"><span>O</span></li>
+            <li data-key="80"><span>P</span></li>
+        </ul>
+        <ul>
+            <li data-key="65"><span>A</span></li>
+            <li data-key="83"><span>S</span></li>
+            <li data-key="68"><span>D</span></li>
+            <li data-key="70"><span>F</span></li>
+            <li data-key="71"><span>G</span></li>
+            <li data-key="72"><span>H</span></li>
+            <li data-key="74"><span>J</span></li>
+            <li data-key="75"><span>K</span></li>
+            <li data-key="76"><span>L</span></li>
+        </ul>
+        <ul>
+            <li data-key="90"><span>Z</span></li>
+            <li data-key="88"><span>X</span></li>
+            <li data-key="67"><span>C</span></li>
+            <li data-key="86"><span>V</span></li>
+            <li data-key="66"><span>B</span></li>
+            <li data-key="78"><span>N</span></li>
+            <li data-key="77"><span>M</span></li>
+        </ul>
+    </div>
+
+    <div id="setting">
+        <div align="right"><span class="close">ㄨ</span></div>
+        <table>
+            <tr>
+                <td>新窗口打开网页</td>
+                <td><span id="newWindow" class="slideSwitch"></span></td>
+            </tr>
+            <tr>
+                <td>搜索引擎</td>
+                <td>
+                    <select id="searchEngine">
+                        <option value="https://www.google.com/search?q=">Google</option>
+                        <option value="https://www.baidu.com/s?wd=">Baidu</option>
+                        <option value="https://www.bing.com/search?q=">Bing</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>默认设置</td>
+                <td><input type="button" value="恢复" onclick="localStorage.clear() || location.reload()"></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align:center">鼠标点击按键即可设置对应网址</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align:center"><a href="http://www.xuxueli.com">XXL社区</a><a> ∙ </a></td>
+            </tr>
+        </table>
+    </div>
+
 <script src="main.js"></script>
+<!-- thanks to i.huguotao.com -->
 </body>
 </html>
