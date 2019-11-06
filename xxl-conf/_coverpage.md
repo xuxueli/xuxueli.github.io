@@ -1,4 +1,4 @@
-<img src="https://www.xuxueli.com/xxl-job/data/images/xxl-logo.png" width="100" >
+<img src="https://www.xuxueli.com/doc/static/xxl-job/images/xxl-logo.png" width="100" >
 
 # XXL-CONF
 
