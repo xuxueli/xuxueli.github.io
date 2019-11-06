@@ -23,15 +23,12 @@ https://xuxueli.github.com
 - 1、购买万网域名，并绑定 GitHubPages 的地址
 
 [GitHubPages地址文档地址](https://help.github.com/articles/setting-up-an-apex-domain/) ，地址如下：
-```
-192.30.252.153
-192.30.252.154
-```
+
 
 万网域名绑定参数为：
 ```
-记录类型 	主机记录 	解析线路 	记录值	MX优先级 
- 	A	www	默认	192.30.252.153	--	1
+记录类型 	主机记录 	解析线路 	记录值	            TTL
+CNAME	www	    默认	    xuxueli.github.io	10min
 ```
 
 - 2、GitHubPages 仓库新增文件**CNAME**，内容为购买的万网域名，如下：
