@@ -27,8 +27,9 @@ https://xuxueli.github.com
 
 万网域名绑定参数为：
 ```
-记录类型 	主机记录 	解析线路 	记录值	            TTL
-CNAME	www	    默认	    xuxueli.github.io	10min
+主机记录    记录类型      解析线路 	记录值	            TTL
+www        CNAME        默认	    xuxueli.github.io	10min
+@          CNAME	    默认	    xuxueli.github.io	10min
 ```
 
 - 2、GitHubPages 仓库新增文件**CNAME**，内容为购买的万网域名，如下：
