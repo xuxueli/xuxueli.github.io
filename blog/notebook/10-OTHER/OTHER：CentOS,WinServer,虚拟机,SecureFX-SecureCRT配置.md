@@ -310,9 +310,9 @@ root      1709     1  0 22:05 ?        00:00:00 svnserve -d -r /home/root/subver
 
 * （3）Host-only：这种技术提供了主机和虚拟机、虚拟机和虚拟机之前的网络通信，而不是虚拟机访问Internet，在这种模式下相当于使虚拟机和主机、虚拟机和虚拟机处在一个和外网隔离的网络中。在vmware workstation中虚拟网卡VMnet1的默认属性为Host-only
 
-![image](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img01.jpeg )
+![image](https://www.xuxueli.com/blog/static/images/img01.jpeg )
 
-![image](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img02.png  )
+![image](https://www.xuxueli.com/blog/static/images/img02.png  )
 
 
 ### windows server2012使用

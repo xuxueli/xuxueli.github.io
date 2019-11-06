@@ -11,13 +11,13 @@
 #### 二、分析
 新系统GLUE底层基于Groovy实现，系统通过执行 “groovy.lang.GroovyClassLoader.parseClass(groovyScript)” 进行Groovy代码解析，Groovy为了保证解析后执行的都是最新的脚本内容，每进行一次解析都会生成一次新命名的Class文件，底层代码如下图：
 
-![输入图片说明](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img_c8Hk.jpg "在这里输入图片标题")
+![输入图片说明](https://www.xuxueli.com/blog/static/images/img_c8Hk.jpg "在这里输入图片标题")
 
 因此，如果Groovy类加载器设置为单例，当对脚本（即使同一段脚本）多次执行该方法时，会导致 “GroovyClassLoader” 装载的Class越来越多。如果此处临时加载的类不能够被及时释放，最终将会导致PermGen OutOfMemoryError。即使情况没有那么糟糕，也会引起频繁的full GC，从而影响稳定运行时的性能。
 
 然后，我翻阅了线上启动时大量Timeout以及Full GC的项目代码。发现该项目同样适用“GroovyClassLoader”进行groovy脚本解析，断点接入如下：
 
-![输入图片说明](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img_Yk4G.png "在这里输入图片标题")
+![输入图片说明](https://www.xuxueli.com/blog/static/images/img_Yk4G.png "在这里输入图片标题")
 
 首先，我发现该项目中的Groovy类加载器是单例；
 其次，该项目中的加载一次页面，将会调用多达31次“groovy.lang.GroovyClassLoader.parseClass(groovyScript)”方法进行groovy脚本解析。这很震惊，但是庆幸的是，该系统对解析后的Class做了缓存。
@@ -344,22 +344,22 @@ public class DemoHandlerAImpl  {
 ```
 
 ##### 在系统运行四分钟后，Test1.java对应JVM的GC如图：
-![输入图片说明](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img_PSq7.png "在这里输入图片标题")
+![输入图片说明](https://www.xuxueli.com/blog/static/images/img_PSq7.png "在这里输入图片标题")
 
 从日志可以发现，共解析groovy达38694次。
-![输入图片说明](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img_0hka.png "在这里输入图片标题")
+![输入图片说明](https://www.xuxueli.com/blog/static/images/img_0hka.png "在这里输入图片标题")
 
 ##### 在系统运行四分钟后，Test2.java对应JVM的GC如图：
-![输入图片说明](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img_bxSA.png "在这里输入图片标题")
+![输入图片说明](https://www.xuxueli.com/blog/static/images/img_bxSA.png "在这里输入图片标题")
 
 从日志可以发现，共解析groovy达39100次。
-![输入图片说明](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img_R8QK.png "在这里输入图片标题")
+![输入图片说明](https://www.xuxueli.com/blog/static/images/img_R8QK.png "在这里输入图片标题")
 
 ##### 在系统运行四分钟后，Test3.java对应JVM的GC如图：
-![输入图片说明](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img_B5I2.png "在这里输入图片标题")
+![输入图片说明](https://www.xuxueli.com/blog/static/images/img_B5I2.png "在这里输入图片标题")
 
 从日志可以发现，共解析groovy达40000次。
-![输入图片说明](https://raw.githubusercontent.com/xuxueli/xuxueli.github.io/master/blog/static/images/img_LgWJ.png "在这里输入图片标题")
+![输入图片说明](https://www.xuxueli.com/blog/static/images/img_LgWJ.png "在这里输入图片标题")
 
 #### 三、测试结果分析
 通过观察内存曲线图，可以获取测试结果：
