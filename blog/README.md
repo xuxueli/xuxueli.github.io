@@ -117,7 +117,7 @@
 
 ### 十、OTHER
 - [OTHER：CentOS,WinServer,虚拟机,SecureFX-SecureCRT配置](notebook/10-OTHER/OTHER：CentOS,WinServer,虚拟机,SecureFX-SecureCRT配置.md )
-- [OTHER：Hadoop部署](notebook/10-OTHER/OTHER：Hadoop部署.md )
+- [OTHER：Docker-容器](notebook/10-OTHER/OTHER：Docker-容器.md )
 - [OTHER：Java曾经汇总的面试题](notebook/10-OTHER/OTHER：Java曾经汇总的面试题.md )
 - [OTHER：Linux-目录,yum和apt-get,内核启动错误解决](notebook/10-OTHER/OTHER：Linux-目录,yum和apt-get,内核启动错误解决.md )
 - [OTHER：nodejs-环境和博客搭建](notebook/10-OTHER/OTHER：nodejs-环境和博客搭建.md )
