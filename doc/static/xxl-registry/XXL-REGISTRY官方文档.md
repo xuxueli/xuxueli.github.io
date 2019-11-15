@@ -1,6 +1,6 @@
 ## 《分布式服务注册中心XXL-REGISTRY》
 
-[![Build Status](https://travis-ci.org/xuxueli/xxl-registry.svg?branch=master)](https://travis-ci.org/xuxueli/xxl-registry)
+[![Actions Status](https://github.com/xuxueli/xxl-registry/workflows/Java%20CI/badge.svg)](https://github.com/xuxueli/xxl-registry/actions)
 [![Docker Status](https://img.shields.io/badge/docker-passing-brightgreen.svg)](https://hub.docker.com/r/xuxueli/xxl-registry-admin/)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-registry/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-registry/)
 [![GitHub release](https://img.shields.io/github/release/xuxueli/xxl-registry.svg)](https://github.com/xuxueli/xxl-registry/releases)
@@ -380,7 +380,12 @@ XXL-REGISTRY内部通过广播机制，集群节点实时同步服务注册信�
 - 5、移除冗余属性，如version等； 
 - 6、服务注册中心全量同步线程优化，对齐起始时间，避免集群节点数据不一致；
 
-### 5.4 版本 v1.0.3 Release Notes[ING]
+### 5.4 版本 v1.1.0 Release Notes[2019-11-16]
+- 1.注册日志文件加载方式优化，修复文件名乱码问题；
+- 2.修复服务注册version不匹配问题；
+- 3.升级依赖版本，如slf4j-api/spring-boot/mybatis/mysql等；
+
+### 5.4 版本 v1.1.1 Release Notes[迭代中]
 
 
 
