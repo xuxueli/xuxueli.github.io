@@ -9,4 +9,4 @@
 
 [GitHub](https://github.com/xuxueli/xxl-rpc/)
 [Gitee](http://gitee.com/xuxueli0323/xxl-rpc)
-[Get Started](#《分布式服务通讯框架XXL-RPC》)
+[Get Started](#《分布式服务框架XXL-RPC》)
