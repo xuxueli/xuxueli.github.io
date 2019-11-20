@@ -1,46 +1,254 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>许雪里的博客</title>
-    <link rel="icon" href="favicon.ico">
+    <link rel="icon" href="../favicon.ico">
 
-    <meta name="keywords" content=许雪里,博客">
-    <meta name="description" content="许雪里的博客">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <!-- CSS  -->
+    <link href="../page/static/plugins/material-design-icons/3.0.1/iconfont/material-icons.css" rel="stylesheet">
+    <link href="../page/static/plugins/materialize/0.100.2/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <!-- editor.md -->
+    <link rel="stylesheet" href="../page/static/plugins/editor.md/css/editormd.preview.min.css" />
 
-    <link rel="stylesheet" href="../page/static/plugins/docsify/4.2.8/themes/vue.css">
+    <style>
+        /* Custom Stylesheet */
+        /**
+         * Use this file to override Materialize files so you can update
+         * the core Materialize files in the future
+         *
+         * Made By MaterializeCSS.com
+         */
 
-    <!-- google-adsense start -->
-    <script data-ad-client="ca-pub-4895131469989222" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <!-- google-adsense end -->
+        nav ul a,
+        nav .brand-logo {
+            color: #444;
+        }
 
+        p {
+            line-height: 2rem;
+        }
+
+        .button-collapse {
+            color: #26a69a;
+        }
+
+        .parallax-container {
+            min-height: 380px;
+            line-height: 0;
+            height: auto;
+            color: rgba(255,255,255,.9);
+        }
+        .parallax-container .section {
+            width: 100%;
+        }
+
+        @media only screen and (max-width : 992px) {
+            .parallax-container .section {
+                position: absolute;
+                top: 40%;
+            }
+            #index-banner .section {
+                top: 10%;
+            }
+        }
+
+        @media only screen and (max-width : 600px) {
+            #index-banner .section {
+                top: 0;
+            }
+        }
+
+        .icon-block {
+            padding: 0 15px;
+        }
+        .icon-block .material-icons {
+            font-size: inherit;
+        }
+
+        footer.page-footer {
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
-    <div id="app"></div>
+
+<!-- header start -->
+<nav class="white" role="navigation">
+    <div class="nav-wrapper container">
+        <a id="logo-container" href="../index.html" class="brand-logo">
+            <img src="https://www.xuxueli.com/doc/static/xxl-job/images/xxl-logo.jpg"
+                 style="width: 38px;vertical-align:middle;" >
+            XXL 社区
+        </a>
+        <!-- pc-nav -->
+        <ul class="right hide-on-med-and-down">
+            <li><a href="../index.html">首页</a></li>
+            <li><a href="../page/projects.html">项目列表</a></li>
+            <li class="active"><a href="../blog">博客</a></li>
+            <li><a href="../page/donate.html" >赞助</a></li>
+            <li><a href="../page/community.html">关于社区</a></li>
+        </ul>
+        <!-- mobile-nav -->
+        <ul id="nav-mobile" class="side-nav">
+            <li class="center" >
+                <img src="https://www.xuxueli.com/doc/static/xxl-job/images/xxl-logo.jpg"
+                     style="width: 38px;vertical-align:middle;" >
+            </li>
+            <li class="divider"></li>
+            <li><a href="../index.html">首页</a></li>
+            <li><a href="../page/projects.html">项目列表</a></li>
+            <li class="active"><a href="../blog">博客</a></li>
+            <li><a href="../page/donate.html" >赞助</a></li>
+            <li><a href="../page/community.html">关于社区</a></li>
+            <li class="divider"></li>
+        </ul>
+        <!-- menu icon -->
+        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+</nav>
+<!-- header end -->
+
+<!-- content -->
+<div class="section no-pad-bot">
+    <div class="container">
+
+        <div class="row">
+
+            <div style="width: 90%;margin: 0 auto;" >
+                <h5><span id="blog-title"></span></h5>
+                <hr>
+            </div>
+
+            <!-- content -->
+            <div id="blog-content-view" style="width: 90%;margin: 0 auto;" ></div>
+        </div>
+
+    </div>
+</div>
+
+<!-- footer start -->
+<footer class="page-footer teal">
+    <div class="container">
+        <div class="row">
+            <div class="col l5 s12">
+                <h5 class="white-text">About</h5>
+                <p class="grey-text text-lighten-4">
+                    【XXL社区】成立于2015年，是专门为支持开源软件项目而创办的一个非盈利性组织，负责发行和维护XXL系列开源软件，崇尚开放、自由和分享。
+                </p>
+            </div>
+            <div class="col offset-l1 l3 s12">
+                <h5 class="white-text">Link</h5>
+                <ul>
+                    <li>
+                        <a class="grey-text text-lighten-3" href="https://github.com/xuxueli" target="_blank">Github</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col l3 s12">
+                <h5 class="white-text">Follow us</h5>
+                <ul>
+                    <li>
+                        <img src="https://www.xuxueli.com/blog/static/images/img_wechat_official_account_qrcode.png" width="80">
+                        <br>
+                        (关注公众号)
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <div class="container">
+            Copyright (c) 2015-present, xuxueli.
+            <a class="grey-text text-lighten-4 right" ></a>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+<!-- fork me
+<a href="https://github.com/xuxueli"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
+-->
+
 </body>
 
+<script src="../page/static/plugins/jquery/2.2.4/jquery.min.js"></script>
+<script src="../page/static/plugins/materialize/0.100.2/js/materialize.min.js"></script>
 <script>
-    window.$docsify = {
-        name: '许雪里的博客' +
-            '<br>' +
-            '<img src="https://www.xuxueli.com/blog/static/images/img_wechat_official_account_qrcode.png" width="80">' +
-            '<br>' +
-            '<span style="font-size: medium;">(关注公众号)</span>' +
-            '',
-        /*coverpage: true,*/
-        loadNavbar: true,
-        /*loadSidebar: true,*/
-        /*maxLevel: 5,*/
-        auto2top: true
-    }
+    $(function () {
+        $('.button-collapse').sideNav();
+    });
 </script>
 
-<!-- Docsify -->
-<script src="../page/static/plugins/docsify/4.2.8/docsify.min.js"></script>
-<script src="../page/static/plugins/docsify/4.2.8/plugins/search.min.js"></script>
-<!-- Prism -->
-<script src="../page/static/plugins/prismjs/components/prism-java.min.js"></script>
+
+<script src="../page/static/plugins/editor.md/lib/marked.min.js"></script>
+<script src="../page/static/plugins/editor.md/lib/prettify.min.js"></script>
+
+<script src="../page/static/plugins/editor.md/lib/raphael.min.js"></script>
+<script src="../page/static/plugins/editor.md/lib/underscore.min.js"></script>
+<script src="../page/static/plugins/editor.md/lib/sequence-diagram.min.js"></script>
+<script src="../page/static/plugins/editor.md/lib/flowchart.min.js"></script>
+<script src="../page/static/plugins/editor.md/lib/jquery.flowchart.min.js"></script>
+
+<script src="../page/static/plugins/editor.md/editormd.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+
+        // blogPath
+        var originUrl = decodeURI(window.location.href);
+        if (originUrl.indexOf("?") > -1) {
+            originUrl = originUrl.substr(0, originUrl.indexOf("?"));
+        }
+        var blogPath;
+        if (originUrl.indexOf("#") > -1) {
+            blogPath = originUrl.substr(originUrl.indexOf("#") + 1, originUrl.length);
+        }
+        if (!blogPath) {
+            blogPath = "./notebook/目录.md";
+        }
+
+        // blogTitle
+        var blogTitle = blogPath;
+        if (blogTitle.indexOf("/") > -1) {
+            blogTitle = blogTitle.substr(blogTitle.lastIndexOf("/") + 1, blogTitle.length);
+        }
+        if (blogTitle.indexOf(".md") > -1) {
+            blogTitle = blogTitle.substr(0, blogTitle.indexOf(".md"));
+        }
+
+        $('#blog-title').html(blogTitle);
+
+        $.get(blogPath, function(markdown) {
+
+            var testEditormdView = editormd.markdownToHTML("blog-content-view", {
+                markdown        : markdown ,                //+ "\r\n" + $("#append-test").text(),
+                //htmlDecode      : true,                   // 开启 HTML 标签解析，为了安全性，默认不开启
+                htmlDecode      : "style,script,iframe",    // you can filter tags decode
+                toc             : false,
+                tocm            : true,                     // Using [TOCM]
+                //tocContainer    : "#custom-toc-container",    // 自定义 ToC 容器层
+                //gfm             : false,
+                //tocDropdown     : true,
+                // markdownSourceCode : true,               // 是否保留 Markdown 源码，即是否删除保存源码的 Textarea 标签
+                emoji           : true,
+                taskList        : true,
+                tex             : true,  // 默认不解析
+                flowChart       : true,  // 默认不解析
+                sequenceDiagram : true,  // 默认不解析
+            });
+
+            //console.log("返回一个 jQuery 实例 =>", testEditormdView);
+
+            // 获取Markdown源码
+            //console.log(testEditormdView.getMarkdown());
+
+            //alert(testEditormdView.getMarkdown());
+        });
+
+    });
+</script>
+
 
 <!-- google start -->
 <script>
@@ -54,7 +262,6 @@
 
 </script>
 <!-- google end -->
-
 
 <!-- baidu start -->
 <script>
@@ -70,6 +277,7 @@
 
 <!-- cnzz start -->
 <script type="text/javascript">
+    /*var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1263800177'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s13.cnzz.com/z_stat.php%3Fid%3D1263800177' type='text/javascript'%3E%3C/script%3E"));*/
     var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
     document.write(unescape("%3Cspan style='display:none;' id='cnzz_stat_icon_1263800177'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s13.cnzz.com/z_stat.php%3Fid%3D1263800177' type='text/javascript'%3E%3C/script%3E"));
 </script>
