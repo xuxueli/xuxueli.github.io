@@ -1,3 +1,11 @@
+<h2 style="color:#4db6ac !important" >ConcurrentMap-线程安全Map</h2>
+
+[TOCM]
+
+[TOC]
+
+---
+
 ### LinkedBlockingQueue
 **由于LinkedBlockingQueue实现是线程安全的，实现了先进先出等特性，是作为生产者消费者的首选**
 

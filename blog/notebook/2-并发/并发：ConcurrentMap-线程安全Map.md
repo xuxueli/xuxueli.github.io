@@ -1,3 +1,11 @@
+<h2 style="color:#4db6ac !important" >ConcurrentMap-线程安全Map</h2>
+
+[TOCM]
+
+[TOC]
+
+---
+
 ### 深入剖析ConcurrentHashMap
 ##### 简介
 **ConcurrentHashMap**是Java5中新增加的一个线程安全的Map集合，可以用来替代HashTable。对于ConcurrentHashMap是如何提高其效率的，可能大多人只是知道它使用了多个锁代替HashTable中的单个锁，也就是**锁分离技术（Lock Stripping）**。实际上，ConcurrentHashMap对提高并发方面的优化，还有一些其它的技巧在里面（比如你是否知道在get操作的时候，它是否也使用了锁来保护？）。

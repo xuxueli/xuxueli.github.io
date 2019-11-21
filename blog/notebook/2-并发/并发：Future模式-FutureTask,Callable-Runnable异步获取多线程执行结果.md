@@ -1,3 +1,11 @@
+<h2 style="color:#4db6ac !important" >ConcurrentMap-线程安全Map</h2>
+
+[TOCM]
+
+[TOC]
+
+---
+
 ##### Future模式，核心思想
 > Future模式的核心在于：去除了主函数的等待时间，并使得原本需要等待的时间段可以用于处理其他业务逻辑（根据《Java程序性能优化》）。
 
