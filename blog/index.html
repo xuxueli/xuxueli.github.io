@@ -116,12 +116,6 @@
 
         <div class="row" style="margin: 0 auto;" >
 
-            <!-- title -->
-            <div class="center teal-text text-lighten-2" >
-                <h5 id="blog-title" ></h5>
-            </div>
-            <hr>
-
             <!-- content -->
             <div id="blog-content-view" ></div>
             <hr>
@@ -221,18 +215,7 @@
             blogPath = "./notebook/目录.md";
         }
 
-        // blogTitle
-        var blogTitle = blogPath;
-        if (blogTitle.indexOf("/") > -1) {
-            blogTitle = blogTitle.substr(blogTitle.lastIndexOf("/") + 1, blogTitle.length);
-        }
-        if (blogTitle.indexOf(".md") > -1) {
-            blogTitle = blogTitle.substr(0, blogTitle.indexOf(".md"));
-        }
-
-
         // init
-        $('#blog-title').html(blogTitle);
         $.get(blogPath, function(markdown) {
 
             editormd.katexURL  = {
@@ -243,7 +226,7 @@
                 markdown        : markdown ,                //+ "\r\n" + $("#append-test").text(),
                 //htmlDecode      : true,                   // 开启 HTML 标签解析，为了安全性，默认不开启
                 htmlDecode      : "style,script,iframe",    // you can filter tags decode
-                toc             : false,
+                toc             : true,
                 tocm            : true,                     // Using [TOCM]
                 //tocContainer    : "#custom-toc-container",    // 自定义 ToC 容器层
                 //gfm             : false,

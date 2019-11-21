@@ -1,5 +1,11 @@
+<h2 style="color:#4db6ac !important" >Java内存模型</h2>
+
+[TOCM]
+
+[TOC]
 
 ---
+
 ### 【JVM工作原理】
 介绍一篇[教程](http://blog.csdn.net/cutesource/article/details/5904501) 
 
