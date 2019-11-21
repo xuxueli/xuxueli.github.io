@@ -197,12 +197,12 @@
 
         // blogPath
         var originUrl = decodeURI(window.location.href);
-        if (originUrl.indexOf("?") > -1) {
-            originUrl = originUrl.substr(0, originUrl.indexOf("?"));
+        if (originUrl.indexOf(".md") > -1) {
+            originUrl = originUrl.substr(0, originUrl.indexOf(".md")+3);
         }
         var blogPath;
-        if (originUrl.indexOf("#") > -1) {
-            blogPath = originUrl.substr(originUrl.indexOf("#") + 1, originUrl.length);
+        if (originUrl.indexOf("?blog=") > -1) {
+            blogPath = originUrl.substr(originUrl.indexOf("?blog=") + 6, originUrl.length);
         }
         if (!blogPath) {
             blogPath = "./notebook/目录.md";
