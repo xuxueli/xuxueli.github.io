@@ -7,8 +7,8 @@
     <link rel="icon" href="../favicon.ico">
 
     <!-- CSS  -->
-    <link href="../page/static/plugins/material-design-icons/3.0.1/iconfont/material-icons.css" rel="stylesheet">
-    <link href="../page/static/plugins/materialize/0.100.2/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="../page/static/plugins/materialize/1.0.0/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 
     <style>
         /* Custom Stylesheet */
@@ -28,7 +28,7 @@
             line-height: 2rem;
         }
 
-        .button-collapse {
+        .sidenav-trigger {
             color: #26a69a;
         }
 
@@ -69,6 +69,7 @@
             margin: 0;
         }
     </style>
+
 </head>
 <body>
 
@@ -89,7 +90,7 @@
             <li><a href="../page/community.html">社区</a></li>
         </ul>
         <!-- mobile-nav -->
-        <ul id="nav-mobile" class="side-nav">
+        <ul id="nav-mobile" class="sidenav">
             <li class="center" >
                 <img src="https://www.xuxueli.com/doc/static/xxl-job/images/xxl-logo.jpg"
                      style="width: 38px;vertical-align:middle;" >
@@ -103,7 +104,7 @@
             <li class="divider"></li>
         </ul>
         <!-- menu icon -->
-        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+        <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
     </div>
 </nav>
 <!-- header end -->
@@ -411,10 +412,10 @@
 </body>
 
 <script src="../page/static/plugins/jquery/2.2.4/jquery.min.js"></script>
-<script src="../page/static/plugins/materialize/0.100.2/js/materialize.min.js"></script>
+<script src="../page/static/plugins/materialize/1.0.0/js/materialize.min.js"></script>
 <script>
     $(function () {
-        $('.button-collapse').sideNav();
+        $('.sidenav').sidenav();
     });
 </script>
 

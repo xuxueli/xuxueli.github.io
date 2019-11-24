@@ -7,8 +7,8 @@
     <link rel="icon" href="./favicon.ico">
 
     <!-- CSS  -->
-    <link href="./page/static/plugins/material-design-icons/3.0.1/iconfont/material-icons.css" rel="stylesheet">
-    <link href="./page/static/plugins/materialize/0.100.2/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="./page/static/plugins/materialize/1.0.0/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 
     <style>
         /* Custom Stylesheet */
@@ -28,7 +28,7 @@
             line-height: 2rem;
         }
 
-        .button-collapse {
+        .sidenav-trigger {
             color: #26a69a;
         }
 
@@ -90,7 +90,7 @@
             <li><a href="./page/community.html">社区</a></li>
         </ul>
         <!-- mobile-nav -->
-        <ul id="nav-mobile" class="side-nav">
+        <ul id="nav-mobile" class="sidenav">
             <li class="center" >
                 <img src="https://www.xuxueli.com/doc/static/xxl-job/images/xxl-logo.jpg"
                      style="width: 38px;vertical-align:middle;" >
@@ -104,7 +104,7 @@
             <li class="divider"></li>
         </ul>
         <!-- menu icon -->
-        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+        <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
     </div>
 </nav>
 <!-- header end -->
@@ -139,23 +139,23 @@
 
         <!-- feture -->
         <div class="row">
-            <div class="col s4">
-                <div class="center promo promo-example">
-                    <i class="material-icons" style="margin: 20px 0;color:#4db6ac ;font-size: 2rem;display: block;" >flash_on</i>
-                    <p class="promo-caption">高效</p>
+            <div class="col s12 m4">
+                <div class="icon-block">
+                    <h2 class="center brown-text"><i class="material-icons" style="margin: 20px 0;color:#4db6ac ;font-size: 2rem;display: block;"  >flash_on</i></h2>
+                    <p class="center">高效</p>
                     <p class="light center"></p>
                 </div>
             </div>
-            <div class="col s4">
-                <div class="center promo promo-example">
-                    <i class="material-icons" style="margin: 20px 0;color:#4db6ac ;font-size: 2rem;display: block;" >group</i>
-                    <p class="promo-caption">易用</p>
+            <div class="col s12 m4">
+                <div class="icon-block">
+                    <h2 class="center brown-text"><i class="material-icons" style="margin: 20px 0;color:#4db6ac ;font-size: 2rem;display: block;"  >group</i></h2>
+                    <p class="center">易用</p>
                 </div>
             </div>
-            <div class="col s4">
-                <div class="center promo promo-example">
-                    <i class="material-icons" style="margin: 20px 0;color:#4db6ac ;font-size: 2rem;display: block;" >settings</i>
-                    <p class="promo-caption">灵活</p>
+            <div class="col s12 m4">
+                <div class="icon-block">
+                    <h2 class="center brown-text"><i class="material-icons" style="margin: 20px 0;color:#4db6ac ;font-size: 2rem;display: block;"  >settings</i></h2>
+                    <p class="center">灵活</p>
                 </div>
             </div>
         </div>
@@ -241,10 +241,10 @@
 </body>
 
 <script src="./page/static/plugins/jquery/2.2.4/jquery.min.js"></script>
-<script src="./page/static/plugins/materialize/0.100.2/js/materialize.min.js"></script>
+<script src="./page/static/plugins/materialize/1.0.0/js/materialize.min.js"></script>
 <script>
     $(function () {
-        $('.button-collapse').sideNav();
+        $('.sidenav').sidenav();
     });
 </script>
 
