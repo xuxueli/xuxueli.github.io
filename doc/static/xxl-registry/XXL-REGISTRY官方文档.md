@@ -7,6 +7,9 @@
 [![License](https://img.shields.io/badge/license-GPLv3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html)
 [![donate](https://img.shields.io/badge/%24-donate-ff69b4.svg?style=flat-square)](https://www.xuxueli.com/page/donate.html)
 
+[TOCM]
+
+[TOC]
 
 ## 一、简介
 
@@ -397,6 +400,8 @@ XXL-REGISTRY内部通过广播机制，集群节点实时同步服务注册信�
     - 注册服务支持Tag属性；如机房TAG，客户端优先使用本机房，即机房TAG一致的服务；
 - springboot、dubbo 示例；
 - 单机版本：H2数据库;
+- 异地多活：注册中心无中心服务；
+- 同机房读：服务支持Region属性，优先使用本Region服务；
 
 
 ## 六、其他
