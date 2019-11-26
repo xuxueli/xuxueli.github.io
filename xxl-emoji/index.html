@@ -1,36 +1,286 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Emoji表情编解码库XXL-EMOJI</title>
-    <link rel="icon" href="favicon.ico">
+    <link rel="icon" href="../favicon.ico">
 
     <meta name="keywords" content="Emoji表情编解码库XXL-EMOJI">
     <meta name="description" content="XXL-EMOJI 是一个灵活可扩展的Emoji库，可快速实现Emoji表情Unicode的编解码.">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 
-    <link rel="stylesheet" href="../page/static/plugins/docsify/4.2.8/themes/vue.css">
+    <!-- CSS  -->
+    <link href="../page/static/plugins/material-design-icons/3.0.1/material-icons.css?family=Material+Icons" rel="stylesheet">
+    <link href="../page/static/plugins/materialize/1.0.0/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <!-- editor.md -->
+    <link rel="stylesheet" href="../page/static/plugins/editor.md/css/editormd.preview.min.css" />
 
+    <style>
+        /* Custom Stylesheet */
+        /**
+         * Use this file to override Materialize files so you can update
+         * the core Materialize files in the future
+         *
+         * Made By MaterializeCSS.com
+         */
+
+        nav ul a,
+        nav .brand-logo {
+            color: #444;
+        }
+
+        p {
+            line-height: 2rem;
+        }
+
+        .sidenav-trigger {
+            color: #26a69a;
+        }
+
+        .parallax-container {
+            min-height: 380px;
+            line-height: 0;
+            height: auto;
+            color: rgba(255,255,255,.9);
+        }
+        .parallax-container .section {
+            width: 100%;
+        }
+
+        @media only screen and (max-width : 992px) {
+            .parallax-container .section {
+                position: absolute;
+                top: 40%;
+            }
+            #index-banner .section {
+                top: 10%;
+            }
+        }
+
+        @media only screen and (max-width : 600px) {
+            #index-banner .section {
+                top: 0;
+            }
+        }
+
+        .icon-block {
+            padding: 0 15px;
+        }
+        .icon-block .material-icons {
+            font-size: inherit;
+        }
+
+        footer.page-footer {
+            margin: 0;
+        }
+    </style>
 
 </head>
 <body>
-    <div id="app"></div>
+
+<!-- header start -->
+<nav class="white" role="navigation">
+    <div class="nav-wrapper container">
+        <a id="logo-container" href="../index.html" class="brand-logo" style="white-space:nowrap;" >
+            <img src="https://www.xuxueli.com/doc/static/xxl-job/images/xxl-logo.jpg"
+                 style="width: 38px;vertical-align:middle;" >
+            XXL开源社区
+        </a>
+        <!-- pc-nav -->
+        <ul class="right hide-on-med-and-down">
+            <li><a href="../index.html">首页</a></li>
+            <li class="active"><a href="../page/projects.html">项目</a></li>
+            <li><a href="../blog">博客</a></li>
+            <li><a href="../page/donate.html" >赞助</a></li>
+            <li><a href="../page/community.html">社区</a></li>
+        </ul>
+        <!-- mobile-nav -->
+        <ul id="nav-mobile" class="sidenav">
+            <li>
+                <div class="center" style="padding: 20px;" >
+                    <img src="https://www.xuxueli.com/doc/static/xxl-job/images/xxl-logo.jpg" style="width: 80px;vertical-align:middle;" >
+                    <br>
+                    <h5 style="color: #4db6ac !important;" >XXL开源社区</h5>
+                </div>
+            </li>
+            <li class="divider"></li>
+            <li><a href="../index.html">首页</a></li>
+            <li class="active"><a href="../page/projects.html">项目</a></li>
+            <li><a href="../blog">博客</a></li>
+            <li><a href="../page/donate.html" >赞助</a></li>
+            <li><a href="../page/community.html">社区</a></li>
+            <li class="divider"></li>
+        </ul>
+        <!-- menu icon -->
+        <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    </div>
+</nav>
+<!-- header end -->
+
+<!-- content -->
+<div class="section no-pad-bot">
+    <div class="container">
+
+        <div class="row" style="margin: 0 auto;" >
+
+            <!-- index -->
+            <div class="row">
+                <div class="col s12 m12">
+                    <div class="card">
+                        <div class="card-content">
+
+                            <!-- index -->
+                            <div class="row center">
+                                <img src="https://www.xuxueli.com/doc/static/xxl-job/images/xxl-logo.jpg" style="width: 99px;" >
+                                <h5 class2="center teal-text text-lighten-2">XXL-EMOJI</h5>
+                                <h6>Emoji表情编解码库</h6>
+                                <p class="light">
+                                    简洁、易扩展、别名自定义、实时性
+                                </p>
+                            </div>
+                            <div class="row center">
+                                <a href="https://github.com/xuxueli/xxl-emoji/" target="_blank" class="btn waves-effect waves-light grey" >GitHub</a>
+                                <a href="http://gitee.com/xuxueli0323/xxl-emoji" target="_blank" class="btn waves-effect waves-light grey" >Gitee</a>
+                                <a href="#《Emoji表情编解码库XXL-EMOJI》" class="btn waves-effect waves-light teal lighten-1" >Get Started</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- content -->
+            <div class="row">
+                <div class="col s12 m12">
+                    <div class="card">
+                        <div class="card-content">
+
+                            <!-- content -->
+                            <div id="blog-content-view" ></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <!-- google-adsense start 横幅A -->
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- 横幅A -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-4895131469989222"
+                 data-ad-slot="9868945496"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+            <!-- google-adsense end 横幅A -->
+
+        </div>
+
+    </div>
+</div>
+
+<!-- footer start -->
+<footer class="page-footer teal">
+    <div class="container">
+        <div class="row">
+            <div class="col l5 s12">
+                <h5 class="white-text">About</h5>
+                <p class="grey-text text-lighten-4">
+                    【XXL开源社区】成立于2015年，是专门为支持开源软件项目而创办的一个非盈利性组织，负责发行和维护XXL系列开源软件，崇尚开放、自由和分享。
+                </p>
+            </div>
+            <div class="col offset-l1 l3 s12">
+                <h5 class="white-text">Link</h5>
+                <ul>
+                    <li>
+                        <a class="grey-text text-lighten-3" href="https://github.com/xuxueli" target="_blank">Github</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col l3 s12">
+                <h5 class="white-text">Follow us</h5>
+                <ul>
+                    <li>
+                        <img src="https://www.xuxueli.com/blog/static/images/img_wechat_official_account_qrcode.png" width="80">
+                        <br>
+                        (关注公众号)
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <div class="container">
+            Copyright (c) 2015-present, xuxueli.
+            <a class="grey-text text-lighten-4 right" ></a>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
 </body>
 
+<script src="../page/static/plugins/jquery/2.2.4/jquery.min.js"></script>
+<script src="../page/static/plugins/materialize/1.0.0/js/materialize.min.js"></script>
 <script>
-    window.$docsify = {
-        homepage: 'https://www.xuxueli.com/doc/static/xxl-emoji/XXL-EMOJI%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3.md',
-        coverpage: true,
-        loadNavbar: true,
-        auto2top: true
-    }
+    $(function () {
+        $('.sidenav').sidenav();
+    });
 </script>
 
-<!-- Docsify -->
-<script src="../page/static/plugins/docsify/4.2.8/docsify.min.js"></script>
-<script src="../page/static/plugins/docsify/4.2.8/plugins/search.min.js"></script>
-<!-- Prism -->
-<script src="../page/static/plugins/prismjs/components/prism-java.min.js"></script>
+<!-- editormd -->
+<script src="../page/static/plugins/editor.md/lib/marked.min.js"></script>
+<script src="../page/static/plugins/editor.md/lib/prettify.min.js"></script>
+
+<script src="../page/static/plugins/editor.md/lib/raphael.min.js"></script>
+<script src="../page/static/plugins/editor.md/lib/underscore.min.js"></script>
+<script src="../page/static/plugins/editor.md/lib/sequence-diagram.min.js"></script>
+<script src="../page/static/plugins/editor.md/lib/flowchart.min.js"></script>
+<script src="../page/static/plugins/editor.md/lib/jquery.flowchart.min.js"></script>
+
+<script src="../page/static/plugins/editor.md/editormd.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+
+        // blogPath
+        var blogPath = "../doc/static/xxl-excel/XXL-EXCEL官方文档.md";
+
+        // init
+        $.get(blogPath, function(markdown) {
+
+            editormd.katexURL  = {
+                css : "../page/static/plugins/katex/katex.min",
+                js  : "../page/static/plugins/katex/katex.min"
+            };
+            var testEditormdView = editormd.markdownToHTML("blog-content-view", {
+                markdown        : markdown ,                //+ "\r\n" + $("#append-test").text(),
+                //htmlDecode      : true,                   // 开启 HTML 标签解析，为了安全性，默认不开启
+                htmlDecode      : "style,script,iframe",    // you can filter tags decode
+                toc             : true,
+                tocm            : true,                     // Using [TOCM]
+                //tocContainer    : "#custom-toc-container",    // 自定义 ToC 容器层
+                //gfm             : false,
+                //tocDropdown     : true,
+                // markdownSourceCode : true,               // 是否保留 Markdown 源码，即是否删除保存源码的 Textarea 标签
+                emoji           : true,
+                taskList        : true,
+                tex             : true,  // 默认不解析
+                flowChart       : true,  // 默认不解析
+                sequenceDiagram : true,  // 默认不解析
+            });
+
+            // 获取Markdown源码
+            //console.log(testEditormdView.getMarkdown());
+            //alert(testEditormdView.getMarkdown());
+        });
+
+    });
+</script>
 
 
 <!-- google start -->
@@ -60,6 +310,7 @@
 
 <!-- cnzz start -->
 <script type="text/javascript">
+    /*var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1263800177'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s13.cnzz.com/z_stat.php%3Fid%3D1263800177' type='text/javascript'%3E%3C/script%3E"));*/
     var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
     document.write(unescape("%3Cspan style='display:none;' id='cnzz_stat_icon_1263800177'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s13.cnzz.com/z_stat.php%3Fid%3D1263800177' type='text/javascript'%3E%3C/script%3E"));
 </script>
