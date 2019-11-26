@@ -1,9 +1,14 @@
 ## 《分布式单点登录框架XXL-SSO》
 
+[![Actions Status](https://github.com/xuxueli/xxl-sso/workflows/Java%20CI/badge.svg)](https://github.com/xuxueli/xxl-sso/actions)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-sso/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-sso/)
 [![GitHub release](https://img.shields.io/github/release/xuxueli/xxl-sso.svg)](https://github.com/xuxueli/xxl-sso/releases)
 [![License](https://img.shields.io/badge/license-GPLv3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html)
 [![donate](https://img.shields.io/badge/%24-donate-ff69b4.svg?style=flat-square)](https://www.xuxueli.com/page/donate.html)
+
+[TOCM]
+
+[TOC]
 
 ## 一、简介
 
@@ -96,7 +101,7 @@ XXL-SSO 是一个分布式单点登录框架。只需要登录一次就可以访
 xxl.sso.redis.address=redis://127.0.0.1:6379
 
 // 登录态有效期窗口，默认24H，当登录态有效期窗口过半时，自动顺延一个周期
-xxl.sso.redis.expire.minite=1440
+xxl.sso.redis.expire.minute=1440
 
 ```
 
@@ -388,6 +393,7 @@ SSO User | 登录用户信息，与 SSO SessionId 相对应
 - 1、升级pom依赖版本；
 - 2、[迭代中]spring mvc 版本示例；
 - 3、[迭代中]Client跳转新增一次性Token验证；
+- 4、拼写问题修复；
 
 ### TODO LIST
 - 1、认证中心与接入端交互数据加密，增强安全性；redirect_url必须和临时AccessToken配合才会生效，AccessToken有效期60s，阅后即焚模式；
