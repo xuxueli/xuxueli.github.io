@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>XXL开源社区 | 工具 | JSON格式校验、格式化</title>
+    <script src="json2.js"></script>
+    <script src="jsonlint.js"></script>
+    <script>
+        window.onload = function () {
+            document.getElementById("button").onclick = function () {
+                try {
+                    var result = jsonlint.parse(document.getElementById("source").value);
+                    if (result) {
+                        document.getElementById("result").innerHTML = "JSON is valid!";
+                        document.getElementById("result").className = "pass";
+                        if (document.getElementById("reformat").checked) {
+                            document.getElementById("source").value = JSON.stringify(result, null, "  ");
+                        }
+                    }
+                } catch (e) {
+                    document.getElementById("result").innerHTML = e;
+                    document.getElementById("result").className = "fail";
+                }
+            };
+        }
+    </script>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+
+        #result {
+            padding: 1em;
+        }
+
+        .pass {
+            background-color: #efe;
+            color: #393;
+            border: 2px solid #393;
+        }
+
+        .fail {
+            background-color: #fee;
+            color: #933;
+            border: 2px solid #933;
+        }
+
+        textarea {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<h2>JSON格式校验、格式化</h2>
+<p></p>
+
+<textarea id="source" rows="20" cols="50"></textarea>
+
+<p>
+    <button id="button">格式校验</button>
+    <input type="checkbox" value="yes" id="reformat"/><label for="reformat">格式化JSON</label>
+</p>
+
+<h2>结果：</h2>
+<pre id="result"></pre>
+
+
+</body>
+</html>
