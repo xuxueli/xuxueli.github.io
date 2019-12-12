@@ -441,6 +441,7 @@ XXL-JOB是一个轻量级分布式任务调度平台，其核心设计目标是�
         ：xxl-job-executor-sample-frameless：无框架版本；
         ：xxl-job-executor-sample-jfinal：JFinal版本，通过JFinal管理执行器；
         ：xxl-job-executor-sample-nutz：Nutz版本，通过Nutz管理执行器；
+        ：xxl-job-executor-sample-jboot：jboot版本，通过jboot管理执行器；
         
 
 ### 2.3 配置部署“调度中心”
@@ -575,7 +576,7 @@ docker run -e PARAMS="--spring.datasource.url=jdbc:mysql://127.0.0.1:3306/xxl_jo
 执行器组件，配置内容说明：
 
 ```
-@Bean(initMethod = "start", destroyMethod = "destroy")
+@Bean
 public XxlJobSpringExecutor xxlJobExecutor() {
     logger.info(">>>>>>>>>>> xxl-job config init.");
     XxlJobSpringExecutor xxlJobSpringExecutor = new XxlJobSpringExecutor();
@@ -598,6 +599,7 @@ public XxlJobSpringExecutor xxlJobExecutor() {
     xxl-job-executor-sample-spring：项目编译打包成WAR包，并部署到tomcat中。
     xxl-job-executor-sample-jfinal：同上
     xxl-job-executor-sample-nutz：同上
+    xxl-job-executor-sample-jboot：同上
     
 
 至此“执行器”项目已经部署结束。
@@ -685,20 +687,36 @@ public XxlJobSpringExecutor xxlJobExecutor() {
     - 执行参数：任务执行所需的参数；
     
 ### 3.1 BEAN模式
-任务逻辑以JobHandler的形式存在于“执行器”所在项目中，开发流程如下：
 
-#### 步骤一：执行器项目中，开发JobHandler：
+BEAN模式有两种开发方式：
+- 1、基于类的方式：早期提供的方式，需要开发一个继承自"com.xxl.job.core.handler.IJobHandler"的JobHandler类。新版本已经不提供这种方式的任务自动注入支持，需要手动通过如下方式注入到执行器容器。方式比较原始；
+```
+XxlJobExecutor.registJobHandler("demoJobHandler", new DemoJobHandler());
+```
+- 2、基于方法的方式：新版本提供，也是推荐的方式，只需要在相关任务方法上添加"@XxlJob"注解即可，会自动完成任务注入到执行器容器。更加方便、高效；
 
-     - 1、继承"IJobHandler"：“com.xxl.job.core.handler.IJobHandler”；
-     - 2、注册到Spring容器：添加“@Component”注解，被Spring容器扫描为Bean实例；
-     - 3、注册到执行器工厂：添加“@JobHandler(value="自定义jobhandler名称")”注解，注解value值对应的是调度中心新建任务的JobHandler属性的值。
-     - 4、执行日志：需要通过 "XxlJobLogger.log" 打印执行日志；
-    （可参考Sample示例执行器中的DemoJobHandler，见下图）
+>注意：上面两种方式开发的任务，底层都会生成JobHandler代理，因此，任务都会以JobHandler的形式存在于执行器任务容器中。
 
-![输入图片说明](https://www.xuxueli.com/doc/static/xxl-job/images/img_oLlM.png "在这里输入图片标题")
+基于方法的方式，开发步骤如下：
+
+#### 步骤一：执行器项目中，开发Job方法：
+
+    - 1、在Spring Bean实例中，开发Job方法，方式格式要求为 "public ReturnT<String> execute(String param)"
+    - 2、为Job方法添加注解 "@XxlJob(value="自定义jobhandler名称", init = "JobHandler初始化方法", destroy = "JobHandler销毁方法")"，注解value值对应的是调度中心新建任务的JobHandler属性的值。
+    - 3、执行日志：需要通过 "XxlJobLogger.log" 打印执行日志；
+    
+```
+// 可参考Sample示例执行器中的 "com.xxl.job.executor.service.jobhandler.SampleXxlJob" ，如下：
+@XxlJob("demoJobHandler")
+public ReturnT<String> execute(String param) {
+
+    XxlJobLogger.log("hello world.");
+    return ReturnT.SUCCESS;
+}
+```
 
 #### 步骤二：调度中心，新建调度任务
-参考上文“配置属性详细说明”对新建的任务进行参数配置，运行模式选中 "BEAN模式"，JobHandler属性填写任务注解“@JobHandler”中定义的值；
+参考上文“配置属性详细说明”对新建的任务进行参数配置，运行模式选中 "BEAN模式"，JobHandler属性填写任务注解“@XxlJob”中定义的值；
 
 ![输入图片说明](https://www.xuxueli.com/doc/static/xxl-job/images/img_ZAsz.png "在这里输入图片标题")
 
@@ -934,7 +952,7 @@ Quartz作为开源作业调度中的佼佼者，是作业调度的首选。但�
    
 - 问题一：调用API的的方式操作任务，不人性化；
 - 问题二：需要持久化业务QuartzJobBean到底层数据表中，系统侵入性相当严重。
-- 问题三：调度逻辑和QuartzJobBean耦合在同一个项目中，这将导致一个问题，在调度任务数量逐渐增多，同时调度任务逻辑逐渐加重的情况加，此时调度系统的性能将大大受限于业务；
+- 问题三：调度逻辑和QuartzJobBean耦合在同一个项目中，这将导致一个问题，在调度任务数量逐渐增多，同时调度任务逻辑逐渐加重的情况下，此时调度系统的性能将大大受限于业务；
 - 问题四：quartz底层以“抢占式”获取DB锁并由抢占成功节点负责运行任务，会导致节点负载悬殊非常大；而XXL-JOB通过执行器实现“协同分配式”运行任务，充分发挥集群优势，负载各节点均衡。
 
 XXL-JOB弥补了quartz的上述不足之处。
@@ -1630,8 +1648,19 @@ Tips: 历史版本(V1.3.x)目前已经Release至稳定版本, 进入维护阶段
 - 25、项目依赖升级至较新稳定版本，如spring、spring-boot、mybatis、slf4j、groovy等等；
 
 ### 6.27 版本 v2.1.2 Release Notes[迭代中]
-- 1、[迭代中]移除commons-exec，采用原生方式实现；
-- 2、[迭代中]任务操作API服务调整为restful方式，降低接入成本；
+- 1、方法任务支持：由原来基于JobHandler类任务开发方式，优化为支持基于方法的任务开发方式；因此，可以支持单个类中开发多个任务方法，进行类复用（TODO：JobHandler移除）；
+```
+@XxlJob("demoJobHandler2")
+public ReturnT<String> execute(String param) {
+    XxlJobLogger.log("hello world");
+    return ReturnT.SUCCESS;
+}
+```
+- 2、调度中心dispatcher servlet加载顺序优化；
+- 3、执行器回调乱码问题修复；
+- 4、[迭代中]移除commons-exec，采用原生方式实现；
+- 5、[迭代中]任务操作API服务调整为restful方式，降低接入成本；
+
 
 
 ### TODO LIST
