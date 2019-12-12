@@ -377,6 +377,8 @@ XXL-JOB是一个轻量级分布式任务调度平台，其核心设计目标是�
     - 285、北京老虎证券【老虎证券】
     - 286、悠活省吧（北京）网络科技有限公司
     - 287、F5未来商店
+    - 288、深圳环阳通信息技术有限公司
+    - 289、遠傳電信
 	- ……
 
 > 更多接入的公司，欢迎在 [登记地址](https://github.com/xuxueli/xxl-job/issues/1 ) 登记，登记仅仅为了产品推广。
@@ -1672,10 +1674,10 @@ public ReturnT<String> execute(String param) {
     return ReturnT.SUCCESS;
 }
 ```
-- 2、调度中心dispatcher servlet加载顺序优化；
+- 2、移除commons-exec，采用原生方式实现；
 - 3、执行器回调乱码问题修复；
-- 4、[迭代中]移除commons-exec，采用原生方式实现；
-- 5、[迭代中]任务操作API服务调整为restful方式，降低接入成本；
+- 4、调度中心dispatcher servlet加载顺序优化；
+- 5、执行器回调地址https兼容支持；
 
 
 
