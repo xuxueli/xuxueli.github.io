@@ -559,6 +559,51 @@ Redis 没有关系型数据库中的表这一概念来将同种类型的数据�
 
 <div align="center"> <img src="https://www.xuxueli.com/blog/static/images/img_213.png" width="800"/> </div><br>
 
+# 十五、Redis安装-yum方式
+
+## EPEL安装
+centos需要epel支持； [EPEL官网](https://fedoraproject.org/wiki/EPEL/zh-cn)
+
+```
+// 1、安装yum优先级插件
+yum install yum-priorities
+
+// 2、安装epel
+yum -y install epel-release
+
+// 3、检查是否安装成功
+rpm -q epel-release
+
+// 4、更新yum缓存
+yum clean all && yum makecache
+```
+
+## yum安装redis
+
+```
+// 1、安装
+yum install redis
+
+service redis start
+service redis restart
+service redis stop
+
+// 2、测试
+redis-cli
+set key "hello world"
+get key
+
+// 3、修改redis配置，修改限制访问IP   
+// 默认位置“/etc/redis.conf”
+vi /etc/redis.conf
+
+注释掉下面一行，本行功能限制指定IP访问
+#bind 127.0.0.1
+
+// 4、开放Redis端口：6379（默认）
+```
+
+
 # 参考资料
 
 - Carlson J L. Redis in Action[J]. Media.johnwiley.com.au, 2013.
@@ -569,4 +614,6 @@ Redis 没有关系型数据库中的表这一概念来将同种类型的数据�
 - [Redis 3.0 中文版- 分片](http://wiki.jikexueyuan.com/project/redis-guide)
 - [Redis 应用场景](http://www.scienjus.com/redis-use-case/)
 - [Using Redis as an LRU cache](https://redis.io/topics/lru-cache)
-
+- [官网](http://redis.io/)    
+- [github地址](https://github.com/antirez/redis)  
+- [redis中文api文档](http://doc.redisfans.com/)
