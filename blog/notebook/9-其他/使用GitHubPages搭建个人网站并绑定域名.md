@@ -1,4 +1,4 @@
-<h2 style="color:#4db6ac !important" >使用GitHubPages搭建个人网站并绑定域名.md</h2>
+<h2 style="color:#4db6ac !important" >使用GitHubPages搭建个人网站并绑定域名</h2>
 > 【原创】2015/04/29
 
 [TOCM]

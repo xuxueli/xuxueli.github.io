@@ -1,4 +1,4 @@
-<h2 style="color:#4db6ac !important" >发布Jar包到Maven中央仓库.md</h2>
+<h2 style="color:#4db6ac !important" >发布Jar包到Maven中央仓库</h2>
 > 【原创】2016/09/06
 
 [TOCM]
