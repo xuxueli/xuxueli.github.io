@@ -1353,6 +1353,8 @@ Java 注解是附加在代码中的一些元信息，用于一些工具在编译
 
 [注解 Annotation 实现原理与自定义注解例子](https://www.cnblogs.com/acm-bingzi/p/javaAnnotation.html)
 
+
+
 # 十一、特性
 
 ## Java 各版本的新特性
@@ -1484,6 +1486,335 @@ echo $PATH
 ```
 
 ## Maven安装
+- [官网](http://maven.apache.org/download.cgi)
+- [官方教程](http://maven.apache.org/guides/getting-started/index.html)
+- [官方五分钟入门](http://maven.apache.org/guides/getting-started/maven-in-five-minutes.html)
+
+** 前提 **
+正确安装JDK，并配置环境变量
+
+** Mac下安装 **
+
+```
+# 用户目录下，新建.bash_profile文件
+cd ~
+touch .bash_profile     (如果该文件不存在，将创建一个空文件)
+open .bash_profile      (调用记事本编辑该文件)
+
+# 配置maven环境变量（maven解压目录）
+export MAVEN_HOME=/Users/xuxueli/programfils/apache-maven-3.3.9
+
+# 配置path
+PATH=$PATH:$MAVEN_HOME/bin
+export PATH
+
+# 配置生效
+source .bash_profile
+```
+
+验证：在terminal下 "mvn -version" 确认
+配置本地仓库：在Maven解压安装目录下 “\conf\settings.xml” 文件中配置
+    ```
+    <localRepository>/Users/xuxueli/workspaces/maven-libs</localRepository>
+    ```
+    
+
+** Windows下安装 **
+
+解压安装，并配置Windows环境变量：
+```
+MAVEN_HOME=D://maven
+PATH=%MAVEN_HOME%\bin;  + 其他
+```
+
+验证：在dos下 "mvn -version" 确认
+配置本地仓库：在Maven解压安装目录下 “\conf\settings.xml” 文件中配置
+    ```
+    <localRepository>e:/work/maven_lib</localRepository>
+    ```
+
+** 常用命令 **
+```
+mvn validate //验证工程是否正确，所有需要的资源是否可用
+mvn compile//编译项目的源代码
+mvn test-compile  //编译项目测试代码
+mvn test  //使用已编译的测试代码，测试已编译的源代码
+mvn package    //已发布的格式，如jar，将已编译的源代码打包
+mvn integration-test //在集成测试可以运行的环境中处理和发布包
+mvn verify //运行任何检查，验证包是否有效且达到质量标准
+mvn install //把包安装在本地的repository中，可以被其他工程作为依赖来使用
+mvn deploy //在整合或者发布环境下执行，将最终版本的包拷贝到远程的repository，使得其他的开发者或者工程可以共享
+mvn generate-sources //产生应用需要的任何额外的源代码，如xdoclet
+mvn archetype:generate //创建 Maven 项目
+mvn compile //编译源代码
+mvn test-compile//编译测试代码
+mvn test //运行应用程序中的单元测试
+mvn site //生成项目相关信息的网站
+mvn clean //清除目标目录中的生成结果
+mvn package //依据项目生成 jar 文件
+mvn install //在本地 Repository 中安装 jar
+mvn eclipse:eclipse //生成 Eclipse 项目文件
+
+// etc
+mvn -Dhttps.protocols=TLSv1.2   // 启用 TLSv1.2 协议，maven仓库要求
+```
+
+** Maven 参数 ** 
+
+    -D 传入属性参数 
+    -P 使用pom中指定的配置 
+    -e 显示maven运行出错的信息 
+    -o 离线执行命令,即不去远程仓库更新包 
+    -X 显示maven允许的debug信息 
+    -U 强制去远程参考更新snapshot包 
+    例如 mvn install -Dmaven.test.skip=true -Poracle 
+    其他参数可以通过mvn help 获取
+
+** maven scope（依赖范围控制）说明 **
+在POM 4中，<dependency>中还引入了<scope>，它主要管理依赖的部署。目前<scope>可以使用5个值：
+
+- ** compile （编译范围） **：compile是默认的范围；如果没有提供一个范围，那该依赖的范围就是编译范围。编译范围依赖在所有的classpath 中可用，同时它们也会被打包。 
+- ** provided （已提供范围） **：provided 依赖只有在当JDK 或者一个容器已提供该依赖之后才使用。例如， 如果你开发了一个web 应用，你可能在编译 classpath 中需要可用的Servlet API 来编译一个servlet，但是你不会想要在打包好的WAR 中包含这个Servlet API；这个Servlet API JAR 由你的应用服务器或者servlet 容器提供。已提供范围的依赖在编译classpath （不是运行时）可用。它们不是传递性的，也不会被打包。 
+- ** runtime （运行时范围） **：runtime 依赖在运行和测试系统的时候需要，但在编译的时候不需要。比如，你可能在编译的时候只需要JDBC API JAR，而只有在运行的时候才需要JDBC 驱动实现。
+- ** test （测试范围） **：test范围依赖 在一般的编译和运行时都不需要，它们只有在测试编译和测试运行阶段可用。 
+- ** system （系统范围） ** ：system范围依赖与provided 类似，但是你必须显式的提供一个对于本地系统中JAR 文件的路径。这么做是为了允许基于本地对象编译，而这些对象是系统类库的一部分。这样的构件应该是一直可用的，Maven 也不会在仓库中去寻找它。如果你将一个依赖范围设置成系统范围，你必须同时提供一个 systemPath 元素。注意该范围是不推荐使用的（你应该一直尽量去从公共或定制的 Maven 仓库中引用依赖）。
+
+## GIT安装
+- [windows下Git安装与配置](http://blog.csdn.net/renfufei/article/details/41647875)
+- [Mac-OSX下安装Git](http://blog.csdn.net/zhangkongzhongyun/article/details/7903148)
+- [Git 常用命令速查表(图文+表格)](http://www.jb51.net/article/55442.htm)
+- [Git 教程](http://www.runoob.com/git/git-tutorial.html)
+
+** GIT常用命令汇总 **
+
+```
+// 初始化
+cd git-workspace
+git init
+git clone http://xxxxx.git
+cd xxxxx
+
+// 查看
+git status
+git branch -a
+git branch -r
+
+// 拉取master分支到本地
+git fetch origin master:master
+git checkout master
+
+// 获取远程分支master并merge到当前分支 
+git fetch origin master
+git pull origin master 
+
+// 获取所有远程分支，并merge到本地分支
+git fetch
+git pull
+
+// 在master基础上，新建分支，推送分支
+git checkout master
+git fetch origin master
+git checkout -b XXX
+git push origin XXX
+
+// 加入缓存，提交代码，并push分支
+git add xxx.java
+git commit -m "init project"
+git push orgin XXX
+
+// 在 branch_a 分支上 merge 分支 master
+git checkout branch_a
+git merge master
+git push orgin branch_a
+
+// 在 branch_a 分支上 rebase 分支 master （不推荐）
+git checkout branch_a
+git rebase master
+git push orgin branch_a
+// (merge操作会生成一个新的节点，之前的提交分开显示。而rebase操作不会生成新的节点，是将两个分支融合成一个线性的提交，之前分支就没有了。)
+
+// 删除分支，大写D强制删除，push远程删除
+git branch -d XXX
+git branch -D XXX
+git push origin  :XXXX
+
+// 文件加入/移除stage（加入stage才可commit和push）
+git add xxx.imi
+git reset HEAD xxl.imi
+
+// .gitignore文件
+加入.gitingore文件中的文件，不会被 “git status(检测未被git管理、git管理下被修改但未被commit和push的文件)”检测到；
+git rm --cached file/path/to/be/ignored
+
+// 冲突解决
+add 
+commit
+
+// 撤消上一个commit，但保留add的文件
+git reset --soft HEAD~1
+
+// 生成公钥，默认位置：~/.ssh
+$ ssh-keygen -t rsa -C "xxx@gmail.com"
+cat .\.ssh\id_rsa.pub
+》》New SSH key
+ssh -T git@github.com
+
+// 更新仓库地址
+git remote set-url origin remote_git_address
+
+// 更新config
+git config --list
+git config user.name
+git config user.email   // query
+git config user.email "email info"  // update each
+git config --global user.email "email info"  // update global
+
+// 回滚commit
+git log
+git reset --hard <commit_id>
+git push origin HEAD --force
+
+// 放弃本地的修改，用远程的库覆盖本地
+git fetch --all
+git reset --hard origin/master
+
+// 强制覆盖推送
+git push -f origin/bbbbbb
+```
+
+** Git常用命令 **
+
+```
+// 常用命令汇总
+git clone <url>	clone远程版本库
+git status	查看状态
+git diff	查看变更内容
+git add .	跟踪所有改动过的文件
+git add <file>	跟踪指定的文件
+git mv <old> <new>	文件改名
+git rm <file>	删除文件
+git rm --cached <file>	停止跟踪文件但不删除
+git commit -m "commit message"	提交所有更新过的文件
+git log	查看提交历史
+git reset --hard HEAD	撤销工作目录中所有未提交文件的修改内容
+git checkout HEAD <file>	撤销指定的未提交文件的修改内容
+git revert <commit>	撤销指定的提交
+git branch	显示所有本地分支
+git checkout <branch/tag>	切换到指定分支或标签
+git branch <new-branch>	创建新分支
+git branch -d <branch>	删除本地分支
+git merge <branch>	合并指定分支到当前分支
+git rebase <branch>	Rebase指定分支到当前分支
+git remote -v	查看远程版本库信息
+git remote show <remote>	查看指定远程版本库信息
+git remote add <remote> <url>	添加远程版本库
+git fetch <remote>	从远程库获取代码
+git pull <remote> <branch>	下载代码合并到当前分支
+git push <remote> <branch>	上传代码到远程
+git push <remote> :<branch/tag>	删除远程分支或标签
+
+```
+
+## Intellij安装
+
+** 安装注册 **
+- [下载地址](http://www.jetbrains.com/idea/) 
+
+> Community Edition社区免费版功能有精简，推荐使用Ultimate Edition商业版本，可免费用30天，需要注册激活。
+
+> 已经集成了：JDK、Tomcat、Maven、Git、Freemarker、explorer等功能，比较完善。（插件库比较智能完善，如markdown插件在打开MD文件时会主动询问是否安装）
+
+** 设置 **
+> Project等同于eclipse的workspace，Module等同于eclipse的Project。失去焦点自动保存；
+
+* 1、JDK：
+
+        开发版本/JDK：
+        File》Other Setting》Default Project Structure》Platform Settings》SDKs》+JDK》选择全局jdk目录;
+        File》Project Structure》Platform Settings》SDKs》+JDK》选择项目jdk目录
+        编译版本/Compiler：
+        Preferences》Default Settings》Build、Execution、Deployment》Java Compiler》Project bytecode version》置空，编译版本自动和开发版本一致；
+        File》Other Settint》Default Settings》Build、Execution、Deployment》Java Compiler》Project bytecode version》置空，编译版本自动和开发版本一致；
+        运行版本/JRE：
+        Tomcat》Edit...》JRE》选择对应的JDK版本即可；（低版本spring2.x不兼容1.8）
+
+* 2、maven设置：
+    >File》Other Setting》Default Setting》Build、Execution、Deployment》Build Tools》Maven》配置maven安装目录和settin文件
+
+    >File》Setting》Build、Execution、Deployment》Build Tools》Maven》配置maven安装目录和settin文件
+    
+    ```
+    Maven home directory：maven安装目录 (Override)
+    User settings file：setting文件目录 (Override)
+    Local repository： 默认即可
+    ```
+    
+    Tips：推荐依赖树查看插件 Maven Helper
+
+* 3、Git配置：
+    >配置GIT：安装Git，配置Git：File》Setting》Version Control》Git》Path to Git executable选择git.exe地址；
+    
+    >下载Git仓库：VCS》Checkout from Version Control》Git》...
+        
+    >导入Git项目：File》New》Module from exists Sources》Git仓库中项目；
+        
+    >非Git仓库顶级目录下项目，关联Git：VCS》Version Control Operation
+        
+    >多git仓库同时使用：File》Setting》Version Control》点击+新增git本地仓库地址；
+        
+    >取消git自动tracked文件，导致gitignore失效：File》Setting》Version Control》When fils are created》勾选Do not add;
+    
+* 4、Tomcat：
+
+    >配置Server环境：File》Setting》Build、Execution、Deployment》Application Servers》点击+选择Tomcat类型，选择目录路径
+    
+    >配置Server实例：右上角》Edit Configurations》点击+号》Tomcat Server》Local》配置：环境、名称、默认浏览器、默认端口路径、端口，VM设置等；
+    
+    >部署项目：右上角》Edit Configurations》Deployment》点+号》Artifact》选择Web项目，配置根路径Application context；
+    
+    >动态Debug：右上角》Edit Configurations》Server》On update action改动/ On frame deactivation失活都选择update classes and resources(exploded格式才有)；
+
+    >一个Tomcat实例只能启动一个项目，如需启动多台，需要配置多个Tomcat并修改端口号；
+    
+* 5、修改IDE字体，黑色风格：
+    >File》Setting》Appearance & Behavior》Appearance》
+
+    ```
+    Theme：Darcula；Override default fonts by(not recommeded) 打钩选中；
+    Name：dialogInput；Size：12；
+    ```
+        
+    >修改编辑器/代码字体：File》Setting》Font》保存自定义Scheme》primary font：Consolas；Size：14；
+    
+    >控制台字体：
+    File》Setting》Editor》Color&Fonts》Console Font》primary font：Consolas；Size：14；
+
+
+* 6、Keymap（快捷键）设置：
+    >Keymap》选中即可（因为熟悉Eclipse，可改为此；但为了以后适应，推荐使用默认）
+* 7、显示行号：
+    >File》Setting》Editor》General》Appearance》Show line numbers（勾选）
+        
+* 8、不自动打开上次项目：
+    >File》Setting》Apprearance & Behavior》System Settings》Reopen last project on startup（去掉勾选）；
+
+* 9、设置文件头注释：
+    >File》Setting》Editor》File and Code Templates》Includes》File Header》输入：Created by ${USER} on ${DATE} ${TIME}.
+* 10、文件自动保存：
+    >挺好的，不用修改；
+* 11、用*标识编辑过的文件：
+    >Editor》Editor Tabs》Mark modifyied tabs with asterisk（勾选）
+* 12、快捷键冲突：
+    >Ctrl + Space：和Win7输入法冲突；语言栏》高级键设置》编辑“在输入语言之间”不修改点击确认》编辑“中文-输入法/非输入法切换”Ctrl+Space修改为如Ctrl+Home等即可》保存，重启即可；
+* idea热部署
+    >1.Build,Excution,Deployment>>Make project automatically（勾选）
+    >2.CTRL + SHIFT + A --> 查找Registry;  勾选  compiler.automake.allow.when.app.running;
+    springboot自动部署参考文档：https://blog.csdn.net/a1273022039/article/details/79590681
+    >3. Edit Configurations --> 'On Update Action' 勾 'update classes and resources'
+
+
+** 快捷键 **
+官网文档很完善：Help》KeyMap Preference》双击即可查看快捷键表；
 
 
 
