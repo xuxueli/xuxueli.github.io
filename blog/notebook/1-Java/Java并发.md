@@ -429,6 +429,81 @@ public static void main(String[] args) {
 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9
 ```
 
+一个线程在持有一个锁的时候，它内部能否再次（多次）申请该锁。如果一个线程已经获得了锁，其内部还可以多次申请该锁成功。那么我们就称该锁为可重入锁。
+
+典型使用场景：
+
+** 场景1：有状态执行（如果发现该操作已经在执行中则不再执行） **
+
+```
+private ReentrantLock lock = new ReentrantLock();
+...
+//如果已经被lock，则立即返回false不会等待，达到忽略操作的效果 
+if (lock.tryLock()) {  
+    try {
+       //操作
+    } finally {
+        lock.unlock();
+    }
+}
+```
+
+** 场景2：同步执行（如果发现该操作已经在执行，等待一个一个执行） **
+类似synchronized。但是，ReentrantLock有更灵活的锁定方式，支持公平锁（默认）与不公平锁，而synchronized永远是公平的。    
+- 公平锁：操作会排一个队按顺序执行，来保证执行顺序。（会消耗更多的时间来排队）
+- 不公平锁：是无序状态允许插队，jvm会自动计算如何处理更快速来调度插队。（如果不关心顺序，这个速度会更快）
+
+```
+//参数默认false，不公平锁
+private ReentrantLock lock = new ReentrantLock();
+//公平锁
+private ReentrantLock lock = new ReentrantLock(true);
+
+try {
+    // 如果被其它资源锁定，会在此等待锁释放，达到暂停的效果
+    lock.lock(); 
+    //操作
+} finally {
+    lock.unlock();
+}
+```
+
+** 场景3：尝试等待执行（如果发现该操作已经在执行，则尝试等待一段时间，等待超时则不执行） **
+这种其实属于场景2的改进，等待获得锁的操作有一个时间的限制，如果超时则放弃执行。    
+用来防止由于资源处理不当长时间占用导致死锁情况（大家都在等待资源，导致线程队列溢出）。 
+
+```
+try {
+    // 如果已经被lock，尝试等待5s，看是否可以获得锁，如果5s后仍然无法获得锁则返回false继续执行
+    if (lock.tryLock(5, TimeUnit.SECONDS)) {  
+        try {
+            //操作
+        } finally {
+            lock.unlock();
+        }
+    }
+} catch (InterruptedException e) {
+    // 当前线程被中断时(interrupt)，会抛InterruptedException 
+    e.printStackTrace();
+}
+```
+
+** 场景4：可中断执行（如果发现该操作已经在执行，等待执行。这时可中断正在进行的操作立刻释放锁继续下一操作） **
+synchronized与Lock在默认情况下是不会响应中断(interrupt)操作，会继续执行完。
+lockInterruptibly()提供了可中断锁来解决此问题。（场景2的另一种改进，没有超时，只能等待中断或执行完毕）
+这种情况主要用于取消某些操作对资源的占用。如：（取消正在同步运行的操作，来防止不正常操作长时间占用造成的阻塞）
+
+```
+try {
+    lock.lockInterruptibly();
+    //操作
+} catch (InterruptedException e) {
+    e.printStackTrace();
+} finally {
+    lock.unlock();
+}
+```
+
 
 ## 比较
 
@@ -674,9 +749,12 @@ java.util.concurrent（J.U.C）大大提高了并发性能，AQS 被认为是 J.
 
 ## CountDownLatch
 
-用来控制一个或者多个线程等待多个线程。
+CountDownLatch是一个同步工具类，它允许一个或多个线程一直等待，直到其他线程的操作执行完后再执行。
 
 维护了一个计数器 cnt，每次调用 countDown() 方法会让计数器的值减 1，减到 0 的时候，那些因为调用 await() 方法而在等待的线程就会被唤醒。
+
+与CountDownLatch的第一次交互是主线程等待其他线程。主线程必须在启动其他线程后立即调用CountDownLatch.await()方法。这样主线程的操作就会在这个方法上阻塞，直到其他线程完成各自的任务。
+其他N 个线程必须引用闭锁对象，因为他们需要通知CountDownLatch对象，他们已经完成了各自的任务。这种通知机制是通过 CountDownLatch.countDown()方法来完成的；每调用一次这个方法，在构造函数中初始化的count值就减1。所以当N个线程都调 用了这个方法，count的值等于0，然后主线程就能通过await()方法，恢复执行自己的任务。
 
 <div align="center"> <img src="https://www.xuxueli.com/blog/static/images/img_143.png" width="300px"> </div><br>
 
@@ -758,7 +836,14 @@ before..before..before..before..before..before..before..before..before..before..
 
 ## Semaphore
 
-Semaphore 类似于操作系统中的信号量，可以控制对互斥资源的访问线程数。
+Semaphore也是一个线程同步的辅助类，可以维护当前访问自身的线程个数，并提供了同步机制。使用Semaphore可以控制同时访问资源的线程个数，例如，实现一个文件允许的并发访问数。
+
+主要方法摘要：
+
+    void acquire()  : 从此信号量获取一个许可，在提供一个许可前一直将线程阻塞，否则线程被中断。
+    void release()  : 释放一个许可，将其返回给信号量。
+    int availablePermits()  : 返回此信号量中当前可用的许可数。
+    boolean hasQueuedThreads()  : 查询是否有线程正在等待获取。
 
 以下代码模拟了对某个服务的并发请求，每次只能有 3 个客户端同时访问，请求总数为 10。
 
