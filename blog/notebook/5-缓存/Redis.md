@@ -1,12 +1,9 @@
 <h2 style="color:#4db6ac !important" >Redis</h2>
+> 本文内容来源于书籍和网络。
 
 [TOCM]
 
 [TOC]
-
-
->本文内容来源于书籍和网络。
-
 
 # 一、概述
 

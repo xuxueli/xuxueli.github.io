@@ -1,11 +1,9 @@
 <h2 style="color:#4db6ac !important" >Java容器</h2>
+> 本文内容来源于书籍和网络。
 
 [TOCM]
 
 [TOC]
-
-
->本文内容来源于书籍和网络，可查看底部参考资料。
 
 # 一、概览
 

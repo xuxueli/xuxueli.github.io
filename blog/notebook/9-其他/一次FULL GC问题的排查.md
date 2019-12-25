@@ -1,5 +1,5 @@
 <h2 style="color:#4db6ac !important" >一次FULL GC问题的排查</h2>
-> 创建时间：2016/06/15
+> 【原创】2016/06/15
 
 [TOCM]
 

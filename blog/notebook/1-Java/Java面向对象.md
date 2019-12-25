@@ -1,11 +1,9 @@
 <h2 style="color:#4db6ac !important" >Java 面向对象（三大特性）</h2>
+> 本文内容来源于书籍和网络。
 
 [TOCM]
 
 [TOC]
-
-
->本文内容来源于书籍和网络。
 
 ## 封装
 

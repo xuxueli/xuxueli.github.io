@@ -1,5 +1,5 @@
 <h2 style="color:#4db6ac !important" >发布Jar包到Maven中央仓库.md</h2>
-> 创建时间：2016/09/06
+> 【原创】2016/09/06
 
 [TOCM]
 
@@ -15,9 +15,9 @@
 仓库镜像 | http://search.maven.org/ 或 http://mvnrepository.com/ | 最终Jar包可以在这里搜索到。
 
 ### 一、申请上传资格和groupId
-第一访问工单管理界面，需要提前注册，进行工单管理和构建仓库身份验证。
+访问工单管理界面需要提前注册，进行工单管理和构建仓库身份验证。
 
-点击顶部“create”按钮创建一个Issue，提交你上传jar包的基本信息，主要是groupid。
+点击顶部“Create”按钮创建一个Issue，提交你上传jar包的基本信息，主要信息是groupid。
 如果你申请 "com.{域名}" 那么你最有有 "{域名}.com" 这个域名的所有权。如果没有域名可以使用github二级域名，比如 "com.github.{用户名}"。
 
 创建成功后，接下来等待后台管理员审核，一般一个工作日以内，当Issue的Status变为RESOLVED后，就可以进行下一步操作了。
@@ -121,7 +121,7 @@ brew install gpg
 // 查看版本
 gpg --version
 
-// 生成密匙对（name=x******,email=9********@qq.com,Passphase=普通密码************4，命令行下小键盘有问题不要用）
+// 生成密匙对（name=x******,email=9********,Passphase=************4，命令行下小键盘有问题不要用）
 gpg --gen-key
 
 // 查看公钥
@@ -132,7 +132,7 @@ gpg --list-keys
 ---------------------------------
 pub   rsa2048 2016-09-05 [SC]
       {用户ID}
-uid           [ 绝对 ] x****** <9********@qq.com>
+uid           x****** <9********>
 sub   rsa2048 2016-09-05 [E]
 
 // 将公钥发布到 PGP 密钥服务器，公钥服务器配置地址 "~/.gnupg/gpg.conf"，可使用默认值也可自定义；
@@ -184,11 +184,11 @@ gpg版本较新，需要额外配置，在gpg安装目录（mac的是~/.gnup）�
 ### 五、发布JAR到构件仓库
 默认使用环境变量配置的maven下的默认配置，修改器setting即可
 ```
-mvn clean deploy -P release -Dgpg.keyname={用户ID} -Dgpg.passphrase=Passphase
+mvn clean deploy -P release -Dgpg.keyname={用户ID} -Dgpg.passphrase={passphrase}
 ```
 
 ### 五、发布JAR到正式仓库
-登录OSS，在构建仓库，Staging菜单中，找到刚刚发布JAR包，依次进行Close，Release操作即可。延时2小时后自动同步到正式仓库。
+登录OSS，在构建仓库的Staging菜单中找到刚刚发布JAR包，依次进行Close、Release操作，大约2小时后自动同步到正式仓库。
 
 
 注意："申请上传资格和groupId" 步骤只需要首次申请时操作，后续不需要。
