@@ -115,7 +115,7 @@ setting.xml放在Maven安装文件/conf目录下
 
 配置gpg-key核心步骤。
 ```
-// brew 安装 gpg （mac下神器）
+// brew 安装 gpg
 brew install gpg
 
 // 查看版本
