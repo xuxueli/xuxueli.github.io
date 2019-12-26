@@ -1351,59 +1351,132 @@ public class Box<T> {
 
 Java 注解是附加在代码中的一些元信息，用于一些工具在编译、运行时进行解析和使用，起到说明、配置的功能。注解不会也不能影响代码的实际逻辑，仅仅起到辅助性的作用。
 
+JDK5.0及以后版本引入的一个特性，与类、接口、枚举是在同一个层次。它可以声明在包、类、字段、方法、局部变量、方法参数等的前面，用来对这些元素进行说明，注释。
+
+作用分类：
+
+- 1、 编写文档：通过代码里标识的元数据生成文档【生成文档doc文档】
+- 2、 代码分析：通过代码里标识的元数据对代码进行分析【使用反射】
+- 3、 编译检查：通过代码里标识的元数据让编译器能够实现基本的编译检查【Override】
+
+## java中注解的使用与实例
+注解目前非常的流行，很多主流框架都支持注解，而且自己编写代码的时候也会尽量的去用注解，一时方便，而是代码更加简洁。
+
+注解的语法比较简单，除了@符号的使用之外，它基本与Java固有语法一致。Java SE5内置了三种**标准注解**：
+
+- **@Override**，表示当前的方法定义将覆盖超类中的方法。
+- **@Deprecated**，使用了注解为它的元素编译器将发出警告，因为注解@Deprecated是不赞成使用的代码，被弃用的代码。
+- **@SuppressWarnings**，关闭不当编译器警告信息。
+
+上面这三个注解多少我们都会在写代码的时候遇到。Java还提供了4中注解，专门负责新注解的创建（**元注解**）。
+
+- **@Target** ：
+    
+    表示该注解可以用于什么地方，可能的ElementType参数有：
+    - CONSTRUCTOR：构造器的声明
+    - FIELD：域声明（包括enum实例）
+    - LOCAL_VARIABLE：局部变量声明
+    - METHOD：方法声明
+    - PACKAGE：包声明
+    - PARAMETER：参数声明
+    - TYPE：类、接口（包括注解类型）或enum声明
+
+- **@Retention** ：
+    
+    表示需要在什么级别保存该注解信息。可选的RetentionPolicy参数    包括：
+    - SOURCE：注解将被编译器丢弃
+    - CLASS：注解在class文件中可用，但会被VM丢弃
+    - RUNTIME：VM将在运行期间保留注解，因此可以通过反射机制读取注解的信息。
+    
+- **@Document** ：
+    将注解包含在Javadoc中
+- **@Inherited** ：
+    允许子类继承父类中的注解
+
+##  定义一个注解的方式：
+
+```
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Test {
+    
+}
+```
+
+除了@符号，注解很像是一个接口。定义注解的时候需要用到元注解，上面用到了@Target和@Retention，它们的含义在上面的表格中已近给出。
+
+在注解中一般会有一些元素以表示某些值。注解的元素看起来就像接口的方法，唯一的区别在于可以为其制定默认值。没有元素的注解称为标记注解，上面的@Test就是一个标记注解。 
+
+## 注解须知：
+- 注解的可用的类型包括以下几种：所有基本类型、String、Class、enum、Annotation、以上类型的数组形式。
+- 元素不能有不确定的值，即要么有默认值，要么在使用注解的时候提供元素的值。而且元素不能使用null作为默认值。
+- 注解在只有一个元素且该元素的名称是value的情况下，在使用注解的时候可以省略“value=”，直接写需要的值即可。
+
+
+下面看一个定义了元素的注解。
+```
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface UseCase {
+    public String id();
+    public String description() default "no description";
+}
+```
+
+定义了注解，必然要去使用注解。 
+```
+public class PasswordUtils {
+    @UseCase(id = 47, description = "Passwords must contain at least one numeric")
+    public boolean validatePassword(String password) {
+        return (password.matches("\\w*\\d\\w*"));
+    }
+    @UseCase(id = 48)
+    public String encryptPassword(String password) {
+        return new StringBuilder(password).reverse().toString();
+    }
+}
+```
+
+使用注解最主要的部分在于对注解的处理，那么就会涉及到注解处理器。
+
+## 注解处理器：
+从原理上讲，注解处理器就是通过反射机制获取被检查方法上的注解信息，然后根据注解元素的值进行特定的处理。
+
+
+```
+public static void main(String[] args) {
+     List<Integer> useCases = new ArrayList<Integer>();
+     Collections.addAll(useCases, 47, 48, 49, 50);
+     trackUseCases(useCases, PasswordUtils.class);
+ }
+ 
+ public static void trackUseCases(List<Integer> useCases, Class<?> cl) {
+     for (Method m : cl.getDeclaredMethods()) {
+         UseCase uc = m.getAnnotation(UseCase.class);
+         if (uc != null) {
+             System.out.println("Found Use Case:" + uc.id() + " "
+                         + uc.description());
+             useCases.remove(new Integer(uc.id()));
+         }
+     }
+     for (int i : useCases) {
+         System.out.println("Warning: Missing use case-" + i);
+     }
+}
+ 
+----------
+Found Use Case:47 Passwords must contain at least one numeric
+Found Use Case:48 no description
+Warning: Missing use case-49
+Warning: Missing use case-50
+```
+
+上面的三段代码结合起来是一个跟踪项目中用例的简单例子。
+
 [注解 Annotation 实现原理与自定义注解例子](https://www.cnblogs.com/acm-bingzi/p/javaAnnotation.html)
 
 
-
-# 十一、特性
-
-## Java 各版本的新特性
-
-**New highlights in Java SE 8**  
-
-1. Lambda Expressions
-2. Pipelines and Streams
-3. Date and Time API
-4. Default Methods
-5. Type Annotations
-6. Nashhorn JavaScript Engine
-7. Concurrent Accumulators
-8. Parallel operations
-9. PermGen Error Removed
-
-**New highlights in Java SE 7**  
-
-1. Strings in Switch Statement
-2. Type Inference for Generic Instance Creation
-3. Multiple Exception Handling
-4. Support for Dynamic Languages
-5. Try with Resources
-6. Java nio Package
-7. Binary Literals, Underscore in literals
-8. Diamond Syntax
-
-- [Difference between Java 1.8 and Java 1.7?](http://www.selfgrowth.com/articles/difference-between-java-18-and-java-17)
-- [Java 8 特性](http://www.importnew.com/19345.html)
-
-## Java 与 C++ 的区别
-
-- Java 是纯粹的面向对象语言，所有的对象都继承自 java.lang.Object，C++ 为了兼容 C 即支持面向对象也支持面向过程。
-- Java 通过虚拟机从而实现跨平台特性，但是 C++ 依赖于特定的平台。
-- Java 没有指针，它的引用可以理解为安全指针，而 C++ 具有和 C 一样的指针。
-- Java 支持自动垃圾回收，而 C++ 需要手动回收。
-- Java 不支持多重继承，只能通过实现多个接口来达到相同目的，而 C++ 支持多重继承。
-- Java 不支持操作符重载，虽然可以对两个 String 对象执行加法运算，但是这是语言内置支持的操作，不属于操作符重载，而 C++ 可以。
-- Java 的 goto 是保留字，但是不可用，C++ 可以使用 goto。
-
-[What are the main differences between Java and C++?](http://cs-fundamentals.com/tech-interview/java/differences-between-java-and-cpp.php)
-
-## JRE or JDK
-
-- JRE is the JVM program, Java application need to run on JRE.
-- JDK is a superset of JRE, JRE + tools for developing java programs. e.g, it provides the compiler "javac"
-
-
-# 十二、环境配置
+# 十一、环境配置
 
 ## JDK安装
 [JDK下载地址](http://www.oracle.com/index.html )
@@ -1484,6 +1557,55 @@ javac
 java -version
 echo $PATH 
 ```
+
+
+# 十二、特性
+
+## Java 各版本的新特性
+
+**New highlights in Java SE 8**  
+
+1. Lambda Expressions
+2. Pipelines and Streams
+3. Date and Time API
+4. Default Methods
+5. Type Annotations
+6. Nashhorn JavaScript Engine
+7. Concurrent Accumulators
+8. Parallel operations
+9. PermGen Error Removed
+
+**New highlights in Java SE 7**  
+
+1. Strings in Switch Statement
+2. Type Inference for Generic Instance Creation
+3. Multiple Exception Handling
+4. Support for Dynamic Languages
+5. Try with Resources
+6. Java nio Package
+7. Binary Literals, Underscore in literals
+8. Diamond Syntax
+
+- [Difference between Java 1.8 and Java 1.7?](http://www.selfgrowth.com/articles/difference-between-java-18-and-java-17)
+- [Java 8 特性](http://www.importnew.com/19345.html)
+
+## Java 与 C++ 的区别
+
+- Java 是纯粹的面向对象语言，所有的对象都继承自 java.lang.Object，C++ 为了兼容 C 即支持面向对象也支持面向过程。
+- Java 通过虚拟机从而实现跨平台特性，但是 C++ 依赖于特定的平台。
+- Java 没有指针，它的引用可以理解为安全指针，而 C++ 具有和 C 一样的指针。
+- Java 支持自动垃圾回收，而 C++ 需要手动回收。
+- Java 不支持多重继承，只能通过实现多个接口来达到相同目的，而 C++ 支持多重继承。
+- Java 不支持操作符重载，虽然可以对两个 String 对象执行加法运算，但是这是语言内置支持的操作，不属于操作符重载，而 C++ 可以。
+- Java 的 goto 是保留字，但是不可用，C++ 可以使用 goto。
+
+[What are the main differences between Java and C++?](http://cs-fundamentals.com/tech-interview/java/differences-between-java-and-cpp.php)
+
+## JRE or JDK
+
+- JRE is the JVM program, Java application need to run on JRE.
+- JDK is a superset of JRE, JRE + tools for developing java programs. e.g, it provides the compiler "javac"
+
 
 ## Maven安装
 - [官网](http://maven.apache.org/download.cgi)
