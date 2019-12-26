@@ -1626,7 +1626,156 @@ Warning: Missing use case-50
 [注解 Annotation 实现原理与自定义注解例子](https://www.cnblogs.com/acm-bingzi/p/javaAnnotation.html)
 
 
-# 十一、环境配置
+# 十一、Swing
+
+Swing是一个用于开发Java应用程序用户界面的开发工具包。
+以抽象窗口工具包（AWT）为基础使跨平台应用程序可以使用任何可插拔的外观风格。Swing开发人员只用很少的代码就可以利用Swing丰富、灵活的功能和模块化组件来创建优雅的用户界面。 工具包中所有的包都是以swing作为名称，例如javax.swing,javax.swing.event。
+
+## 布局方式
+- java.awt FlowLayout ：将组件按从左到右而后从上到下的顺序依次排列，一行不能放完则折到下一行继续放置
+- java.awt GridLayout ：形似一个无框线的表格，每个单元格中放一个组件
+- java.awt BorderLayout： 将组件按东、南、西、北、中五个区域放置，每个方向最多只能放置一个组件
+- java.awt GridBagLayout ：非常灵活，可指定组件放置的具体位置及占用单元格数目
+
+## 提示框
+- JOptionPane.showMessageDialog(null, "这是一个简单的消息框");
+- JOptionPane.showMessageDialog(null, "提示正文", "标题", - JOptionPane.ERROR_MESSAGE);
+- JOptionPane.showConfirmDialog(null,"这是一个有三个按钮的确认框，\n按任意按钮返回");
+- JOptionPane.showInputDialog(null,"这是一个可供用户输入信息的对话框");
+
+## 实例：Server启动器
+```
+package com.xxl.ui;
+
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+public class Main extends JFrame implements ActionListener {
+	
+	public JButton startBtn;
+	public JButton stopBtn;
+	public JButton exitBtn;
+	
+	public Main() {
+		
+		// 界面元素
+		startBtn = new JButton("启动");
+		startBtn.addActionListener(this);
+		stopBtn = new JButton("停止");
+		stopBtn.addActionListener(this);
+		exitBtn = new JButton("退出");
+		exitBtn.addActionListener(this);
+		
+		this.setLayout(new FlowLayout());
+		this.add(startBtn);
+		this.add(stopBtn);
+		this.add(exitBtn);
+		
+		// 主界面
+		this.setTitle("服务器");
+		this.setSize(250, 300);
+		this.setResizable(false);
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
+		this.setVisible(true);
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == startBtn) {
+			//MsgServer.getInstance().start();
+			this.getContentPane().setBackground(Color.GREEN);
+		} else if (e.getSource() == stopBtn) {
+			//MsgServer.getInstance().stop();
+			this.getContentPane().setBackground(Color.GRAY);
+		} else if (e.getSource() == exitBtn) {
+			System.exit(0);
+		}
+		
+	}
+
+	public static void main(String[] args) {
+		new Main();
+	}
+
+}
+
+```
+
+## 实例：人脸识别，UI模块
+```
+package com.xxl.ui;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Panel;
+import javax.swing.JFrame;
+import javax.swing.JTabbedPane;
+
+@SuppressWarnings("serial")
+public class IndexUI extends JFrame{
+	/**首窗口：实例*/
+	public static IndexUI indexui;
+	/**首窗口：标签面板*/
+	public static JTabbedPane tabbedpane;
+	
+	/**
+	 * 构造
+	 */
+	public IndexUI() {
+		tabbedpane=new JTabbedPane();
+		tabbedpane.add("人脸识别",getTabbedpaneFaceLogin());
+		tabbedpane.add("视屏监控",getTabbedpaneVideoFind());
+		this.add(tabbedpane);
+		
+		this.setTitle("人脸识别登录系统");
+		this.setSize(1000,618);
+		this.setLocationRelativeTo(null);//居中
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//关闭
+		this.setResizable(false); //不可调整大小
+		this.setVisible(true);
+		//overwrite windowClosing
+		/*this.addWindowListener(
+			new java.awt.event.WindowAdapter(){
+				public void windowClosing(java.awt.event.WindowEvent evt) {
+					
+				}
+		});*/
+	}
+	
+	/**
+	 * 标签窗口1:人脸识别
+	 */
+	private Component getTabbedpaneFaceLogin() {
+		Panel p = new Panel();
+		p.setBackground(Color.GRAY);
+		return p;
+	}
+
+	/**
+	 * 标签窗口2:视屏监控
+	 */
+	private Component getTabbedpaneVideoFind() {
+		Panel p = new Panel();
+		p.setBackground(Color.WHITE);
+		return p;
+	}
+	
+	/*** main测试 ***/
+	public static void main(String[] args) {
+		indexui = new IndexUI();
+	}
+}
+```
+
+[Swing文档](https://www.w3cschool.cn/swing/)
+
+# 十二、环境配置
 
 ## JDK安装
 [JDK下载地址](http://www.oracle.com/index.html )
@@ -1707,55 +1856,6 @@ javac
 java -version
 echo $PATH 
 ```
-
-
-# 十二、特性
-
-## Java 各版本的新特性
-
-**New highlights in Java SE 8**  
-
-1. Lambda Expressions
-2. Pipelines and Streams
-3. Date and Time API
-4. Default Methods
-5. Type Annotations
-6. Nashhorn JavaScript Engine
-7. Concurrent Accumulators
-8. Parallel operations
-9. PermGen Error Removed
-
-**New highlights in Java SE 7**  
-
-1. Strings in Switch Statement
-2. Type Inference for Generic Instance Creation
-3. Multiple Exception Handling
-4. Support for Dynamic Languages
-5. Try with Resources
-6. Java nio Package
-7. Binary Literals, Underscore in literals
-8. Diamond Syntax
-
-- [Difference between Java 1.8 and Java 1.7?](http://www.selfgrowth.com/articles/difference-between-java-18-and-java-17)
-- [Java 8 特性](http://www.importnew.com/19345.html)
-
-## Java 与 C++ 的区别
-
-- Java 是纯粹的面向对象语言，所有的对象都继承自 java.lang.Object，C++ 为了兼容 C 即支持面向对象也支持面向过程。
-- Java 通过虚拟机从而实现跨平台特性，但是 C++ 依赖于特定的平台。
-- Java 没有指针，它的引用可以理解为安全指针，而 C++ 具有和 C 一样的指针。
-- Java 支持自动垃圾回收，而 C++ 需要手动回收。
-- Java 不支持多重继承，只能通过实现多个接口来达到相同目的，而 C++ 支持多重继承。
-- Java 不支持操作符重载，虽然可以对两个 String 对象执行加法运算，但是这是语言内置支持的操作，不属于操作符重载，而 C++ 可以。
-- Java 的 goto 是保留字，但是不可用，C++ 可以使用 goto。
-
-[What are the main differences between Java and C++?](http://cs-fundamentals.com/tech-interview/java/differences-between-java-and-cpp.php)
-
-## JRE or JDK
-
-- JRE is the JVM program, Java application need to run on JRE.
-- JDK is a superset of JRE, JRE + tools for developing java programs. e.g, it provides the compiler "javac"
-
 
 ## Maven安装
 - [官网](http://maven.apache.org/download.cgi)
@@ -2089,6 +2189,70 @@ git push <remote> :<branch/tag>	删除远程分支或标签
 官网文档很完善：Help》KeyMap Preference》双击即可查看快捷键表；
 
 
+# 十三、特性
+
+## Java 各版本的新特性
+
+**New highlights in Java SE 8**  
+
+1. Lambda Expressions
+2. Pipelines and Streams
+3. Date and Time API
+4. Default Methods
+5. Type Annotations
+6. Nashhorn JavaScript Engine
+7. Concurrent Accumulators
+8. Parallel operations
+9. PermGen Error Removed
+
+**New highlights in Java SE 7**  
+
+1. Strings in Switch Statement
+2. Type Inference for Generic Instance Creation
+3. Multiple Exception Handling
+4. Support for Dynamic Languages
+5. Try with Resources
+6. Java nio Package
+7. Binary Literals, Underscore in literals
+8. Diamond Syntax
+
+- [Difference between Java 1.8 and Java 1.7?](http://www.selfgrowth.com/articles/difference-between-java-18-and-java-17)
+- [Java 8 特性](http://www.importnew.com/19345.html)
+
+## Java 与 C++ 的区别
+
+- Java 是纯粹的面向对象语言，所有的对象都继承自 java.lang.Object，C++ 为了兼容 C 即支持面向对象也支持面向过程。
+- Java 通过虚拟机从而实现跨平台特性，但是 C++ 依赖于特定的平台。
+- Java 没有指针，它的引用可以理解为安全指针，而 C++ 具有和 C 一样的指针。
+- Java 支持自动垃圾回收，而 C++ 需要手动回收。
+- Java 不支持多重继承，只能通过实现多个接口来达到相同目的，而 C++ 支持多重继承。
+- Java 不支持操作符重载，虽然可以对两个 String 对象执行加法运算，但是这是语言内置支持的操作，不属于操作符重载，而 C++ 可以。
+- Java 的 goto 是保留字，但是不可用，C++ 可以使用 goto。
+
+[What are the main differences between Java and C++?](http://cs-fundamentals.com/tech-interview/java/differences-between-java-and-cpp.php)
+
+## JRE or JDK
+
+- JRE is the JVM program, Java application need to run on JRE.
+- JDK is a superset of JRE, JRE + tools for developing java programs. e.g, it provides the compiler "javac"
+
+## J2EE的核心API与组件
+
+> J2EE平台由一整套服务（Services）、应用程序接口（APIs）和协议构成，它对开发基于Web的多层应用提供了功能支持，下面对J2EE中的13种技术规范进行简单的描述(限于篇幅，这里只能进行简单的描述):
+
+- 1、 **JDBC(Java Database Connectivity)**: JDBC API为访问不同的数据库提供了一种统一的途径，象ODBC一样，JDBC对开发者屏蔽了一些细节问题，另外，JDCB对数据库的访问也具有平台无关性。 
+- 2、 **JNDI(Java Name and Directory Interface)**: JNDI API被用于执行名字和目录服务。它提供了一致的模型来存取和操作企业级的资源如DNS和LDAP，本地文件系统，或应用服务器中的对象。 
+- 3、 **EJB(Enterprise JavaBean)**: J2EE技术之所以赢得某体广泛重视的原因之一就是EJB。它们提供了一个框架来开发和实施分布式商务逻辑，由此很显著地简化了具有可伸缩性和高度复杂的企业级应用的开发。EJB规范定义了EJB组件在何时如何与它们的容器进行交互作用。容器负责提供公用的服务，例如目录服务、事务管理、安全性、资源缓冲池以及容错性。但这里值得注意的是，EJB并不是实现J2EE的唯一途径。正是由于J2EE的开放性，使得有的厂商能够以一种和EJB平行的方式来达到同样的目的。 
+- 4、 **RMI(Remote Method Invoke)**: 正如其名字所表示的那样，RMI协议调用远程对象上方法。它使用了序列化方式在客户端和服务器端传递数据。RMI是一种被EJB使用的更底层的协议。 
+- 5、 **Java IDL/CORBA**: 在Java IDL的支持下，开发人员可以将Java和CORBA集成在一起。他们可以创建Java对象并使之可在CORBA ORB中展开, 或者他们还可以创建Java类并作为和其它ORB一起展开的CORBA对象的客户。后一种方法提供了另外一种途径，通过它Java可以被用于将你的新的应用和旧的系统相集成。 
+- 6、 **JSP(Java Server Pages)**: JSP页面由HTML代码和嵌入其中的Java代码所组成。服务器在页面被客户端所请求以后对这些Java代码进行处理，然后将生成的HTML页面返回给客户端的浏览器。 
+- 7、 **Java Servlet**: Servlet是一种小型的Java程序，它扩展了Web服务器的功能。作为一种服务器端的应用，当被请求时开始执行，这和CGI Perl脚本很相似。Servlet提供的功能大多与JSP类似，不过实现的方式不同。JSP通常是大多数HTML代码中嵌入少量的Java代码，而servlets全部由Java写成并且生成HTML。 
+- 8、 **XML(Extensible Markup Language)**: XML是一种可以用来定义其它标记语言的语言。它被用来在不同的商务过程中共享数据。XML的发展和Java是相互独立的，但是，它和Java具有的相同目标正是平台独立性。通过将Java和XML的组合，您可以得到一个完美的具有平台独立性的解决方案。 
+- 9、 **JMS(Java Message Service)**: MS是用于和面向消息的中间件相互通信的应用程序接口(API)。它既支持点对点的域，有支持发布/订阅(publish/subscribe)类型的域，并且提供对下列类型的支持：经认可的消息传递,事务型消息的传递，一致性消息和具有持久性的订阅者支持。JMS还提供了另一种方式来对您的应用与旧的后台系统相集成。 
+- 10、 **JTA(Java Transaction Architecture)**: JTA定义了一种标准的API，应用系统由此可以访问各种事务监控。 
+- 11、 **JTS(Java Transaction Service)**: JTS是CORBA OTS事务监控的基本的实现。JTS规定了事务管理器的实现方式。该事务管理器是在高层支持Java Transaction API (JTA)规范，并且在较底层实现OMG OTS specification的Java映像。JTS事务管理器为应用服务器、资源管理器、独立的应用以及通信资源管理器提供了事务服务。 
+- 12、 **JavaMail**: JavaMail是用于存取邮件服务器的API，它提供了一套邮件服务器的抽象类。不仅支持SMTP服务器，也支持IMAP服务器。 
+- 13、 **JTA(JavaBeans Activation Framework)**: JavaMail利用JAF来处理MIME编码的邮件附件。MIME的字节流可以被转换成Java对象，或者转换自Java对象。大多数应用都可以不需要直接使用JAF。 
 
 
 # 参考资料
