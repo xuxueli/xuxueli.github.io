@@ -24,36 +24,36 @@
 - 2、每一个缓存key都可以通过Hash算法转化为一个32位的二进制数，也就对应着环形空间的某一个缓存区。我们把所有的缓存key映射到环形空间的不同位置。
 - 3、我们的每一个缓存节点也遵循同样的Hash算法，比如利用IP或者主机名做Hash，映射到环形空间当中，如下图
 
-![](http://mseddl.gitee.io/photos/backend/consistent-hashing-1.png)
+![](https://www.xuxueli.com/blog/static/images/img_231.png)
 
 ** 如何让key和缓存节点对应起来呢？ **
 很简单，每一个key的顺时针方向最近节点，就是key所归属的缓存节点。所以图中key1存储于node1，key2，key3存储于node2，key4存储于node3。
 
-![](http://mseddl.gitee.io/photos/backend/consistent-hashing-2.png)
+![](https://www.xuxueli.com/blog/static/images/img_232.png)
 
 当缓存的节点有增加或删除的时候，一致性哈希的优势就显现出来了。让我们来看看实现的细节：
 
 ** 增加节点 **
 当缓存集群的节点有所增加的时候，整个环形空间的映射仍然会保持一致性哈希的顺时针规则，所以有一小部分key的归属会受到影响。
 
-![](http://mseddl.gitee.io/photos/backend/consistent-hashing-3.png)
+![](https://www.xuxueli.com/blog/static/images/img_233.png)
 
 ** 有哪些key会受到影响呢？ **
 图中加入了新节点node4，处于node1和node2之间，按照顺时针规则，从node1到node4之间的缓存不再归属于node2，而是归属于新节点node4。因此受影响的key只有key2。
 
-![](http://mseddl.gitee.io/photos/backend/consistent-hashing-4.png)
+![](https://www.xuxueli.com/blog/static/images/img_234.png)
 
 最终把key2的缓存数据从node2迁移到node4，就形成了新的符合一致性哈希规则的缓存结构。
 
 ** 删除节点 **
 当缓存集群的节点需要删除的时候（比如节点挂掉），整个环形空间的映射同样会保持一致性哈希的顺时针规则，同样有一小部分key的归属会受到影响。
     
-![](http://mseddl.gitee.io/photos/backend/consistent-hashing-5.png)
+![](https://www.xuxueli.com/blog/static/images/img_235.png)
 
 ** 有哪些key会受到影响呢？ **
 图中删除了原节点node3，按照顺时针规则，原本node3所拥有的缓存数据就需要“托付”给node3的顺时针后继节点node1。因此受影响的key只有key4。
 
-![](http://mseddl.gitee.io/photos/backend/consistent-hashing-6.png)
+![](https://www.xuxueli.com/blog/static/images/img_236.png)
 
 最终把key4的缓存数据从node3迁移到node1，就形成了新的符合一致性哈希规则的缓存结构。
 
@@ -64,7 +64,7 @@
 ** 如果出现分布不均匀的情况怎么办？ **
 一致性hash算法的结果相比传统hash求余算法已经进步很多，但是出现分布不均匀的情况会有问题。比如下图这样，按顺时针规则，所有的key都归属于统一个节点。
 
-![](http://mseddl.gitee.io/photos/backend/consistent-hashing-7.png)
+![](https://www.xuxueli.com/blog/static/images/img_237.png)
 
 
 ## 一致性hash算法+虚拟节点
@@ -72,7 +72,7 @@
 为了优化这种节点太少而产生的不均衡情况。一致性哈希算法引入了 **虚拟节点** 的概念。
 所谓虚拟节点，就是基于原来的物理节点映射出N个子节点，最后把所有的子节点映射到环形空间上。
 
-![](http://mseddl.gitee.io/photos/backend/consistent-hashing-8.png)
+![](https://www.xuxueli.com/blog/static/images/img_238.png)
 
 > 虚拟节点越多，分布越均匀。使用一致性hash算法+虚拟节点这种情况下，缓存节点从3个变成4个，缓存失效率为25%，而且每个节点都平均的承担了压力。
 
