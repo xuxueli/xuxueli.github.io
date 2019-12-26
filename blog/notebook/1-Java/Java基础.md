@@ -1289,34 +1289,184 @@ public static void main(String[] args) {
 
 # 七、反射
 
-每个类都有一个   **Class**   对象，包含了与类有关的信息。当编译一个新类时，会产生一个同名的 .class 文件，该文件内容保存着 Class 对象。
+Java反射是Java被视为动态（或准动态）语言的一个关键性质。这个机制允许程序在运行时透过Reflection APIs取得任何一个已知名称的class的内部信息，包括其modifiers（诸如public, static 等）、superclass（例如Object）、实现之interfaces（例如Cloneable），也包括fields和methods的所有信息，并可于运行时改变fields内容或唤起methods。
+Java反射机制容许程序在运行时加载、探知、使用编译期间完全未知的classes。换言之，Java可以加载一个运行时才得知名称的class，获得其完整结构。
 
-类加载相当于 Class 对象的加载，类在第一次使用时才动态加载到 JVM 中。也可以使用 `Class.forName("com.mysql.jdbc.Driver")` 这种方式来控制类的加载，该方法会返回一个 Class 对象。
-
-反射可以提供运行时的类信息，并且这个类可以在运行时才加载进来，甚至在编译时期该类的 .class 不存在也可以加载进来。
-
-Class 和 java.lang.reflect 一起对反射提供了支持，java.lang.reflect 类库主要包含了以下三个类：
-
--   **Field**  ：可以使用 get() 和 set() 方法读取和修改 Field 对象关联的字段；
--   **Method**  ：可以使用 invoke() 方法调用与 Method 对象关联的方法；
--   **Constructor**  ：可以用 Constructor 的 newInstance() 创建新的对象。
-
-**反射的优点：**  
+## 反射的优点  
 
 *     **可扩展性**   ：应用程序可以利用全限定名创建可扩展对象的实例，来使用来自外部的用户自定义类。
 *     **类浏览器和可视化开发环境**   ：一个类浏览器需要可以枚举类的成员。可视化开发环境（如 IDE）可以从利用反射中可用的类型信息中受益，以帮助程序员编写正确的代码。
 *     **调试器和测试工具**   ： 调试器需要能够检查一个类里的私有成员。测试工具可以利用反射来自动地调用类里定义的可被发现的 API 定义，以确保一组测试中有较高的代码覆盖率。
 
-**反射的缺点：**  
+## 反射的缺点  
 
 尽管反射非常强大，但也不能滥用。如果一个功能可以不用反射完成，那么最好就不用。在我们使用反射技术时，下面几条内容应该牢记于心。
 
 *     **性能开销**   ：反射涉及了动态类型的解析，所以 JVM 无法对这些代码进行优化。因此，反射操作的效率要比那些非反射操作低得多。我们应该避免在经常被执行的代码或对性能要求很高的程序中使用反射。
-
 *     **安全限制**   ：使用反射技术要求程序必须在一个没有安全限制的环境中运行。如果一个程序必须在有安全限制的环境中运行，如 Applet，那么这就是个问题了。
-
 *     **内部暴露**   ：由于反射允许代码执行一些在正常情况下不被允许的操作（比如访问私有的属性和方法），所以使用反射可能会导致意料之外的副作用，这可能导致代码功能失调并破坏可移植性。反射代码破坏了抽象性，因此当平台发生改变的时候，代码的行为就有可能也随着变化。
 
+
+## Java反射相关的API在包java.lang.reflect中，如下：
+
+接口 | 功能
+---|---
+Member	| 该接口可以获取有关类成员（域或者方法）后者构造函数的信息。
+AccessibleObject | 	该类是域(field)对象、方法(method)对象、构造函数(constructor)对象的基础类。它提供了将反射的对象标记为在使用时取消默认 Java 语言访问控制检查的能力。
+Array	| 该类提供动态地生成和访问JAVA数组的方法。
+Constructor | 提供一个类的构造函数的信息以及访问类的构造函数的接口。
+Field	| 提供一个类的 Field 的信息以及访问类的域的接口。
+Method | 提供一个类的 Method 的信息以及访问类的方法的接口。
+Modifier | 提供了 static 方法和常量，对类和成员访问修饰符进行解码。
+Proxy | 	提供动态地生成代理类和类实例的静态方法。
+
+
+## 反射常用功能示例
+### 1、获取类的Class对象
+Class 类的实例表示正在运行的 Java 应用程序中的类和接口。获取类的Class对象有多种方式：
+
+- 调用getClass
+```
+Boolean var1 = true;
+Class<?> classType2 = var1.getClass();
+System.out.println(classType2);
+输出：class java.lang.Boolean
+```
+- 运用.class 语法
+```
+Class<?> classType4 = Boolean.class;
+System.out.println(classType4);
+输出：class java.lang.Boolean
+```
+- 运用static method Class.forName()
+```
+Class<?> classType5 = Class.forName("java.lang.Boolean");
+System.out.println(classType5);
+输出：class java.lang.Boolean
+```
+- 运用primitive wrapper classes的TYPE 语法(这里返回的是原生类型，和Boolean.class返回的不同)
+```
+Class<?> classType3 = Boolean.TYPE;
+System.out.println(classType3);        
+输出：boolean
+```
+
+### 2、获取类的Fields
+可以通过反射机制得到某个类的某个属性，然后改变对应于这个类的某个实例的该属性值。JAVA 的Class<T>类提供了几个方法获取类的属性。
+
+- public Field getField(String name)
+> 返回一个 Field 对象，它反映此 Class 对象所表示的类或接口的指定公共成员字段
+- public Field[] getFields()
+> 返回一个包含某些 Field 对象的数组，这些对象反映此 Class 对象所表示的类或接口的所有可访问公共字段
+- public Field getDeclaredField(Stringname)
+> 返回一个 Field 对象，该对象反映此 Class 对象所表示的类或接口的指定已声明字段
+- public Field[] getDeclaredFields()
+> 返回 Field 对象的一个数组，这些对象反映此 Class 对象所表示的类或接口所声明的所有字段
+
+**getFields和getDeclaredFields区别：**
+- getFields返回的是申明为public的属性，包括父类中定义，
+- getDeclaredFields返回的是指定类定义的所有定义的属性，不包括父类的。
+
+### 3、获取类的Method，调用指定方法
+- 1、通过反射机制得到某个类的某个方法；
+- 2、然后调用对应于这个类的某个实例的该方法；
+
+Class<T>类提供了几个方法获取类的方法。
+- public Method getMethod(String name,Class<?>... parameterTypes)
+    > 返回一个 Method 对象，它反映此 Class 对象所表示的类或接口的指定公共成员方法
+- public Method[] getMethods()
+    > 返回一个包含某些 Method 对象的数组，这些对象反映此 Class 对象所表示的类或接口（包括那些由该类或接口声明的以及从超类和超接口继承的那些的类或接口）的公共 member 方法
+- public Method getDeclaredMethod(Stringname,Class<?>... parameterTypes)
+    > 返回一个 Method 对象，该对象反映此 Class 对象所表示的类或接口的指定已声明方法
+- public Method[] getDeclaredMethods()
+    > 返回 Method 对象的一个数组，这些对象反映此 Class 对象表示的类或接口声明的所有方法，包括公共、保护、默认（包）访问和私有方法，但不包括继承的方法
+
+### 4、获取类的Constructor
+通过反射机制得到某个类的构造器，然后调用该构造器创建该类的一个实例 
+
+Class<T>类提供了几个方法获取类的构造器。
+- public Constructor<T> getConstructor(Class<?>... parameterTypes)
+ >返回一个 Constructor 对象，它反映此 Class 对象所表示的类的指定公共构造方法
+- public Constructor<?>[] getConstructors()
+ >返回一个包含某些 Constructor 对象的数组，这些对象反映此 Class 对象所表示的类的所有公共构造方法
+- public Constructor<T> getDeclaredConstructor(Class<?>... parameterTypes)
+ >返回一个 Constructor 对象，该对象反映此 Class 对象所表示的类或接口的指定构造方法
+- public Constructor<?>[] getDeclaredConstructors()
+ >返回 Constructor 对象的一个数组，这些对象反映此 Class 对象表示的类声明的所有构造方法。它们是公共、保护、默认（包）访问和私有构造方法
+
+### 5、新建类的实例
+通过反射机制创建新类的实例，有几种方法可以创建
+
+- 调用无自变量ctor
+
+```
+1、调用类的Class对象的newInstance方法，该方法会调用对象的默认构造器，如果没有默认构造器，会调用失败.
+Class<?> classType = ExtendType.class;
+Object inst = classType.newInstance();
+System.out.println(inst);
+输出：
+Type:Default Constructor
+ExtendType:Default Constructor
+com.quincy.ExtendType@d80be3
+ 
+2、调用默认Constructor对象的newInstance方法
+Class<?> classType = ExtendType.class;
+Constructor<?> constructor1 = classType.getConstructor();
+Object inst = constructor1.newInstance();
+System.out.println(inst);
+输出：
+Type:Default Constructor
+ExtendType:Default Constructor
+com.quincy.ExtendType@1006d75
+```
+
+- 调用带参数ctor
+
+```
+3、调用带参数Constructor对象的newInstance方法
+Constructor<?> constructor2 =
+classType.getDeclaredConstructor(int.class, String.class);
+Object inst = constructor2.newInstance(1, "123");
+System.out.println(inst);
+输出：
+Type:Default Constructor
+ExtendType:Constructor with parameters
+com.quincy.ExtendType@15e83f9
+```
+
+### 6、调用类的函数
+通过反射获取类Method对象，调用Field的Invoke方法调用函数。
+
+```
+Class<?> classType = ExtendType.class;
+Object inst = classType.newInstance();
+Method logMethod = classType.<strong>getDeclaredMethod</strong>("Log", String.class);
+logMethod.invoke(inst, "test");
+ 
+输出：
+Type:Default Constructor
+ExtendType:Default Constructor
+Class com.quincy.ClassT can not access a member of class com.quincy.ExtendType with modifiers "private"
+ 
+上面失败是由于没有权限调用private函数，这里需要设置Accessible为true;
+Class<?> classType = ExtendType.class;
+Object inst = classType.newInstance();
+Method logMethod = classType.getDeclaredMethod("Log", String.class);
+logMethod.setAccessible(true);
+logMethod.invoke(inst, "test");
+```
+
+### 7、设置/获取类的属性值
+通过反射获取类的Field对象，调用Field方法设置或获取值
+
+```
+Class<?> classType = ExtendType.class;
+Object inst = classType.newInstance();
+Field intField = classType.getField("pubIntExtendField");
+intField.setAccessible(true);
+intField.setInt(inst, 100);
+int value = intField.getInt(inst);
+```
 
 - [Trail: The Reflection API](https://docs.oracle.com/javase/tutorial/reflect/index.html)
 - [深入解析 Java 反射（1）- 基础](http://www.sczyh30.com/posts/Java/java-reflection-1/)
