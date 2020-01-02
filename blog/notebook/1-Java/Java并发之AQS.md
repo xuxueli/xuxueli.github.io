@@ -10,7 +10,7 @@
 
 AQS全称AbstractQueuedSynchronizer，即抽象的队列同步器，是一种用来构建锁和同步器的框架。
 
-基于AQS构建同步器：
+** 基于AQS构建同步器 ** ：
 - ReentrantLock
 - Semaphore
 - CountDownLatch
@@ -18,7 +18,7 @@ AQS全称AbstractQueuedSynchronizer，即抽象的队列同步器，是一种用
 - SynchronusQueue
 - FutureTask
 
-优势：
+** 优势 ** ：
 - AQS 解决了在实现同步器时涉及的大量细节问题，例如自定义标准同步状态、FIFO 同步队列。
 - 基于 AQS 来构建同步器可以带来很多好处。它不仅能够极大地减少实现工作，而且也不必处理在多个位置上发生的竞争问题。
 
@@ -27,15 +27,15 @@ AQS全称AbstractQueuedSynchronizer，即抽象的队列同步器，是一种用
 ## 2.1 AQS核心思想
 如果被请求的共享资源空闲，则将当前请求资源的线程设置为有效的工作线程，并且将共享资源设置为锁定状态。如果被请求的共享资源被占用，那么就需要一套线程阻塞等待以及被唤醒时锁分配的机制，这个机制AQS是用CLH队列锁实现的，即将暂时获取不到锁的线程加入到队列中。如图所示：
 
-![](https://img2018.cnblogs.com/i-beta/1824337/201912/1824337-20191229213644541-253156782.png)
+![](https://www.xuxueli.com/blog/static/images/img_265.png)
 
 ** Sync queue **： 同步队列，是一个双向列表。包括head节点和tail节点。head节点主要用作后续的调度。
 
-![](https://img2018.cnblogs.com/i-beta/1824337/201912/1824337-20191229213357467-1834965223.png)
+![](https://www.xuxueli.com/blog/static/images/img_261.png)
 
 ** Condition queue **： 非必须，单向列表。当程序中存在cindition的时候才会存在此列表。
 
-![](https://img2018.cnblogs.com/i-beta/1824337/201912/1824337-20191229213421055-1093150663.png)
+![](https://www.xuxueli.com/blog/static/images/img_262.png)
 
 ## 2.2 AQS设计思想
 - AQS使用一个int成员变量来表示同步状态
@@ -84,11 +84,11 @@ state状态使用volatile int类型的变量，表示当前同步状态。state�
 
 例如，ReentrantLock，state初始化为0，表示未锁定状态。A线程lock()时，会调用tryAcquire()独占该锁并将state+1。
 
-![](https://img2018.cnblogs.com/i-beta/1824337/201912/1824337-20191229213530632-796913162.png)
+![](https://www.xuxueli.com/blog/static/images/img_263.png)
 
  ** 独占模式下的AQS是不响应中断的 ** ，指的是加入到同步队列中的线程，如果因为中断而被唤醒的话，不会立即返回，并且抛出InterruptedException。而是再次去判断其前驱节点是否为head节点，决定是否争抢同步状态。如果其前驱节点不是head节点或者争抢同步状态失败，那么再次挂起。
 
-## 3.1.1 独占模式获取资源-acquire方法
+### 3.1.1 独占模式获取资源-acquire方法
 acquire以独占exclusive方式获取资源。如果获取到资源，线程直接返回，否则进入等待队列，直到获取到资源为止， ** 且整个过程忽略中断的影响 ** 。源码如下：
 
 ```
@@ -101,14 +101,14 @@ public final void acquire(int arg) {
 
 流程图：
 
-![](https://img2018.cnblogs.com/i-beta/1824337/201912/1824337-20191229213605066-1810933810.png)
+![](https://www.xuxueli.com/blog/static/images/img_264.png)
 
 - 调用自定义同步器的tryAcquire()尝试直接去获取资源，如果成功则直接返回；
 - 没成功，则addWaiter()将该线程加入等待队列的尾部，并标记为独占模式；
 - acquireQueued()使线程在等待队列中休息，有机会时（轮到自己，会被unpark()）会去尝试获取资源。获取到资源后才返回。如果在整个等待过程中被中断过，则返回true，否则返回false。
 - 如果线程在等待过程中被中断过，它是不响应的。只是获取资源后才再进行自我中断selfInterrupt()，将中断补上。
 
-## 3.1.2 独占模式获取资源-tryAcquire方法
+### 3.1.2 独占模式获取资源-tryAcquire方法
 tryAcquire尝试以独占的方式获取资源，如果获取成功，则直接返回true，否则直接返回false，且具体实现由自定义AQS的同步器实现的。
 
 ```
@@ -117,7 +117,7 @@ protected boolean tryAcquire(int arg) {
 }
 ```
 
-## 3.1.3 独占模式获取资源-addWaiter方法
+### 3.1.3 独占模式获取资源-addWaiter方法
 根据不同模式(Node.EXCLUSIVE互斥模式、Node.SHARED共享模式)创建结点并以CAS的方式将当前线程节点加入到不为空的等待队列的末尾(通过compareAndSetTail()方法)。如果队列为空，通过enq(node)方法初始化一个等待队列，并返回当前节点。
 
 ```
@@ -172,7 +172,7 @@ private Node enq(final Node node) {
 }
 ```
 
-## 3.1.4 独占模式获取资源-acquireQueued方法
+### 3.1.4 独占模式获取资源-acquireQueued方法
 acquireQueued用于已在队列中的线程以独占且不间断模式获取state状态，直到获取锁后返回。主要流程：
 
 - 结点node进入队列尾部后，检查状态；
@@ -210,7 +210,7 @@ final boolean acquireQueued(final Node node, int arg) {
 }
 ```
 
-## 3.1.5 独占模式释放资源-release方法
+### 3.1.5 独占模式释放资源-release方法
 release方法是独占exclusive模式下线程释放共享资源的锁。它会调用tryRelease()释放同步资源，如果全部释放了同步状态为空闲（即state=0）,当同步状态为空闲时，它会唤醒等待队列里的其他线程来获取资源。这也正是unlock()的语义，当然不仅仅只限于unlock().
 
 ```
@@ -225,7 +225,7 @@ public final boolean release(int arg) {
 }
 ```
 
-## 3.1.6 独占模式释放资源-tryRelease方法
+### 3.1.6 独占模式释放资源-tryRelease方法
 tryRelease()跟tryAcquire()一样实现都是由自定义定时器以独占exclusive模式实现的。因为其是独占模式，不需要考虑线程安全的问题去释放共享资源，直接减掉相应量的资源即可(state-=arg)。而且tryRelease()的返回值代表着该线程是否已经完成资源的释放，因此在自定义同步器的tryRelease()时，需要明确这条件，当已经彻底释放资源(state=0)，要返回true，否则返回false。
 
 ```
@@ -251,7 +251,7 @@ protected final boolean tryRelease(int releases) {
 }
 ```
 
-## 3.1.7 独占模式释放资源-unparkSuccessor
+### 3.1.7 独占模式释放资源-unparkSuccessor
 unparkSuccessor用unpark()唤醒等待队列中最前驱的那个未放弃线程，此线程并不一定是当前节点的next节点，而是下一个可以用来唤醒的线程，如果这个节点存在，调用unpark()方法唤醒。
 
 ```
@@ -284,9 +284,9 @@ private void unparkSuccessor(Node node) {
 
 例如，CountDownLatch，任务分为N个子线程去执行，同步状态state也初始化为N（注意N要与线程个数一致）：
 
-![](https://img2018.cnblogs.com/i-beta/1824337/201912/1824337-20191229213751786-833133240.png)
+![](https://www.xuxueli.com/blog/static/images/img_266.png)
 
-## 3.2.1 共享模式获取资源-acquireShared方法
+### 3.2.1 共享模式获取资源-acquireShared方法
 acquireShared在共享模式下线程获取共享资源的顶层入口。它会获取指定量的资源，获取成功则直接返回，获取失败则进入等待队列，直到获取到资源为止，整个过程忽略中断。
 
 ```
@@ -301,7 +301,7 @@ public final void acquireShared(int arg) {
 - 先通过tryAcquireShared()尝试获取资源，成功则直接返回；
 - 失败则通过doAcquireShared()中的park()进入等待队列，直到被unpark()/interrupt()并成功获取到资源才返回(整个等待过程也是忽略中断响应)。
 
-## 3.2.2 共享模式获取资源-tryAcquireShared方法
+### 3.2.2 共享模式获取资源-tryAcquireShared方法
 tryAcquireShared()跟独占模式获取资源方法一样实现都是由自定义同步器去实现。但AQS规范中已定义好tryAcquireShared()的返回值：
 
 - 负值代表获取失败；
@@ -314,7 +314,7 @@ protected int tryAcquireShared(int arg) {
 }
 ```
 
-## 3.2.3 共享模式获取资源-doAcquireShared方法
+### 3.2.3 共享模式获取资源-doAcquireShared方法
 doAcquireShared()用于将当前线程加入等待队列尾部休息，直到其他线程释放资源唤醒自己，自己成功拿到相应量的资源后才返回。
 
 ```
@@ -352,7 +352,7 @@ private void doAcquireShared(int arg) {
 }
 ```
 
-## 3.2.4 共享模式释放资源-releaseShared方法
+### 3.2.4 共享模式释放资源-releaseShared方法
 releaseShared()用于共享模式下线程释放共享资源，释放指定量的资源，如果成功释放且允许唤醒等待线程，它会唤醒等待队列里的其他线程来获取资源。
 
 ```
@@ -369,7 +369,7 @@ public final boolean releaseShared(int arg) {
 
 > 独占模式下的tryRelease()在完全释放掉资源（state=0）后，才会返回true去唤醒其他线程，这主要是基于独占下可重入的考量；而共享模式下的releaseShared()则没有这种要求，共享模式实质就是控制一定量的线程并发执行，那么拥有资源的线程在释放掉部分资源时就可以唤醒后继等待结点。 
 
-## 3.2.共享模式释放资源-doReleaseShared方法
+### 3.2.5 共享模式释放资源-doReleaseShared方法
 doReleaseShared()主要用于唤醒后继节点线程,当state为正数，去获取剩余共享资源；当state=0时去获取共享资源。
 
 ```
@@ -400,4 +400,4 @@ private void doReleaseShared() {
 
 # 参考资料
 
-- [Java并发之AQS全面详解](https://www.cnblogs.com/Ccwwlx/p/12116668.html)
+- [Java并发之AQS全面详解](https://www.cnblogs.com/waterystone/p/4920797.html)
