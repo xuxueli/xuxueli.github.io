@@ -219,6 +219,10 @@
         }
         if (!blogPath) {
             blogPath = "./notebook/目录.md";
+        } else {
+            var title = originUrl.substr(originUrl.lastIndexOf("/")+1);
+            title = title.substr(0, title.indexOf(".md"))
+            document.title = title;
         }
 
         // init
