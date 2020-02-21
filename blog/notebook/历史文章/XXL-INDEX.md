@@ -52,7 +52,7 @@
                 - xxl-pm : 工作流驱动的项目管理平台
                 - xxl-seckill : 秒杀系统
                 - xxl-url-shortener：url shortener；url rule, case when 'app/holiday/date/os/cityid/usertype/param' then 'real-url'
-                - xxl-dynamic-page：可见即所得，拖拽组件、填写数据，立即生成生产环境页面地址；组件打通前后端，全流程；
+                - xxl-dynamic-page：可见即所得，拖拽组件、填写数据，立即生成生产环境页面地址；组件打通前后端，全流程；https://www.cnblogs.com/zhuanzhuanfe/p/10500786.html
                 - xxl-util : 实用工具类汇总
             - /tmp : demo项目
                 - ws ：微信小程序
