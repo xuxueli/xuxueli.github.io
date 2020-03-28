@@ -20,6 +20,7 @@ IOC：
     - <bean> 元素的 init-method/destroy-method属性指定方法；
     - 指定方法上加上@PostConstruct或@PreDestroy注解；
     - BeanPostProcessor实现 postProcessBeforeInitialization/postProcessAfterInitialization 方法；
+    - SmartInitializingSingleton 实现 afterSingletonsInstantiated
 
 
         Bean在实例化的过程中，执行顺序：
@@ -30,11 +31,20 @@ IOC：
             InitializingBean 
             init-method
             BeanPostProcessor.postProcessAfterInitialization
+            SmartInitializingSingleton
             
         Bean在销毁的过程中，执行顺序：
             @PreDestroy
             DisposableBean
             destroy-method
+            
+- Bean中初始化方法顺序：
+    - 当@Scope为singleton时,bean会在ioc初始化时就被实例化,默认为singleton,可以配合@Lazy实现延时加载
+    - 当@Scope为prototype时,bean在ioc初始化时不会被实例化,只有在通过context.getBean()时才会被实例化
+    - 执行顺序 Constructor > @PostConstruct > InitializingBean > init-method > SmartInitializingSingleton
+    - 实现SmartInitializingSingleton接口的类被Spring实例化为一个单例bean,在所有的Bean加载完成后,才会被调用。如果该类被设置为懒加载,那么SmartInitializingSingleton接口方法永远不会被触发,即使使用时bean被实例化了也不会触发。
+    - 其他的初始化方式不管是否懒加载,在对象被创建后都会被调用
+    - 如果一个类被设置为懒加载,但是其他类注入该懒加载类,也会立刻实例化为Spring Bean。解决办法:可以在注入的地方也设置成懒加载。
 
 ##### @RequestBody 请求体中传递JSON数据
 ```
