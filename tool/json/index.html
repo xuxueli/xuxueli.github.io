@@ -18,6 +18,7 @@
     <script src="jsonlint.js"></script>
     <script>
         window.onload = function () {
+            // 校验
             document.getElementById("button").onclick = function () {
                 try {
                     var result = jsonlint.parse(document.getElementById("source").value);
@@ -31,6 +32,7 @@
                 }
             };
 
+            // 格式化
             document.getElementById("button2").onclick = function () {
                 try {
                     var result = jsonlint.parse(document.getElementById("source").value);
@@ -44,6 +46,23 @@
                     document.getElementById("result").className = "fail";
                 }
             };
+
+            // 压缩
+            document.getElementById("button3").onclick = function () {
+                try {
+                    var result = jsonlint.parse(document.getElementById("source").value);
+                    if (result) {
+                        document.getElementById("result").innerHTML = "JSON is valid!";
+                        document.getElementById("result").className = "pass";
+                        document.getElementById("source").value = JSON.stringify(result, null, "  ").replace(/[\r\n]/g,"") ;
+                    }
+                } catch (e) {
+                    document.getElementById("result").innerHTML = e;
+                    document.getElementById("result").className = "fail";
+                }
+            };
+
+
         }
     </script>
     <style>
@@ -128,6 +147,7 @@
                 <p>
                     <button id="button" type="button" >校验</button>
                     <button id="button2" type="button" style="margin-left: 20px;" >格式化</button>
+                    <button id="button3" type="button" style="margin-left: 20px;" >压缩</button>
                 </p>
 
                 <h6>结果：</h6>
