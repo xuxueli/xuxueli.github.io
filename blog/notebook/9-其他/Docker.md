@@ -219,7 +219,7 @@ docker run -p 2181:2181 --name zookeeper -v $PWD/conf/zoo.cfg:/opt/zookeeper/con
 mvn clean package docker:build
 
 // docker run
-docker run -p 8080:8080 -v /tmp:/data/applogs --name xxl-code-generator-admin-0.0.2-SNAPSHOT  -d xxl-code-generator-admin:0.0.2-SNAPSHOT
+docker run -p 8080:8080 -v /tmp:/data/applogs --name xxx-project  -d xxx-project:0.0.2-SNAPSHOT
 docker run -e PARAMS="--mysqladdress=172.17.0.2:3306 --zkaddress=172.17.0.3:2181" -p 8080:8080 -v /tmp:/data/applogs --name xxl-conf-admin-1.5.0-SNAPSHOT  -d xxl-conf-admin:1.5.0-SNAPSHOT
 
 
