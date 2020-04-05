@@ -87,7 +87,7 @@ public class ShopDTO {
 - Excel导出：Object 转换为 Excel
 
 ```java
-// 参考测试代码：com.xxl.tool.excel.test.Test
+// 参考测试代码：com.xxl.tool.excel.test.ExcelTest
 
 /**
  * Excel导出：Object 转换为 Excel
@@ -99,7 +99,7 @@ ExcelExportUtil.exportToFile(filePath, shopDTOList);
 - Excel导入：Excel 转换为 Object
 
 ```
-// 参考测试代码：com.xxl.tool.excel.test.Test
+// 参考测试代码：com.xxl.tool.excel.test.ExcelTest
 
 /**
  * Excel导入：Excel 转换为 Object
