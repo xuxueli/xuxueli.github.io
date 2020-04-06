@@ -12,14 +12,17 @@
 ## 一、简介
 
 ### 1.1 概述
-XXL-TOOL 是一个Java工具类库，让Java开发更高效。包含 “集合、缓存、并发、字符串、IO、Excel、Emoji……” 等数十个模块。
+XXL-TOOL 是一个Java工具类库，致力于让Java开发更高效。包含 “集合、缓存、并发、字符串、IO、Excel、Emoji……” 等数十个模块。
 
 ### 1.2 组件列表
 模块 | 说明
 --- | ---
-xxl-tool-core | 核心模块：包含集合、日期……等基础组件工具
-xxl-tool-excel | Excel模块：一个灵活的Java对象和Excel文档相互转换的工具。一行代码完成Java对象和Excel之间的转换。
-xxl-tool-emoji | emoji模块：一个灵活可扩展的Emoji表情编解码库，可快速实现Emoji表情的编解码.
+xxl-tool-all | 可以根据需求对每个模块单独引入，也可以通过引入xxl-tool-all方式引入全部模块
+xxl-tool-core | 核心模块：包含集合、缓存、日期……等基础组件工具
+xxl-tool-excel | Excel模块：一个灵活的Java对象和Excel文档相互转换的工具。一行代码完成Java对象和Excel之间的转换
+xxl-tool-emoji | emoji模块：一个灵活可扩展的Emoji表情编解码库，可快速实现Emoji表情的编解码
+xxl-tool-json | json模块：json序列化、反序列化库
+xxl-tool-fiber | fiber模块：Java协程库，基于quasar封装实现
 ... | ...
 
 ### 1.4 下载
@@ -60,9 +63,8 @@ xxl-tool-emoji | emoji模块：一个灵活可扩展的Emoji表情编解码库�
 略
 
 ### 2.3 xxl-tool-excel模块
-- maven依赖添加
+- a、定义Java对象    
 
-- 定义Java对象
 ```java
 @ExcelSheet(name = "商户列表", headColor = HSSFColor.HSSFColorPredefined.LIGHT_GREEN)
 public class ShopDTO {
@@ -84,7 +86,7 @@ public class ShopDTO {
 }
 ```
 
-- Excel导出：Object 转换为 Excel
+- b、Excel导出：Object 转换为 Excel
 
 ```java
 // 参考测试代码：com.xxl.tool.excel.test.ExcelTest
@@ -92,11 +94,11 @@ public class ShopDTO {
 /**
  * Excel导出：Object 转换为 Excel
  */
-ExcelExportUtil.exportToFile(filePath, shopDTOList);
+ExcelExportTool.exportToFile(filePath, shopDTOList);
 
 ```
 
-- Excel导入：Excel 转换为 Object
+- c、Excel导入：Excel 转换为 Object
 
 ```
 // 参考测试代码：com.xxl.tool.excel.test.ExcelTest
@@ -104,13 +106,12 @@ ExcelExportUtil.exportToFile(filePath, shopDTOList);
 /**
  * Excel导入：Excel 转换为 Object
   */
-List<Object> list = ExcelImportUtil.importExcel(filePath, ShopDTO.class);
+List<Object> list = ExcelImportTool.importExcel(filePath, ShopDTO.class);
 ```
 
-### 2.3 xxl-tool-emoji模块
-- maven依赖添加
+### 2.4 xxl-tool-emoji模块
 
-- 使用示例  
+- a、使用示例  
 
 ```java
 // 参考测试代码：com.xxl.tool.emoji.test.EmojiTest
@@ -135,7 +136,7 @@ System.out.println("hexdecimal decode: " + EmojiTool.decodeToUnicode(hexdecimal,
         
 ```
 
-- 示例代码运行日志输入    
+- b、运行日志输出    
 
 ```text
 aliases encode: 一朵美丽的茉莉:rose:
@@ -148,13 +149,32 @@ hexdecimal encode: 一朵美丽的茉莉&#x1f339;
 hexdecimal decode: 一朵美丽的茉莉🌹
 ```
 
+### 2.5 xxl-tool-json模块
+
+- 使用示例 
+
+```
+Map<String, Object> result = new HashMap<>();
+result.put("int", 200);
+result.put("str", "success");
+result.put("arr", Arrays.asList("111","222"));
+result.put("float", 1.11f);
+
+String json = BasicJsonTool.toJson(result);
+System.out.println(json);
+
+Object objectMap = BasicJsonTool.parseMap(json);
+System.out.println(objectMap);
+```
+
+
 ## 三、总体设计
 
 ### 3.1 xxl-tool-excel模块
-##### 3.1.1 功能定位    
+#### 3.1.1 功能定位    
 一个灵活的Java对象和Excel文档相互转换的工具。一行代码完成Java对象和Excel文档之间的转换。同时保证性能和稳定。
 
-##### 3.1.2 特性
+#### 3.1.2 特性
 - 1、Excel导出：支持Java对象装换为Excel，并且支持File、字节数组、Workbook等多种导出方式；
 - 2、Excel导入：支持Excel转换为Java对象，并且支持File、InputStream、文件路径、Workbook等多种导入方式；
 - 3、全基础数据类型支持：Excel的映射Java对象支持设置任意基础数据类型，将会自动完整值注入；
@@ -162,7 +182,7 @@ hexdecimal decode: 一朵美丽的茉莉🌹
 - 5、多Sheet导出：导出Excel时支持设置多张sheet；
 - 6、多Sheet导入：导入Excel时支持设置多张sheet，通过 "@ExcelSheet.name" 注解匹配Sheet;
 
-##### 3.1.3 Java 对象 和 Excel映射关系
+#### 3.1.3 Java 对象 和 Excel映射关系
 
 -- | Excel | Java 对象
 --- | --- | ---
@@ -170,7 +190,7 @@ hexdecimal decode: 一朵美丽的茉莉🌹
 表头 | Sheet首行 | Java对象Field
 数据 | Sheet一行记录 | Java对象列表中一个元素
 
-##### 3.1.4 核心注解：ExcelSheet
+#### 3.1.4 核心注解：ExcelSheet
 
 功能：描述Sheet信息，注解添加在待转换为Excel的Java对象类上，可选属性如下。
 
@@ -179,7 +199,7 @@ ExcelSheet | 说明
 name | 表/Sheet名称
 headColor | 表头/Sheet首行的颜色
 
-##### 3.1.5 核心注解：ExcelField
+#### 3.1.5 核心注解：ExcelField
 
 功能：描述Sheet的列信息，注解添加在待转换为Excel的Java对象类的字段上，可选属性如下。
 
@@ -188,16 +208,16 @@ ExcelField | 说明
 name | 属性/列名称
 
 ### 3.2 xxl-tool-emoji模块
-##### 3.2.1 功能定位
+#### 3.2.1 功能定位
 XXL-EMOJI 是一个灵活可扩展的Emoji表情编解码库，可快速实现Emoji表情的编解码.
 
-##### 3.2.2 特性
+#### 3.2.2 特性
 - 1、简洁：API直观简洁，一分钟上手；
 - 2、易扩展：模块化的结构，可轻松扩展；
 - 3、别名自定义：支持为Emoji自定义别名；
 - 4、实时性：实时收录最新发布的Emoji；
 
-##### 3.2.3 Emoji编码类型
+#### 3.2.3 Emoji编码类型
 
 概念 | 说明
 --- | ---
@@ -205,7 +225,7 @@ EmojiEncode.ALIASES | 将Emoji表情转换为别名，格式为 ": alias :"；
 EmojiEncode.HTML_DECIMAL | 将Emoji表情Unicode数据转换为十进制数据；
 EmojiEncode.HTML_HEX_DECIMAL | 将Emoji表情Unicode数据转换为十六进制数据；
 
-##### 3.2.4 Emoji编解码API
+#### 3.2.4 Emoji编解码API
 
 API | 说明
 --- | ---
@@ -217,7 +237,7 @@ public static String decodeToUnicode(String input) | Emoji表情解码方法，�
 public static String removeEmojis(String input, final Collection<Emoji> emojisToRemove, final Collection<Emoji> emojisToKeep) | 清除输入字符串中的Emoji数据；
 public static List<String> findEmojis(String input) | 查找输入字符转中的全部Emoji数据列表；
 
-##### 3.2.5 自定义Emoji别名
+#### 3.2.5 自定义Emoji别名
 略
 
 
@@ -242,10 +262,14 @@ public static List<String> findEmojis(String input) | 查找输入字符转中�
 - 5、导入时支持空Excel；导出时限制非空，否则无法进行类型推导。
 
 ### 版本 v1.1.2，新特性[迭代中]
-- 1、[ING]【excel模块】 HSSFWorkbook=2003/xls、XSSFWorkbook=2007/xlsx 兼容支持；
-- 2、[ING]【excel模块】Excel导入、导出时，CellType 全类型支持，如string、number、date等；
-- 3、【emoji模块】升级Emoji版本至最新Release版本：Unicode Emoji 11.0；
-- 4、【emoji模块】精简配置文件，体积减少100k,；
+- excel模块：
+    - 1、[ING]HSSFWorkbook=2003/xls、XSSFWorkbook=2007/xlsx 兼容支持；
+    - 2、[ING]Excel导入、导出时，CellType 全类型支持，如string、number、date等；
+    - 3、升级POI至4.1.2版本；
+- emoji模块：
+    - 1、[ING]升级Emoji版本至最新Release版本：Unicode Emoji 11.0；
+    - 2、[ING]精简配置文件，体积减少100k,；
+    - 3、升级jackson至2.10.3版本；
 
 ### TODO LIST
 - excel模块
