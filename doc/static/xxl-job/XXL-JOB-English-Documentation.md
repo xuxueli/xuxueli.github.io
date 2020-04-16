@@ -416,7 +416,7 @@ The concrete contet describe as follows:
 
     ### JDBC connection info of schedule center：keep Consistent with chapter 2.1
     xxl.job.db.driverClass=com.mysql.jdbc.Driver
-    xxl.job.db.url=jdbc:mysql://localhost:3306/xxl-job?useUnicode=true&characterEncoding=UTF-8
+    xxl.job.db.url=jdbc:mysql://127.0.0.1:3306/xxl_job?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
     xxl.job.db.user=root
     xxl.job.db.password=root_pwd
     
@@ -504,7 +504,7 @@ Concrete contet describe as follows：
     <!-- executor port[required] -->
     <property name="port" value="${xxl.job.executor.port}" />
     <!-- executor AppName[required]，auto register will be closed if it blank -->
-    <property name="appName" value="${xxl.job.executor.appname}" />
+    <property name="appname" value="${xxl.job.executor.appname}" />
     <!-- register center address of executor [required]，auto register will be closed if it blank -->
     <property name="adminAddresses" value="${xxl.job.admin.addresses}" />
     <!-- log path of executor[required] -->
@@ -603,9 +603,7 @@ The task logic exist in the executor project as JobHandler,the develop steps as 
     - 1, create new java class implent com.xxl.job.core.handler.IJobHandler;
     - 2, if you add @Component annotation on the top of the class name it’s will be managed as a bean instance by spring container;
     - 3, add  “@JobHandler(value=" customize jobhandler name")” annotation，the value stand for JobHandler name,it will be used as JobHandler property when create a new task in the schedule center.
-    （go and see DemoJobHandler in the xxl-job-executor-example project, as shown below）
 
-![输入图片说明](https://www.xuxueli.com/doc/static/xxl-job/images/img_oLlM.png "在这里输入图片标题")
 
 #### Step 2:create task in schedule center
 If you want learn more about configure item please go and sedd “Description of configuration item”，select  "BEAN模式" as run mode，property JobHandler please fill in the value defined by @JobHande.
@@ -665,7 +663,7 @@ If you want to create a new executor,please click "+新增执行器" button:
 
 ### Description of executor attributes
 
-    AppName: the unique identity of the executor cluster,executor will registe automatically and periodically by appName so that it can be scheduled.
+    Appname: the unique identity of the executor cluster,executor will registe automatically and periodically by appname so that it can be scheduled.
     名称: the name of ther executor,it is used to describe the executor.
     排序: the order of executor,it will be used in the place where need to select executor.
     注册方式:which way the schedule center used to acquire executor address through;
