@@ -1776,17 +1776,6 @@ public class IndexUI extends JFrame{
 [Swing文档](https://www.w3cschool.cn/swing/)
 
 # 十二、环境配置
-	
-## Mac		
-
-- 终端proxy & 安装homebrew：
-```
-## 终端启用代理命令(确定端口：SS》高级设置》socks端口)
-export http_proxy='http://localhost:{端口}'
-export https_proxy='http://localhost:{端口}'
-
-## 安装homebrew安装领命（安装命令：https://brew.sh/ ）
-```
 
 ## JDK安装
 [JDK下载地址](http://www.oracle.com/index.html )
@@ -1805,7 +1794,7 @@ open .bash_profile      (调用记事本编辑该文件)
 
 # 配置jdk环境变量
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk/Contents/Home
-export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+#export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 
 # 配置maven环境变量
 export MAVEN_HOME=/Users/xuxueli/programfils/apache-maven-3.3.9
@@ -1963,10 +1952,27 @@ mvn -Dhttps.protocols=TLSv1.2   // 启用 TLSv1.2 协议，maven仓库要求
 - ** system （系统范围） ** ：system范围依赖与provided 类似，但是你必须显式的提供一个对于本地系统中JAR 文件的路径。这么做是为了允许基于本地对象编译，而这些对象是系统类库的一部分。这样的构件应该是一直可用的，Maven 也不会在仓库中去寻找它。如果你将一个依赖范围设置成系统范围，你必须同时提供一个 systemPath 元素。注意该范围是不推荐使用的（你应该一直尽量去从公共或定制的 Maven 仓库中引用依赖）。
 
 ## GIT安装
-- [windows下Git安装与配置](http://blog.csdn.net/renfufei/article/details/41647875)
-- [Mac-OSX下安装Git](http://blog.csdn.net/zhangkongzhongyun/article/details/7903148)
 - [Git 常用命令速查表(图文+表格)](http://www.jb51.net/article/55442.htm)
 - [Git 教程](http://www.runoob.com/git/git-tutorial.html)
+
+** 安装方式1：Command Line Tools（内置Git） **
+终端中输入 git 命令会弹出对话框提示安装 "Command Line Tools"，选择确认后自动安装，该工具内置Git、Gcc和Make等。
+
+** 安装方式2：homebrew 安装 **
+
+终端proxy & 安装homebrew
+```
+# 终端启用代理命令(确定端口：SS》高级设置》socks端口)
+export http_proxy='http://localhost:{端口}'
+export https_proxy='http://localhost:{端口}'
+
+# 安装homebrew安装领命（安装命令：https://brew.sh/ ）
+```
+
+brew方式安装git
+```
+sudo brew install git
+```
 
 ** GIT常用命令汇总 **
 
@@ -2101,14 +2107,7 @@ git push <remote> :<branch/tag>	删除远程分支或标签
 ## Intellij安装
 
 ** 安装注册 **
-- [下载地址](http://www.jetbrains.com/idea/) 
-
-> Community Edition社区免费版功能有精简，推荐使用Ultimate Edition商业版本，可免费用30天，需要注册激活。
-
-> 已经集成了：JDK、Tomcat、Maven、Git、Freemarker、explorer等功能，比较完善。（插件库比较智能完善，如markdown插件在打开MD文件时会主动询问是否安装）
-
-** 设置 **
-> Project等同于eclipse的workspace，Module等同于eclipse的Project。失去焦点自动保存；
+- [下载地址](http://www.jetbrains.com/idea/)
 
 * 1、JDK：
 
@@ -2147,19 +2146,7 @@ git push <remote> :<branch/tag>	删除远程分支或标签
         
     >取消git自动tracked文件，导致gitignore失效：File》Setting》Version Control》When fils are created》勾选Do not add;
     
-* 4、Tomcat：
-
-    >配置Server环境：File》Setting》Build、Execution、Deployment》Application Servers》点击+选择Tomcat类型，选择目录路径
-    
-    >配置Server实例：右上角》Edit Configurations》点击+号》Tomcat Server》Local》配置：环境、名称、默认浏览器、默认端口路径、端口，VM设置等；
-    
-    >部署项目：右上角》Edit Configurations》Deployment》点+号》Artifact》选择Web项目，配置根路径Application context；
-    
-    >动态Debug：右上角》Edit Configurations》Server》On update action改动/ On frame deactivation失活都选择update classes and resources(exploded格式才有)；
-
-    >一个Tomcat实例只能启动一个项目，如需启动多台，需要配置多个Tomcat并修改端口号；
-    
-* 5、修改IDE字体，黑色风格：
+* 4、修改IDE字体，黑色风格：
     >File》Setting》Appearance & Behavior》Appearance》
 
     ```
@@ -2173,21 +2160,21 @@ git push <remote> :<branch/tag>	删除远程分支或标签
     File》Setting》Editor》Color&Fonts》Console Font》primary font：Consolas；Size：14；
 
 
-* 6、Keymap（快捷键）设置：
+* 5、Keymap（快捷键）设置：
     >Keymap》选中即可（因为熟悉Eclipse，可改为此；但为了以后适应，推荐使用默认）
-* 7、显示行号：
+* 6、显示行号：
     >File》Setting》Editor》General》Appearance》Show line numbers（勾选）
         
-* 8、不自动打开上次项目：
+* 7、不自动打开上次项目：
     >File》Setting》Apprearance & Behavior》System Settings》Reopen last project on startup（去掉勾选）；
 
-* 9、设置文件头注释：
+* 8、设置文件头注释：
     >File》Setting》Editor》File and Code Templates》Includes》File Header》输入：Created by ${USER} on ${DATE} ${TIME}.
-* 10、文件自动保存：
+* 9、文件自动保存：
     >挺好的，不用修改；
-* 11、用*标识编辑过的文件：
+* 10、用*标识编辑过的文件：
     >Editor》Editor Tabs》Mark modifyied tabs with asterisk（勾选）
-* 12、快捷键冲突：
+* 11、快捷键冲突：
     >Ctrl + Space：和Win7输入法冲突；语言栏》高级键设置》编辑“在输入语言之间”不修改点击确认》编辑“中文-输入法/非输入法切换”Ctrl+Space修改为如Ctrl+Home等即可》保存，重启即可；
 * idea热部署
     >1.Build,Excution,Deployment>>Make project automatically（勾选）
