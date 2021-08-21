@@ -1776,6 +1776,17 @@ public class IndexUI extends JFrame{
 [Swing文档](https://www.w3cschool.cn/swing/)
 
 # 十二、环境配置
+	
+## Mac		
+
+- 终端proxy & 安装homebrew：
+```
+## 终端启用代理命令(确定端口：SS》高级设置》socks端口)
+export http_proxy='http://localhost:{端口}'
+export https_proxy='http://localhost:{端口}'
+
+## 安装homebrew安装领命（安装命令：https://brew.sh/ ）
+```
 
 ## JDK安装
 [JDK下载地址](http://www.oracle.com/index.html )
