@@ -124,10 +124,8 @@ API 是应用之间的粘合剂，一个合格开发者肯定使用过别人提�
     - 环境要求；https://docs.docker.com/docker-for-mac/install/#what-to-know-before-you-install
     - brew 安装
         ```
-        brew install docker
-        或者：
-        brew update
-        brew upgrade docker
+        # https://www.runoob.com/docker/macos-docker-install.html
+        brew install --cask --appdir=/Applications docker
         ```
     - 手动安装：下载DMG镜像安装
 
