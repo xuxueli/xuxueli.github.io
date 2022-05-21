@@ -122,7 +122,8 @@ brew install gpg
 gpg --version
 
 // 生成密匙对（name=x******,email=9********,Passphase=************4，命令行下小键盘有问题不要用）
-gpg --gen-key
+gpg --gen-key   
+gpg --full-generate-key     （建议，可指定 rsa2048 ）
 
 // 查看公钥
 gpg --list-keys
@@ -136,10 +137,16 @@ uid           x****** <9********>
 sub   rsa2048 2016-09-05 [E]
 
 // 将公钥发布到 PGP 密钥服务器，公钥服务器配置地址 "~/.gnupg/gpg.conf"，可使用默认值也可自定义；
-gpg --keyserver hkp://keys.gnupg.net --send-keys {用户ID}
+gpg --keyserver hkeyserver.ubuntu.com --send-keys {用户ID}
 
 // 查询公钥是否发布成功
-gpg --keyserver hkp://keys.gnupg.net --recv-keys {用户ID}
+gpg --keyserver keyserver.ubuntu.com --recv-keys {用户ID}
+
+// PGP 密钥服务器
+hkp://keys.gnupg.net    (疑似废弃)
+keyserver.ubuntu.com    (20220521可用)
+keys.openpgp.org
+pgp.mit.edu
 
 // 帮助，如修改密码等
 gpg --help
