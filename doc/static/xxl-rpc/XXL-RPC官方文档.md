@@ -5,7 +5,7 @@
 [![GitHub release](https://img.shields.io/github/release/xuxueli/xxl-rpc.svg)](https://github.com/xuxueli/xxl-rpc/releases)
 [![GitHub stars](https://img.shields.io/github/stars/xuxueli/xxl-rpc)](https://github.com/xuxueli/xxl-rpc/)
 [![Docker Status](https://img.shields.io/docker/pulls/xuxueli/xxl-rpc-admin)](https://hub.docker.com/r/xuxueli/xxl-rpc-admin/)
-[![License](https://img.shields.io/badge/license-GPLv3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html)
+![License](https://img.shields.io/github/license/xuxueli/xxl-rpc.svg)
 [![donate](https://img.shields.io/badge/%24-donate-ff69b4.svg?style=flat-square)](https://www.xuxueli.com/page/donate.html)
 
 [TOCM]
@@ -57,7 +57,7 @@ RPC（Remote Procedure Call Protocol，远程过程调用），调用远程服�
 源码仓库地址 | Release Download
 --- | ---
 [https://github.com/xuxueli/xxl-rpc](https://github.com/xuxueli/xxl-rpc) | [Download](https://github.com/xuxueli/xxl-rpc/releases)
-[https://gitee.com/xuxueli0323/xxl-rpc](https://gitee.com/xuxueli0323/xxl-rpc) | [Download](https://gitee.com/xuxueli0323/xxl-rpc/releases)
+[https://gitee.com/xuxueli0323/xxl-rpc](https://gitee.com/xuxueli0323/xxl-rpc) | [Download](https://gitee.com/xuxueli0323/xxl-rpc/releases)  
 
 
 #### 技术交流
@@ -221,7 +221,7 @@ setSerializer | 序列化方案，可选范围: HessianSerializer（默认）、
 setCorePoolSize | 业务线程池core大小
 setMaxPoolSize | 业务线程是max大小
 ip |  服务方IP，为空自动获取机器IP，支持手动指定
-port | 服务方端口，默认 7080
+port | 服务方端口，默认 7080 
 accessToken | 服务鉴权Token，非空时生效；
 setServiceRegistry | 服务注册中心，可选范围：XxlRegistryServiceRegistry.class、LocalServiceRegistry.class；支持灵活自由扩展；
 setServiceRegistryParam | 服务注册中心启动参数，参数说明可参考各注册中心实现的 start() 的方法注释；
@@ -298,7 +298,7 @@ UserDTO user = demoService.sayHi(name);
 
 “@XxlRpcReference” 注解参数 | 说明
 --- | ---
-client | 服务通讯方案，可选范围：NettyClient（默认）、NettyHttpClient ;
+client | 服务通讯方案，可选范围：NettyClient（默认）、NettyHttpClient ; 
 serializer | 序列化方案，可选范围: HESSIAN（默认）、HESSIAN1；
 callType | 请求类型，可选范围：SYNC（默认）、ONEWAY、FUTURE、CALLBACK；
 loadBalance | 负载均衡类型，可选范围：ROUND（默认）、RANDOM、LRU、LFU、CONSISTENT_HASH；
@@ -845,14 +845,15 @@ XXL-RPC默认将 "XXL-RPC-ADMIN" 作为原生注册中心。其他Java服务框�
 - 4、RPC Server端，新增属性 ”注册地址/registryAddress“，优先使用该属性作为注册地址，为空时使用服务 ”IP:PORT“ 作为注册地址。从而更灵活的支持容器类型执行器动态IP和动态映射端口问题。
 
 ### 6.13 版本 v1.7.0 Release Notes[2022-10-02]
-- 1、轮训路由策略优化，修复小概率下并发问题；
-- 2、默认注册中心代码结构重构，废弃冗余 "biz" 属性；
-- 3、依赖版本升级，如netty、spring、gson等;
-- 4、数据库编码调整为utf8mb4；
-- 5、序列化组件由Jackson替换为Gson；
-- 6、restful api序列化组件调整为gson；
+- 1、开源协议：由 GPLv3 调整为 Apache2.0 开源协议；
+- 2、路由策略：轮训路由策略代码优化，修复小概率下并发问题；
+- 3、代码重构：默认注册中心代码结构重构，废弃冗余 "biz" 属性；
+- 4、版本升级：依赖版本升级，如netty、spring、gson等;
+- 5、数据库编码：调整为utf8mb4；
+- 6、restful api：序列化组件调整为Gson；
+- 7、服务磁盘注册数据：序列化组件调整为Gson；
 
-### 6.14 新版本规划 [2022-10-02]
+### 6.14 v1.7.1 Release Notes[规划中]
 - 1、[迭代中]环境标识字段长度上限调整为50；
 
 ### TODO
@@ -911,7 +912,7 @@ XXL-RPC默认将 "XXL-RPC-ADMIN" 作为原生注册中心。其他Java服务框�
 ### 7.3 开源协议和版权
 产品开源免费，并且将持续提供免费的社区技术支持。个人或企业内部可自由的接入和使用。
 
-- Licensed under the GNU General Public License (GPL) v3.
+- Licensed under the Apache License, Version 2.0.
 - Copyright (c) 2015-present, xuxueli.
 
 ---
