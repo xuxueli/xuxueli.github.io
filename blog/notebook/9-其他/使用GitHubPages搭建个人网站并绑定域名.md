@@ -57,6 +57,13 @@ www        CNAME        默认	    {用户名}.github.io	10min
 
 GitHub会将CNAME中的域名绑定为你的项目域名，同时将原有二级域名重定向到新域名下。而且，一旦项目文件变动，会触发“Page build” 实时生效，如果失败github可能会发送邮件。
 
+### 其他 
+#### github dns解析
+1、通过网址 ipaddress.com 搜索框输入github.com，查找对应的IP地址。
+2、修改hosts文件，追加如下内容。
+```
+140.82.113.3 github.com
+```
 
 ### 参考
 [GitHubPages官网](https://pages.github.com/)
