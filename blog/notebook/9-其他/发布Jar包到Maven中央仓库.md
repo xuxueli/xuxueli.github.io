@@ -198,8 +198,9 @@ mvn clean deploy -P release -Dgpg.keyname={用户ID} -Dgpg.passphrase={passphras
 登录OSS，在构建仓库的Staging菜单中找到刚刚发布JAR包，依次进行Close、Release操作，大约2小时后自动同步到正式仓库。
 
 
-注意："申请上传资格和groupId" 步骤只需要首次申请时操作，后续不需要。
-只需要申请过一个groupId，之后该groupId下可自由发布，只需要 "Close + Release" 即可。
+注意：
+1、"申请上传资格和groupId" 步骤只需要首次申请时操作，后续不需要。只需要申请过一个groupId，之后该groupId下可自由发布，只需要 "Close + Release" 即可。
+2、如果只需要发布Jar包模块，发布前注意将其他模块依赖暂时注释掉。
 
 
 ### 参考：
