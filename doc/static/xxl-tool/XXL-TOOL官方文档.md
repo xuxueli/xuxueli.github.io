@@ -4,7 +4,7 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-tool/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-tool/)
 [![GitHub release](https://img.shields.io/github/release/xuxueli/xxl-tool.svg)](https://github.com/xuxueli/xxl-tool/releases)
 [![GitHub stars](https://img.shields.io/github/stars/xuxueli/xxl-tool)](https://github.com/xuxueli/xxl-tool/)
-[![License](https://img.shields.io/badge/license-GPLv3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html)
+![License](https://img.shields.io/github/license/xuxueli/xxl-tool.svg)
 [![donate](https://img.shields.io/badge/%24-donate-ff69b4.svg?style=flat-square)](https://www.xuxueli.com/page/donate.html)
 
 [TOCM]
@@ -67,7 +67,7 @@ Fiber模块 | Java协程库，基于quasar封装实现
 
 ### 3.2 快速入门
 
-- a、定义Java对象    
+- a、定义Java对象
 
 ```java
 @ExcelSheet(name = "商户列表", headColor = HSSFColor.HSSFColorPredefined.LIGHT_GREEN)
@@ -111,7 +111,7 @@ public static void exportToFile(boolean xlsx, List<List<?>> sheetDataListArr, St
 public static List<Object> importExcel(String filePath, Class<?> sheetClass) {
 ```
 
-### 3.3 功能定位    
+### 3.3 功能定位
 一个灵活的Java对象和Excel文档相互转换的工具。一行代码完成Java对象和Excel文档之间的转换。同时保证性能和稳定。
 （原名 XXL-EXCEL）
 
@@ -155,7 +155,7 @@ name | 属性/列名称
 添加 xxl-tool 依赖。
 
 ### 4.2 快速入门
-- a、使用示例  
+- a、使用示例
 
 ```java
 // 参考测试代码：com.xxl.tool.test.emoji.EmojiToolTest
@@ -180,7 +180,7 @@ System.out.println("hexdecimal decode: " + EmojiTool.decodeToUnicode(hexdecimal,
         
 ```
 
-- b、运行日志输出    
+- b、运行日志输出
 
 ```text
 aliases encode: 一朵美丽的茉莉:rose:
@@ -232,7 +232,7 @@ public static List<String> findEmojis(String input) | 查找输入字符转中�
 
 ### 5.1 快速入门
 
-- 使用示例 
+- 使用示例
 
 ```
 Map<String, Object> result = new HashMap<>();
@@ -277,30 +277,32 @@ System.out.println(objectMap);
 - 5、导入时支持空Excel；导出时限制非空，否则无法进行类型推导。
 
 ### 6.4 v1.2.0 Release Notes[2020-04-16]
-- 将 XXL-EXCEL 和 XXL-Emoji 两个单独项目，统一合并至 XXL-TOOL，方便统一迭代维护； 
+- 将 XXL-EXCEL 和 XXL-Emoji 两个单独项目，统一合并至 XXL-TOOL，方便统一迭代维护；
 - excel模块：
-    - 1、Excel 多版本导入导出兼容支持，包括：HSSFWorkbook=2003/xls、XSSFWorkbook=2007/xlsx ；
-    - 2、升级POI至4.1.2版本；
+  - 1、Excel 多版本导入导出兼容支持，包括：HSSFWorkbook=2003/xls、XSSFWorkbook=2007/xlsx ；
+  - 2、升级POI至4.1.2版本；
 - emoji模块：
-    - 1、json组件调整为调整为gson；
+  - 1、json组件调整为调整为gson；
 
+### 6.5 v1.2.1 Release Notes[迭代中]
+- 1、开源协议：由 GPLv3 调整为 Apache2.0 开源协议；
 
 ### TODO LIST
 - excel模块
-    - 1、单个Excel多Sheet导出导出；
-    - 2、列合并导入导出；
-    - 3、行合并导入导出；
-    - 4、同一个单元格，横向、竖向拆分多个单元格；List属性；
-    - 5、流式导入：多批次导入数据；
-    - 7、流式导出：分页方式导出数据；
-    - 6、单表行数限制：2003/xls=65536，2007/xlsx=1048576；行数限制内进行性能测试和优化；
-    - 8、排序的字段，对时间等其他类型的处理。
-    - 9、Java已经支持全基础数据类型导入导出，但是Excel仅支持STRING类型CELL，需要字段属性支持定义CELL类型；
-    - 10、Excel导入多Sheet支持，API 格式 "Map<String, List<Object>> importExcel(String filePath, Class<?> sheetClass ...)" ；
-    - 11、Excel导入、导出时，CellType 全类型支持，如string、number、date等；
+  - 1、单个Excel多Sheet导出导出；
+  - 2、列合并导入导出；
+  - 3、行合并导入导出；
+  - 4、同一个单元格，横向、竖向拆分多个单元格；List属性；
+  - 5、流式导入：多批次导入数据；
+  - 7、流式导出：分页方式导出数据；
+  - 6、单表行数限制：2003/xls=65536，2007/xlsx=1048576；行数限制内进行性能测试和优化；
+  - 8、排序的字段，对时间等其他类型的处理。
+  - 9、Java已经支持全基础数据类型导入导出，但是Excel仅支持STRING类型CELL，需要字段属性支持定义CELL类型；
+  - 10、Excel导入多Sheet支持，API 格式 "Map<String, List<Object>> importExcel(String filePath, Class<?> sheetClass ...)" ；
+  - 11、Excel导入、导出时，CellType 全类型支持，如string、number、date等；
 - emoji模块
-    - 1、Emoji远程编解码服务；
-    - 2、升级Emoji版本至最新Release版本：Unicode Emoji 11.0；
+  - 1、Emoji远程编解码服务；
+  - 2、升级Emoji版本至最新Release版本：Unicode Emoji 11.0；
 
 
 ## 七、其他
@@ -314,7 +316,7 @@ System.out.println(objectMap);
 ### 7.3 开源协议和版权
 产品开源免费，并且将持续提供免费的社区技术支持。个人或企业内部可自由的接入和使用。
 
-- Licensed under the GNU General Public License (GPL) v3.
+- Licensed under the Apache License, Version 2.0.
 - Copyright (c) 2015-present, xuxueli.
 
 ---
