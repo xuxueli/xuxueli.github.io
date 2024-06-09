@@ -137,13 +137,15 @@ uid           x****** <9********>
 sub   rsa2048 2016-09-05 [E]
 
 // 将公钥发布到 PGP 密钥服务器，公钥服务器配置地址 "~/.gnupg/gpg.conf"，可使用默认值也可自定义；
-gpg --keyserver hkeyserver.ubuntu.com --send-keys {用户ID}
+//gpg --keyserver keyserver.ubuntu.com --send-keys {用户ID}
+gpg --keyserver keys.openpgp.org --send-keys BEF94BB0E925CC47494B1DF47A420015E0A498C9
+
 
 // 查询公钥是否发布成功
-gpg --keyserver keyserver.ubuntu.com --recv-keys {用户ID}
+//gpg --keyserver keyserver.ubuntu.com --recv-keys {用户ID}
+gpg --keyserver keys.openpgp.org --recv-keys {用户ID}
 
 // PGP 密钥服务器
-hkp://keys.gnupg.net    (疑似废弃)
 keyserver.ubuntu.com    (20220521可用)
 keys.openpgp.org
 pgp.mit.edu
