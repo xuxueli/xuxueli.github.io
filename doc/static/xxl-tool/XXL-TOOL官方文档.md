@@ -302,7 +302,7 @@ hexdecimal decode: 一朵美丽的茉莉🌹
 ### 3.5 v1.3.0 Release Notes[2024-06-09]
 - 1、开源协议变更，由 GPLv3 调整为 Apache2.0 开源协议；
 - 2、新增Response模块，统一响应数据结构体，标准化数据结构、状态码等，降低协作成本；
-- 3、新增Pipeline模块，高扩展性流程编排引擎。
+- 3、新增Pipeline模块，高扩展性流程编排引擎；
 
 ### TODO LIST
 - excel模块
@@ -338,4 +338,4 @@ hexdecimal decode: 一朵美丽的茉莉🌹
 
 ---
 ### 捐赠
-XXL-DEEP 是一个开源且免费项目，其正在进行的开发完全得益于支持者的支持。开源不易，[前往赞助项目开发](https://www.xuxueli.com/page/donate.html )
+XXL-TOOL 是一个开源且免费项目，其正在进行的开发完全得益于支持者的支持。开源不易，[前往赞助项目开发](https://www.xuxueli.com/page/donate.html )
