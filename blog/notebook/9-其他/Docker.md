@@ -6,8 +6,8 @@
 [TOC]
 
 ## 相关地址
-- 官网：http://www.docker.com/    
-- 中文文档：http://www.widuu.com/docker/  
+- 官网：http://www.docker.com/
+- 中文文档：http://www.widuu.com/docker/
 - 教程：http://www.runoob.com/docker/docker-tutorial.html
 
 ## Docker是什么？
