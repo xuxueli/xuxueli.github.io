@@ -2187,6 +2187,11 @@ git push <remote> :<branch/tag>	删除远程分支或标签
 官网文档很完善：Help》KeyMap Preference》双击即可查看快捷键表；
 
 
+## Mac根目录创建 data 目录
+
+参考：[link](https://www.cnblogs.com/Alandre/p/15474716.html)
+
+
 # 十三、特性
 
 ## Java 各版本的新特性
