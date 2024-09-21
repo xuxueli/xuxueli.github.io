@@ -108,6 +108,15 @@ API 是应用之间的粘合剂，一个合格开发者肯定使用过别人提�
 ## 安装Docker
 参考：https://www.runoob.com/docker/macos-docker-install.html
 
+- mac安装docker
+    - 环境要求；https://docs.docker.com/docker-for-mac/install/#what-to-know-before-you-install
+    - brew 安装
+        ```
+        # https://www.runoob.com/docker/macos-docker-install.html
+        brew install --cask --appdir=/Applications docker
+        ```
+    - 手动安装：下载DMG镜像安装
+
 - win 安装 docker
 
     - 方式1：Win10 Pro（Hyper-V） + Docker-for-Windows-Installer.exe
@@ -119,15 +128,6 @@ API 是应用之间的粘合剂，一个合格开发者肯定使用过别人提�
         --registry-mirror https://registry.docker-cn.com
         docker-machine restart default
         ```
-        
-- mac安装docker
-    - 环境要求；https://docs.docker.com/docker-for-mac/install/#what-to-know-before-you-install
-    - brew 安装
-        ```
-        # https://www.runoob.com/docker/macos-docker-install.html
-        brew install --cask --appdir=/Applications docker
-        ```
-    - 手动安装：下载DMG镜像安装
 
 ## 常用命令
 参考：https://www.runoob.com/docker/docker-command-manual.html
@@ -228,4 +228,31 @@ docker run -e PARAMS="--mysqladdress=172.17.0.2:3306 --zkaddress=172.17.0.3:2181
 4、push镜像：docker push <namespace>/<image name>:<version tag eg latest>
 
 ```
-    
+
+## Docker Hub镜像超时解决
+参考：
+[link1](https://gitee.com/wanfeng789/docker-hub)
+[link2](https://www.runoob.com/docker/docker-mirror-acceleration.html)
+
+#### centos 
+
+对于使用 systemd 的系统，请在 /etc/docker/daemon.json 中写入如下内容（如果文件不存在请新建该文件）：
+```
+{
+    "registry-mirrors": [
+        "https://docker.1ms.run",
+        "https://hub.rat.dev",
+        "https://docker.1panel.live"
+    ]
+}
+```
+
+之后重新启动服务：
+```
+$ sudo systemctl daemon-reload
+$ sudo systemctl restart docker
+```
+
+#### Mac OS 
+对于 Mac 和 Windows 用户，直接在 Docker Desktop 系统设置中，配置 registry-mirrors 即可。
+
