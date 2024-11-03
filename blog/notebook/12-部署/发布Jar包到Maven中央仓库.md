@@ -207,3 +207,8 @@ mvn clean deploy -P release -Dgpg.keyname={用户ID} -Dgpg.passphrase={passphras
 
 ### 参考：
 [参考文档](http://my.oschina.net/u/2335754/blog/476676)
+[终端代理1](https://zhuanlan.zhihu.com/p/357875811)
+[github-host1](https://zhuanlan.zhihu.com/p/681350679)
+[brew镜像1](https://www.cnblogs.com/orzs/p/18306760)
+[brew镜像2](https://www.cnblogs.com/liyihua/p/12753163.html)
+
