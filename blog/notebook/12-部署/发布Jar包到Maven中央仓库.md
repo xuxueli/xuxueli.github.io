@@ -92,7 +92,13 @@
 ### 三、配置Maven setting.xml
 setting.xml放在Maven安装文件/conf目录下
 ```
-// oss 配置
+// oss 配置：Token方式，登录 oss->profile->user token生成；
+<server>
+  <id>oss</id>
+  <username>{随机token key}</username>
+  <password>{随机token value}</password>
+</server>
+// oss 配置：账号密码方式，已废弃 （注意 id 与 pom中distributionManagement 一致） 
 <servers>
     <server>
       <id>oss</id>
@@ -138,7 +144,7 @@ sub   rsa2048 2016-09-05 [E]
 
 // 将公钥发布到 PGP 密钥服务器，公钥服务器配置地址 "~/.gnupg/gpg.conf"，可使用默认值也可自定义；
 //gpg --keyserver keyserver.ubuntu.com --send-keys {用户ID}
-gpg --keyserver keys.openpgp.org --send-keys BEF94BB0E925CC47494B1DF47A420015E0A498C9
+gpg --keyserver keys.openpgp.org --send-keys {用户ID}
 
 
 // 查询公钥是否发布成功
@@ -188,6 +194,17 @@ gpg版本较新，需要额外配置，在gpg安装目录（mac的是~/.gnup）�
     - 在gpg-agent.conf添加：
         allow-loopback-pinentry
 
+```
+
+临时设置终端代理
+```
+在当前终端会话中运行以下命令，使 wget、curl 等网络命令通过 SSR 代理进行访问。关闭终端后，这些设置会失效。
+export ALL_PROXY="socks5://127.0.0.1:1080"
+export http_proxy="socks5://127.0.0.1:1080"
+验证代理是否生效：
+curl http://ipinfo.io
+取消代理：
+unset http_proxy
 ```
 
 ### 五、发布JAR到构件仓库
