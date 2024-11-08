@@ -32,6 +32,13 @@ export PATH
 
 # 配置生效
 source .bash_profile
+
+# 确保 Zsh 加载 .bash_profile
+vim ~/.zshrc
+# 文件末尾添加以下内容
+source ~/.bash_profile
+# 使 .zshrc 配置生效
+source ~/.zshrc
 ```
 
 **Windows下安装**
