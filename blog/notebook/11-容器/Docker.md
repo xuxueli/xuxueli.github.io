@@ -215,6 +215,10 @@ docker run -p 2181:2181 --name zookeeper -v $PWD/conf/zoo.cfg:/opt/zookeeper/con
 // springboot
 // maven配置 + DockerFile 
 mvn clean package docker:build
+// 方式2
+mvn clean package
+docker build -t aaa/bbb ./bbb
+
 
 // docker run
 docker run -p 8080:8080 -v /tmp:/data/applogs --name xxx-project  -d xxx-project:0.0.2-SNAPSHOT
