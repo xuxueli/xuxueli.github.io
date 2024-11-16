@@ -1623,7 +1623,7 @@ XXL-JOB是一个跨语言的任务调度平台，主要体现在如下几个方�
 可以通过以下命令快速构建调度中心，并启动运行；
 ```
 mvn clean package
-docker build -t xuxueli/xxl-job-admin ./xxl-job-admin
+docker build -t xuxueli/xxl-job-admin:{version} ./xxl-job-admin
 docker run --name xxl-job-admin -p 8080:8080 -d xuxueli/xxl-job-admin
 ```
 
@@ -2327,7 +2327,7 @@ data: post-data
 - 20、修复bootstrap.min.css.map 404问题；
 - 21、执行器UI交互优化,移除冗余order属性；
 - 22、执行备注消息长度限制，修复数据超长无法存储导致导致回调失败的问题；
-  注意：XxlJobSpringExecutor组件个别字段调整：“appName” 调整为 “appname” ，升级时该组件时需要注意；
+- 注意：XxlJobSpringExecutor组件个别字段调整：“appName” 调整为 “appname” ，升级时该组件时需要注意；
 
 ### 7.31 版本 v2.3.0 Release Notes[2021-02-09]
 - 1、【新增】调度过期策略：调度中心错过调度时间的补偿处理策略，包括：忽略、立即补偿触发一次等；
@@ -2395,9 +2395,9 @@ public void execute() {
 - 6、【修复】漏洞修复，包括 "CVE-2024-42681" 子任务越权漏洞修复、"CVE-2023-33779" 任务API越权问题修复；
 - 7、【升级】多个项目依赖升级至较新稳定版本，涉及netty、groovy、gson、springboot、mybatis等；
 
-备注：
-- 1、“CVE-2024-38820”漏洞源自spring，当前使用spring5.x及springboot2.x软件普遍受该问题影响。 该问题修复需要升级至spring6.x与springboot3.x，同时需要升级JDK17，如有诉求可自行升级。计划下个大版本升级spring及jdk版本解决该问题。
-- 2、本次升级数据模型及通讯协议向前兼容，v2.4.*可无缝升级。
+**备注：**
+  - a、“CVE-2024-38820”漏洞源自spring，当前使用spring5.x及springboot2.x软件普遍受该问题影响。 该问题修复需要升级至spring6.x与springboot3.x，同时需要升级JDK17，如有诉求可自行升级。计划下个大版本升级spring及jdk版本解决该问题。
+  - b、本次升级数据模型及通讯协议向前兼容，v2.4.*可无缝升级。
 
 
 ### 7.35 版本 v2.5.0 Release Notes[规划中]
