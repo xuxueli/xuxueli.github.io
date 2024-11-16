@@ -23,6 +23,7 @@ XXL-API 是一个强大易用的API管理平台，提供API的"管理"、"文档
 - 8、Mock：支持为API定义Mock数据并制定数据响应格式，从而快速提供Mock接口，加快开发进度；
 - 9、在线测试：支持在线对API进行测试并保存测试数据，提供接口测试效率；
 - 10、权限控制：支持以业务线为维度进行用户权限控制，分配权限才允许操作业务线下项目接口和数据类型，否则仅允许查看；
+- 11、容器化：提供官方docker镜像，并实时更新推送dockerhub，进一步实现产品开箱即用；
 
 ### 1.4 下载
 
@@ -57,7 +58,6 @@ XXL-API 是一个强大易用的API管理平台，提供API的"管理"、"文档
 
 ```
 - xxl-api
-    - doc
     - xxl-api-admin ：API管理中心项目；
 ```
 
@@ -79,17 +79,23 @@ API管理中心支持集群部署，提升系统可用性。
 
 ### 2.6 Docker镜像构建
 除通过原始方式部署外，可以通过以下命令快速构建项目，并启动运行；
+
+- 下载镜像
+
 ```
-# package
-mvn clean package
+// Docker地址：https://hub.docker.com/r/xuxueli/xxl-api-admin/     (建议指定版本号)
+docker pull xuxueli/xxl-api-admin
+```
 
-# build image
-docker build -t xxl-api-admin ./xxl-api-admin
+- 创建容器并运行
 
+```
 /**
-* 自定义 mysql 等配置，可通过 "PARAMS" 指定，参数格式 PARAMS="--key=value  --key2=value2" ；
+* 如需自定义 mysql 等配置，可通过 "-e PARAMS" 指定，参数格式 PARAMS="--key=value  --key2=value2" ；
+* 配置项参考文件：/xxl-api/xxl-api-admin/src/main/resources/application.properties
+* 如需自定义 JVM内存参数 等配置，可通过 "-e JAVA_OPTS" 指定，参数格式 JAVA_OPTS="-Xmx512m" ；
 */
-docker run --name xxl-api-admin -p 8080:8080 -v /tmp:/data/applogs -e PARAMS="--spring.datasource.url=jdbc:mysql://127.0.0.1:3306/xxl_api?Unicode=true&characterEncoding=UTF-8" -d xxl-api-admin
+docker run -e PARAMS="--spring.datasource.url=jdbc:mysql://127.0.0.1:3306/xxl_api?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai" -p 8080:8080 -v /tmp:/data/applogs --name xxl-api-admin  -d xuxueli/xxl-api-admin:{指定版本}
 ```
 
 
@@ -320,10 +326,14 @@ Mock数据属性说明：
 - 6、接口在线测试功能对于响应状态码为302的请求未能正确展示“Location”问题修复；
 
 ### 8.4 版本 V1.2.0 特性[2024-11-16]
-- 1、【优化】Docker基础镜像切换，精简镜像；
-- 2、【优化】freemarker对数字默认加千分位问题修复，解决日志ID被分隔导致查看日志失败问题；
-- 3、【升级】升级依赖版本，如springboot、mybatis、httpclient等；
-- 4、【优化】精简项目，移除依赖如commons-collections4、commons-lang3；
+- 1、【新增】容器化：提供官方docker镜像，并实时更新推送dockerhub，进一步实现产品开箱即用；
+- 2、【优化】Docker基础镜像切换，精简镜像；降低资源消耗、提升部署效率；
+- 3、【优化】精简项目，移除依赖如commons-collections4、commons-lang3；
+- 4、【优化】登录页默认填充密码移除，提升安全性；
+- 5、【修复】数据类型循环处理逻辑优化，修复超5层循环处理空值问题；
+- 6、【修复】序列化组件兼容性问题处理；
+- 7、【修复】freemarker对数字默认加千分位问题修复，解决日志ID被分隔导致查看日志失败问题；
+- 8、【升级】升级依赖版本，如springboot、mybatis、httpclient等；
 
 ### 8.5 版本 V1.2.1 特性[迭代中]
 - 5、【ING】API导出为PDF；
