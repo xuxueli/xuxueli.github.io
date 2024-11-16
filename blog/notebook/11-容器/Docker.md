@@ -146,6 +146,7 @@ docker logs -f zookeeper
 docker exec -it 47fec42abbb7 /bin/sh
 docker exec -it 47fec42abbb7 /bin/bash
 
+// 查看节点IP端口
 docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)
 
 
@@ -221,7 +222,7 @@ docker build -t aaa/bbb ./bbb
 
 
 // docker run
-docker run -p 8080:8080 -v /tmp:/data/applogs --name xxx-project  -d xxx-project:0.0.2-SNAPSHOT
+//docker run -p 8080:8080 -v /tmp:/data/applogs --name xxx-project  -d xxx-project:0.0.2-SNAPSHOT
 docker run -e PARAMS="--mysqladdress=172.17.0.2:3306 --zkaddress=172.17.0.3:2181" -p 8080:8080 -v /tmp:/data/applogs --name xxl-conf-admin-1.5.0-SNAPSHOT  -d xxl-conf-admin:1.5.0-SNAPSHOT
 
 
