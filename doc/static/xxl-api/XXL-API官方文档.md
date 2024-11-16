@@ -49,7 +49,7 @@ XXL-API 是一个强大易用的API管理平台，提供API的"管理"、"文档
 ### 2.1 初始化“API数据库”
 请下载项目源码并解压，获取 "初始化SQL脚本"，脚本位置：
 ```
-/xxl-api/doc/db/xxl-api-mysql.sql
+/xxl-api/doc/db/tables_xxl_api.sql
 ```
 
 ### 2.2 编译源码
