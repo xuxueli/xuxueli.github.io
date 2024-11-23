@@ -218,7 +218,7 @@ docker run -p 2181:2181 --name zookeeper -v $PWD/conf/zoo.cfg:/opt/zookeeper/con
 mvn clean package docker:build
 // 方式2
 mvn clean package
-docker build -t aaa/bbb ./bbb
+docker build -t aaa/bbb:{version} ./bbb
 
 
 // docker run
