@@ -98,23 +98,6 @@ setting.xml放在Maven安装文件/conf目录下
   <username>{随机token key}</username>
   <password>{随机token value}</password>
 </server>
-// oss 配置：账号密码方式，已废弃 （注意 id 与 pom中distributionManagement 一致） 
-<servers>
-    <server>
-      <id>oss</id>
-      <username>Sonatype 账号</username>
-      <password>Sonatype 密码</password>
-    </server>
-</servers>
-
-// profile 配置 （windows 可选配置，id 需要和pom一致，指定 gpg.exe目录）
-<profile>
-    <id>release</id>
-    <properties>
-        <gpg.executable>D:/ProgramFiles/gpg/GnuPG/bin/gpg.exe</gpg.executable>
-        <!-- <gpg.passphrase>***</gpg.passphrase> -->
-        </properties>
-</profile>
 ```
 
 ### 四、配置gpg-key
@@ -143,16 +126,13 @@ uid           x****** <9********>
 sub   rsa2048 2016-09-05 [E]
 
 // 将公钥发布到 PGP 密钥服务器，公钥服务器配置地址 "~/.gnupg/gpg.conf"，可使用默认值也可自定义；
-//gpg --keyserver keyserver.ubuntu.com --send-keys {用户ID}
 gpg --keyserver keys.openpgp.org --send-keys {用户ID}
 
 
 // 查询公钥是否发布成功
-//gpg --keyserver keyserver.ubuntu.com --recv-keys {用户ID}
 gpg --keyserver keys.openpgp.org --recv-keys {用户ID}
 
 // PGP 密钥服务器
-keyserver.ubuntu.com    (20220521可用)
 keys.openpgp.org
 pgp.mit.edu
 
