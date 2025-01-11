@@ -216,7 +216,7 @@ docker run -p 2181:2181 --name zookeeper -v $PWD/conf/zoo.cfg:/opt/zookeeper/con
 // springboot
 // 方式1：分步操作
 mvn clean package
-docker build -t aaa/bbb:{version} ./bbb
+docker build -t xuxueli/xxl-xxx:{version} ./bbb
 
 
 // docker run
