@@ -37,6 +37,9 @@ IOC：
             @PreDestroy
             DisposableBean
             destroy-method
+
+        所有单例 Bean 实例化完成后：
+            SmartInitializingSingleton.afterSingletonsInstantiated 
             
 - Bean中初始化方法顺序：
     - 当@Scope为singleton时,bean会在ioc初始化时就被实例化,默认为singleton,可以配合@Lazy实现延时加载
