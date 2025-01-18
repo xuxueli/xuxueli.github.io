@@ -132,6 +132,7 @@ API 是应用之间的粘合剂，一个合格开发者肯定使用过别人提�
 ## 常用命令
 参考：https://www.runoob.com/docker/docker-command-manual.html
 
+常用命令：
 ```
 docker --version
 docker images
@@ -140,7 +141,10 @@ docker rmi images_id
 docker ps
 docker ps -a
 docker rm second-mysql
+```
 
+容器内部查看：
+```
 docker logs -f zookeeper
 
 docker exec -it 47fec42abbb7 /bin/sh
@@ -148,8 +152,10 @@ docker exec -it 47fec42abbb7 /bin/bash
 
 // 查看节点IP端口
 docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)
+```
 
-
+常用中间件：
+```
 // redis
 
 docker start redis
@@ -160,8 +166,6 @@ docker run -p 6379:6379 --name redis -v $PWD/data:/data  -d redis:4.0 redis-serv
 -v $PWD/data:/data : 将主机中当前目录下的data挂载到容器的/data
 redis-server --appendonly yes : 在容器执行redis-server启动命令，并打开redis持久化配置
 */
-
-
 
 // mysql
 
@@ -175,7 +179,7 @@ conf目录里的配置文件将映射为mysql容器的配置文件
 */
 
 // 参考文档：https://www.cnblogs.com/zqifa/p/mysql-6.html
-docker run -p 3306:3306 --name mysql -v $PWD/conf:/etc/mysql/conf.d -v $PWD/logs:/var/log/mysql -v $PWD/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root_pwd -d mysql:5.7
+docker run -p 3306:3306 --name mysql -v $PWD/conf:/etc/mysql/conf.d -v $PWD/logs:/var/log/mysql -v $PWD/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root_pwd -d mysql:8.0
 
 
 cd /Users/xxx/programfils/plugin/docker/mysql
@@ -212,24 +216,45 @@ clientPort=2181
 
 docker run -p 2181:2181 --name zookeeper -v $PWD/conf/zoo.cfg:/opt/zookeeper/conf/zoo.cfg  -v $PWD/data:/opt/zookeeper/data  -d zookeeper:3.4.12
 // --restart=always ：开机启动
+```
 
+服务镜像打包：
+```
 // springboot
 // 方式1：分步操作
 mvn clean package
 docker build -t xuxueli/xxl-xxx:{version} ./bbb
 
-
 // docker run
-//docker run -p 8080:8080 -v /tmp:/data/applogs --name xxx-project  -d xxx-project:0.0.2-SNAPSHOT
-docker run -e PARAMS="--mysqladdress=172.17.0.2:3306 --zkaddress=172.17.0.3:2181" -p 8080:8080 -v /tmp:/data/applogs --name xxl-conf-admin-1.5.0-SNAPSHOT  -d xxl-conf-admin:1.5.0-SNAPSHOT
-
+docker run -e PARAMS="--spring.datasource.url=jdbc:mysql://127.0.0.1:3306/xxl_job?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai" -p 8080:8080 -v /tmp:/data/applogs --name xxl-job-admin  -d xuxueli/xxl-job-admin:{指定版本}
 
 // 推送镜像至docker-hub仓库
 1、锁定镜像：docker images
 2、登陆Hub：docker login (或 docker login docker.io )
 3、tag镜像：docker tag <imageID> <namespace>/<image name>:<version tag eg latest>
 4、push镜像：docker push <namespace>/<image name>:<version tag eg latest>
+```
 
+多架构打包：
+```
+// 查看架构
+docker inspect --format='{{.Architecture}}' <image_name_or_id>
+
+// AMD架构 ：pull 方式1
+docker pull openjdk:8-jre-slim --platform linux/amd64
+
+// AMD架构 ：pull 方式2
+export DOCKER_DEFAULT_PLATFORM=linux/amd64
+docker pull openjdk:8-jre-slim
+
+// AMD：build 
+docker build -t xuxueli/xxl-job-admin:2.5.0 ./xxl-job-admin --platform linux/amd64  
+
+// AMD：run
+docker run -e PARAMS="--spring.datasource.url=jdbc:mysql://127.0.0.1:3306/xxl_job?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai" -p 8080:8080 -v /tmp:/data/applogs --name xxl-job-admin  -d xuxueli/xxl-job-admin:{指定版本} --platform linux/amd64
+
+// 问题：DeadlineExceeded: failed to fetch oauth token 
+// 配置镜像，ipv6 proxy不生效导致；参考：https://zhuanlan.zhihu.com/p/635984165 
 ```
 
 ## Docker Hub镜像超时解决
