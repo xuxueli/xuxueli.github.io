@@ -1,10 +1,11 @@
 ## 《分布式配置管理平台XXL-CONF》
 
-[![Build Status](https://travis-ci.org/xuxueli/xxl-conf.svg?branch=master)](https://travis-ci.org/xuxueli/xxl-conf)
-[![Docker Status](https://img.shields.io/badge/docker-passing-brightgreen.svg)](https://hub.docker.com/r/xuxueli/xxl-conf-admin/)
+[![Build Status](https://github.com/xuxueli/xxl-conf/workflows/Java%20CI/badge.svg)](https://github.com/xuxueli/xxl-conf/actions)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-conf/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-conf/)
 [![GitHub release](https://img.shields.io/github/release/xuxueli/xxl-conf.svg)](https://github.com/xuxueli/xxl-conf/releases)
-[![License](https://img.shields.io/badge/license-GPLv3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html)
+[![GitHub stars](https://img.shields.io/github/stars/xuxueli/xxl-conf)](https://github.com/xuxueli/xxl-conf/)
+[![Docker pulls](https://img.shields.io/docker/pulls/xuxueli/xxl-conf-admin)](https://hub.docker.com/r/xuxueli/xxl-conf-admin/)
+<img src="https://img.shields.io/github/license/xuxueli/xxl-conf.svg" >
 [![donate](https://img.shields.io/badge/%24-donate-ff69b4.svg?style=flat-square)](https://www.xuxueli.com/page/donate.html)
 
 [TOCM]
@@ -14,7 +15,7 @@
 ## 一、简介
 
 ### 1.1 概述
-XXL-CONF 一站式服务管理平台（配置中心、注册中心），提供 动态配置管理、服务注册与发现 等核心能力，拥有 “轻量级、秒级推送（配置变更、注册发现）、多环境、跨语言、跨机房、权限控制” 等特性。现已开放源代码，开箱即用。
+XXL-CONF 是 一站式服务管理平台，作为服务 配置中心 与 注册中心，提供 动态配置管理、服务注册与发现 等核心能力；拥有 “轻量级、秒级实时推送、多环境、跨语言、跨机房、权限控制” 等特性。现已开放源代码，开箱即用。
 
 ### 1.2 社区交流
 - [社区交流](https://www.xuxueli.com/page/community.html)
@@ -148,7 +149,7 @@ XXL-CONF 一站式服务管理平台（配置中心、注册中心），提供 �
 ### 2.3 “配置中心/注册中心” 搭建（支持集群）
 
     项目：xxl-conf-admin
-    作用：一站式服务管理平台（配置中心、注册中心），提供 动态配置管理、服务注册与发现 等核心能力
+    作用：XXL-CONF 是 一站式服务管理平台，作为服务 配置中心 与 注册中心，提供 动态配置管理、服务注册与发现 等核心能力；
 
 
 #### 方式1：源码编译方式搭建：
@@ -447,7 +448,7 @@ XxlConfHelper.addListener("sample.key03", new XxlConfListener(){
 
 ## 五、总体设计（配置中心）
 
-XXL-CONF 一站式服务管理平台（配置中心、注册中心），提供 动态配置管理、服务注册与发现 等核心能力。
+XXL-CONF 是 一站式服务管理平台，作为服务 配置中心 与 注册中心，提供 动态配置管理、服务注册与发现 等核心能力；
 下文主要介绍 “配置中心” 能力系统设计及实现细节。
 
 ### 5.1 架构图
@@ -613,7 +614,7 @@ XXL-CONF拥有极高的容灾性，首先配置数据进行多级存储， 可�
 
 ## 六、总体设计（注册中心）
 
-XXL-CONF 一站式服务管理平台（配置中心、注册中心），提供 动态配置管理、服务注册与发现 等核心能力。
+XXL-CONF 是 一站式服务管理平台，作为服务 配置中心 与 注册中心，提供 动态配置管理、服务注册与发现 等核心能力；
 下文主要介绍 “注册中心” 能力系统设计及实现细节。
 
 ### 6.1 架构图
@@ -896,7 +897,7 @@ Java应用可参考XXL-RPC实现方案，XXL-RPC原生基于XXL-CONF的 Restful 
 - 6、升级pom依赖至较新版本；
 
 ### 7.15 版本 v1.7.0 Release Notes[2024-01-24]
-- 1、【升级】XXL-CONF 升级重构，定位 一站式服务管理平台（配置中心、注册中心），提供 动态配置管理、服务注册及发现能力；降低中间件认知及运维成本；
+- 1、【升级】XXL-CONF 升级重构，XXL-CONF 是 一站式服务管理平台，作为服务 配置中心 与 注册中心，提供 动态配置管理、服务注册与发现 等核心能力；降低中间件认知及运维成本；
 - 2、【整合】XXL-CONF 整合XXL-RPC注册中心（xxl-rpc-admin）能力，提供轻量级服务动态注册及发现能力；
 - 3、【重构】XXL-CONF 客户端代码重构，模块化设计实现，提升可扩展性与稳定性；
 - 4、【优化】客户端配置监控逻辑优化，避免异常情况下重试请求太频繁；
@@ -909,6 +910,7 @@ Java应用可参考XXL-RPC实现方案，XXL-RPC原生基于XXL-CONF的 Restful 
 
 ### 7.16 版本 v1.7.1 Release Notes[迭代中]
 - 1、【迭代中】XXL-CONF 配置历史Diff及一键回滚能力完善；
+- 2、【迭代中】启动预热优化，加载当前AppName下全量配置预热；
 
 ### TODO LIST
 - 支持托管配置文件，properties或yml，待考虑，不利于配置复用与细粒度管理；
@@ -916,7 +918,6 @@ Java应用可参考XXL-RPC实现方案，XXL-RPC原生基于XXL-CONF的 Restful 
 - 灰度发布：将配置推送到指定环境上的指定ip或者指定模块进程；
 - 锁定Key变更，需要申请和审核；配置的发布也可以考虑增加审核功能；
 - 配置权限：列表只展示有权限的项目列表，无有权限项目时限制不允许登录；权限粒度细分，支持配置 "管理、查看" 权限；
-- XxlConfClient 更名为 XxlConf。
 - 配置告警：底层DB异常时，主动推送告警信息；推送粒度为管理员还是配置影响用户，未定；
 - 配置锁：项目粒度，管理员锁定后，禁止普通用户直接操作；
 - 开放API接口；
