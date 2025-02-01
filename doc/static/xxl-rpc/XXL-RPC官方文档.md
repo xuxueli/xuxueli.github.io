@@ -64,15 +64,14 @@ RPC（Remote Procedure Call Protocol，远程过程调用），调用远程服�
 
 
 ### 1.5 环境
-- Maven3+
 - Jdk1.8+
-- Mysql8.0+
+- XXL-CONF 1.9.0+ (可选，支持无注册中心使用；默认适配 “xxl-conf” 实现动态服务注册与发现。)
 
 
 ## 二、快速入门
 
 XXL-RPC 支持多种使用方式，并提供轻量级内置注册中心，下面分别介绍使用方式：
-- springboot版本：与springboot无缝集成，并借助内置的 “轻量级注册中心” 实现动态服务注册发现；
+- springboot版本：与springboot无缝集成，默认适配 “xxl-conf” 实现动态服务注册与发现；
 - frameless 无框架版本：不具体依赖项目框架，只需要JDK即可集成使用；
 
 ### 2.1、springboot 版本示例
@@ -80,8 +79,8 @@ XXL-RPC 支持多种使用方式，并提供轻量级内置注册中心，下面
 #### 2.1.1、服务注册中心搭建
 
 基于 XXL-CONF 搭建 “轻量级注册中心”：一行命令启动注册中心，一站式提供服务动态注册发现能力。
-- XXL-CONF：一站式服务管理平台（配置中心、注册中心），提供 动态配置管理、服务注册及发现能力；降低中间件认知及运维成本。
-- Github：https://github.com/xuxueli/xxl-conf ）；
+- XXL-CONF：分布式服务管理平台，作为服务 配置中心 与 注册中心，提供 动态配置管理、服务注册与发现 等核心能力；
+- Github：https://github.com/xuxueli/xxl-conf 
 - 官方文档：https://www.xuxueli.com/xxl-conf/
 ```
 // 说明：xxl-conf 详细配置可参考官方文档
@@ -199,7 +198,7 @@ timeout | 服务超时时间，单位毫秒；选填；
 ![输入图片说明](https://www.xuxueli.com/doc/static/xxl-rpc/images/img_02.png "在这里输入图片标题")
 
 ### 2.2、frameless 无框架版本
-
+ 
 得益于优良的兼容性与模块化设计，不限制外部框架；除 spring/springboot 环境之外，理论上支持运行在任何Java代码中，甚至main方法直接启动运行；
 
 以示例项目 “xxl-rpc-sample-frameless” 为例讲解；该示例项目以直连IP方式进行演示，也可以选择接入注册中心方式使用。
@@ -208,15 +207,14 @@ timeout | 服务超时时间，单位毫秒；选填；
 ```
 // 参考代码位置：com.xxl.rpc.sample.server.XxlRpcServerApplication
 
-// 1、XxlRpcBootstrap：XXL-RPC 基础配置
+// 1、XxlRpcBootstrap：XXL-RPC 初始化
 XxlRpcBootstrap rpcBootstrap = new XxlRpcBootstrap();
 rpcBootstrap.setBaseConfig(new BaseConfig("test", "xxl-rpc-sample-frameless-server"));
 rpcBootstrap.setProviderConfig(new ProviderConfig(NettyServer.class, JsonbSerializer.class, null, -1, -1, 7080, null));
 
-// 2、start：XXL-RPC 容器启动
 rpcBootstrap.start();
 
-// 3、add services：本地服务注册，提供给远程RPC请求使用
+// 2、add services：服务信息注册，提供给远程RPC请求使用
 rpcBootstrap.getProvider().addService(DemoService.class.getName(), null, new DemoServiceImpl());
 ```
 
@@ -224,11 +222,11 @@ rpcBootstrap.getProvider().addService(DemoService.class.getName(), null, new Dem
 ```
 // 参考代码位置：com.xxl.rpc.sample.client.XxlRpcClientAplication
 
-// 1、LocalRegister：本地注册中心 初始化，维护远程服务通讯地址信息
+// 1、LocalRegister：本地注册中心 初始化，维护远程服务地址信息
 LocalRegister localRegister = new LocalRegister();
 localRegister.register(new RegisterInstance("test", "xxl-rpc-sample-frameless-server", "127.0.0.1", 7080, null));
 
-// 2、XxlRpcBootstrap：XXL-RPC 基础配置
+// 2、XxlRpcBootstrap：XXL-RPC 初始化
 XxlRpcBootstrap rpcBootstrap = new XxlRpcBootstrap();
 rpcBootstrap.setBaseConfig(new BaseConfig("test", "xxl-rpc-sample-frameless-client"));
 rpcBootstrap.setRegister(localRegister);
@@ -236,7 +234,7 @@ rpcBootstrap.setInvokerConfig(new InvokerConfig(true, NettyClient.class, JsonbSe
 
 ……
 
-// 3、XxlRpcReferenceBean build：创建远程服务代理对象
+// 3、XxlRpcReferenceBean build：创建远程服务代理对象，同步调用方式
 DemoService demoService_SYNC = buildReferenceBean(rpcBootstrap, CallType.SYNC);
 
 // 4、发起RPC请求，测试结果输出
@@ -244,13 +242,6 @@ UserDTO userDTO = demoService.sayHi("[SYNC]jack");
 System.out.println(userDTO);
 ```
 
-#### c、测试
-
-```
-// test
-UserDTO userDTO = demoService.sayHi("[SYNC]jack");
-System.out.println(userDTO);
-```
 
 ## 三、系统设计
 
@@ -315,7 +306,7 @@ XXL-RPC提供多中通讯方案：支持 TCP 和 HTTP 两种通讯方式进行�
   - 服务工厂 "XxlRpcSpringProviderFactory.netType" ：可参考springboot示例组件初始化代码；
   - 服务引用注解 "XxlRpcReference.netType" | 服务Bean对象 "XxlRpcReferenceBean.netType" ：可参考springboot示例组件初始化代码；
 
-### 3.7 注册中心
+### 3.7 注册中心  
 内置服务注册中心支持服务动态发现，提供轻量级、一站式解决方案。也支持扩展集成其他注册中心，或者不使用注册中心、直接指定服务提供方机器地址调用；
 
 注册中心项目内容可参考章节 “四、轻量级服务注册中心”。
@@ -436,15 +427,15 @@ public class Demo2ServiceImpl implements Demo2Service {
 ### v1.2.2（XXL-RPC） Release Notes[2018-11-26]
 - 1、默认通讯方案切换为 Netty，可选方案依赖均调整为 provided 类型；提供强制依赖最小精简选型组合 "netty + hessian + 无注册中心(推荐采用：XXL-RPC原生注册中心)"；
 - 2、XXL-RPC原生注册中心：底层抽象注册中心模块，并原生提供自研基于DB的注册中心，真正实现开箱即用，更轻量级、降低第三方依赖；至今XXL-RPC以提供三种注册中心具体实现："XXL-RPC原生注册中心方案"，"ZK方案"，"Local方案"；其中"XXL-RPC原生注册中心方案"特性如下：
-  - 轻量级：基于DB与磁盘文件，只需要提供一个DB实例即可，无第三方依赖；
-  - 实时性：借助内部广播机制，新服务上线、下线，可以在1s内推送给客户端；
-  - 数据同步：注册中心内部10s会全量同步一次磁盘数据，清理无效服务，确保服务数据实时可用；
-  - 性能：服务发现时仅读磁盘文件，性能非常高；服务注册、摘除时通过磁盘文件校验，防止重复注册操作；
-  - 扩展性：可方便、快速的横向扩展，只需保证 "注册中心" 配置一致即可，可借助负载均衡组件如Nginx快速集群部署；
-  - 多状态：服务内置三种状态：正常状态=支持动态注册、发现，服务注册信息实时更新；锁定状态=人工维护注册信息，服务注册信息固定不变；禁用状态=禁止使用，服务注册信息固定为空；
-  - 跨语言：注册中心提供HTTP接口供客户端实用，语言无关，通用性更强；
-  - 兼容性：“XXL-RPC原生轻量级注册中心”虽然为XXL-RPC设计，但是不限于XXL-RPC使用。兼容支持任何服务框架服务注册实用，如dubbo、springboot等；
-  - 容器化：提供官方docker镜像，并实时更新推送dockerhub，进一步实现"XXL-RPC原生注册中心方案"产品开箱即用；
+    - 轻量级：基于DB与磁盘文件，只需要提供一个DB实例即可，无第三方依赖；
+    - 实时性：借助内部广播机制，新服务上线、下线，可以在1s内推送给客户端；
+    - 数据同步：注册中心内部10s会全量同步一次磁盘数据，清理无效服务，确保服务数据实时可用；
+    - 性能：服务发现时仅读磁盘文件，性能非常高；服务注册、摘除时通过磁盘文件校验，防止重复注册操作；
+    - 扩展性：可方便、快速的横向扩展，只需保证 "注册中心" 配置一致即可，可借助负载均衡组件如Nginx快速集群部署；
+    - 多状态：服务内置三种状态：正常状态=支持动态注册、发现，服务注册信息实时更新；锁定状态=人工维护注册信息，服务注册信息固定不变；禁用状态=禁止使用，服务注册信息固定为空；
+    - 跨语言：注册中心提供HTTP接口供客户端实用，语言无关，通用性更强；
+    - 兼容性：“XXL-RPC原生轻量级注册中心”虽然为XXL-RPC设计，但是不限于XXL-RPC使用。兼容支持任何服务框架服务注册实用，如dubbo、springboot等；
+    - 容器化：提供官方docker镜像，并实时更新推送dockerhub，进一步实现"XXL-RPC原生注册中心方案"产品开箱即用；
 - 3、XXL-RPC客户端适配"XXL-RPC原生注册中心"，可快速接入，只需要切换注册中心实现为 "NativeServiceRegistry" 即可，文档由专门章节介绍；
 - 4、注册中心启动参数位置调整，与注册中心实现关联；
 - 5、服务提供者参数优化，IP为空时原生动态获取，核心参数启动时增强校验；
@@ -571,26 +562,26 @@ public class Demo2ServiceImpl implements Demo2Service {
 
 ### TODO LIST
 - 提高系统可用性，以部分功能暂时不可达为代价，防止服务整体缓慢或雪崩
-  - 限流=防止负载过高，导致服务雪崩；client、server，双向限流；方法级，QPS限流；在途请求数，流控依据；
-  - 降级=10s内超阈值（异常、超时）；拒绝服务、默认值；
-    - 超过（熔断模式）：99.9% 返回默认值，0.1%真实请求；
-    - 未超过：熔断模式下，每 10s 增加 10% 的流量，直至恢复；
-  - 服务隔离：超时较多的请求，自动路由到 “慢线程池” ，避免占用公共线程池；
-  - 预热控制，刚启动的节点，只会分配比较少的请求；逐步增大，直至平均。帮助新节点启动；
+    - 限流=防止负载过高，导致服务雪崩；client、server，双向限流；方法级，QPS限流；在途请求数，流控依据；
+    - 降级=10s内超阈值（异常、超时）；拒绝服务、默认值；
+        - 超过（熔断模式）：99.9% 返回默认值，0.1%真实请求；
+        - 未超过：熔断模式下，每 10s 增加 10% 的流量，直至恢复；
+    - 服务隔离：超时较多的请求，自动路由到 “慢线程池” ，避免占用公共线程池；
+    - 预热控制，刚启动的节点，只会分配比较少的请求；逐步增大，直至平均。帮助新节点启动；
 - 支持HTTP异步响应，至此底层remoting层通讯全异步化；
 - zk注册中心初始化时取消对集群状态强依赖，底层异常时循环检测；
 - Server启动失败时，ZK销毁中断问题修复，偶发；
 - 服务提供者iface获取方式优化，兼容代理方式获取接口 “getProxiedInterfaces”；
 - 演进计划：
-  - 通讯：remoting模块；TCP、HTTP、HTTP2可选方案；
-  - 限流：ratelimit模块；滑动窗口方式，单机限流，请求/响应方双向限流；[ING]
-  - 网关：servlet3 + 泛化调用模块；计划：基于DB轻量级注册中心，服务动态发现，自动转发；
+    - 通讯：remoting模块；TCP、HTTP、HTTP2可选方案；
+    - 限流：ratelimit模块；滑动窗口方式，单机限流，请求/响应方双向限流；[ING]
+    - 网关：servlet3 + 泛化调用模块；计划：基于DB轻量级注册中心，服务动态发现，自动转发；
 - admin-服务监控（《xxl-trace》）:
-  - tps，99线；
-  - 成功率；
-  - 调用链：
+    - tps，99线；
+    - 成功率；
+    - 调用链：
 - rpc filter：方便埋点、监控等；
-- 服务治理实现，服务调用量，成功率，1min上报一次；
+- 服务治理实现，服务调用量，成功率，1min上报一次； 
 - static代码块移除，进行组件无状态优化，jetty/pool/等；
 - 接入方配置方式优化，provider与invoker配置合并至新组建；
 - 新增 appname 属性，为后续服务 trace 做准备；
@@ -602,15 +593,15 @@ public class Demo2ServiceImpl implements Demo2Service {
 - 限流-熔断-降级，结合xxl-registry与xxl-rpc filter共同演进；
 - 长连心跳、断线重连、空闲连接回收；
 - 服务注册中心：
-  - 服务端：注册IP黑名单、白名单；
-  - 客户端：瞬间下线拒绝，比如超过 90% 服务批量下线，本次下线标记失败，连续三次才生效；防止注册中心故障，导致整体服务不可用；
-  - 注册方式附属信息；
-    - 服务注册，支持节点权重配置；
-    - 注册服务支持Tag属性；如机房TAG，客户端优先使用本机房，即机房TAG一致的服务；
-  - springboot、dubbo 示例；
-  - 单机版本：H2数据库;
-  - 异地多活：注册中心无中心服务；
-  - 同机房读：服务支持Region属性，优先使用本Region服务；
+    - 服务端：注册IP黑名单、白名单；
+    - 客户端：瞬间下线拒绝，比如超过 90% 服务批量下线，本次下线标记失败，连续三次才生效；防止注册中心故障，导致整体服务不可用；
+    - 注册方式附属信息；
+        - 服务注册，支持节点权重配置；
+        - 注册服务支持Tag属性；如机房TAG，客户端优先使用本机房，即机房TAG一致的服务；
+    - springboot、dubbo 示例；
+    - 单机版本：H2数据库;
+    - 异地多活：注册中心无中心服务；
+    - 同机房读：服务支持Region属性，优先使用本Region服务；
 - 客户端并发锁超时优化；
 - 路由对象支持可配置，当前根据iface，太固定；
 
