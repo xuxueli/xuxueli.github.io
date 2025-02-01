@@ -102,7 +102,7 @@ mkdir /Users/admin/program/docker/instance/open-webui/data
 cd /Users/admin/program/docker/instance/open-webui
 
 // 启动容器
-docker run -d -p 3000:3000 -v $PWD/data:/app/backend/data --name open-webui ghcr.io/open-webui/open-webui:main 
+docker run -d -p 3000:8080 -v $PWD/data:/app/backend/data --name open-webui ghcr.io/open-webui/open-webui:main
 ```
 
 启动成功后，可在终端中查看容器状态，通过浏览器访问Open-WebUI：http://localhost:3000 
