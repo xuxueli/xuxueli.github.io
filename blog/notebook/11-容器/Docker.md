@@ -154,19 +154,28 @@ docker exec -it 47fec42abbb7 /bin/bash
 docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)
 ```
 
-常用中间件：
+redis：
 ```
 // redis
+docker pull redis:7.4
 
-docker start redis
-docker stop redis
-docker run -p 6379:6379 --name redis -v $PWD/data:/data  -d redis:4.0 redis-server --appendonly yes
+cd /Users/admin/program/docker/instance/redis
+mkdir -p ./data
+
+docker run -p 6379:6379 --name redis -v $PWD/data:/data  -d redis:7.4 redis-server --appendonly yes
 /*
 -p 6379:6379 : 将容器的6379端口映射到主机的6379端口
 -v $PWD/data:/data : 将主机中当前目录下的data挂载到容器的/data
 redis-server --appendonly yes : 在容器执行redis-server启动命令，并打开redis持久化配置
 */
 
+docker start redis
+docker stop redis
+
+```
+
+mysql：
+```
 // mysql
 
 cd /Users/xxx/programfils/plugin/docker/mysql
@@ -200,7 +209,10 @@ docker cp /etc/localtime mysql:/etc/localtime
 docker exec -it <image-id> /bin/bash  
 cp /usr/share/zoneinfo/PRC /etc/localtime
 date -R
+```
 
+zookeeper：  
+```
 // zookeeper
 docker pull zookeeper:3.4.12
 
