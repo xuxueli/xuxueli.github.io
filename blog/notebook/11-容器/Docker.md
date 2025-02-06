@@ -177,8 +177,9 @@ docker stop redis
 mysql：
 ```
 // mysql
+docker pull mysql:8.4
 
-cd /Users/xxx/programfils/plugin/docker/mysql
+cd /Users/admin/program/docker/instance/mysql
 
 mkdir -p ./data ./logs ./conf
 /*
@@ -188,12 +189,8 @@ conf目录里的配置文件将映射为mysql容器的配置文件
 */
 
 // 参考文档：https://www.cnblogs.com/zqifa/p/mysql-6.html
-docker run -p 3306:3306 --name mysql -v $PWD/conf:/etc/mysql/conf.d -v $PWD/logs:/var/log/mysql -v $PWD/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root_pwd -d mysql:8.0
+docker run -p 3306:3306 --name mysql -v $PWD/conf:/etc/mysql/conf.d -v $PWD/logs:/var/log/mysql -v $PWD/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root_pwd -d mysql:8.4 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci 
 
-
-cd /Users/xxx/programfils/plugin/docker/mysql
-mkdir -p ./data
-docker run -p 3306:3306 --name mysql -v $PWD/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root_pwd -d mysql:5.7  --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci 
 
 /*
 -p 3306:3306：将容器的3306端口映射到主机的3306端口
@@ -254,6 +251,7 @@ docker inspect --format='{{.Architecture}}' <image_name_or_id>
 
 // AMD架构 ：pull 方式1
 docker pull openjdk:8-jre-slim --platform linux/amd64
+docker pull openjdk:17-jdk-slim --platform linux/amd64
 
 // AMD架构 ：pull 方式2
 export DOCKER_DEFAULT_PLATFORM=linux/amd64
