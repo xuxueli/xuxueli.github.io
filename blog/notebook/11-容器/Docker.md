@@ -258,7 +258,7 @@ export DOCKER_DEFAULT_PLATFORM=linux/amd64
 docker pull openjdk:8-jre-slim
 
 // AMD：build 
-docker build -t xuxueli/xxl-job-admin:2.5.0 ./xxl-job-admin --platform linux/amd64  
+docker build -t xuxueli/xxl-job-admin:{指定版本} ./xxl-job-admin --platform linux/amd64  
 
 // AMD：run
 docker run -e PARAMS="--spring.datasource.url=jdbc:mysql://127.0.0.1:3306/xxl_job?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai" -p 8080:8080 -v /tmp:/data/applogs --name xxl-job-admin  -d xuxueli/xxl-job-admin:{指定版本} --platform linux/amd64
