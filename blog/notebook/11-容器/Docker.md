@@ -252,6 +252,7 @@ docker inspect --format='{{.Architecture}}' <image_name_or_id>
 // AMD架构 ：pull 方式1
 docker pull openjdk:8-jre-slim --platform linux/amd64
 docker pull openjdk:17-jdk-slim --platform linux/amd64
+docker pull openjdk:21-jdk-slim --platform linux/amd64
 
 // AMD架构 ：pull 方式2
 export DOCKER_DEFAULT_PLATFORM=linux/amd64
