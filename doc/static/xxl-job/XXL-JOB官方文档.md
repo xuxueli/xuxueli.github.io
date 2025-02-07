@@ -1,7 +1,7 @@
 ## 《分布式任务调度平台XXL-JOB》
 
 [![Actions Status](https://github.com/xuxueli/xxl-job/workflows/Java%20CI/badge.svg)](https://github.com/xuxueli/xxl-job/actions)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-job/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-job/)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-job-core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-job-core/)
 [![GitHub release](https://img.shields.io/github/release/xuxueli/xxl-job.svg)](https://github.com/xuxueli/xxl-job/releases)
 [![GitHub stars](https://img.shields.io/github/stars/xuxueli/xxl-job)](https://github.com/xuxueli/xxl-job/)
 [![Docker Status](https://img.shields.io/docker/pulls/xuxueli/xxl-job-admin)](https://hub.docker.com/r/xuxueli/xxl-job-admin/)
@@ -51,7 +51,7 @@ XXL-JOB是一个分布式任务调度平台，其核心设计目标是开发迅�
 - 28、推送maven中央仓库: 将会把最新稳定版推送到maven中央仓库, 方便用户接入和使用;
 - 29、运行报表：支持实时查看运行数据，如任务数量、调度次数、执行器数量等；以及调度报表，如调度日期分布图，调度成功分布图等；
 - 30、全异步：任务调度流程全异步化设计实现，如异步调度、异步运行、异步回调等，有效对密集调度进行流量削峰，理论上支持任意时长任务的运行；
-- 31、跨语言：调度中心与执行器提供语言无关的 RESTful API 服务，第三方任意语言可据此对接调度中心或者实现执行器。除此之外，还提供了 “多任务模式”和“httpJobHandler”等其他跨语言方案；
+- 31、跨语言/OpenAPI：调度中心与执行器提供语言无关的 OpenApi（RESTful 格式），第三方任意语言可据此对接调度中心或者实现执行器，实现多语言支持。除此之外，还提供了 “多任务模式”和“httpJobHandler”等其他跨语言方案；
 - 32、国际化：调度中心支持国际化设置，提供中文、英文两种可选语言，默认为中文；
 - 33、容器化：提供官方docker镜像，并实时更新推送dockerhub，进一步实现产品开箱即用；
 - 34、线程池隔离：调度线程池进行隔离拆分，慢任务自动降级进入"Slow"线程池，避免耗尽调度线程，提高系统稳定性；
@@ -783,6 +783,7 @@ XXL-JOB是一个分布式任务调度平台，其核心设计目标是开发迅�
     - 687、河南宠呦呦信息技术有限公司
     - 688、陕西星邑空间技术有限公司
     - 689、广东西欧克实业有限公司
+    - 690、唱吧麦颂KTV
     - ……
 
 > 更多接入的公司，欢迎在 [登记地址](https://github.com/xuxueli/xxl-job/issues/1 ) 登记，登记仅仅为了产品推广。
@@ -968,7 +969,7 @@ xxl.job.admin.timeout=3
 xxl.job.executor.appname=xxl-job-executor-sample
 ### 执行器注册 [选填]：优先使用该配置作为注册地址，为空时使用内嵌服务 ”IP:PORT“ 作为注册地址。从而更灵活的支持容器类型执行器动态IP和动态映射端口问题。
 xxl.job.executor.address=
-### 执行器IP [选填]：默认为空表示自动获取IP，多网卡时可手动设置指定IP，该IP不会绑定Host仅作为通讯实用；地址信息用于 "执行器注册" 和 "调度中心请求并触发任务"；
+### 执行器IP [选填]：默认为空表示自动获取IP，多网卡时可手动设置指定IP，该IP不会绑定Host仅作为通讯使用；地址信息用于 "执行器注册" 和 "调度中心请求并触发任务"；
 xxl.job.executor.ip=
 ### 执行器端口号 [选填]：小于等于0则自动获取；默认端口为9999，单机部署多个执行器时，注意要配置不同执行器端口；
 xxl.job.executor.port=9999
@@ -1167,7 +1168,7 @@ public void demoJobHandler() throws Exception {
 ![输入图片说明](https://www.xuxueli.com/doc/static/xxl-job/images/img_ZAsz.png "在这里输入图片标题")
 
 #### 原生内置Bean模式任务
-为方便用户参考与快速实用，示例执行器内原生提供多个Bean模式任务Handler，可以直接配置实用，如下：
+为方便用户参考与快速使用，示例执行器内原生提供多个Bean模式任务Handler，可以直接配置使用，如下：
 
 - demoJobHandler：简单示例任务，任务内部模拟耗时任务逻辑，用户可在线体验Rolling Log等功能；
 - shardingJobHandler：分片示例任务，任务内部模拟处理分片参数，可参考熟悉分片任务；
@@ -1402,7 +1403,7 @@ XXL-JOB调度模块基于自研调度组件并支持集群部署，调度数据�
 #### 5.4.1 quartz的不足
 Quartz作为开源作业调度中的佼佼者，是作业调度的首选。但是集群环境中Quartz采用API的方式对任务进行管理，从而可以避免上述问题，但是同样存在以下问题：
 
-- 问题一：调用API的的方式操作任务，不人性化；
+- 问题一：调用API的方式操作任务，不人性化；
 - 问题二：需要持久化业务QuartzJobBean到底层数据表中，系统侵入性相当严重。
 - 问题三：调度逻辑和QuartzJobBean耦合在同一个项目中，这将导致一个问题，在调度任务数量逐渐增多，同时调度任务逻辑逐渐加重的情况下，此时调度系统的性能将大大受限于业务；
 - 问题四：quartz底层以“抢占式”获取DB锁并由抢占成功节点负责运行任务，会导致节点负载悬殊非常大；而XXL-JOB通过执行器实现“协同分配式”运行任务，充分发挥集群优势，负载各节点均衡。
@@ -1636,7 +1637,7 @@ echo "分片总数 total = $3"
 
 ### 5.15 跨语言
 XXL-JOB是一个跨语言的任务调度平台，主要体现在如下几个方面：
-- 1、RESTful API：调度中心与执行器提供语言无关的 RESTful API 服务，第三方任意语言可据此对接调度中心或者实现执行器。（可参考章节 “调度中心/执行器 RESTful API” ）
+- 1、OpenApi（RESTful 格式）：调度中心与执行器提供语言无关的 RESTful API 服务，第三方任意语言可据此对接调度中心或者实现执行器，实现多语言支持。（可参考章节 “调度中心/执行器 RESTful API” ）
 - 2、多任务模式：提供Java、Python、PHP……等十来种任务模式，可参考章节 “5.5 任务 "运行模式" ”；理论上可扩展任意语言任务模式；
 - 2、提供基于HTTP的任务Handler（Bean任务，JobHandler="httpJobHandler"）；业务方只需要提供HTTP链接等相关信息即可，不限制语言、平台；（可参考章节 “原生内置Bean模式任务” ）
 
@@ -1670,12 +1671,12 @@ XXL-JOB日志主要包含如下两部分，均支持日志自动清理，说明�
 针对该问题，调度中心提供内置组件进行处理，逻辑为：调度记录停留在 "运行中" 状态超过10min，且对应执行器心跳注册失败不在线，则将本地调度主动标记失败；
 
 
-## 六、调度中心/执行器 RESTful API
+## 六、调度中心/执行器 OpenApi
 XXL-JOB 目标是一种跨平台、跨语言的任务调度规范和协议。
 
 针对Java应用，可以直接通过官方提供的调度中心与执行器，方便快速的接入和使用调度中心，可以参考上文 “快速入门” 章节。
 
-针对非Java应用，可借助 XXL-JOB 的标准 RESTful API 方便的实现多语言支持。
+针对非Java应用，可借助 XXL-JOB 的标准 OpenApi（RESTful API） 方便的实现多语言支持。
 
 - 调度中心 RESTful API：
     - 说明：调度中心提供给执行器使用的API；不局限于官方执行器使用，第三方可使用该API来实现执行器；
@@ -2216,7 +2217,7 @@ Tips: 历史版本(V1.3.x)目前已经Release至稳定版本, 进入维护阶段
 - 6、任务状态优化，仅运行状态"NORMAL"任务关联至quartz，降低quartz底层数据存储与调度压力；
 - 7、任务状态规范：新增任务默认停止状态，任务更新时保持任务状态不变；
 - 8、IP获取逻辑优化，优先遍历网卡来获取可用IP；
-- 9、任务新增的API服务接口返回任务ID，方便调用方实用；
+- 9、任务新增的API服务接口返回任务ID，方便调用方使用；
 - 10、组件化优化，移除对 spring 的依赖：非spring应用选用 "XxlJobExecutor" 、spring应用选用 "XxlJobSpringExecutor" 作为执行器组件；
 - 11、任务RollingLog展示逻辑优化，修复超时任务无法查看的问题；
 - 12、多项UI组件升级到最新版本，如：CodeMirror、Echarts、Jquery 等；
@@ -2440,9 +2441,9 @@ public void execute() {
 - b、版本v2.5.x为基于jdk8的最后的大版本，将会长期持续维护，问题及漏洞将会及时跟进修复。
 - c、下个大版本（v3.0）将会基于 jdk17 与 springboot3.x 构建；
 
-### 7.37 版本 v3.0.0 Release Notes[规划中]
+### 7.37 版本 v3.0.0 Release Notes[2025-02-07]
 - 1、【升级】调度中心升级至 SpringBoot3 + JDK17；
-- 2、【升级】Docker镜像升级，镜像构建基于JDK17（openjdk:17-jdk-slim）；
+- 2、【升级】Docker镜像升级，镜像构建基于JDK17；
 - 3、【优化】IP获取逻辑优化，优先遍历网卡来获取可用IP；
 - 4、【优化】通用命令行任务(“commandJobHandler”)优化，支持多参数执行，命令及参数之间通过空格隔开；如任务参数 "ls la" 或 "pwd" 将会执行命令并输出数据；
 - 5、【优化】通用HTTP任务（httpJobHandler）优化，任务参数格式调整为json格式；示例参数如下：
@@ -2453,7 +2454,15 @@ public void execute() {
     "data": "hello world"
 }
 ```
-- 6、[规划中]登陆态Token生成逻辑优化，混淆登陆时间属性，降低token泄漏风险；
+- 6、【升级】多个项目依赖升级至较新稳定版本，涉及 gson、groovy、spring/springboot 等；
+
+**备注：**
+- a、本次升级数据模型及通讯协议向前兼容，v2.4.*及后续版本可无缝升级；
+- b、从该版本(v3.0.x)开始基于 SpringBoot3 + JDK17 构建，
+
+### 7.38 版本 v3.0.1 Release Notes[规划中]
+- 1、[规划中]登陆态Token生成逻辑优化，混淆登陆时间属性，降低token泄漏风险；
+- 2、[规划中]组件扫描改为BeanPostProcessor方式，避免小概率情况下提前初始化；底层组件移除单例写法，汇总factory统一管理；
 
 ### TODO LIST
 - 1、调度隔离：调度中心针对不同执行器，各自维护不同的调度和远程触发组件。
