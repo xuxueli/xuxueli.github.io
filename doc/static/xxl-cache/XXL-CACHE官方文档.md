@@ -83,6 +83,8 @@ xxl.cache.l1.maxSize=-1
 xxl.cache.l1.expireAfterWrite=-1
 ## L2缓存（分布式）提供者，默认 redis
 xxl.cache.l2.provider=redis
+## L2缓存序列化方式，默认 java
+xxl.cache.l2.serializer=java
 ## L2缓存节点配置，多个节点用逗号分隔；示例 “127.0.0.1:6379,127.0.0.1:6380”
 xxl.cache.l2.nodes=127.0.0.1:6379
 ## L2缓存用户名配置
@@ -107,6 +109,7 @@ public XxlCacheFactory xxlCacheFactory() {
     xxlCacheFactory.setMaxSize(maxSize);
     xxlCacheFactory.setExpireAfterWrite(expireAfterWrite);
     xxlCacheFactory.setL2Provider(l2Provider);
+    xxlCacheFactory.setSerializer(serializer);
     xxlCacheFactory.setNodes(nodes);
     xxlCacheFactory.setUser(user);
     xxlCacheFactory.setPassword(password);
@@ -126,16 +129,28 @@ public XxlCacheFactory xxlCacheFactory() {
 示例代码：
 ```
 String category = "user";
+long survivalTime = 60*1000;
 String key = "user03";
 
-// 缓存写入 
-XxlCacheHelper.getCache(category).set(key, value);
+/**
+* 1、定义缓存对象，并指定 “缓存category + 过期时间”
+*/
+XxlCacheHelper.XxlCache userCache = XxlCacheHelper.getCache(category, survivalTime);
 
-// 缓存查询
-String value = XxlCacheHelper.getCache(category).get(key);
+/**
+* 2、缓存写：按照 L1 -> L2 顺序依次写缓存，同时借助内部广播机制更新全局L1节点缓存；
+*/
+userCache.set(key, value);
 
-// 缓存删除
-XxlCacheHelper.getCache(category).del(key);
+/**
+* 3、缓存读：按照 L1 -> L2 顺序依次读取缓存，如果L1存在缓存则返回，否则读取L2缓存并同步L1；
+*/
+userCache.get(key);
+
+/**
+* 4、缓存删：按照 L1 -> L2 顺序依次删缓存，同时借助内部广播机制更新全局L1节点缓存；
+*/
+userCache.del(key);
 ... 
 
 ```
@@ -193,13 +208,18 @@ XXL-CACHE 定位多级缓存框架，高效组合本地缓存和分布式缓存(
 - 6、【升级】多个依赖升级最新版本，如jedis、spring等；
 - 7、【优化】核心依赖推送maven中央仓库, 方便用户接入和使用;
 
-### v1.1.1 Release Notes[迭代中]
+### v1.2.0 Release Notes[2025-02-07]
+- 1、【重构】L2缓存序列化组件抽象，支持自定义扩展序列化方案 （Serializer）；
+- 2、【优化】移除容易依赖，精简Core体积；
+
+### v1.2.1 Release Notes[迭代中]
 - 1、[迭代中]缓存监控：L1、L2缓存命中率，L1缓存容量、内容占用等；
 
 ### TODO LIST
 - 1、缓存监控：L1、L2缓存命中率，L1缓存容量、内容占用等；
 - 2、多序列化方案；
 - 3、redis接入方式丰富，单节点、sentinel、cluster等；
+- 4、L1缓存，过期主动清理；
 
 
 ## 七、其他
