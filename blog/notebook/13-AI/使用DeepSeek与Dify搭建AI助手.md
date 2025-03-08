@@ -52,16 +52,16 @@ Dify 社区版默认使用 80 端口，点击链接 http://localhost 即可访�
 
 ### 5、将 DeepSeek 接入至 Dify
 
-配置模型供应商：点击 Dify 平台右上角头像 → 设置 → 模型供应商，选择 Ollama，轻点“添加模型”。
+配置模型供应商：点击Dify平台右上角头像 → 设置 → 模型供应商，选择 Ollama，轻点“添加模型”。
 
 ![img_270.png](https://www.xuxueli.com/blog/static/images/img_270.png)
 
-添加本地 DeepSeek 模型：选中 Ollama 供应商 → 点击“添加模型”，参考下午配置模型信息
+添加本地 DeepSeek 模型：选中 Ollama 供应商 → 点击“添加模型”，参考如下配置模型信息
 
 ![img_271.png](https://www.xuxueli.com/blog/static/images/img_271.png)
 
 
-特殊问题说明：如果Ollama作为macOS应用运行，上述配置模型URL可能无法识别，可更换成如下URL配置。请参考[Dify常见问题](https://docs.dify.ai/zh-hans/learn-more/use-cases/private-ai-ollama-deepseek-dify#id-1.-docker-bu-shu-shi-de-lian-jie-cuo-wu)。
+特殊问题说明：如果Ollama作为macOS应用运行，上述配置模型URL可能无法连接，可更换成如下URL配置。请参考[Dify常见问题](https://docs.dify.ai/zh-hans/learn-more/use-cases/private-ai-ollama-deepseek-dify#id-1.-docker-bu-shu-shi-de-lian-jie-cuo-wu)。
 
 ```
 http://host.docker.internal:11434
