@@ -151,12 +151,15 @@ public ToolCallbackProvider weatherTools(WeatherService weatherService) {
 第三步：自测验证（SSE方式）
 
 - 启动 MCP 服务（SSE方式需要手动启动）
+
 ``` 
 public static void main(String[] args) {
     SpringApplication.run(ServerApplication.class, args);
 }
 ```
+
 - 发起 SSE 请求
+
 ```
 // 初始化 SSE Client
 var client = McpClient.sync(new HttpClientSseClientTransport("http://localhost:8080")).build(
