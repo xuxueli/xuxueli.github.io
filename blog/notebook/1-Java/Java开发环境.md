@@ -404,6 +404,11 @@ Tips：推荐依赖树查看插件 Maven Helper
 ```
 
 
-## Mac根目录创建 data 目录
+## 其他
 
+**Mac根目录创建 data 目录**
 参考：[link](https://www.cnblogs.com/Alandre/p/15474716.html)
+
+**Github访问慢**   
+- 方式1：根据 ipaddress.com 获取 ip 地址，然后手动修改 hosts 文件：https://zhuanlan.zhihu.com/p/681350679 
+- 方式2：命令行 "export http_proxy…" 设置，手动git命令提交； 
