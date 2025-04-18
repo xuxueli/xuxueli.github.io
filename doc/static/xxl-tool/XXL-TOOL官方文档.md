@@ -32,7 +32,8 @@ IO模块 | 一系列处理IO（输入/输出）操作的工具。
 Encrypt模块 | 一系列处理编解码、加解密的工具。
 Http模块 | 一系列处理Http通讯、IP、Cookie等相关工具。
 JsonRpc模块 | 一个轻量级、跨语言远程过程调用实现，基于json、http实现（对比传统RPC框架：[XXL-RPC](https://github.com/xuxueli/xxl-rpc)）。
-Concurrent模块 | 一系列并发编程工具，具备良好的线程安全、高并发及高性能优势，包括CyclicThread（循环线程）、MessageQueue（高性能内存队列，30W+ TPS）等。
+Concurrent模块 | 一系列并发编程工具，具备良好的线程安全、高并发及高性能优势，包括CyclicThread（后台循环线程）、MessageQueue（高性能内存队列，30W+ TPS）、TimeWheel（时间轮组件）等。
+Exception模块 | 异常处理相关工具；
 ... | ...
 
 ### 1.4 下载
@@ -477,8 +478,7 @@ httpServer.createContext("/jsonrpc", new HttpHandler() {
 客户端代码：
 ```
 // 方式1：代理方式使用 （针对接口构建代理，通过代理对象实现远程调用；）
-UserService userService = new JsonRpcClient("http://localhost:8080/jsonrpc", 3000)
-                                    .proxy("userService", UserService.class);   // 根据接口创建代理对象
+UserService userService = new JsonRpcClient("http://localhost:8080/jsonrpc", 3000).proxy("userService", UserService.class);
 UserDTO result = userService.loadUser("zhangsan");
 
 
@@ -544,6 +544,21 @@ messageQueue.produce(addData);
 messageQueue.stop();
 ```
 
+**TimeWheel （时间轮）**
+说明：时间轮算法实现，具备高精度、多任务、以及线程安全等优势。
+参考单元测试，见目录：com.xxl.tool.test.concurrent.TimeWheelTest
+```
+// 定义时间轮
+TimeWheel timeWheel = new TimeWheel(60, 1000);
+timeWheel.start();
+System.out.println("start at:" + DateTool.format(new Date(), "yyyy-MM-dd HH:mm:ss SSS"));
+
+// 提交时间轮任务
+timeWheel.submitTask(System.currentTimeMillis() + 3000, () -> {
+    System.out.println("Task delay " + waitTime + "ms executed at: " + DateTool.format(new Date(), "yyyy-MM-dd HH:mm:ss SSS"));
+});
+```
+
 
 ### 2.12、更多
 略
@@ -596,7 +611,7 @@ messageQueue.stop();
 
 ### 3.8 v1.4.0 Release Notes[迭代中]
 - 1、【新增】JsonRpc模块：一个轻量级、跨语言远程过程调用实现，基于json、http实现（传统RPC框架对比：[XXL-RPC](https://github.com/xuxueli/xxl-rpc)）。
-- 2、【新增】Concurrent模块：一系列并发编程工具，具备良好的线程安全、高并发及高性能优势，包括循环线程、高性能队列等。
+- 2、【新增】Concurrent模块：一系列并发编程工具，具备良好的线程安全、高并发及高性能优势，包括CyclicThread（循环线程）、MessageQueue（高性能内存队列，30W+ TPS）等。
 - 3、【强化】已有工具能力完善，包括：CollectionTool、MapTool、HttpTool 等；
 - 4、【升级】升级依赖版本，如slf4j、poi、spring、gson…等。
 
