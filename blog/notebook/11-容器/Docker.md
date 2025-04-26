@@ -208,6 +208,18 @@ cp /usr/share/zoneinfo/PRC /etc/localtime
 date -R
 ```
 
+docker：
+```
+// docker
+docker pull pingcap/tidb:v8.5.0
+
+// create data dir
+mkdir -p /Users/xuxueli/workspaces/docker/instance/tidb/{data,logs}
+
+// run
+docker run -d --name tidb-standalone -p 4000:4000 -p 10080:10080 -p 2379:2379 -v /Users/xuxueli/workspaces/docker/instance/tidb/data:/tmp/tidb -v /Users/xuxueli/workspaces/docker/instance/tidb/logs:/var/log  pingcap/tidb:v8.5.0
+```
+
 zookeeper：  
 ```
 // zookeeper
