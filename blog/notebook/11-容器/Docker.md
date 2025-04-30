@@ -157,86 +157,7 @@ docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAdd
 
 ## Docker 部署常用软件
 
-mysql：
-```
-// mysql
-docker pull mysql:8.4
-
-cd /Users/admin/program/docker/instance/mysql
-
-mkdir -p ./data ./logs ./conf
-/*
-data目录将映射为mysql容器配置的数据文件存放路径
-logs目录将映射为mysql容器的日志目录
-conf目录里的配置文件将映射为mysql容器的配置文件
-*/
-
-// 参考文档：https://www.cnblogs.com/zqifa/p/mysql-6.html
-docker run -p 3306:3306 --name mysql -v $PWD/conf:/etc/mysql/conf.d -v $PWD/logs:/var/log/mysql -v $PWD/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root_pwd -d mysql:8.4 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci 
-
-
-/*
--p 3306:3306：将容器的3306端口映射到主机的3306端口
--v $PWD/conf:/etc/mysql/conf.d：将主机当前目录下的conf/my.cnf挂载到容器的/etc/mysql/my.cnf
--v $PWD/logs:/var/log/mysql：将主机当前目录下的logs目录挂载到容器的/logs
--v $PWD/data:/var/lib/mysql：将主机当前目录下的data目录挂载到容器的/mysql_data
--e MYSQL_ROOT_PASSWORD=123456：初始化root用户的密码
-*/
-
-// 同步时区
-docker cp /etc/localtime mysql:/etc/localtime
-// 同步时区2，重启后确认，参考：https://blog.csdn.net/zhangchao19890805/article/details/52690473
-docker exec -it <image-id> /bin/bash  
-cp /usr/share/zoneinfo/PRC /etc/localtime
-date -R
-```
-
-redis：
-```
-// redis
-docker pull redis:7.4
-
-cd /Users/admin/program/docker/instance/redis
-mkdir -p ./data
-
-docker run -p 6379:6379 --name redis -v $PWD/data:/data  -d redis:7.4 redis-server --appendonly yes
-/*
--p 6379:6379 : 将容器的6379端口映射到主机的6379端口
--v $PWD/data:/data : 将主机中当前目录下的data挂载到容器的/data
-redis-server --appendonly yes : 在容器执行redis-server启动命令，并打开redis持久化配置
-*/
-
-docker start redis
-docker stop redis
-
-```
-
-tidb：
-```
-// docker
-docker pull pingcap/tidb:v8.5.0
-
-// create data dir
-cd /Users/admin/program/docker/instance/tidb
-mkdir -p ./{data,logs}
-
-// run
-docker run -d --name tidb-standalone -p 4000:4000 -p 10080:10080 -p 2379:2379 -v $PWD/data:/tmp/tidb -v $PWD/logs:/var/log  pingcap/tidb:v8.5.0
-```
-
-elasticsearch：
-```
-// docker
-docker pull elasticsearch:8.18.0
-
-// create data dir
-cd /Users/admin/program/docker/instance/elasticsearch
-mkdir -p ./data
-
-// run
-docker run -d --name elasticsearch -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -v $PWD/data:/usr/share/elasticsearch/data elasticsearch:8.18.0
-
-```
+常用场景，如 mysql、redis、elasticsearch 等，见相关文档资料。
 
 zookeeper：  
 ```
@@ -256,7 +177,6 @@ clientPort=2181
 docker run -p 2181:2181 --name zookeeper -v $PWD/conf/zoo.cfg:/opt/zookeeper/conf/zoo.cfg  -v $PWD/data:/opt/zookeeper/data  -d zookeeper:3.4.12
 // --restart=always ：开机启动
 ```
-
 
 ## Docker 打包镜像
 

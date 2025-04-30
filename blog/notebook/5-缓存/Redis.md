@@ -556,11 +556,34 @@ Redis 没有关系型数据库中的表这一概念来将同种类型的数据�
 
 <div align="center"> <img src="https://www.xuxueli.com/blog/static/images/img_213.png" width="800"/> </div><br>
 
-# 十五、Redis安装-yum方式
+# 十五、Redis 安装与配置
 
-## EPEL安装
-centos需要epel支持； [EPEL官网](https://fedoraproject.org/wiki/EPEL/zh-cn)
+## 1、docker 部署 redis
 
+```
+// 1、拉取 redis 镜像
+docker pull redis:7.4
+
+// 2、新建映射目录
+cd /Users/admin/program/docker/instance/redis
+mkdir -p ./data
+
+// 3、启动 redis 容器
+docker run -p 6379:6379 --name redis -v $PWD/data:/data  -d redis:7.4 redis-server --appendonly yes
+/*
+-p 6379:6379 : 将容器的6379端口映射到主机的6379端口
+-v $PWD/data:/data : 将主机中当前目录下的data挂载到容器的/data
+redis-server --appendonly yes : 在容器执行redis-server启动命令，并打开redis持久化配置
+*/
+
+// 4、容器启停
+docker start redis
+docker stop redis
+```
+
+## 2、yum 部署 redis
+
+安装并更新 yum（ centos需要epel支持： [EPEL官网](https://fedoraproject.org/wiki/EPEL/zh-cn)  ）
 ```
 // 1、安装yum优先级插件
 yum install yum-priorities
@@ -575,8 +598,7 @@ rpm -q epel-release
 yum clean all && yum makecache
 ```
 
-## yum安装redis
-
+yum安装redis
 ```
 // 1、安装
 yum install redis

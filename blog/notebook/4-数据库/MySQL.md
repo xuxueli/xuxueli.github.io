@@ -422,6 +422,52 @@ MySQL 提供了 FROM_UNIXTIME() 函数把 UNIX 时间戳转换为日期，并提
 ```
 
 
+# 八、MySql 安装与配置
+
+## 1. docker部署 mysql
+
+```
+// a、拉取 mysql 镜像
+docker pull mysql:8.4
+
+// b、新建本地映射目录
+cd /Users/admin/program/docker/instance/mysql
+mkdir -p ./data ./logs ./conf
+
+/*
+data目录将映射为mysql容器配置的数据文件存放路径
+logs目录将映射为mysql容器的日志目录
+conf目录里的配置文件将映射为mysql容器的配置文件
+*/
+
+// c、启动容器  （ 参考文档：https://www.cnblogs.com/zqifa/p/mysql-6.html ）
+docker run -p 3306:3306 --name mysql \
+-v $PWD/conf:/etc/mysql/conf.d \
+-v $PWD/logs:/var/log/mysql \
+-v $PWD/data:/var/lib/mysql \
+-e MYSQL_ROOT_PASSWORD=root_pwd \
+-e TZ=Asia/Shanghai \
+-d mysql:8.4 \
+--character-set-server=utf8mb4 \
+--collation-server=utf8mb4_unicode_ci
+
+/*
+-p 3306:3306：将容器的3306端口映射到主机的3306端口
+-v $PWD/conf:/etc/mysql/conf.d：将主机当前目录下的conf/my.cnf挂载到容器的/etc/mysql/my.cnf
+-v $PWD/logs:/var/log/mysql：将主机当前目录下的logs目录挂载到容器的/logs
+-v $PWD/data:/var/lib/mysql：将主机当前目录下的data目录挂载到容器的/mysql_data
+-e MYSQL_ROOT_PASSWORD=123456：初始化root用户的密码
+*/
+
+// d、设置时区 （可选）
+// 同步时区-01：
+docker cp /etc/localtime mysql:/etc/localtime
+
+// 同步时区-02：重启后确认，参考：https://blog.csdn.net/zhangchao19890805/article/details/52690473
+docker exec -it <image-id> /bin/bash  
+cp /usr/share/zoneinfo/PRC /etc/localtime
+date -R
+```
 
 
 # 参考资料
