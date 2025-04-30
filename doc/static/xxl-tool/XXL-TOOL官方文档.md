@@ -637,13 +637,17 @@ Date expirationTime = jwtTool.getExpirationTime(token);
 - 2、【完善】工具类单测完善；
 - 3、【升级】升级依赖版本，如freemarker、junit…等。
 
-### 3.8 v1.4.0 Release Notes[迭代中]
+### 3.8 v1.4.0 Release Notes[2025-05-01]
 - 1、【新增】JsonRpc模块：一个轻量级、跨语言远程过程调用实现，基于json、http实现（传统RPC框架对比：[XXL-RPC](https://github.com/xuxueli/xxl-rpc)）。
 - 2、【新增】Concurrent模块：一系列并发编程工具，具备良好的线程安全、高并发及高性能优势，包括CyclicThread（循环线程）、MessageQueue（高性能内存队列，30W+ TPS）等。
-- 3、【新增】Auth模块：一系列权限认证相关工具，包括JwtTool...等。
-- 4、【强化】已有工具能力完善，包括：CollectionTool、MapTool、HttpTool 等；
-- 5、【升级】升级依赖版本，如slf4j、poi、spring、gson…等。
+- 3、【新增】Auth模块：一系列权限认证相关工具，包括JwtTool等。
+- 4、【强化】已有工具能力完善，包括 CollectionTool、MapTool、HttpTool 等；
+- 5、【升级】升级依赖版本，包括 slf4j、poi、spring、gson、junit等。
 
+### 3.8 v1.4.1 Release Notes[迭代中]
+- 1、【Todo】IPTool.getAvailablePort 重构，优化非法端口号校验、端口占用状态处理逻辑；
+- 2、【Todo】Excel模块：流式导入导出，API优化；
+- 3、【Todo】CVS模块；
 
 ### TODO LIST
 - excel模块：大数据导出，流式导入导出；
