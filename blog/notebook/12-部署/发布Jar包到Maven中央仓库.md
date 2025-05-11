@@ -8,11 +8,13 @@
 
 ### 相关地址
 
- 名称   | 地址                                                   | 说明                                                         
-------|------------------------------------------------------|------------------------------------------------------------
- 工单管理 | https://issues.sonatype.org/                         | 申请上传资格和groupId 的地方。注册账号、创建和管理issue，Jar包的发布是以解决issue的方式起步的。 
- 构件仓库 | https://oss.sonatype.org/                            | Jar包上传的位置，Release 之后就会同步到maven中央仓库。                        
- 仓库镜像 | http://search.maven.org/ 或 http://mvnrepository.com/ | 最终Jar包可以在这里搜索到。                                            
+| 名称             | 地址                                                           | 说明                                                         
+|----------------|--------------------------------------------------------------|------------------------------------------------------------
+| 工单管理           | https://issues.sonatype.org/                                 | 申请上传资格和groupId 的地方。注册账号、创建和管理issue，Jar包的发布是以解决issue的方式起步的。 
+| 构件仓库[旧版]       | https://oss.sonatype.org/                                    | Jar包上传的位置，Release 之后就会同步到maven中央仓库。
+| 发布镜像[新版]       | https://central.sonatype.com/publishing/namespaces    | Jar包上传;
+| 仓库镜像           | http://search.maven.org/ 或 http://mvnrepository.com/         | 最终Jar包可以在这里搜索到。
+
 
 ### 一、申请上传资格和groupId
 访问工单管理界面需要提前注册，进行工单管理和构建仓库身份验证。
@@ -72,9 +74,20 @@
                         </execution>
                     </executions>
                 </plugin>
+                <!-- maven central -->
+                <plugin>
+                    <groupId>org.sonatype.central</groupId>
+                    <artifactId>central-publishing-maven-plugin</artifactId>
+                    <version>0.7.0</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <publishingServerId>central</publishingServerId>
+                    </configuration>
+                </plugin>
             </plugins>
         </build>
-        <!-- oss distributionManagement -->
+        
+        <!-- oss distributionManagement：废弃，老版本 -->
         <distributionManagement>
             <snapshotRepository>
                 <id>oss</id>
@@ -84,7 +97,8 @@
                 <id>oss</id>
                 <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
             </repository>
-        </distributionManagement>
+        </distributionManagement> -->
+        
     </profile>
 </profiles>
 ```
@@ -92,12 +106,20 @@
 ### 三、配置Maven setting.xml
 setting.xml放在Maven安装文件/conf目录下
 ```
-// oss 配置：Token方式，登录 oss->profile->user token生成；
+// maven center 配置：Token方式，登录 central.sonatype.com -> View Account -> Generate User Token 生成；
+<server>
+  <id>central</id>
+  <username>{随机 username}</username>
+  <password>{随机token value}</password>
+</server>
+
+
+<!--  // oss 配置：Token方式，登录 oss->profile->user token生成；  废弃，老版本
 <server>
   <id>oss</id>
   <username>{随机token key}</username>
   <password>{随机token value}</password>
-</server>
+</server> -->
 ```
 
 ### 四、配置gpg-key
@@ -194,7 +216,10 @@ mvn clean deploy -P release -Dgpg.keyname={用户ID} -Dgpg.passphrase={passphras
 ```
 
 ### 五、发布JAR到正式仓库
-登录OSS，在构建仓库的Staging菜单中找到刚刚发布JAR包，依次进行Close、Release操作，大约2小时后自动同步到正式仓库。
+
+新版本：登录 maven-central，右上角 View Deployments 查看刚刚推送的Jar包，点击 Publish 操作，大约2小时后自动同步到正式仓库。
+
+老版本： 登录OSS，在构建仓库的Staging菜单中找到刚刚发布JAR包，依次进行Close、Release操作，大约2小时后自动同步到正式仓库。
 
 
 注意：
