@@ -6,7 +6,7 @@
     <link rel="icon" href="../favicon.ico">
 
     <meta name="keywords" content="轻量级,分布式,消息,队列,XXL-MQ">
-    <meta name="description" content="XXL-MQ是一款轻量级分布式消息队列，拥有 水平扩展、高可用、海量数据堆积、单机TPS过10万、毫秒级投递 等特性, 支持 并发消息、串行消息、广播消息、延迟消息、事务消费、失败重试、超时控制 等消息特性。现已开放源代码，开箱即用。">
+    <meta name="description" content="XXL-MQ是一个轻量级分布式消息队列，具备“轻量级、分布式、高吞吐（单机TPS 10W+）、海量消息（亿级）” 等特性，支持 “并行消息、串行消息、分片消息、广播消息、延迟消息、失败重试消息”多消息类型，现已开放源代码，开箱即用。">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 
     <!-- CSS  -->
@@ -76,11 +76,11 @@
                             <div class="row center">
                                 <img src="https://www.xuxueli.com/doc/static/xxl-job/images/xxl-logo.jpg" style="width: 99px;" >
                                 <h5 class2="center teal-text text-lighten-2">XXL-MQ</h5>
-                                <h6>分布式消息队列</h6>
+                                <h6>【轻量级】分布式消息队列</h6>
                                 <p class="light">
-                                    水平扩展、高可用、海量数据堆积、单机TPS过10万、毫秒级投递
+                                    轻量级、分布式、高吞吐（单机TPS 10W+）
                                     <br>
-                                    并发消息、串行消息、广播消息、延迟消息、事务消费、失败重试、超时控制
+                                    并发消息、串行消息、分片消息、广播消息、延时消息、失败重试消息
                                 </p>
                             </div>
                             <div class="row center">
@@ -149,6 +149,50 @@
 <script>
     $(function () {
         $('.sidenav').sidenav();
+        $(".dropdown-trigger").dropdown();
+
+        // slideToTop start
+        var slideToTop = $("<div />");
+        slideToTop.html('<i class="fa fa-chevron-up"></i>');
+        slideToTop.css({
+            position: 'fixed',
+            bottom: '20px',
+            right: '25px',
+            width: '40px',
+            height: '40px',
+            color: '#eee',
+            'font-size': '',
+            'line-height': '40px',
+            'text-align': 'center',
+            'background-color': '#222d32',
+            cursor: 'pointer',
+            'border-radius': '5px',
+            'z-index': '99999',
+            opacity: '.7',
+            'display': 'none'
+        });
+        slideToTop.on('mouseenter', function () {
+            $(this).css('opacity', '1');
+        });
+        slideToTop.on('mouseout', function () {
+            $(this).css('opacity', '.7');
+        });
+        $('body').append(slideToTop);
+        $(window).scroll(function () {
+            if ($(window).scrollTop() >= 150) {
+                if (!$(slideToTop).is(':visible')) {
+                    $(slideToTop).fadeIn(500);
+                }
+            } else {
+                $(slideToTop).fadeOut(500);
+            }
+        });
+        $(slideToTop).click(function () {
+            $("html,body").animate({		// firefox ie not support body, chrome support body. but found that new version chrome not support body too.
+                scrollTop: 0
+            }, 100);
+        });
+        // slideToTop end
     });
 </script>
 
