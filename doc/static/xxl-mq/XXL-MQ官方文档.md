@@ -1,9 +1,10 @@
 ## 《分布式消息队列XXL-MQ》
 
-[![Build Status](https://travis-ci.org/xuxueli/xxl-mq.svg?branch=master)](https://travis-ci.org/xuxueli/xxl-mq)
-[![Docker Status](https://img.shields.io/badge/docker-passing-brightgreen.svg)](https://hub.docker.com/r/xuxueli/xxl-mq-admin/)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-mq/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-mq/)
+[![Actions Status](https://github.com/xuxueli/xxl-mq/workflows/Java%20CI/badge.svg)](https://github.com/xuxueli/xxl-mq/actions)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-mq-core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-mq-core/)
 [![GitHub release](https://img.shields.io/github/release/xuxueli/xxl-mq.svg)](https://github.com/xuxueli/xxl-mq/releases)
+[![GitHub stars](https://img.shields.io/github/stars/xuxueli/xxl-mq)](https://github.com/xuxueli/xxl-mq/)
+[![Docker pulls](https://img.shields.io/docker/pulls/xuxueli/xxl-mq-admin)](https://hub.docker.com/r/xuxueli/xxl-mq-admin/)
 [![License](https://img.shields.io/badge/license-GPLv3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html)
 [![donate](https://img.shields.io/badge/%24-donate-ff69b4.svg?style=flat-square)](https://www.xuxueli.com/page/donate.html)
 
@@ -14,43 +15,47 @@
 ## 一、简介
 
 ### 1.1 概述
-XXL-MQ是一款轻量级分布式消息队列，拥有 "水平扩展、高可用、海量数据堆积、单机TPS过10万、毫秒级投递" 等特性, 
-支持 "并发消息、串行消息、广播消息、延迟消息、事务消费、失败重试、超时控制" 等消息特性。现已开放源代码，开箱即用。
-
+XXL-MQ是一个轻量级分布式消息队列，具备“轻量级、分布式、高吞吐（单机TPS 10W+）、海量消息（亿级）” 等特性，支持 “并行消息、串行消息、分片消息、广播消息、延迟消息、失败重试消息”多消息类型，现已开放源代码，开箱即用。
 
 ### 1.2 特性
 
-- 1、简单易用: 一行代码即可发布一条消息; 一行注解即可订阅一个消息主题;
-- 2、轻量级: 部署简单，不依赖第三方服务，一分钟上手；
-- 3、水平扩展：消息中心支持无限水平扩展，这里的水平扩展包括两方面：消息生产能力、消息消费能力；通过集群扩展线性提升消息吞吐能力；
-- 4、高可用：消息中心能够忍受部分示例失效，不影响整个集群的可用性。通过内置注册中心可以实现秒级摘除失效节点，消息服务动态转移；
-- 5、消息持久化：全部消息持久化存储，消息中心支持通过配置选择是否清理过期消息。
-- 6、强数据安全：消息数据存储在DB中，可事务保障数据安全，防止消息数据丢失；
-- 7、海量数据堆积：消息数据存储在DB中，原生兼容支持 "MySQL、TIDB" 两种存储方式，前者支持千万级消息堆积，后者支持百亿级别消息堆积（TIDB理论上无上限）；
-- 8、单机TPS过10W：单机TPS受限于DB存储方式，选型 "MySQL" 时单机TPS过万，选型 "TIDB" 时单机TPS过10万；
-- 9、毫秒级投递延迟：消息中心与客户端通过RPC的方式进行消息通讯，毫秒级延时；
-- 10、多种消息模式: 
-    - 并行消息：消息平均分配在该主题在线消费者，分片方式并行消费；适用于吞吐量较大的消息场景，如邮件发送、短信发送等业务逻辑
-    - 串行消息：消息固定分配给该主题在线消费者中其中一个，FIFO方式串行消费；适用于严格限制并发的消息场景，如秒杀、抢单等排队业务逻辑；
-    - 广播消息：消息将会广播发送给该主题在线消费者分组，全部分组都会消费该消息，但是一个分组下只会消费一次；适用于广播场景，如广播更新缓存等
-- 11、延时消息: 支持设置消息的延迟生效时间, 到达设置的生效时间时该消息才会被消费；适用于延时消费场景，如订单超时取消等;
-- 12、事务性: 消费者开启事务开关后,消息事务性保证只会成功执行一次;
-- 13、失败重试: 支持设置消息的重试次数, 在消息执行失败后将会按照设置的值进行消息重试执行,直至重试次数耗尽或者执行成功;
-- 14、超时控制: 支持自定义消息超时时间，消息消费超时将会主动中断；
-- 15、消息可见: 系统中每一条消息可通过Web界面在线查看,甚至支持编辑消息内容和消息状态;
-- 16、消息可追踪: 支持追踪每一条消息的执行路径, 便于排查业务问题;
-- 17、消息失败告警：支持以Topic粒度监控消息，存在失败消息时主动推送告警邮件；默认提供邮件方式失败告警，同时预留扩展接口，可方面的扩展短信、钉钉等告警方式；
-- 18、容器化：提供官方docker镜像，并实时更新推送dockerhub，进一步实现产品开箱即用；
-- 19、访问令牌（accessToken）：为提升系统安全性，消息中心和客户端进行安全性校验，双方AccessToken匹配才允许通讯；
-
+- 1、简单易用: 一行代码即可发布一条消息，一行注解即可订阅一个消息主题，接入灵活方便；
+- 2、轻量级: 除存储层（可选，支持MySQL/Blade），无第三方依赖；部署及运维低成本、轻量级。
+- 3、水平扩展：得益于存算分离系统设计，消息中心为无状态服务；消息中心（Broker）及消费者（Client）均支持集群扩展部署，线形提升消息生产及吞吐能力；
+- 4、高可用/HA：消息中心内置注册发现能力，支持Broker服务以及Topic消费者动态注册；消息中心与消费者单节点故障时，可自动摘除故障节点，实现消息吞吐及消费故障转移；
+- 5、高吞吐：消息生产及消费链路进行批量、并行及异步系统设计，消息存储进行冷数据及时清理归档设计，实现消息高吞吐（Mysql存储单机吞吐1W；Blade存储单机吞吐10W）。
+- 6、海量消息：消息存储基于DB实现，支持Mysql、Blade多存储介质；消息存储进行冷热设计，并滚动式清理归档，支持海量消息堆积（Mysql存储支持千万级；Blade存储支持10亿级/理论无上限）。
+- 7、存算分离：消息中心（Broker）设计为无状态服务，提供主题及消息控制台管理能力以及消息RPC服务能力，与消息存储层解耦；
+- 8、跨语言/OpenAPI：提供语言无关的消息中心 OpenAPI（RESTFUL 格式），提供消息生产、拉取及消费等能力，实现多语言支持；
+- 9、实时性：消息中心与消费者基于JsonRpc进行吞吐消费，支持毫秒级生产投递、秒级消费感知，延迟消息基于时间轮机制支持零延迟消费感知；
+- 10、消息持久化：消息数据默认持久化存储，并支持Topic维度自定义清理归档策略，灵活控制消息数据滚动归档清理；
+- 11、分区路由策略：针对消息数据进行分区并路由消费者，提供丰富路由策略，包括：Hash、轮询、随机、第一个、最后一个、广播；
+- 12、归档策略：针对已消费完成数据滚动归档及清理，提供丰富归档策略，包括：归档保留7天、归档保留30天、归档保留90天、归档永久保留、不归档直接清理；
+- 13、重试策略：针对消费失败消息，支持设置丰富重试策略，包括：固定间隔、线性间隔、随机间隔；
+- 14、失败重试：针对消费失败消息，支持自定义重试次数、以及重试间隔基数，结合重试策略支持灵活消费失败重试，支持重试次数耗尽或者消费成功；
+- 15、超时控制: 支持自定义消息超时时间，消息消费超时将会主动中断；
+- 16、多消息类型:
+  - 并行消息：多个消费者并行消费数据，支持轮询或随机策略。适用于消息吞吐量较大的业务场景，如邮件发送、日志记录等。
+  - 串行消息：同一时刻只有一个消费者消费数据，消息按照生产顺序FIFO串行消费。适用于有串行消费诉求的业务场景，如秒杀、抢单等场景；
+  - 分片消息：支持根据业务参数进行Hash分片，相同分片的消息数据路由至同一个消费者FIFO串行消费，不同分片的消息数据路由至不同消费者并行执行。适用于有根据业务参数分片消费的业务场景，如短信发送，可实现同一个手机号（业务参数）的消息路由至单个消费者串行消息，同时全局消息分片并行消费。
+  - 广播消息：消息发送后，广播发送给相关主题全部在线消费者。适用于广播消息场景，如广播通知、广播更新缓存等；
+  - 延时消息：支持设置消息的延迟生效时间，到达设置的生效时间时该消息才会被消费。适用于延时消费场景，如订单超时取消、定时发送邮件等；
+  - 失败重试消息：支持设置消息的失败重试次数，自定义重试间隔侧路，消息失败时会主动进行重试消费，直至重试次数耗尽或者消费成功。
+- 17、消息可视化: 提供消息中心Web控制台，可在线管理消息主题、消息数据，查看消费数据及消费轨迹等；
+- 18、消息轨迹: 消费生产及消费轨迹日志会进行记录，并支持在线查看，辅助排查业务问题；
+- 19、优先级：支持设置消息主题优先级，优先级越高，消费吞吐资源配置及保障越高；
+- 20、消息失败告警：支持以Topic粒度监控消息，存在失败消息时主动推送告警邮件；默认提供邮件方式失败告警，同时预留扩展接口，可方面的扩展短信、钉钉等告警方式；
+- 21、容器化：提供官方Docker镜像，并实时更新推送DockerHub，进一步实现产品开箱即用；
+- 22、访问令牌（AccessToken）：为提升系统安全性，消息中心和消费者客户端进行安全性校验，校验AccessToken合法性；
 
 
 ### 1.3 发展
 于2015年中，我在github上创建XXL-MQ项目仓库并提交第一个commit，随之进行系统结构设计，UI选型，交互设计……
 
 至今，XXL-MQ已接入多家公司的线上产品线，截止2016-09-18为止，XXL-MQ已接入的公司包括不限于：
-    
+
 	- 1、农信互联
+    - 2、源源科技
 	- ……
 
 > 更多接入的公司，欢迎在 [登记地址](https://github.com/xuxueli/xxl-mq/issues/1 ) 登记，登记仅仅为了产品推广。
@@ -60,14 +65,25 @@ XXL-MQ是一款轻量级分布式消息队列，拥有 "水平扩展、高可用
 
 #### Why MQ
 
-- 异步: 很多场景下，不会立即处理消息，此时可以在MQ中存储message，并在某一时刻再进行处理；
-- 解耦: 不同进程间添加一层实现解耦，方便今后的扩展。
-- 消除峰值: 在高并发环境下，由于来不及同步处理，请求往往会发生堵塞，比如大量的insert，update之类的请求同时到达mysql，直接导致无数的行锁表锁，甚至最后请求会堆积过多，从而触发too manyconnections错误。通过使用消息队列，我们可以异步处理请求，从而缓解系统的压力。
-- 耗时业务: 在一些比较耗时的业务场景中, 可以耗时较多的业务解耦通过异步队列执行, 提高系统响应速度和吞吐量;
+- 1、**系统解耦**：生产者与消费者无需直接依赖，降低模块间耦合度，提升可维护性。
+- 2、**异步处理**：将耗时操作异步化，提高响应速度，增强用户体验。
+- 3、**削峰填谷**：缓解高并发请求对系统的冲击，防止系统雪崩。
+- 4、**保证最终一致性**：通过消息通知实现跨系统数据同步，支持重试机制确保一致性。
+- 5、**多通信模式诉求**：如点对点、发布订阅、延迟消息等，适应不同业务场景。
+- 6、**提高可靠性与容错能力**：消息持久化、失败重试、死信队列等机制保障消息不丢失。
+
 
 #### Why XXL-MQ
 
-目前流行的ActiveMQ、RabbitMQ和ZeroMQ等消息队列的软件中，大多为了实现AMQP，STOMP，XMPP之类的协议，变得极其重量级(如新版本Activemq建议分配内存达1G+)，但在很多Web应用中的实际情况是：我们只是想找到一个缓解高并发请求的解决方案，一个轻量级的消息队列实现方式才是我们真正需要的。
+Kafka、RabbitMQ等流行消息中间件，具备高吞吐及高性能等优势，但相对应的存在运维及搭建成本、高硬件资源消耗、依赖组件复杂度、冷启动成本等。如Kafka集群要求三节点部署、单独配置ZK（或启用KRaft）。
+
+如果你期望 “轻量级、分布式、低运维成本、中等规模消息量级（TPS<10W；消息存储<10亿）”，轻量级分布式消息队列 XXL-MQ 是一个适合的解决方案，对比特征如下：
+
+- 1、**部署轻量级**：除存储层（可选，支持MySQL/Blade），无第三方依赖；部署及运维低成本、轻量级。
+- 2、**低运维成本**：可复用已有存储层基建能力，不需要额外运维；
+- 3、**开发门槛低**：一行代码即可发布一条消息，一行注解即可订阅一个消息主题，接入灵活方便；
+- 4、**特性丰富**：相较于传统消息中间件，具备丰富特性。详细参考章节 “1.2 特性”。
+- 5、**二次开发**：系统基于流行语言及技术实现，可灵活进行二次开发，自定义扩展满足业务需求。
 
 
 ### 1.4 下载
@@ -90,9 +106,10 @@ XXL-MQ是一款轻量级分布式消息队列，拥有 "水平扩展、高可用
 #### 中央仓库地址
 
 ```
+<!-- http://repo1.maven.org/maven2/com/xuxueli/xxl-mq-core/ -->
 <dependency>
     <groupId>com.xuxueli</groupId>
-    <artifactId>xxl-mq-client</artifactId>
+    <artifactId>xxl-mq-core</artifactId>
     <version>{最新Release版本}</version>
 </dependency>
 ```
@@ -100,37 +117,39 @@ XXL-MQ是一款轻量级分布式消息队列，拥有 "水平扩展、高可用
 ### 1.5 环境
 
 - Maven3+
-- Jdk1.7+
-- Mysql5.6+ （或 TIDB）
+- Jdk1.8+
+- Mysql8.0+
 
 
 ## 二、快速入门
-
 
 ### 2.1 初始化"消息中心数据库"
 请下载项目源码并解压，获取 "消息中心数据库初始化SQL脚本" 并执行即可
 
 "消息中心数据库初始化SQL脚本" 位置为:
-
-    /xxl-mq/doc/db/xxl-mq-mysql.sql
-    
+```
+/xxl-mq/doc/db/tables_xxl_mq.sql
+``` 
 消息中心支持集群部署，集群情况下各节点务必连接同一个mysql实例;
 
->注意：消息中心数据库，原生兼容支持 "MySQL、TIDB" 两种存储方式，前者支持千万级消息堆积，后者支持百亿级别消息堆积（TIDB理论上无上限）；
-可视情况选择使用，当选择TIDB时，仅需要修改消息中心数据库连接jdbc地址配置即可，其他部分如SQL和驱动兼容MySQL和TIDB使用，不需修改。
+> 注意：消息中心数据库，原生兼容支持 "MySQL、TIDB" 两种存储方式，前者支持千万级消息堆积，后者支持10亿级别消息堆积（TIDB理论上无上限）；
+> 可视情况选择使用，当选择TIDB时，仅需要修改消息中心数据库连接jdbc地址配置即可，其他部分如SQL和驱动兼容MySQL和TIDB使用，不需修改。
 
 
 ### 2.2 编译项目
 解压源码,按照maven格式将源码导入IDE, 使用maven进行编译即可，源码结构如下：
 
-    - /xxl-mq-admin                 ：消息中心，提供消息Broker、服务注册、消息在线管理功能；
-    - /xxl-mq-client                ：客户端核心依赖, 提供API开发Producer和Consumer；
-    - /xxl-mq-samples               ：接入项目参考示例, 可自行参考学习并使用；
+    - /xxl-mq-admin                     ：消息中心，
+    - /xxl-mq-core                      ：客户端核心依赖, 提供API支持进行 消费生产 以及 消费者 开发；
+    - /xxl-mq-samples                   ：接入项目参考示例, 可自行参考学习并使用；
         - /xxl-mq-samples-frameless     ：无框架示例项目，不依赖第三方框架，只需main方法即可启动运行；
         - /xxl-mq-samples-springboot    ：springboot版本示例项目；
-        
 
-### 2.3 配置部署“消息中心”
+
+### 2.3 “消息中心”配置
+
+    消息中心项目：xxl-mq-admin
+    作用：提供消息Broker、客户端注册能力，以及消息主题及消息在线管理等功能；
 
 #### 步骤一：消息中心配置：
 消息中心配置文件地址：
@@ -142,38 +161,25 @@ XXL-MQ是一款轻量级分布式消息队列，拥有 "水平扩展、高可用
 消息中心配置内容说明：
 
 ```
-### 数据库配置
-spring.datasource.url=jdbc:mysql://127.0.0.1:3306/xxl-mq?Unicode=true&characterEncoding=UTF-8
+### 消息中心JDBC链接：链接地址请保持和 2.1章节 所创建的数据库的地址一致
+spring.datasource.url=jdbc:mysql://127.0.0.1:3306/xxl_mq?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
+... 
 
-### 告警邮箱发送方配置
+### 报警邮箱
+spring.mail.host=smtp.qq.com
+spring.mail.port=25
 spring.mail.username=xxx@qq.com
 spring.mail.password=xxx
+... 
 
-### 注册心跳时间
-xxl.mq.registry.beattime=10
-
-### 注册信息磁盘存储目录，务必拥有读写权限；
-xxl.mq.registry.data.filepath=/data/applogs/xxl-mq/registrydata
-
-### 消息中心Broker服务RPC通讯地址，为空则自动获取
-xxl-mq.rpc.remoting.ip=
-
-### 消息中心Broker服务RPC通讯端口
-xxl-mq.rpc.remoting.port=7080
-
-### 日志保存天数，超过该阈值的成功消息将会被自动清理；大于等于3时生效
-xxl.mq.log.logretentiondays=3
-
-### 登陆信息配置
-xxl.mq.login.username=admin
-xxl.mq.login.password=123456
-
+### 消息中心国际化配置 [必填]： 默认为 "zh_CN"/中文简体, 可选范围为 "zh_CN"/中文简体, "zh_TC"/中文繁体 and "en"/英文；
+xxl.mq.i18n=zh_CN
 ``` 
 
 #### 步骤二：部署项目：
-
 如果已经正确进行上述配置，可将项目编译打包部署。
-消息中心访问地址：http://localhost:8080/xxl-mq-admin (该地址接入方项目将会使用到，作为注册地址)，登录后运行界面如下图所示
+
+消息中心访问地址：http://127.0.0.1:8080/xxl-mq-admin  (该地址接入方项目将会使用到)，登录后运行界面如下图所示
 
 ![输入图片说明](https://www.xuxueli.com/doc/static/xxl-mq/images/img_01.png "在这里输入图片标题")
 
@@ -184,7 +190,6 @@ xxl.mq.login.password=123456
 
 消息中心集群部署时，几点要求和建议：
 - DB配置保持一致；
-- 登陆账号配置保持一致；
 - 集群机器时钟保持一致（单机集群忽视）；
 - 建议：推荐通过nginx为消息中心集群做负载均衡，分配域名。消息中心访问、客户端使用等操作均通过该域名进行。
 
@@ -199,13 +204,12 @@ docker pull xuxueli/xxl-mq-admin
 - 创建容器并运行
 
 ```
-docker run -p 8080:8080 -v /tmp:/data/applogs --name xxl-mq-admin  -d xuxueli/xxl-mq-admin
-
 /**
-* 如需自定义 mysql 等配置，可通过 "PARAMS" 指定，参数格式 RAMS="--key=value  --key2=value2" ；
+* 如需自定义 mysql 等配置，可通过 "-e PARAMS" 指定，参数格式 PARAMS="--key=value  --key2=value2" ；
 * 配置项参考文件：/xxl-mq/xxl-mq-admin/src/main/resources/application.properties
+* 如需自定义 JVM内存参数 等配置，可通过 "-e JAVA_OPTS" 指定，参数格式 JAVA_OPTS="-Xmx512m" ；
 */
-docker run -e PARAMS="--spring.datasource.url=jdbc:mysql://127.0.0.1:3306/xxl-mq?Unicode=true&characterEncoding=UTF-8" -p 8080:8080 -p 7080 -v /tmp:/data/applogs --name xxl-mq-admin  -d xuxueli/xxl-mq-admin
+docker run -e PARAMS="--spring.datasource.url=jdbc:mysql://127.0.0.1:3306/xxl_mq?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai" -p 8080:8080 -v /tmp:/data/applogs --name xxl-mq-admin  -d xuxueli/xxl-mq-admin:{指定版本}
 ```
 
 
@@ -215,9 +219,9 @@ docker run -e PARAMS="--spring.datasource.url=jdbc:mysql://127.0.0.1:3306/xxl-mq
     作用：生产消息、消费消息；可直接部署，也可以将集成到现有业务项目中。
 
 #### 步骤一：maven依赖
-确认pom文件中引入了 "xxl-mq-client" 的maven依赖；
+确认pom文件中引入了 "xxl-mq-core" 的maven依赖；
 
-#### 步骤二："消息接入方"，属性配置
+#### 步骤二："消息接入方" 配置
 消息接入方配置，配置文件地址：
 
 ```
@@ -227,122 +231,162 @@ docker run -e PARAMS="--spring.datasource.url=jdbc:mysql://127.0.0.1:3306/xxl-mq
 消息接入方配置，配置内容说明：
 
 ```
-# 消息中心跟地址；支持配置多个，建议域名方式配置；
-xxl.mq.admin.address=http://localhost:8080/xxl-mq-admin
+# 消息中心根地址 [必填]；支持配置多个，建议域名方式配置；
+xxl.mq.admin.address=http://127.0.0.1:8080/xxl-mq-admin
+# 通讯TOKEN [必填]：非空时启用；
+xxl.mq.admin.accesstoken=defaultaccesstoken
+# 客户端AppName [必填]：与消息主题/Topic自动绑定；
+xxl.mq.client.appname=xxl-mq-sample
+# 客户端通讯超时时间[选填]，单位秒；默认3s；
+xxl.mq.client.timeout=3000
+# 客户端批量拉消息批次大小[选填]，默认100；
+xxl.mq.client.pull.batchsize=100；合法区间 [20, 500]
+## xxl-mq, client pull interval
+# 客户端拉消息批次间隔时间[选填]，单位毫秒；默认3000ms；合法区间 [1000, 30000]
+xxl.mq.client.pull.interval=1000
 ```
-    
+
 #### 步骤三："消息接入方"，组件配置
 
 ```
 @Bean
-public XxlMqSpringClientFactory getXxlMqConsumer(){
-    XxlMqSpringClientFactory xxlMqSpringClientFactory = new XxlMqSpringClientFactory();
-    xxlMqSpringClientFactory.setAdminAddress(adminAddress);
+public XxlMqSpringBootstrap getXxlMqConsumer(){
+    // init xxl-mq spring bootstrap
+    XxlMqSpringBootstrap xxlMqBootstrap = new XxlMqSpringBootstrap();
+    xxlMqBootstrap.setAddress(address);
+    xxlMqBootstrap.setAccesstoken(accesstoken);
+    xxlMqBootstrap.setAppname(appname);
+    xxlMqBootstrap.setTimeout(timeout);
+    xxlMqBootstrap.setPullBatchsize(batchsize);
+    xxlMqBootstrap.setPullInterval(interval);
 
-    return xxlMqSpringClientFactory;
+    return xxlMqBootstrap;
 }
 ```    
-    
+
 #### 步骤四：部署"消息接入方"项目：
 
+如果已经正确进行上述配置，可将"消息接入方"项目编译打部署，系统提供多种Sample示例项目，选择其中一个即可，各自的部署方式如下。
+
+    xxl-mq-samples-springboot：项目编译打包成springboot类型的可执行JAR包，命令启动即可；
+    xxl-mq-samples-frameless：项目编译打包成JAR包，命令启动即可；
+
+至此“消息接入方”项目已经部署结束。
+
 如果已经正确进行上述配置，可将项目编译打包部署。
-springboot版本示例项目，访问地址：http://localhost:8081/
-
-
-至此“消息接入方”示例项目已经部署结束。
+springboot版本示例项目，访问地址：http://127.0.0.1:8081/
 
 
 #### 步骤五："消息接入方"集群（可选）：
 消息接入方支持集群部署，提升消息系统可用性，同时提升消息处理能力。
 
 消息接入方集群部署时，要求和建议：
-- 消息中心跟地址（xxl.mq.admin.address）需要保持一致；
+- 消息中心根地址（xxl.mq.admin.address）需要保持一致；
+- 同一个客户端集群内AppName（xxl.mq.client.appname）需要保持一致；消息中心消息路由时根据Topic匹配关联的AppName，并发现AppName在线消费节点列表。
 
 
 ### 2.5 生产消息、消费消息
 
-#### 生产消息
+#### a、生产消息
 
+**消息生产API说明：**
+
+API：com.xxl.mq.core.XxlMqHelper.produce
+参数：
+- topic：消息主题
+- data：消息数据
+- effectTime：消息延迟生效时间，为空时立即执行；
+- bizId：业务参数ID，支持根据业务参数进行Hash分片，相同分片的消息数据路由至同一个消费者FIFO串行消费，不同分片的消息数据路由至不同消费者并行执行。
+
+**消息生产示例代码**
 ```
 /**
- * 生产消息：并行消息
+ * 1、并行消息：
+ * 		实现方式：消息中心，Topic属性 “分区策略” 选择为 “轮询” 或 “随机”
+ * 		测试Topic：	topic_sample
  */
-XxlMqProducer.produce(new XxlMqMessage(topic, data));
+XxlMqHelper.produce("topic_sample", "全局并行消费");
 
 
 /**
- * 生产消息：串行消费（ ShardingId 保持一致即可；如秒杀消息，可将 ShardingId 设置为商品ID，则该商户全部消息固定在一台机器消费；）
+ * 2、串行消息：
+ * 		实现方式：消息中心，Topic属性 “分区策略” 选择为 “第一个” 或 “最后一个”
+ * 		测试Topic：topic_sample_02
  */
-XxlMqMessage mqMessage = new XxlMqMessage();
-mqMessage.setTopic(topic);
-mqMessage.setData(data);
-mqMessage.setShardingId(1);
-
-XxlMqProducer.produce(mqMessage);
-			
-/**
- * 生产消息：广播消费（ 消费者 IMqConsumer 注解的 group 属性修改不一致即可；一条消息将会广播给该主题全部在线 group，每个group都会消费，单个group只会消费一次； ）
- */
-XxlMqProducer.broadcast(new XxlMqMessage(topic, data));
+XxlMqHelper.produce("topic_sample_02", "全局串行消费");
 
 
 /**
- * 生产消息：延时消费（ EffectTime 设置为固定时间点即可；如订单30min超时取消，可将 EffectTime 设置为30min后的时间点，到时将会自动消费；）
+ * 3、分片消息：
+ * 		实现方式：
+ * 			a、消息中心：Topic 路由策略 = “Hash”；
+ * 			b、客户端：生产消息时，自定义消息 “BizId”（作为 “分区hash“ 的 ”业务参数“ ）。相同 BizId 的消息将会被Hash到同一个分区，由同一个消费者串行消费执行；不同 BizId 的消息数据，将会在多个分区并行执行；
+ * 		测试Topic：	topic_sample_03
  */
-XxlMqMessage mqMessage = new XxlMqMessage();
-mqMessage.setTopic(topic);
-mqMessage.setData(data);
-mqMessage.setEffectTime(effectTime);
-
-XxlMqProducer.produce(mqMessage);
+long bizId = 1000;
+XxlMqHelper.produce("topic_sample_03", "串并行结合消费", -1, bizId);
 
 
 /**
- * 生产消息：失败重试消费（ RetryCount 设置重试次数即可；如发送短信消息，第三方服务不稳定时失败很常见，可设置 RetryCount 为3，失败是将会自动重试指定次数；）
+ * 4、广播消费：
+ * 		实现方式：消息中心，Topic属性 “分区策略” 选择为 “广播”
+ * 		测试Topic：	topic_sample_04
  */
-XxlMqMessage mqMessage = new XxlMqMessage();
-mqMessage.setTopic(topic);
-mqMessage.setData(data);
-mqMessage.setRetryCount(3);
+XxlMqHelper.produce("topic_sample_04", "广播消费");	
 
-XxlMqProducer.produce(mqMessage);
 
-……
+/**
+ * 5、延时消息（模拟 延时3min）：
+ * 		实现方式：客户端，消息生产时自定义设置 “effectTime”，消息将在指定时间触发消费；
+ * 		测试Topic：	topic_sample_05
+ */
+Calendar calendar = Calendar.getInstance();
+calendar.add(Calendar.MINUTE, 3);
+Date effectTime = calendar.getTime();
+
+XxlMqHelper.produce("topic_sample_05", "延时消息（模拟 延时3min）",  effectTime.getTime());
+
+/**
+ * 6、失败重试消息（模拟 重试3次）：
+ * 		实现方式：消息中心，Topic属性 “重试次数” 设置大于零，并设置 “重试策略”、“重试间隔” 即可。
+ * 		测试Topic：	topic_sample_06
+ */
+XxlMqHelper.produce("topic_sample_06", "失败重试消息（模拟 重试3次））");
 ```
 
-更多消息属性、场景，可参考章节 "4.2 Message设计"；
+#### b、消费消息
 
+**消费者注解说明：**
 
-#### 消费消息 
+注解：com.xxl.mq.core.consumer.annotation.XxlMq
+参数：
+- value：消息主题
+- init：消费者初始化方法，可选；消息初始化时执行一次；
+- destroy：消费者销毁方法，可选；消息销毁时执行一次；
+
+**消费者示例代码**
 
 ```
-@MqConsumer(topic = "topic_1")
-@Service
-public class DemoAMqComsumer implements IMqConsumer {
-    private Logger logger = LoggerFactory.getLogger(DemoAMqComsumer.class);
+@XxlMq("topic_sample")
+public void consume() {
 
-    @Override
-    public MqResult consume(String data) throws Exception {
-        logger.info("[DemoAMqComsumer] 消费一条消息:{}", data);
-        return MqResult.SUCCESS;
-    }
+    // 获取消息ID，可用于消息幂等；
+    long messageId = XxlMqHelper.getMessageId();
+    
+    // 获取消息内容；
+    String messageData = XxlMqHelper.getMessageData();
 
+    // 设置消息消费结果，可选；不设置时，默认为消费成功；
+    XxlMqHelper.consumeSuccess();
 }
 ```
-
-系统中每个消费者以 "IMqConsumer" 的形式存在, 规定如下:
- 
-     - 1、每个 "IMqConsumer" 需要继承 "com.xxl.mq.client.consumer.IMqConsumer" 接口;
-     - 2、需要扫描为Spring的Bean实例, 需加上 "@Service" 注解并被Spring扫描;
-     - 3、需要加上注解 "com.xxl.mq.client.consumer.annotation.MqConsumer"。该注解 "value" 值为订阅的消息主题, "type" 值为消息类型(TOPIC广播消息、QUEUE并发消息队列 和 SERIAL_QUEUE串行消息队列);
-
-
-更多消费者属性、场景，可参考章节 "4.6 Consumer设计"；
 
 
 ### 2.6 功能测试 & 性能测试
 
-首选启动消息中心，然后启动 "springboot版本示例项目"；
+依次启动 “消息中心”、 "springboot版本示例项目"、"frameless版本示例项目"，访问地址如下：
+- 消息中心：http://127.0.0.1:8080/xxl-mq-admin
+- "springboot版本示例项目"：http://127.0.0.1:8081/
 
 访问部署成功的 "springboot版本示例项目" 地址，浏览器访问展示如下如下：
 
@@ -350,49 +394,47 @@ public class DemoAMqComsumer implements IMqConsumer {
 
 该示例项目已经提供了多个消息生产与消费的实例：
 
-#### a、"并行消费" 测试：连续点击 "并行消费" 按钮4次，将会生产4条并行消息；
+#### a、"并行消息" 测试：连续点击 "并行消费" 按钮3次，将会生产3条并行消息；
 
-进入消息中心 "消息记录" 菜单，消息列表如下：
+进入消息中心 "消息管理" 菜单，输入指定“topic = topic_sample” 查询，消息数据如下：
 ![输入图片说明](https://www.xuxueli.com/doc/static/xxl-mq/images/img_06.png "在这里输入图片标题")
 
-逐个查看消息流转日志如下：
+并行消费逻辑说明：
+- 分区范围：进入“服务管理”菜单，可以看到消费者服务（xxl-mq-sample）注册节点数为2。消息中心固定总分区数 1W，因此2个客户端各自负责分区范围为 [1, 5000]、[5001, 10000]。
+- 并行逻辑：进入“主题管理”才看，可以看到 “topic = topic_sample” 的 “分区策略” 选择为 “轮询”；消息分区路由将会依次分配给2个注册节点，因此 partitionId（分区ID）依次为 “1、5001、1”，符合预期。
 
+点击 “查看消费轨迹”按钮，支持查看消息轨迹日志，包括生产、路由、消费详细日志：
 ![输入图片说明](https://www.xuxueli.com/doc/static/xxl-mq/images/img_04.png "在这里输入图片标题")
 
-可以注意 "锁定消息" 的 "消费者信息"，可以查看到当前消费者在集群中的排序 "rank"。
 
-逐个查看每条消息对应消费者的 "rank" 属性，可以看到上面4条消息平局分配给不同 "rank" 的消费者，即平均分配给了不同消费者。测试正常；
+#### b、"串行消息" 测试：连续点击 "触发生产" 按钮3次，将会生产3条串行消费；
 
-#### b、"串行消费" 测试：连续点击 "串行消费" 按钮4次，将会生产4条串行消费；
+进入消息中心 "消息管理" 菜单，输入指定“topic = topic_sample_02” 查询。可见 partitionId 固定为 1 ，将会固定分配给一个消费者。符合预期。
 
-操作步骤同 "并行消息"。最后一步逐个查看每条消息对应消费者的 "rank" 属性，会发现全部一致，即固定分配给了一个消费者。测试正常
+#### c、"分片消息"：连续点击 "触发生产" 按钮3次，将会生产3条分片消息；
 
+进入消息中心 "消息管理" 菜单，输入指定“topic = topic_sample_03” 查询。底层根据 业务参数/BizId 进行分区Hash ，相同 BizId 将会固定分配给一个消费者。符合预期。
 
-#### c、"广播消息"：点击 "广播消息" 按钮一次，将会生产一条广播消息；
+#### d、"广播消费"：点击 "触发生产" 按钮，将会生产一条广播消息；
 
-进入消息中心 "消息记录" 菜单，消息列表如下：
+进入消息中心 "消息管理" 菜单，输入指定“topic = topic_sample_04” 查询。一条广播请求将会广播给2个在线消费者，生成2条广播消息记录，符合预期。
 
-![输入图片说明](https://www.xuxueli.com/doc/static/xxl-mq/images/img_07.png "在这里输入图片标题")
+#### e、"延时消息"：点击 “触发生产” 按钮，将会生产一条延时消息；
 
-一条广播消息将会广播给该主题全部在线group，该消息主题存在2个消息group，所以会每个group创建一条，即两条消息。测试正常。
+进入消息中心 "消息管理" 菜单，输入指定“topic = topic_sample_05” 查询。由于设置延时 3min，最终消息在 3min 之后被消费执行。符合预期。
 
-#### d、"延时消息"：点击 “延时消息” 按钮一次，将会生产一条延时消息；
- 
- 进入消息中心 "消息记录" 菜单，可以查看消息 “生效时间”属性为 5min 之后，最终该消息在 5min 之后被消费执行。测定正常。
+#### f、"失败重试消息"：点击 “触发生产” 按钮一次，将会生产一条失败重试消息；
 
-#### e、"性能测试" 测试：点击 “性能测试”按钮，将会批量发送10000条消息；
+进入消息中心 "消息管理" 菜单，输入指定“topic = topic_sample_06” 查询。由于设置失败重试 3次（测试逻辑，固定设置消费失败），消息在将被重试3次。符合预期。
 
-点击按钮后，页面下方展示文案 “Cost = 1055”，说明在 1055ms 之内客户端发送了 1000 条消息；
+#### g、"性能测试" 测试：点击 “触发生产” 按钮一次，将会批量发送10000条消息；
 
+点击按钮后，页面下方展示文案 “Send message count : 10000, Cost : 16 ms”，说明在 16ms 之内客户端发送了 10000 条消息；
 但是，由于测试代码中采用异步方式发送，消息发送事件与是否成功需要在消息中心中确认。
 
-进入消息中心 “消息记录” 菜单，如下图，可以看到 10000 条消息创建事件最大为 “2018-12-02 04:51:54”，最小为 “2018-12-02 04:51:55”。说明在 1s 左右客户端成功发送了 10000 条消息，且 100% 投递成功，即单机TPS过万；
+进入消息中心 "消息管理" 菜单，输入指定“topic = topic_sample_07” 查询。点击所生产消息的 “查看消费轨迹”，可见最大和最小生产时间相差1S，说明 1S 内客户端生产了 1W条消息、且 100% 投递成功，即单机TPS过万；
 
 ![输入图片说明](https://www.xuxueli.com/doc/static/xxl-mq/images/img_14.png "在这里输入图片标题")
-
-然后进入 “运行报表” 界面，如下图，点击成功比例图可知，成功消费 10000 条，比例 100%。说明客户端发送的 10000 条消息 100% 消费成功。
-
-![输入图片说明](https://www.xuxueli.com/doc/static/xxl-mq/images/img_15.png "在这里输入图片标题")
 
 #### 其他测试
 如延时消息、重试消息 …… 可自行参考示例代码测试；
@@ -401,41 +443,77 @@ public class DemoAMqComsumer implements IMqConsumer {
 ## 三、消息中心，操作指南
 
 ### 3.1 运行报表：
-运行报表界面，展示消息中心系统信息，如业务线、消息主题、消息数量等；支持日期分布图、成功比例图方式查看；
+首页的运行报表界面，展示消费者服务、消息主题、消息数量等；支持以日期分布图、成功比例图方式查看消息生产消费情况。（注意：报表存在10min延迟）
 
 ![输入图片说明](https://www.xuxueli.com/doc/static/xxl-mq/images/img_01.png "在这里输入图片标题")
 
 ### 3.2 消息主题
-消息主题界面，可查看在线消息主题列表；底层会周期性扫描消息记录，发型并录入新的消息主题，并展示在这里；
+消息主题界面，可查看在线消息主题列表；
 ![输入图片说明](https://www.xuxueli.com/doc/static/xxl-mq/images/img_08.png "在这里输入图片标题")
 
-消息主题界面，支持为消息主题设置一些附属参数，提供一些增强功能；如负责人、告警邮箱等；
-
+消息主题管理：支持在线管理 “消费主题”，维护消息主题属性：
 ![输入图片说明](https://www.xuxueli.com/doc/static/xxl-mq/images/img_11.png "在这里输入图片标题")
 
-消息主题属性：
-- 业务线：该消息所属业务线，方便分组管理；
-- 负责人：该消息所属负责人；
-- 告警邮箱：一个或多个，多个逗号分隔；消息消费失败时，将会周期性发送告警邮件；
+**“消息主题”属性说明**：
+- 基础配置：
+  - Topic：消息主题
+  - AppName：消费者服务标识，用于消费者节点注册发现；
+  - 主题描述：消息主题描述信息；
+  - 负责人：Topic负责人；
+  - 告警配置：消息消费失败告警信息接收邮箱，多个逗号分隔；
+- 存储路由：
+  - 分区路由：
+    - Hash：根据 业务参数/BizId 进行分区Hash，相同 BizId 将会固定分配给一个消费者。partitionId 设置为相关消费者负责的分区ID。
+    - 轮询：按照在线的消费者服务节点，轮询路由匹配消费者节点。
+    - 随机：按照在线的消费者服务节点，随机路由匹配消费者节点。
+    - 第一个：固定选择第一个消费者，partitionId 设置为其负责的分区ID。
+    - 最后一个：固定选择第一个消费者，partitionId 设置为其负责的分区ID。
+    - 广播：消息发送后，广播发送给相关主题全部在线消费者。
+  - 归档策略：
+    - 归档保留7天：针对 7天内 消费完成的消息数据进行归档，从“实时消息表”转移到“归档消息表”进行保留，更早的历史消息清理。
+    - 归档保留30天：针对 30天内 消费完成的消息数据进行归档，从“实时消息表”转移到“归档消息表”进行保留，更早的历史消息清理。
+    - 归档保留90天：针对 90天内 消费完成的消息数据进行归档，从“实时消息表”转移到“归档消息表”进行保留，更早的历史消息清理。
+    - 归档永久保留：全部消费完成的消息数据进行归档，从“实时消息表”转移到“归档消息表”，永久保留不清理。
+    - 不归档直接清理：全部消费完成的消息数据，直接清理不保留。
+- 消费策略
+  - 重试策略：
+    - 固定间隔重试：消息消费失败后，固定延迟 “重试间隔” 设置的时间后重试执行，重试次数为 “重试次数” 设置的值。
+    - 线形间隔重试：消息消费失败后，以 “重试间隔” 设置的间隔时间为基础递增，依次延时 "一倍间隔、两倍间隔、三倍间隔 ... " 时间后重试执行。
+    - 随机间隔重试：消息消费失败后，在 0 到 “重试间隔” 范围内获取随机值，随机延迟一定时间后重试执行。
+  - 重试次数：消息消费失败后，允许重试的次数；大于0时生效；
+  - 重试间隔：消息失败后，距离下次重试执行的间隔时间；注意，最终重试间隔时间需要结合 “重试策略” 最终确定；
+  - 超时时间：支持自定义消费超时时间，消费运行超时将会主动中断；
 
-### 3.3 消息记录
-消息记录界面，可查看在线消息记录；支持筛选、查看消息流转轨迹；
-![输入图片说明](https://www.xuxueli.com/doc/static/xxl-mq/images/img_09.png "在这里输入图片标题")
 
-- 消息在线管理功能：支持在线 "新增"、"编辑" 和 "删除" 消息记录； 
+### 3.3 消息管理
+消息管理界面，支持 "新增"、"编辑" 和 "删除" 实时消息数据，支持查看“消息消费轨迹”；
+![输入图片说明](https://www.xuxueli.com/doc/static/xxl-mq/images/img_06.png "在这里输入图片标题")
 
-消息新增如下图所示，消息属性说明，可参考章节 "4.2 Message设计"；
-
+消息属性编辑：如下图所示，可修改消息属性：
 ![输入图片说明](https://www.xuxueli.com/doc/static/xxl-mq/images/img_12.png "在这里输入图片标题")
 
-- 消息手动清理：支持在线清理消息，可选择消息主题、状态、清理类型等；
+**“消息数据”属性说明**：
+- Topic：消息主题
+- PartitionId：消息归属的 分区ID；用于根据消费者负责分区范围，匹配消费者；
+- 生效时间：消息延迟生效时间，非空时到达该时间后才执行，为空时立即执行；
+- 消息数据：消息数据；
+- 消息状态：
+- 未消费
+- 消费中
+- 消费成功
+- 消费失败
+- 超时消费失败
 
+
+消息归档/清理：支持在线归档、清理消息，可选择消息主题、归档策略*等；  
 ![输入图片说明](https://www.xuxueli.com/doc/static/xxl-mq/images/img_13.png "在这里输入图片标题")
 
-### 3.4 业务线
-业务先界面，可查看在线业务线列表，并管理维护；可通过自定义业务线，绑定消息主题，从而方便消息主题的分组管理；
+### 3.4 消费者服务管理
+消费者服务管理界面，可查看服务列表：
 ![输入图片说明](https://www.xuxueli.com/doc/static/xxl-mq/images/img_10.png "在这里输入图片标题")
 
+点击 “查看注册节点”，可查看消费者服务在线节点，以及 “注册节点/UUID” 与 “责任分区范围”（用于消息分区路由）。
+![输入图片说明](https://www.xuxueli.com/doc/static/xxl-mq/images/img_15.png "在这里输入图片标题")
 
 
 ## 四、系统设计
@@ -457,14 +535,14 @@ public class DemoAMqComsumer implements IMqConsumer {
 #### 架构图模块解读:
 
 - Server
-    - Broker: 消息代理中心, 系统核心组成模块, 负责接受消息生产者Producer推送生产的消息, 同时负责提供RPC服务供消费者Consumer使用来消费消息; 
-    - Message Queue: 消息存储模块, 目前底层使用mysql消息表;
+  - Broker: 消息代理中心, 系统核心组成模块, 负责接受消息生产者Producer推送生产的消息, 同时负责提供RPC服务供消费者Consumer使用来消费消息;
+  - Message Queue: 消息存储模块, 目前底层使用mysql消息表;
 - Registry Center
-    - Broker Registry Center: Broker注册中心子模块, 供Broker注册RPC服务使用;
-    - Consumer Registry Center: Consumer注册中心子模块, 供Consumer注册消费节点使用;
+  - Broker Registry Center: Broker注册中心子模块, 供Broker注册RPC服务使用;
+  - Consumer Registry Center: Consumer注册中心子模块, 供Consumer注册消费节点使用;
 - Client
-    - Producer: 消息生产者模块, 负责提供API接口供开发者调用,并生成和发送队列消息;
-    - Consumer: 消息消费者模块, 负责订阅消息并消息;
+  - Producer: 消息生产者模块, 负责提供API接口供开发者调用,并生成和发送队列消息;
+  - Consumer: 消息消费者模块, 负责订阅消息并消息;
 
 ### 4.2 Message设计
 
@@ -520,11 +598,11 @@ transaction | 事务开关，开启消息事务性保证只会成功执行一次
 
 消费者通过 "多线程轮训 + 消息分片 + PULL + 消息锁定" 的方式来实现:
 
-- 多线程轮训: 该模式下每个Consumer将会存在一个线程, 如存在多个Consumer, 多个Consumer将会并行消息同一主题下的消息, 大大提高消息的消费速度; 
-    - 轮训延时自适应：线程轮训方式PULL消息，如若获取不到消息将会主动休眠，休眠时间依次递增10s，最长60s；即消息生产之后距离被消费存在 0~60s 的时间差，分钟范围内；
+- 多线程轮训: 该模式下每个Consumer将会存在一个线程, 如存在多个Consumer, 多个Consumer将会并行消息同一主题下的消息, 大大提高消息的消费速度;
+  - 轮训延时自适应：线程轮训方式PULL消息，如若获取不到消息将会主动休眠，休眠时间依次递增10s，最长60s；即消息生产之后距离被消费存在 0~60s 的时间差，分钟范围内；
 - 消息分片 : 队列中消息将会按照 "Registry Center" 中注册的Consumer列表顺序进行消息分段, 保证一条消息只会被分配给其中一个Consumer, 每个Consumer只会消费分配给自己的消息。 因此在多个Consumer并发消息时, 可以保证同一条消息不被多个Consumer竞争来重复消息。
-    - 分片函数: MOD("消息分片ID", #{在线消费者总数}) = #{当前消费者排名} , 
-    - 分片逻辑解释: 每个Consumer通过注册中心感知到在线所有的Consumer, 计算出在线Consumer总数total, 以及当前Consumer在所有Consumer中的排名rank; 把消息分片ID对在线Consumer总数total进行取模, 余数和当前Consumer排名rank一致的消息认定为分配给自己的消息;
+  - 分片函数: MOD("消息分片ID", #{在线消费者总数}) = #{当前消费者排名} ,
+  - 分片逻辑解释: 每个Consumer通过注册中心感知到在线所有的Consumer, 计算出在线Consumer总数total, 以及当前Consumer在所有Consumer中的排名rank; 把消息分片ID对在线Consumer总数total进行取模, 余数和当前Consumer排名rank一致的消息认定为分配给自己的消息;
 - PULL : 每个Consumer将会轮训PULL消息分片分配给自己的消息, 顺序消费。
 - 消息锁定: Consumer在消费每一条消息时,开启事务时，将会主动进行消息锁定, 通过数据库乐观锁来实现, 锁定成功后消息状态变更为执行中状态, 将不会被Consumer再次PULL到。因此, 可以更进一步保证每条消息只会被消费一次;
 - 消息状态和日志: 消息执行结束后, 将会调用Broker的RPC服务修改消息状态并追加消息日志, Broker将会通过内存队列方式, 异步消息队列中变更存储到数据库中。
@@ -548,9 +626,248 @@ transaction | 事务开关，开启消息事务性保证只会成功执行一次
 可视情况选择使用，当选择TIDB时，仅需要修改消息中心数据库连接jdbc地址配置即可，其他部分如SQL和驱动兼容MySQL和TIDB使用，不需修改。
 
 
+## 五、消息中心 OpenApi
 
-## 五、版本更新日志
-### 5.1 版本V1.1.0 新特性
+XXL-MQ 提供语言无关的消息中心 OpenAPI（RESTFUL 格式），提供消息生产、拉取及消费等能力，实现多语言支持；
+- 针对Java应用，可以直接通过官方提供的SDK快捷的接入消息中心，进行消息生产及消费，可以参考上文 “快速入门” 章节。
+- 针对非Java应用，可借助 XXL-MQ 的标准 OpenApi（RESTful API） 方便的实现多语言支持。
+
+API服务位置：com.xxl.mq.admin.broker.openapi.OpenApiController
+API服务请求参考代码：com.xxl.mq.core.test.openapi.OpenApiClientTest
+
+#### a、客户端（消费端）注册
+```
+说明：客户端（消费端）注册时使用，消息中心会实时感知注册成功的消费者进行分区分配及消息路由；
+
+------
+请求数据JSON格式，放置在 RequestBody：
+    {
+      "service": "brokerService",
+      "method": "registryRemove",
+      "params": [
+        {
+          "accesstoken": "{消息中心通讯TOKEN}",
+          "appname": "{消费者服务appkey}",
+          "instanceUuid": "{消费者服务实例UUID，可自定义，但需保持唯一}",
+          "topicList": [
+            "{消息主题Topic",
+            "{消息主题Topic}"
+          ]
+        }
+      ]
+    }
+
+响应数据JSON格式：
+    {
+        "error":"",                             // 系统异常信息，默认为空；非空时表示发生系统异常；
+        "data":{
+            "code":200,                         // 业务状态码；200 表示正常、其他失败；
+            "msg":""                            // 业务错误提示消息；
+        }
+    }
+```
+
+#### b、客户端（消费端）注册摘除
+```
+说明：客户端（消费端）注册摘除时使用，消息中心会实时感知注册成功的消费者进行分区分配及消息路由；
+
+------
+地址格式：{消息中心根地址}/openapi
+
+请求数据JSON格式，放置在 RequestBody：
+    {
+      "service": "brokerService",
+      "method": "registryRemove",
+      "params": [
+        {
+          "accesstoken": "{消息中心通讯TOKEN}",
+          "appname": "{消费者服务appkey}",
+          "instanceUuid": "{消费者服务实例UUID，可自定义，但需保持唯一}",
+          "topicList": [
+            "{消息主题Topic}",
+            "{消息主题Topic}"
+          ]
+        }
+      ]
+    }
+
+响应数据JSON格式：
+    {
+        "error":"",                             // 系统异常信息，默认为空；非空时表示发生系统异常；
+        "data":{
+            "code":200,                         // 业务状态码；200 表示正常、其他失败；
+            "msg":""                            // 业务错误提示消息；
+        }
+    }
+```
+
+#### c、生产消息
+```
+说明：生产消息时使用，支持批量消息生产；
+
+------
+地址格式：{消息中心根地址}/openapi
+
+请求数据JSON格式，放置在 RequestBody：
+    {
+      "service": "brokerService",
+      "method": "produce",
+      "params": [
+        {
+          "accesstoken": "{消息中心通讯TOKEN}",
+          "messageList": [
+            {
+              "topic": "{消息主题Topic}",
+              "data": "{消息数据}",
+              "bizId": {业务参数ID，选填；仅Topic路由策略为“Hash”时生效，用于分区路由},
+              "effectTime": {消息生效时间，选填，为空时表示立即生效；格式为时间戳/毫秒}
+            },
+            {
+              "topic": "{消息主题Topic}",
+              "data": "{消息数据}",
+              "bizId": {业务参数ID，选填；仅Topic路由策略为“Hash”时生效，用于分区路由},
+              "effectTime":  {消息生效时间，选填，为空时表示立即生效；格式为时间戳/毫秒}
+            }
+          ]
+        }
+      ]
+    }
+
+响应数据JSON格式：
+    {
+        "error":"",                             // 系统异常信息，默认为空；非空时表示发生系统异常；
+        "data":{
+            "code":200,                         // 业务状态码；200 表示正常、其他失败；
+            "msg":""                            // 业务错误提示消息；
+        }
+    }
+```
+
+#### d、消费消息
+```
+说明：消费消息时使用，支持批量回调消息消费结果；
+
+------
+地址格式：{消息中心根地址}/openapi
+
+请求数据JSON格式，放置在 RequestBody：
+    {
+      "service": "brokerService",
+      "method": "consume",
+      "params": [
+        {
+          "accesstoken": "{消息中心通讯TOKEN}",
+          "messageList": [
+            {
+              "id": {消息ID},
+              "topic": "{消息主题Topic}",
+              "status": {消息状态：0-初始状态，1-消费中，2-消费成功，3-消费失败，4-消费超时失败},
+              "consumeLog": "{消息消费日志，用于问题追溯，可选}",
+              "consumeInstanceUuid": "{消费者服务实例UUID，可自定义，但需保持唯一}",
+            },
+            {
+              "id": {消息ID},
+              "topic": "{消息主题Topic}",
+              "status": {消息状态：0-初始状态，1-消费中，2-消费成功，3-消费失败，4-消费超时失败},
+              "consumeLog": "{消息消费日志，用于问题追溯，可选}",
+              "consumeInstanceUuid": "{消费者服务实例UUID，可自定义，但需保持唯一}"
+            }
+          ]
+        }
+      ]
+    }
+
+响应数据JSON格式：
+    {
+        "error":"",                             // 系统异常信息，默认为空；非空时表示发生系统异常；
+        "data":{
+            "code":200,                         // 业务状态码；200 表示正常、其他失败；
+            "msg":""                            // 业务错误提示消息；
+        }
+    }
+```
+
+#### e、Pull消息前置校验
+```
+说明：Pull消息前置校验，包括分区、实例ID、消费者appkey等合法校验；
+
+------
+地址格式：{消息中心根地址}/openapi
+
+请求数据JSON格式，放置在 RequestBody：
+    {
+      "service": "brokerService",
+      "method": "pullPreCheck",
+      "params": [
+        {
+          "accesstoken": "{消息中心通讯TOKEN}",
+          "appname": "{消费者服务appkey}",
+          "instanceUuid": "{消费者服务实例UUID，可自定义，但需保持唯一}",
+          "topicList": [
+            "{消息主题Topic}",
+            "{消息主题Topic}"
+          ],
+          "batchsize": {批量拉取消息数量}
+        }
+      ]
+    }
+
+响应数据JSON格式：
+    {
+        "error":"",                             // 系统异常信息，默认为空；非空时表示发生系统异常；
+        "data":{
+            "code":200,                         // 业务状态码；200 表示正常、其他失败；
+            "msg":""                            // 业务错误提示消息；
+        }
+    }
+```
+
+#### f、Pull消息数据
+```
+说明：Pull消息数据，同时会将Pull成功消息改为“消费中”状态避免重复拉取；
+
+------
+地址格式：{消息中心根地址}/openapi
+
+请求数据JSON格式，放置在 RequestBody：
+    {
+      "service": "brokerService",
+      "method": "pullAndLock",
+      "params": [
+        {
+          "accesstoken": "{消息中心通讯TOKEN}",
+          "appname": "{消费者服务appkey}",
+          "instanceUuid": "{消费者服务实例UUID，可自定义，但需保持唯一}",
+          "topicList": [
+            "{消息主题Topic}",
+            "{消息主题Topic}"
+          ],
+          "batchsize": {批量拉取消息数量}
+        }
+      ]
+    }
+
+响应数据JSON格式：
+    {
+        "error":"",                             // 系统异常信息，默认为空；非空时表示发生系统异常；
+        "data":{
+            "code":200,                         // 业务状态码；200 表示正常、其他失败；
+            "msg":"",                            // 业务错误提示消息；
+            "data":[
+                {
+                  "id": {消息ID},
+                  "topic": "{消息主题Topic}",
+                  "data": "{消息数据}",
+                  "effectTime":  {消息生效时间，格式为时间戳/毫秒}
+                }
+            ]
+        }
+    }
+```
+
+
+## 六、版本更新日志
+### 6.1 版本V1.1.0 新特性
 - 1、简单易用: 一行代码即可发布一条消息; 一行注解即可订阅一个消息主题;
 - 2、部署简单: 除ZK之外不依赖第三方服务;
 - 3、三种消息模式: TOPIC(广播消息)模型、QUEUE(并发队列)模型 和 SERIAL_QUEUE(串行队列)模型,下文将会详细讲解:
@@ -562,7 +879,7 @@ transaction | 事务开关，开启消息事务性保证只会成功执行一次
 - 8、Delay执行: 支持设置消息的延迟生效时间, 到达设置的Delay执行时间时该消息才会被消费 ,提供DelayQueue的功能;
 - 9、消息重试: 支持设置消息的重试次数, 在消息执行失败后将会按照设置的值进行消息重试执行,直至重试次数耗尽或者执行成功;
 
-### 5.2 版本V1.1.1 特性
+### 6.2 版本V1.1.1 特性
 - 1、项目groupId改为com.xuxueli，为推送maven中央仓库做准备；
 - 2、项目推送Maven中央仓库；
 - 3、底层系统优化，CleanCode等；
@@ -571,7 +888,7 @@ transaction | 事务开关，开启消息事务性保证只会成功执行一次
 - 6、broadcast 广播消息时ZK 发送方不进行watch, 否则发送方也会监听到；
 - 7、修复一处因ReentrantLock导致可能死锁的问题；
 
-### 5.3 版本V1.2.0 Release Notes[2018-11-28]
+### 6.3 版本V1.2.0 Release Notes[2018-11-28]
 - 1、client端与Broker长链初始化优化，防止重复创建连接。
 - 2、POM多项依赖升级；
 - 3、UI组件升级；
@@ -584,9 +901,9 @@ transaction | 事务开关，开启消息事务性保证只会成功执行一次
 - 9、串行消费优化，旧版本固定第一台消费，导致其压力过大；新版支持自定义shardingId从而实现串行消息的负载均衡，缓解单台压力；
 - 10、广播消息优化，旧版本不支持消息持久化，新版本支持消息持久化，而且广播支持与串行结合实用，更加灵活；
 - 11、并发消息、串行消息、广播消息全部优化重构，底层逻辑统一，方便后续维护扩展；
-    - 串行：取消ZK依赖，废弃旧版ZK锁方式；优化为通过消息 shardingId 结合消费者排序取模方式；相同 shardingId 的消息将会固定被同一个消费者消费；
-    - 并行：沿用旧版消费者排序取模方式，不过取模参数新增支持 shardingId 参数；确保消息平均分配给在线消费者；
-    - 广播：取消ZK依赖，废弃旧版ZK方式；优化为通过消息 group 属性群发方式；每个group都会消费该消息，但相同group下消息仅被消费一次；
+  - 串行：取消ZK依赖，废弃旧版ZK锁方式；优化为通过消息 shardingId 结合消费者排序取模方式；相同 shardingId 的消息将会固定被同一个消费者消费；
+  - 并行：沿用旧版消费者排序取模方式，不过取模参数新增支持 shardingId 参数；确保消息平均分配给在线消费者；
+  - 广播：取消ZK依赖，废弃旧版ZK方式；优化为通过消息 group 属性群发方式；每个group都会消费该消息，但相同group下消息仅被消费一次；
 - 12、Broker服务支持自定义指定注册IP等信息，位置 "XxlMqBrokerImpl.initServer"；
 - 13、Topic自动发现：消息中心支持动态发现Topic，并展示在消息主题列表，延时1min；
 - 14、运行报表：支持展示在线业务线、消息主题、消息记录等信息、可在线查看消息日期分布图，成功分布图等；
@@ -608,26 +925,41 @@ transaction | 事务开关，开启消息事务性保证只会成功执行一次
 - 30、文档完善：消息模型说明，延时消息说明、事务消息说明、失败重试、超时控制说明，
 
 
-### 5.4 版本 v1.2.1 Release Notes[2018-12-02]
+### 6.4 版本 v1.2.1 Release Notes[2018-12-02]
 - 1、单机TPS过万：示例项目中新增功能测试、性能测试用例，以及消息生产、消费、成功率等方便的数据分析；可参考示例项目性能测试用例（章节 “2.6 功能测试 & 性能测试”），单机TPS过万；
 - 2、底层long polling监控keys非法去重问题修复；
 - 3、注册逻辑优化，批量注册，提高注册性能，降低注册中心压力；
 - 4、消息中心RPC服务支持自定义注册IP地址；
 - 5、消息中心内置注册中心线程数优化，精简；
 
-### 5.5 版本 v1.2.2 Release Notes[2018-12-21]
+### 6.5 版本 v1.2.2 Release Notes[2018-12-21]
 - 1、访问令牌（accessToken）：为提升系统安全性，消息中心和客户端进行安全性校验，双方AccessToken匹配才允许通讯；
 - 2、支持批量注册、摘除，提升注册发现性能；升级 xxl-rpc 至 v1.3.1;
 - 3、升级 pom 依赖至较新版本；
 - 4、表结构调整提升兼容性，表名转小写；
 - 5、客户端取消Consumer非空的限制；
 
-### 5.6 版本 v1.3.0 Release Notes[迭代中]
-- 1、消息流转日志格式优化；
-- 2、消费者批量注册发现，提高注册发现性能；
-- 5、海量数据堆积：消息数据存储在DB中，原生兼容支持 "MySQL、TIDB" 两种存储方式，前者支持千万级消息堆积，后者支持百亿级别消息堆积（TIDB理论上无上限）；
-- 6、消费者分组属性 "group" 支持为空，为空时自动赋值UUID，方便实现多分组广播消费；
-- 7、升级xxl-rpc至较新版本，Broker注册发现服务做适配性优化；
+### 6.6 版本 v1.3.0 Release Notes[2025-02-07]
+- 1、【增强】消费者分组属性 "group" 支持为空，为空时自动赋值UUID，方便实现多分组广播消费；
+- 2、【增强】海量数据堆积：消息数据存储在DB中，原生兼容支持 "MySQL、TIDB" 两种存储方式，前者支持千万级消息堆积，后者支持百亿级别消息堆积（TIDB理论上无上限）；
+- 3、【优化】消费者批量注册发现，提高注册发现性能；
+- 4、【优化】消息流转日志格式优化，提升日志可读性；
+- 5、【优化】升级xxl-rpc、xxl-registry至较新版本，Broker注册发现服务做适配性优化；
+
+### 6.7 版本 v1.4.0 Release Notes[2025-05-11]
+- 1、【重构】XXL-MQ 核心代码重构，模块化设计实现，提升可扩展性与稳定性；
+  - 存算分离：Broker 计算；Blade/Mysql 存储；
+  - 水平扩展：无状态；
+  - 高吞吐：并行计算、异步计算；（TPS：Blade 10W / Mysql单机1W）
+  - 海量消息：（Mysql日百万/Blade日十亿）
+  - 消息轨迹：消息日志，追溯消息记录；
+  - 多消费模式：Group + Partition，支持 广播消费、串行消费、分片消费；
+  - 延迟消息：支持自定义延迟时间；
+  - 失败重试：支持固定间隔策略、线性退避策略、指数退避策略等；
+  - 失败告警：
+  - AccessToken：
+  - 容器化：
+- 2、【增强】串行、并行、串并行结合、延时消息、重试消息、批量消息；
 
 
 ### TODO
@@ -639,23 +971,22 @@ transaction | 事务开关，开启消息事务性保证只会成功执行一次
 - 消息数据、Log使用text字段存储，为避免超长限制长度20000；后续考虑优化，尽量不限制数据长度、避免轨迹较多时Log超长问题；
 - 消息告警功能增强，目前仅支持失败告警，考虑支持消息堆积告警、阻塞告警等，Topic扩展属性存储阈值；30分钟统计一次消息情况, 将会根据topic分组, 堆积超过阈值的topic将会在报警邮件报表中进行记录;
 - 消息主题界面，支持查看在线消费者列表；consumer：topic+group 在线展示；producer：在线展示；
-- 暂停消费；
 - 优先级队列，环境属性。
-- 消费者 group 支持动态设置，目前为注解固定值或者为空赋值UUID；
-- 消费者PULL间隔支持自定义，在有效区间内可自由设定；
-- 支持Rolling Log；
-- API服务：提供 restful 接口，用于消息生产、消费消费等场景；
+- 生产不丢：失败写磁盘文件；UUID，避免重复；
+- 消费不丢：消息锁定逻辑调整。由“pull查询 + 前置锁定+消费后更新（先锁：不会重复消费）”，改为“先pull查询+消费后更新（不锁：可能重复消费）”；
+- 超时消息处理：stuck消息，由标记“失败”改为标记“未消费”状态，可避免消费链路问题导致丢消息（现状，不会重复消费），但会导致小概率重复消费（需要实现幂等）；
+- 消息等级：Topic优先级处理，拆分不同messagequeue；
 
 
-## 六、其他
+## 七、其他
 
-### 6.1 项目贡献
+### 7.1 项目贡献
 欢迎参与项目贡献！比如提交PR修复一个bug，或者新建 [Issue](https://github.com/xuxueli/xxl-mq/issues/) 讨论新特性或者变更。
 
-### 6.2 用户接入登记
+### 7.2 用户接入登记
 更多接入的公司，欢迎在 [登记地址](https://github.com/xuxueli/xxl-mq/issues/1 ) 登记，登记仅仅为了产品推广。
 
-### 6.3 开源协议和版权
+### 7.3 开源协议和版权
 产品开源免费，并且将持续提供免费的社区技术支持。个人或企业内部可自由的接入和使用。
 
 - Licensed under the GNU General Public License (GPL) v3.
