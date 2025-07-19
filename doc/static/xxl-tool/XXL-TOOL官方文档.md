@@ -14,26 +14,28 @@
 ## 一、简介
 
 ### 1.1 概述
-XXL-TOOL 是一个Java工具类库，致力于让Java开发更高效。包含 “集合、字符串、缓存、IO、并发、Excel、Emoji、Response、Pipeline、Http、Json、JsonRpc、Encrypt、Auth……” 等数十个模块。
+XXL-TOOL 是一个Java工具类库，致力于让Java开发更高效。包含 “日期、集合、字符串、IO、缓存、并发、Excel、Emoji、Response、Pipeline、Http、Json、JsonRpc、Encrypt、Auth、ID、Serializer...” 等数十个模块。
 
 ### 1.2 组件列表
- 模块                | 说明
-|-------------------| -----------
- Core模块            | 包含集合、缓存、日期……等基础组件工具。
- IO模块              | 一系列处理IO（输入/输出）操作的工具，包括流、Csv、文件...等。
- Concurrent模块      | 一系列并发编程工具，具备良好的线程安全、高并发及高性能优势，包括MessageQueue（高性能内存队列，30W+ TPS）、CyclicThread（后台循环线程）、TimeWheel（时间轮组件）等。
- Http模块            | 一系列处理Http通讯、IP、Cookie等相关工具。
- Json模块            | json序列化、反序列化工具封装，基于Gson。
- JsonRpc模块         | 一个轻量级、跨语言远程过程调用实现，基于json、http实现（对比传统RPC框架：[XXL-RPC](https://github.com/xuxueli/xxl-rpc)）。
- Excel模块           | 一个基于注解的 Excel 与 Java对象 相互转换及导入导出工具；一行代码完成Java对象和Excel之间的转换。
- Emoji模块           | 一个灵活可扩展的Emoji表情编解码库，可快速实现Emoji表情的编解码。
- Response模块        | 统一响应数据结构体，标准化数据结构、状态码等，降低协作成本。
- Pipeline模块        | 高扩展性流程编排引擎。
- Exception模块       | 异常处理相关工具。
- Freemarker模块      | 模板引擎工具，支持根据模板文件实现 动态文本生成、静态文件生成 等，支持邮件发送、网页静态化场景。
- Encrypt模块         | 一系列处理编解码、加解密的工具，包括 Md5Tool、HexTool、Base64Tool...等。
- Auth模块            | 一系列权限认证相关工具，包括JwtTool...等。
- ...               | ...
+| 模块               | 说明
+|------------------| ---------------
+| Core模块           | 包含集合、缓存、日期……等基础组件工具。
+| IO模块             | 一系列处理IO（输入/输出）操作的工具。
+| Concurrent模块     | 一系列并发编程工具，具备良好的线程安全、高并发及高性能优势，包括MessageQueue（高性能内存队列，30W+ TPS）、CyclicThread（后台循环线程）、TimeWheel（时间轮组件）等。
+| Http模块           | 一系列处理Http通讯、IP、Cookie等相关工具。
+| Json模块           | json序列化、反序列化工具封装，基于Gson。
+| JsonRpc模块        | 一个轻量级、跨语言远程过程调用实现，基于json、http实现（对比传统RPC框架：[XXL-RPC](https://github.com/xuxueli/xxl-rpc)）。
+| Excel模块          | 一个灵活的Java对象和Excel文档相互转换的工具。一行代码完成Java对象和Excel之间的转换。
+| Emoji模块          | 一个灵活可扩展的Emoji表情编解码库，可快速实现Emoji表情的编解码。
+| Response模块       | 统一响应数据结构体，标准化数据结构、状态码等，降低协作成本。
+| Pipeline模块       | 高扩展性流程编排引擎。
+| Exception模块      | 异常处理相关工具。
+| Freemarker模块     | 模板引擎工具，支持根据模板文件实现 动态文本生成、静态文件生成 等，支持邮件发送、网页静态化场景。
+| Encrypt模块        | 一系列处理编解码、加解密的工具，包括 Md5Tool、HexTool、Base64Tool...等。
+| Auth模块           | 一系列权限认证相关工具，包括JwtTool...等。
+| ID模块             | 一系列ID生成工具，支持多种ID生成策略，包括 UUID、Snowflake、Date、Random 等。
+| Serializer模块     | 一系列序列化、反序列化工具，支持扩展多种序列化格式，包括 jdk、protobuf、hessian 等。
+| ...              | ...
 
 ### 1.4 下载
 
@@ -669,7 +671,52 @@ Date expirationTime = jwtTool.getExpirationTime(token);
 </dependency>
 ```
 
-### 2.13、更多
+### 2.14、Serializer模块
+
+一系列序列化、反序列化工具，支持扩展多种序列化格式，包括 jdk、protobuf、hessian 等。
+
+**代码示例**： 参考单元测试，见目录：com.xxl.tool.test.serializer.SerializerTest
+```
+// a、匹配序列化工具
+Serializer serializer = SerializerEnum.JAVA.getSerializer();
+
+// b、序列化 Java 对象 （ DemoUser 为示例对象）
+DemoUser demoUser = new DemoUser("jack", 18);
+byte[] bytes = serializer.serialize(demoUser);
+
+// b、反序列化 Java 对象
+DemoUser demoUser2 = serializer.deserialize(bytes);
+logger.info("demoUser2: {}", demoUser2);
+```
+
+### 2.15、ID模块
+
+一系列ID生成工具，支持多种ID生成策略，包括 UUID、Snowflake、Date、Random 等。
+
+**代码示例**： 参考单元测试，见目录：com.xxl.tool.test.id
+```
+// a、日期方式ID生成
+DateIdTool.getDateId();                     // 输出格式：20250713115530671505
+
+// b、雪花算法方式ID生成
+SnowflakeIdTool idGen = new SnowflakeIdTool(1);
+idGen.nextId());                          // 输出格式：7350010799378665472
+
+// c、UUID方式ID生成
+UUIDTool.getUUID();                       // 输出格式：21765f7c-8c47-4418-9a72-a3e5c88be06c
+UUIDTool.getSimpleUUID();                 // 输出格式：cf665741604b4f309cd59d142ee007e3
+
+// d、随机方式ID生成
+RandomIdTool.getDigitId(10);                // 输出格式：63484898497712492211
+RandomIdTool.getLowercaseId();              // 输出格式：ueppklqjsbqsxfhdlyye
+RandomIdTool.getLowercaseId(10);            // 输出格式：airedlhfxc
+RandomIdTool.getUppercaseId();              // 输出格式：PTKYKLDTLCKYLWAIARUF
+RandomIdTool.getUppercaseId(10);            // 输出格式：RYFZLCXKAT
+RandomIdTool.getAlphaNumeric(10);           // 输出格式：b1LQh8QsNxL15DKEE3yS
+RandomIdTool.getAlphaNumericWithSpecial();  // 输出格式：_bl+Cbf0[Rrj:ta=KZWb
+```
+
+### 2.15、更多
 略
 
 
@@ -738,7 +785,13 @@ Date expirationTime = jwtTool.getExpirationTime(token);
 - 2、【新增】新增 CsvTool 工具，提供Csv文件读写操作能力
 - 3、【强化】已有工具能力完善，包括：DateTool 等；
 
-### 3.11 v1.5.0 Release Notes[迭代中]
+### 3.11 v1.5.0 Release Notes[2025-07-13]
+- 1、【新增】ID模块：提供ID生成能力，支持多种ID生成策略，如：UUID、Snowflake、Date、Random 等多种ID生成工具；
+- 2、【新增】Serializer模块：提供序列化、反序列化能力，支持扩展多种序列化格式，如jdk、protobuf、hessian…等；
+- 3、【强化】已有工具能力完善，包括：StringTool、CookieTool 等；
+- 4、【升级】升级依赖版本；
+
+### 3.12 v1.5.1 Release Notes[迭代中]
 - 1、【Todo】Excel模块：流式导入导出；
 - 2、【Todo】Excel模块：自定义默认行高；
 
