@@ -1,7 +1,7 @@
 ## 《分布式消息队列XXL-MQ》
 
 [![Actions Status](https://github.com/xuxueli/xxl-mq/workflows/Java%20CI/badge.svg)](https://github.com/xuxueli/xxl-mq/actions)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-mq-core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-mq-core/)
+[![Maven Central](https://img.shields.io/maven-central/v/com.xuxueli/xxl-mq-core)](https://central.sonatype.com/artifact/com.xuxueli/xxl-mq-core)
 [![GitHub release](https://img.shields.io/github/release/xuxueli/xxl-mq.svg)](https://github.com/xuxueli/xxl-mq/releases)
 [![GitHub stars](https://img.shields.io/github/stars/xuxueli/xxl-mq)](https://github.com/xuxueli/xxl-mq/)
 [![Docker pulls](https://img.shields.io/docker/pulls/xuxueli/xxl-mq-admin)](https://hub.docker.com/r/xuxueli/xxl-mq-admin/)
@@ -939,7 +939,7 @@ API服务请求参考代码：com.xxl.mq.core.test.openapi.OpenApiClientTest
 - 9、【增强】消息可视化: 提供消息中心Web控制台，可在线管理消息主题、消息数据，查看消费数据及消费轨迹等；
 - 10、【新增】容器化：提供官方Docker镜像，并实时更新推送DockerHub，进一步实现产品开箱即用；
 
-### 6.8 版本 v1.4.1 Release Notes[迭代中]
+### 6.8 版本 v1.4.1 Release Notes[2025-07-20]
 - 1、【增强】客户端新增消费者开关（xxl.mq.client.consumer.enabled），支持主动关闭客户端消费功能，针对只需要消息生产场景可降低系统资源损耗；
 - 2、【优化】客户端SDK终止逻辑优化，避免启动失败时销毁异常；
 - 3、【优化】客户端SDK消息校验逻辑优化，针对非法topic(长度>100)与非法数据(长度>4000)，主动输出错误日志、辅助快速定位业务问题；
