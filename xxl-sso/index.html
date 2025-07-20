@@ -5,8 +5,8 @@
     <title>分布式单点登录框架XXL-SSO</title>
     <link rel="icon" href="../favicon.ico">
 
-    <meta name="keywords" content="分布式，单点登录，框架，XXL-SSO，SSO">
-    <meta name="description" content="XXL-SSO 是一个分布式单点登录框架。只需要登录一次就可以访问所有相互信任的应用系统。">
+    <meta name="keywords" content="分布式,单点登录,框架,XXL-SSO,SSO,登录验证,权限验证">
+    <meta name="description" content="XXL-SSO 是 单点登录框架，只需要登录一次就可以访问所有相互信任的应用系统。具备 “轻量级、高扩展、渐进式” 的等特性，支持 “登录认证、权限(角色)认证、分布式会话认证、单点登录、Web登录、Native(前后端分离)登录” 等多登录及认证类型，现已开放源代码，开箱即用。">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 
     <!-- CSS  -->
@@ -78,7 +78,9 @@
                                 <h5 class2="center teal-text text-lighten-2">XXL-SSO</h5>
                                 <h6>分布式单点登录框架</h6>
                                 <p class="light">
-                                    轻量级、分布式、跨域、Cookie+Token均支持、Web+APP均支持
+                                    轻量级、高扩展、渐进式
+                                    <br>
+                                    登录认证、权限(角色)认证、分布式会话认证、单点登录、Web登录、Native(前后端分离)登录
                                 </p>
                             </div>
                             <div class="row center">
@@ -146,6 +148,50 @@
 <script>
     $(function () {
         $('.sidenav').sidenav();
+        $(".dropdown-trigger").dropdown();
+
+        // slideToTop start
+        var slideToTop = $("<div />");
+        slideToTop.html('<i class="fa fa-chevron-up"></i>');
+        slideToTop.css({
+            position: 'fixed',
+            bottom: '20px',
+            right: '25px',
+            width: '40px',
+            height: '40px',
+            color: '#eee',
+            'font-size': '',
+            'line-height': '40px',
+            'text-align': 'center',
+            'background-color': '#222d32',
+            cursor: 'pointer',
+            'border-radius': '5px',
+            'z-index': '99999',
+            opacity: '.7',
+            'display': 'none'
+        });
+        slideToTop.on('mouseenter', function () {
+            $(this).css('opacity', '1');
+        });
+        slideToTop.on('mouseout', function () {
+            $(this).css('opacity', '.7');
+        });
+        $('body').append(slideToTop);
+        $(window).scroll(function () {
+            if ($(window).scrollTop() >= 150) {
+                if (!$(slideToTop).is(':visible')) {
+                    $(slideToTop).fadeIn(500);
+                }
+            } else {
+                $(slideToTop).fadeOut(500);
+            }
+        });
+        $(slideToTop).click(function () {
+            $("html,body").animate({		// firefox ie not support body, chrome support body. but found that new version chrome not support body too.
+                scrollTop: 0
+            }, 100);
+        });
+        // slideToTop end
     });
 </script>
 
