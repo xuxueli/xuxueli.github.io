@@ -1,0 +1,233 @@
+/* 导航菜单样式 */
+.nav-menu {
+    position: absolute;
+    z-index: 1000;
+    right: 0;
+    top: 0;
+}
+
+.nav-menu-toggle {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px var(--shadow-color);
+    transition: all 0.3s ease;
+}
+
+.nav-menu-toggle:hover {
+    background-color: var(--primary-hover-color);
+    transform: scale(1.05);
+}
+
+.nav-menu-toggle svg {
+    width: 24px;
+    height: 24px;
+}
+
+.nav-menu-content {
+    position: absolute;
+    top: 45px;
+    right: 80px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    width: 220px;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.nav-menu.active .nav-menu-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.nav-menu-list {
+    list-style: none;
+    margin: 0;
+    padding: 6px;
+}
+
+/* 分类样式 */
+.nav-menu-category {
+    margin: 0;
+    padding: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #ffffff;
+    transition: background-color 0.2s ease;
+}
+
+.nav-menu-category + .nav-menu-category {
+    margin-top: 6px;
+}
+
+.category-title {
+    display: flex;
+    align-items: center;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #3b82f6;
+    background-color: #e3f0ff;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    letter-spacing: 0.3px;
+}
+
+.category-title:hover {
+    background-color: #dbeafe;
+}
+
+.category-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: #ffffff;
+}
+
+/* 最常使用分类样式 */
+.nav-menu-category.most-used {
+    margin-bottom: 8px;
+    background-color: #ffffff;
+}
+
+.nav-menu-category.most-used .category-title {
+    background-color: #e3f0ff;
+    cursor: default;
+    font-weight: 600;
+    padding: 12px 14px;
+}
+
+.nav-menu-category.most-used .category-list {
+    max-height: none;
+    overflow: visible;
+    background-color: #ffffff;
+    padding: 4px 0;
+}
+
+/* 其他分类的悬停展开 */
+.nav-menu-category:not(.most-used):hover {
+    background-color: #ffffff;
+}
+
+.nav-menu-category:not(.most-used):hover .category-list {
+    max-height: 300px;
+    padding: 4px 0;
+}
+
+.nav-menu-item {
+    padding: 0;
+    margin: 0;
+}
+
+.nav-menu-link {
+    display: flex;
+    align-items: center;
+    padding: 8px 14px;
+    color: #475569;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-size: 13.5px;
+    line-height: 1.4;
+    border-radius: 4px;
+    margin: 0 4px;
+}
+
+.nav-menu-link:hover {
+    background-color: rgba(59, 130, 246, 0.08);
+    color: #2563eb;
+}
+
+.nav-menu-link.active {
+    background-color: rgba(59, 130, 246, 0.12);
+    color: #2563eb;
+    font-weight: 500;
+}
+
+.nav-menu-link svg {
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+    opacity: 0.75;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.nav-menu-link:hover svg {
+    opacity: 0.9;
+    color: #2563eb;
+}
+
+.nav-menu-link.active svg {
+    opacity: 1;
+    color: #2563eb;
+}
+
+/* 更多菜单样式 */
+.nav-menu-more {
+    position: relative;
+}
+
+.nav-menu-more-content {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    background-color: var(--panel-bg-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 3px 10px var(--shadow-color);
+    width: 210px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-10px);
+    transition: opacity var(--transition-time), visibility var(--transition-time), transform var(--transition-time);
+}
+
+.nav-menu-more:hover .nav-menu-more-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+/* 移动设备适配 */
+@media (max-width: 768px) {
+    .nav-menu-toggle {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .nav-menu-toggle svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .nav-menu-content {
+        width: 200px;
+        right: 16px;
+    }
+    
+    .category-title {
+        padding: 9px 12px;
+        font-size: 12px;
+    }
+    
+    .nav-menu-link {
+        padding: 7px 12px;
+        font-size: 13px;
+    }
+} 

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON工具</title>
+    <link rel="stylesheet" href="../assets/css/common.css">
+    <link rel="stylesheet" href="../assets/css/json-tools.css">
+    <link href="../assets/lib/jsoneditor/jsoneditor.min.css" rel="stylesheet" type="text/css">
+    <style>
+        /* 内容页面特定样式 */
+        body {
+            padding: 0;
+            margin: 0;
+            background-color: transparent;
+            overflow: auto;
+            height: 100vh; /* 使用视口高度 */
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 100%;
+            padding: 0;
+            margin: 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .main-content {
+            margin-top: 0;
+            margin-bottom: 0;
+            flex: 1;
+            display: flex;
+            min-height: 0; /* 修复Flex布局溢出问题 */
+        }
+        
+        .tool-container {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        
+        .editor-section {
+            flex: 1;
+            display: flex;
+            min-height: 0;
+        }
+        
+        #jsoneditor {
+            width: 100%;
+            height: 100%;
+            min-height: 0;
+            flex: 1;
+        }
+
+        /* jsoneditor圆角样式 */
+        .jsoneditor {
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .ace_editor {
+            border-radius: 5px;
+        }
+        
+        .history-container {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .history-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        /* 隐藏原始编辑器 */
+        .editor-wrapper {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-content">
+            <div class="tool-container">
+                <!-- 按钮区域 -->
+                <div class="button-group toolbar">
+                    <button id="jsonSerialize" class="btn">JSON序列化</button>
+                    <button id="jsonCompress" class="btn">压缩JSON</button>
+                    <button id="escapeText" class="btn">转义文本</button>
+                    <button id="unescapeText" class="btn">去除转义</button>
+                    <button id="clearText" class="btn btn-secondary">清空</button>
+                    <button id="copyText" class="btn btn-success">复制</button>
+                </div>
+
+                <!-- 文本编辑区域 -->
+                <div class="editor-section">
+                    <div class="editor-wrapper">
+                        <div class="line-numbers" id="lineNumbers"></div>
+                        <textarea id="editor" placeholder="请输入要处理的文本..."></textarea>
+                    </div>
+                    <div id="jsoneditor"></div>
+                </div>
+            </div>
+
+            <!-- 历史记录区域 -->
+            <div class="history-container">
+                <div class="history-header">
+                    <h2>历史记录</h2>
+                    <button id="clearHistory" class="btn btn-small btn-secondary">清空历史</button>
+                </div>
+                <div id="historyList" class="history-list"></div>
+            </div>
+        </div>
+
+        <!-- 提示信息 -->
+        <div id="notification" class="notification"></div>
+    </div>
+
+    <script src="../assets/lib/jsoneditor/jsoneditor.min.js"></script>
+    <script src="../assets/js/json-tools.js"></script>
+    <script>
+        // 自适应屏幕高度
+        function adjustHeightToScreen() {
+            // 获取视口高度
+            const viewportHeight = window.innerHeight;
+            // 确保内容填充到视口底部
+            document.querySelector('.container').style.height = `${viewportHeight}px`;
+        }
+        
+        // 接收父页面传递的可用高度
+        window.setAvailableHeight = function(height) {
+            if (height && height > 0) {
+                // 设置容器高度
+                document.querySelector('.container').style.height = `${height}px`;
+                
+                console.log('JSON工具: 接收到父页面高度:', height);
+            }
+        };
+        
+        // 页面加载和窗口大小改变时调整高度
+        window.addEventListener('load', adjustHeightToScreen);
+        window.addEventListener('resize', adjustHeightToScreen);
+    </script>
+</body>
+</html> 

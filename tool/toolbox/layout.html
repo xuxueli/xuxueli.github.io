@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">ToolBox</title>
+    <link rel="stylesheet" href="assets/css/common.css">
+    <link rel="stylesheet" href="assets/css/nav-menu.css">
+    <style>
+        /* 布局特有样式 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .layout-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 1280px;
+            max-width: 95%;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .content-frame {
+            flex: 1;
+            width: 100%;
+            border: none;
+            overflow: hidden;
+            background-color: white;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 1300px) {
+            .layout-container {
+                width: 95%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .layout-container {
+                width: 100%;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="layout-container">
+        <!-- 统一标题栏 -->
+        <div class="page-header">
+            <div class="header-left">
+                <div class="header-title">
+                    <h1 id="tool-title">ToolBox</h1>
+                </div>
+                <div class="header-description" id="tool-description">
+                    一站式开发工具箱，提高您的开发效率
+                </div>
+            </div>
+            <div class="header-right">
+                <a href="index.html" class="home-link">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path fill="currentColor" d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z" />
+                    </svg>
+                    返回首页
+                </a>
+                <!-- 导航菜单触发按钮 -->
+                <button class="nav-menu-toggle" title="快速导航">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor" d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 内容区域（嵌入iframe） -->
+        <iframe id="content-frame" class="content-frame" src="about:blank"></iframe>
+        
+        <!-- 导航菜单 -->
+        <div class="nav-menu">
+            <div class="nav-menu-content">
+                <ul class="nav-menu-list">
+                    <!-- 最常使用 -->
+                    <li class="nav-menu-category most-used">
+                        <span class="category-title">最常使用</span>
+                        <ul class="category-list" id="most-used-menu">
+                            <!-- 这里的内容将由JavaScript动态生成 -->
+                        </ul>
+                    </li>
+                    
+                    <!-- 基础工具 -->
+                    <li class="nav-menu-category">
+                        <span class="category-title">基础工具</span>
+                        <ul class="category-list">
+                            <li class="nav-menu-item">
+                                <a href="#" class="nav-menu-link" data-tool="json-tools" data-src="tools/json-tools.html">
+                                    <svg viewBox="0 0 24 24" width="18" height="18">
+                                        <path fill="currentColor" d="M5,3H7V5H5V10A2,2 0 0,1 3,12A2,2 0 0,1 5,14V19H7V21H5C3.93,20.73 3,20.1 3,19V15A2,2 0 0,0 1,13H0V11H1A2,2 0 0,0 3,9V5A2,2 0 0,1 5,3M19,3A2,2 0 0,1 21,5V9A2,2 0 0,0 23,11H24V13H23A2,2 0 0,0 21,15V19A2,2 0 0,1 19,21H17V19H19V14A2,2 0 0,1 21,12A2,2 0 0,1 19,10V5H17V3H19M12,15A1,1 0 0,1 13,16A1,1 0 0,1 12,17A1,1 0 0,1 11,16A1,1 0 0,1 12,15M8,15A1,1 0 0,1 9,16A1,1 0 0,1 8,17A1,1 0 0,1 7,16A1,1 0 0,1 8,15M16,15A1,1 0 0,1 17,16A1,1 0 0,1 16,17A1,1 0 0,1 15,16A1,1 0 0,1 16,15Z" />
+                                    </svg>
+                                    JSON工具
+                                </a>
+                            </li>
+                            <li class="nav-menu-item">
+                                <a href="#" class="nav-menu-link" data-tool="string-diff" data-src="tools/string-diff.html">
+                                    <svg viewBox="0 0 24 24" width="18" height="18">
+                                        <path fill="currentColor" d="M19.5,3.09L15,7.59V4H13V11H20V9H16.41L20.91,4.5L19.5,3.09M4,13V15H7.59L3.09,19.5L4.5,20.91L9,16.41V20H11V13H4Z" />
+                                    </svg>
+                                    字符串差异对比
+                                </a>
+                            </li>
+                            <li class="nav-menu-item">
+                                <a href="#" class="nav-menu-link" data-tool="form-json" data-src="tools/form-json.html">
+                                    <svg viewBox="0 0 24 24" width="18" height="18">
+                                        <path fill="currentColor" d="M20,19V7H4V19H20M20,3A2,2 0 0,1 22,5V19A2,2 0 0,1 20,21H4A2,2 0 0,1 2,19V5C2,3.89 2.9,3 4,3H20M13,17V15H18V17H13M9.58,13L5.57,9H8.4L11.7,12.3C12.09,12.69 12.09,13.33 11.7,13.72L8.42,17H5.59L9.58,13Z" />
+                                    </svg>
+                                    Form与JSON转换
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- 编码安全 -->
+                    <li class="nav-menu-category">
+                        <span class="category-title">编码安全</span>
+                        <ul class="category-list">
+                            <li class="nav-menu-item">
+                                <a href="#" class="nav-menu-link" data-tool="password-generator" data-src="tools/password-generator.html">
+                                    <svg viewBox="0 0 24 24" width="18" height="18">
+                                        <path fill="currentColor" d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z" />
+                                    </svg>
+                                    密码生成器
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- 时间日期 -->
+                    <li class="nav-menu-category">
+                        <span class="category-title">时间日期</span>
+                        <ul class="category-list">
+                            <li class="nav-menu-item">
+                                <a href="#" class="nav-menu-link" data-tool="cron-generator" data-src="tools/cron-generator.html">
+                                    <svg viewBox="0 0 24 24" width="18" height="18">
+                                        <path fill="currentColor" d="M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z" />
+                                    </svg>
+                                    Cron表达式生成器
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- AI工具 -->
+                    <!--<li class="nav-menu-category">
+                        <span class="category-title">AI工具</span>
+                        <ul class="category-list">
+                            <li class="nav-menu-item">
+                                <a href="#" class="nav-menu-link" data-tool="prompt-optimizer" data-src="tools/prompt-optimizer.html">
+                                    <svg viewBox="0 0 24 24" width="18" height="18">
+                                        <path fill="currentColor" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,10A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,10M12,10A2,2 0 0,0 10,12A2,2 0 0,0 12,14A2,2 0 0,0 14,12A2,2 0 0,0 12,10Z" />
+                                    </svg>
+                                    提示词优化
+                                </a>
+                            </li>
+                        </ul>
+                    </li>-->
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/tool-usage.js"></script>
+    <script src="assets/js/nav-menu.js"></script>
+    <script>
+        // 页面工具信息配置
+        const toolsInfo = {
+            'json-tools': {
+                title: 'JSON工具',
+                description: 'JSON序列化、压缩、转义和去除转义，一站式JSON处理工具'
+            },
+            'string-diff': {
+                title: '字符串差异对比工具',
+                description: '对比两段文本的差异，支持格式化JSON，高亮显示差异部分'
+            },
+            'cron-generator': {
+                title: 'Cron表达式生成器',
+                description: '可视化编辑Cron表达式，预览触发时间，提供常用表达式模板'
+            },
+            'password-generator': {
+                title: '密码生成器',
+                description: '生成随机安全密码，支持自定义规则和密码强度评估'
+            },
+            'form-json': {
+                title: 'Form与JSON转换工具',
+                description: '支持Form格式与JSON格式互相转换，支持数组格式'
+            },
+            'prompt-optimizer': {
+                title: '提示词优化工具',
+                description: '优化大模型提示词，提高AI输出质量，支持流式返回结果'
+            }
+        };
+
+        // 获取URL参数
+        function getUrlParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // 加载工具内容
+        function loadTool(toolId) {
+            const toolInfo = toolsInfo[toolId];
+            if (!toolInfo) return;
+            
+            // 更新页面标题和描述
+            document.getElementById('page-title').textContent = `${toolInfo.title} - ToolBox`;
+            document.getElementById('tool-title').textContent = toolInfo.title;
+            document.getElementById('tool-description').textContent = toolInfo.description;
+            
+            // 加载工具内容
+            const contentFrame = document.getElementById('content-frame');
+            const toolSrc = `./tools/${toolId}.html`;
+            contentFrame.src = toolSrc;
+            
+            // 更新活动菜单项
+            document.querySelectorAll('.nav-menu-link').forEach(link => {
+                if (link.getAttribute('data-tool') === toolId) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+            
+            // 处理iframe加载完成事件
+            contentFrame.onload = function() {
+                try {
+                    // 向iframe传递窗口大小信息
+                    const viewportHeight = window.innerHeight;
+                    const headerHeight = document.querySelector('.page-header').offsetHeight;
+                    const availableHeight = viewportHeight - headerHeight - 40; // 40为布局容器的padding
+                    
+                    // 尝试调用iframe内的方法
+                    if (contentFrame.contentWindow && typeof contentFrame.contentWindow.setAvailableHeight === 'function') {
+                        contentFrame.contentWindow.setAvailableHeight(availableHeight);
+                    }
+                } catch (e) {
+                    console.error('向iframe传递高度信息失败:', e);
+                }
+            };
+        }
+        
+        // 当窗口大小改变时，重新计算可用高度并通知iframe
+        window.addEventListener('resize', function() {
+            const contentFrame = document.getElementById('content-frame');
+            const viewportHeight = window.innerHeight;
+            const headerHeight = document.querySelector('.page-header').offsetHeight;
+            const availableHeight = viewportHeight - headerHeight - 40;
+            
+            try {
+                if (contentFrame.contentWindow && typeof contentFrame.contentWindow.setAvailableHeight === 'function') {
+                    contentFrame.contentWindow.setAvailableHeight(availableHeight);
+                }
+            } catch (e) {
+                console.error('向iframe传递高度信息失败:', e);
+            }
+        });
+        
+        // 处理导航菜单点击
+        document.querySelectorAll('.nav-menu-link[data-tool]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const toolId = this.getAttribute('data-tool');
+                // 更新URL，不刷新页面
+                history.pushState({toolId}, '', `?tool=${toolId}`);
+                loadTool(toolId);
+                // 记录工具使用
+                if (window.toolUsageManager) {
+                    window.toolUsageManager.recordToolUsage(toolId);
+                }
+                // 关闭导航菜单
+                document.querySelector('.nav-menu').classList.remove('active');
+            });
+        });
+        
+        // 初始化加载
+        function initializePage() {
+            const toolId = getUrlParam('tool');
+            if (toolId && toolsInfo[toolId]) {
+                loadTool(toolId);
+                // 记录工具使用
+                if (window.toolUsageManager) {
+                    window.toolUsageManager.recordToolUsage(toolId);
+                }
+            } else {
+                // 默认显示首页或者重定向到首页
+                window.location.href = './index.html';
+            }
+        }
+
+        // 等待所有脚本加载完成
+        Promise.all([
+            new Promise(resolve => {
+                if (window.toolUsageManager) {
+                    resolve();
+                } else {
+                    const checkInterval = setInterval(() => {
+                        if (window.toolUsageManager) {
+                            clearInterval(checkInterval);
+                            resolve();
+                        }
+                    }, 100);
+                }
+            }),
+            new Promise(resolve => {
+                if (document.readyState === 'complete') {
+                    resolve();
+                } else {
+                    window.addEventListener('load', resolve);
+                }
+            })
+        ]).then(() => {
+            initializePage();
+        });
+        
+        // 处理浏览器前进/后退按钮
+        window.addEventListener('popstate', function(event) {
+            const toolId = event.state ? event.state.toolId : null;
+            if (toolId && toolsInfo[toolId]) {
+                loadTool(toolId);
+                // 记录工具使用
+                if (window.toolUsageManager) {
+                    window.toolUsageManager.recordToolUsage(toolId);
+                }
+            } else {
+                window.location.href = './index.html';
+            }
+        });
+    </script>
+</body>
+</html> 

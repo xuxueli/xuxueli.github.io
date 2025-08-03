@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>字符串差异对比工具</title>
+    <link rel="stylesheet" href="../assets/css/common.css">
+    <link rel="stylesheet" href="../assets/css/string-diff2.css">
+    <style>
+        /* 内容页面特定样式 */
+        body {
+            padding: 0;
+            margin: 0;
+            background-color: transparent;
+            overflow: auto;
+            height: 100vh; /* 使用视口高度 */
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 100%;
+            padding: 0;
+            margin: 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .main-content {
+            margin-top: 0;
+            margin-bottom: 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0; /* 修复Flex布局溢出问题 */
+            overflow: hidden; /* 防止溢出 */
+        }
+        
+        .diff-container {
+            flex: 1;
+            display: flex;
+            min-height: 0;
+        }
+        
+        .editor-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            flex: 1; /* 确保每个编辑器占据相等空间 */
+            max-width: 50%; /* 限制最大宽度，防止挤压 */
+        }
+        
+        .editor-wrapper {
+            flex: 1;
+            display: flex;
+            min-height: 0;
+        }
+        
+        .editor {
+            flex: 1;
+            min-height: 0;
+        }
+        
+        /* 工具栏布局优化 */
+        .toolbar {
+            flex-shrink: 0; /* 确保不会被压缩 */
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-content">
+            <!-- 工具控制区域 -->
+            <div class="toolbar">
+                <div class="toggle-container">
+                    <input type="checkbox" id="jsonMode" />
+                    <label class="toggle-track" for="jsonMode"></label>
+                    <span class="toggle-label">JSON格式化模式</span>
+                </div>
+                <button id="compareButton" class="btn">对比差异</button>
+                <button id="formatJsonButton" class="btn">格式化JSON</button>
+                <button id="clearButton" class="btn btn-secondary">清空</button>
+                <button id="copyResultButton" class="btn btn-success">复制结果</button>
+            </div>
+
+            <!-- 编辑器区域 -->
+            <div class="diff-container">
+                <!-- 左侧编辑器 -->
+                <div class="editor-container">
+                    <div class="editor-header">
+                        <h2>原始文本</h2>
+                    </div>
+                    <div class="editor-wrapper">
+                        <div class="line-numbers" id="leftLineNumbers"></div>
+                        <textarea class="editor" id="leftEditor" placeholder="在此输入原始文本..."></textarea>
+                        <div class="diff-display" id="leftDiffDisplay"></div>
+                    </div>
+                </div>
+
+                <!-- 交换图标 -->
+                <div class="swap-icon-container">
+                    <div id="swapIcon" class="swap-icon" title="交换内容">
+                        <svg viewBox="0 0 24 24" width="24" height="24">
+                            <path fill="currentColor" d="M19.5,3.09L15,7.59V4H13V11H20V9H16.41L20.91,4.5L19.5,3.09M4,13V15H7.59L3.09,19.5L4.5,20.91L9,16.41V20H11V13H4Z" />
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- 右侧编辑器 -->
+                <div class="editor-container">
+                    <div class="editor-header">
+                        <h2>修改后文本</h2>
+                    </div>
+                    <div class="editor-wrapper">
+                        <div class="line-numbers" id="rightLineNumbers"></div>
+                        <textarea class="editor" id="rightEditor" placeholder="在此输入修改后文本..."></textarea>
+                        <div class="diff-display" id="rightDiffDisplay"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/js/diff_match_patch.js"></script>
+    <script src="../assets/js/string-diff2.js"></script>
+    <script>
+        // 自适应屏幕高度
+        function adjustHeightToScreen() {
+            // 获取视口高度
+            const viewportHeight = window.innerHeight;
+            // 确保内容填充到视口底部
+            document.querySelector('.container').style.height = `${viewportHeight}px`;
+        }
+        
+        // 接收父页面传递的可用高度
+        window.setAvailableHeight = function(height) {
+            if (height && height > 0) {
+                // 设置容器高度
+                document.querySelector('.container').style.height = `${height}px`;
+                
+                // 获取工具栏高度
+                const toolbarHeight = document.querySelector('.toolbar').offsetHeight;
+                
+                // 计算编辑器区域可用高度
+                const editorAvailableHeight = height - toolbarHeight - 30; // 30px作为边距缓冲
+                
+                // 设置编辑器区域高度
+                document.querySelector('.diff-container').style.height = `${editorAvailableHeight}px`;
+                
+                console.log('字符串差异对比工具: 接收到父页面高度:', height);
+                console.log('工具栏高度:', toolbarHeight);
+                console.log('编辑器区域可用高度:', editorAvailableHeight);
+            }
+        };
+        
+        // 页面加载和窗口大小改变时调整高度
+        window.addEventListener('load', adjustHeightToScreen);
+        window.addEventListener('resize', adjustHeightToScreen);
+    </script>
+</body>
+</html> 

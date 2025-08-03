@@ -1,0 +1,475 @@
+:root {
+  --primary-color: #4a90e2;
+  --primary-hover-color: #3a7fd2;
+  --primary-active-color: #2a6fc2;
+  --primary-light-color: #e3f0ff;
+  --bg-color: #f8f9fa;
+  --panel-bg-color: #ffffff;
+  --border-color: #e1e4e8;
+  --text-color: #333333;
+  --text-light-color: #6c757d;
+  --error-color: #f44336;
+  --success-color: #28a745;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.cron-builder {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Cron表达式输入区 */
+.cron-expression-wrapper {
+  background-color: var(--panel-bg-color);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+.expression-input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.expression-input-group label {
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: var(--text-color);
+}
+
+.cron-expression {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 16px;
+  font-family: monospace;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: #fff;
+  color: var(--text-color);
+  transition: all 0.2s ease;
+}
+
+.cron-expression:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+  outline: none;
+}
+
+.expression-format {
+  margin-top: 6px;
+  color: var(--text-light-color);
+  font-size: 0.9rem;
+}
+
+.error-message {
+  color: var(--error-color);
+  font-size: 0.9rem;
+  margin-top: 8px;
+  min-height: 20px;
+}
+
+/* 主体内容区域左右布局 */
+.layout-wrapper {
+  display: flex;
+  gap: 20px;
+}
+
+/* 左侧区域 */
+.left-column {
+  flex: 1;
+  min-width: 0;
+}
+
+/* 右侧区域 */
+.right-column {
+  width: 320px;
+  flex-shrink: 0;
+}
+
+/* 配置面板 */
+.config-panels {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.time-unit-panel {
+  background-color: var(--panel-bg-color);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+.panel-header {
+  background-color: #f5f5f5;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.panel-header h2,
+.panel-header h3 {
+  margin: 0;
+  font-weight: 500;
+}
+
+.panel-header h2 {
+  font-size: 18px;
+}
+
+.panel-header h3 {
+  font-size: 16px;
+}
+
+.panel-body {
+  padding: 16px;
+}
+
+/* 单选按钮组 */
+.radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.radio-option {
+  flex: 1;
+  min-width: 80px;
+}
+
+.radio-option input[type="radio"] {
+  display: none;
+}
+
+.radio-option label {
+  display: block;
+  text-align: center;
+  padding: 6px 8px;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-color);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.radio-option input[type="radio"]:checked + label {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #fff;
+}
+
+/* 值选择器 */
+.value-selector {
+  display: none;
+  margin-top: 12px;
+}
+
+.value-selector.active {
+  display: block;
+}
+
+/* 网格选择器 */
+.selector-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.week-grid, .month-grid {
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+}
+
+.year-grid {
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+}
+
+.selector-item {
+  text-align: center;
+  padding: 8px 0;
+  background-color: #f5f7fa;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.selector-item:hover {
+  background-color: #e9ecef;
+}
+
+.selector-item.selected {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+/* 范围选择器 */
+.range-inputs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.range-input-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.range-input-group label {
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: var(--text-light-color);
+}
+
+.range-separator {
+  margin-top: 24px;
+  color: var(--text-light-color);
+}
+
+/* 周期选择器 */
+.cycle-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cycle-input-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cycle-input-group label {
+  width: 60px;
+  font-size: 14px;
+  color: var(--text-light-color);
+}
+
+.cycle-input-group span {
+  font-size: 14px;
+  color: var(--text-light-color);
+  margin-left: 4px;
+}
+
+/* 输入框样式 */
+input[type="number"],
+select {
+  padding: 8px 10px;
+  font-size: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: #fff;
+  color: var(--text-color);
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+input[type="number"]:focus,
+select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+  outline: none;
+}
+
+/* 右侧区域 */
+.common-expressions,
+.execution-times {
+  background-color: var(--panel-bg-color);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px var(--shadow-color);
+  margin-bottom: 20px;
+}
+
+/* 执行时间预览在前面，所以给它额外的下边距 */
+.execution-times {
+  margin-bottom: 24px;
+}
+
+/* 常用表达式列表 */
+.common-expressions-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.preset-btn {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 10px;
+  background-color: #f8f9fa;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.preset-btn:hover {
+  background-color: var(--primary-light-color);
+  border-color: var(--primary-hover-color);
+}
+
+.preset-name {
+  font-weight: 500;
+  color: var(--text-color);
+  margin-bottom: 4px;
+  font-size: 0.9em;
+}
+
+.preset-expression {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: var(--text-light-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 执行时间预览 */
+.next-executions-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.execution-item {
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+}
+
+.execution-item:last-child {
+  border-bottom: none;
+}
+
+.loading {
+  padding: 20px;
+  text-align: center;
+  color: var(--text-light-color);
+}
+
+/* 响应式布局 */
+@media screen and (max-width: 1400px) {
+  /* 保持3列布局，不再改变为2列 */
+  /* .config-panels {
+    grid-template-columns: repeat(2, 1fr);
+  } */
+  
+  /* 为适应小屏幕下的3列布局，减小间距和内边距 */
+  .config-panels {
+    gap: 10px;
+  }
+  
+  .panel-body {
+    padding: 12px;
+  }
+  
+  .time-unit-panel {
+    min-width: 0;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .layout-wrapper {
+    flex-direction: column;
+  }
+
+  .right-column {
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  /* 保持3列布局，不再改变为2列 */
+  /* .config-panels {
+    grid-template-columns: repeat(2, 1fr);
+  } */
+  
+  /* 进一步减小间距和字体大小以适应小屏幕的3列布局 */
+  .panel-header h3 {
+    font-size: 14px;
+  }
+  
+  .radio-option label {
+    font-size: 13px;
+    padding: 5px 6px;
+  }
+
+  .common-expressions,
+  .next-executions {
+    width: 100%;
+  }
+  
+  /* 小屏幕下常用表达式改为单列 */
+  .common-expressions-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .right-column {
+    order: -1;
+  }
+  
+  /* 保持3列布局，不再改变为1列 */
+  /* .config-panels {
+    grid-template-columns: 1fr;
+  } */
+  
+  /* 进一步减小字体和间距以适应移动设备上的3列布局 */
+  .config-panels {
+    gap: 6px;
+  }
+  
+  .panel-header {
+    padding: 8px 10px;
+  }
+  
+  .panel-body {
+    padding: 8px;
+  }
+  
+  .radio-group {
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+  
+  .radio-option label {
+    font-size: 12px;
+    padding: 4px 5px;
+  }
+
+  .common-expressions {
+    margin-bottom: 20px;
+  }
+
+  .range-inputs {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .range-separator {
+    align-self: center;
+  }
+} 

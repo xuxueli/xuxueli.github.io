@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form与JSON转换工具</title>
+    <link rel="stylesheet" href="../assets/css/common.css">
+    <link href="../assets/lib/jsoneditor/jsoneditor.min.css" rel="stylesheet" type="text/css">
+    <style>
+        /* 基础样式 */
+        body {
+            padding: 0;
+            margin: 0;
+            background-color: transparent;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: var(--text-color);
+        }
+        
+        .container {
+            max-width: none;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            margin: 0;
+            padding: 20px 24px;
+            min-height: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        /* 工具栏样式 */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 16px;
+            padding: 0;
+            margin: 0 0 20px 0;
+            width: 100%;
+            background: none;
+            border-radius: 0;
+        }
+
+        .btn {
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary {
+            background-color: var(--background-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--hover-color);
+            border-color: var(--primary-color);
+        }
+
+        .example-btn {
+            font-size: 13px;
+            padding: 6px 12px;
+            background-color: var(--background-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+        }
+
+        .example-btn:hover {
+            background-color: var(--hover-color);
+            border-color: var(--primary-color);
+        }
+
+        /* 编辑器区域样式 */
+        .converter-container {
+            flex: 1;
+            display: flex;
+            gap: 24px;
+            min-height: 0;
+            padding-bottom: 24px;
+            width: 100%;
+        }
+        
+        .editor-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        
+        .editor-header {
+            padding-bottom: 12px;
+        }
+
+        .editor-header h2 {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .editor-wrapper {
+            flex: 1;
+            display: flex;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #ffffff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            min-height: 0;
+            border: 1px solid var(--border-color);
+        }
+        
+        .form-editor {
+            flex: 1;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            padding: 16px;
+            border: none;
+            resize: none;
+            background-color: #ffffff;
+            color: var(--text-color);
+        }
+
+        .form-editor::placeholder {
+            color: #999;
+            font-style: italic;
+        }
+        
+        #jsonEditor {
+            width: 100%;
+            min-height: 0;
+        }
+
+        /* 转换按钮样式 */
+        .convert-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            justify-content: center;
+            padding: 0;
+            margin-top: 40px;
+        }
+
+        .convert-button {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: #ffffff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            padding: 0;
+        }
+
+        .convert-button:hover {
+            background-color: var(--hover-color);
+            border-color: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        .convert-button:active {
+            transform: scale(0.95);
+        }
+
+        .convert-button svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-color);
+            transition: transform 0.2s ease;
+        }
+
+        .convert-button:hover svg {
+            fill: var(--primary-color);
+        }
+
+        #formToJsonBtn:hover svg {
+            transform: translateX(3px);
+        }
+
+        #jsonToFormBtn:hover svg {
+            transform: translateX(-3px);
+        }
+
+        /* JSONEditor样式覆盖 */
+        .jsoneditor {
+            border: none !important;
+        }
+
+        .jsoneditor-outer {
+            padding: 16px 0;
+            height: 100% !important;
+        }
+
+        .ace_editor {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace !important;
+            font-size: 14px !important;
+            line-height: 1.5 !important;
+        }
+
+        .jsoneditor-menu {
+            display: none !important;
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-content">
+            <div class="toolbar">
+                <button id="clearBtn" class="btn btn-secondary">清空</button>
+                <button id="simpleExampleBtn" class="btn example-btn">简单示例</button>
+                <button id="arrayExampleBtn" class="btn example-btn">数组示例</button>
+            </div>
+
+            <div class="converter-container">
+                <div class="editor-container">
+                    <div class="editor-header">
+                        <h2>Form格式</h2>
+                    </div>
+                    <div class="editor-wrapper">
+                        <textarea class="form-editor" id="formEditor" placeholder="请输入Form格式文本...&#13;&#10;示例格式:&#13;&#10;key1:value1&#13;&#10;key2:value2"></textarea>
+                    </div>
+                </div>
+
+                <div class="convert-buttons">
+                    <button id="formToJsonBtn" class="convert-button" title="Form转JSON">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" />
+                        </svg>
+                    </button>
+                    <button id="jsonToFormBtn" class="convert-button" title="JSON转Form">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="editor-container">
+                    <div class="editor-header">
+                        <h2>JSON格式</h2>
+                    </div>
+                    <div class="editor-wrapper">
+                        <div id="jsonEditor"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/lib/jsoneditor/jsoneditor.min.js"></script>
+    <script>
+        // 初始化JSON编辑器
+        const container = document.getElementById('jsonEditor');
+        const options = {
+            mode: 'code',
+            modes: ['code', 'tree'],
+            onError: function(err) {
+                console.error('JSON编辑器错误:', err);
+            },
+            mainMenuBar: false,
+            navigationBar: false,
+            statusBar: false
+        };
+        const jsonEditor = new JSONEditor(container, options);
+        jsonEditor.set();
+
+        // 获取DOM元素
+        const formEditor = document.getElementById('formEditor');
+        const formToJsonBtn = document.getElementById('formToJsonBtn');
+        const jsonToFormBtn = document.getElementById('jsonToFormBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const simpleExampleBtn = document.getElementById('simpleExampleBtn');
+        const arrayExampleBtn = document.getElementById('arrayExampleBtn');
+
+        // Form转JSON
+        function formToJson() {
+            try {
+                const formText = formEditor.value.trim();
+                if (!formText) return;
+
+                const lines = formText.split('\n');
+                const result = {};
+                
+                lines.forEach(line => {
+                    line = line.trim();
+                    if (!line) return;
+                    
+                    const [key, ...values] = line.split(':');
+                    if (!key || values.length === 0) return;
+                    
+                    const value = values.join(':').trim();
+                    
+                    const arrayMatch = key.match(/^(.+)\[(\d+)\]$/);
+                    if (arrayMatch) {
+                        const arrayKey = arrayMatch[1];
+                        const index = parseInt(arrayMatch[2]);
+                        
+                        if (!result[arrayKey]) {
+                            result[arrayKey] = [];
+                        }
+                        result[arrayKey][index] = value;
+                    } else {
+                        result[key] = value;
+                    }
+                });
+
+                jsonEditor.set(result);
+                jsonEditor.focus();
+            } catch (err) {
+                console.error('Form转JSON失败:', err);
+            }
+        }
+
+        // JSON转Form
+        function jsonToForm() {
+            try {
+                const json = jsonEditor.get();
+                const lines = [];
+                
+                function processValue(key, value) {
+                    if (Array.isArray(value)) {
+                        value.forEach((item, index) => {
+                            if (item !== undefined && item !== null) {
+                                lines.push(`${key}[${index}]:${item}`);
+                            }
+                        });
+                    } else if (value !== undefined && value !== null) {
+                        lines.push(`${key}:${value}`);
+                    }
+                }
+                
+                Object.entries(json).forEach(([key, value]) => {
+                    processValue(key, value);
+                });
+                
+                formEditor.value = lines.join('\n');
+                formEditor.focus();
+            } catch (err) {
+                console.error('JSON转Form失败:', err);
+            }
+        }
+
+        // 清空内容
+        function clearContent() {
+            formEditor.value = '';
+            jsonEditor.set();
+        }
+
+        // 加载简单示例
+        function loadSimpleExample() {
+            formEditor.value = 'name:张三\nage:25\nemail:zhangsan@example.com';
+            formToJson();
+        }
+
+        // 加载数组示例
+        function loadArrayExample() {
+            formEditor.value = 'user:张三\nphones[0]:13800138000\nphones[1]:13900139000\naddress[0]:北京市海淀区\naddress[1]:上海市浦东新区';
+            formToJson();
+        }
+
+        // 绑定事件
+        formToJsonBtn.addEventListener('click', formToJson);
+        jsonToFormBtn.addEventListener('click', jsonToForm);
+        clearBtn.addEventListener('click', clearContent);
+        simpleExampleBtn.addEventListener('click', loadSimpleExample);
+        arrayExampleBtn.addEventListener('click', loadArrayExample);
+
+        // 自适应屏幕高度
+        function adjustHeightToScreen() {
+            const viewportHeight = window.innerHeight;
+            const container = document.querySelector('.container');
+            container.style.height = `${viewportHeight}px`;
+            
+            const toolbarHeight = document.querySelector('.toolbar').offsetHeight;
+            const converterContainer = document.querySelector('.converter-container');
+            
+            const editorAvailableHeight = viewportHeight - toolbarHeight - 52;
+            converterContainer.style.height = `${editorAvailableHeight}px`;
+        }
+        
+        // 接收父页面传递的可用高度
+        window.setAvailableHeight = function(height) {
+            if (height && height > 0) {
+                const container = document.querySelector('.container');
+                container.style.height = `${height}px`;
+                
+                const toolbarHeight = document.querySelector('.toolbar').offsetHeight;
+                const converterContainer = document.querySelector('.converter-container');
+                
+                const editorAvailableHeight = height - toolbarHeight - 52;
+                converterContainer.style.height = `${editorAvailableHeight}px`;
+            }
+        };
+        
+        // 页面加载和窗口大小改变时调整高度
+        window.addEventListener('load', adjustHeightToScreen);
+        window.addEventListener('resize', adjustHeightToScreen);
+    </script>
+</body>
+</html> 

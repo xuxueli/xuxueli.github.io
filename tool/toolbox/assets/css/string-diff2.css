@@ -1,0 +1,241 @@
+/* 字符串差异对比工具特定样式 */
+
+/* 对比区域 */
+.diff-container {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.editor-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    height: auto;
+    background-color: white;
+}
+
+.editor-header {
+    background-color: var(--background-color);
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.editor-header h2 {
+    font-size: var(--font-size-medium);
+    margin: 0;
+    color: var(--header-color);
+    font-weight: 500;
+}
+
+/* 编辑器包装器 */
+.editor-wrapper {
+    position: relative;
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* 行号区域 */
+.line-numbers {
+    width: 40px;
+    background-color: var(--background-color);
+    border-right: 1px solid var(--border-color);
+    user-select: none;
+    font-family: var(--font-family-mono);
+    font-size: 14px;
+    line-height: 21px;
+    padding: 10px 0;
+    color: var(--text-light-color);
+    text-align: right;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.line-numbers div {
+    padding-right: 8px;
+    height: 21px;
+}
+
+/* 编辑器区域 */
+.editor {
+    flex: 1;
+    padding: 10px;
+    font-family: var(--font-family-mono);
+    font-size: 14px;
+    line-height: 21px;
+    border: none;
+    resize: none;
+    outline: none;
+    background-color: white;
+    white-space: pre;
+    overflow: auto;
+    color: var(--text-color);
+}
+
+.editor::placeholder {
+    color: var(--text-light-color);
+}
+
+/* 差异显示区域 */
+.diff-display {
+    position: absolute;
+    top: 0;
+    left: 40px;
+    right: 0;
+    bottom: 0;
+    padding: 10px;
+    font-family: var(--font-family-mono);
+    font-size: 14px;
+    line-height: 21px;
+    white-space: pre;
+    overflow: auto;
+    pointer-events: none;
+    background-color: transparent;
+    visibility: hidden;
+}
+
+/* 差异字符高亮 */
+.char-removed {
+    background-color: rgba(231, 76, 60, 0.2);
+    color: #c0392b;
+    text-decoration: line-through;
+    padding: 0 2px;
+    margin: 0 -2px;
+    border-radius: 2px;
+}
+
+.char-added {
+    background-color: rgba(39, 174, 96, 0.2);
+    color: #219a52;
+    padding: 0 2px;
+    margin: 0 -2px;
+    border-radius: 2px;
+    font-weight: bold;
+}
+
+/* JSON模式开关 */
+.toggle-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all var(--transition-time);
+}
+
+.toggle-container:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.toggle-track {
+    position: relative;
+    width: 40px;
+    height: 20px;
+    background-color: #ddd;
+    border-radius: 10px;
+    transition: background-color var(--transition-time);
+}
+
+.toggle-track::before {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: white;
+    top: 2px;
+    left: 2px;
+    transition: transform var(--transition-time);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-container input[type="checkbox"] {
+    display: none;
+}
+
+.toggle-container input[type="checkbox"]:checked + .toggle-track {
+    background-color: var(--primary-color);
+}
+
+.toggle-container input[type="checkbox"]:checked + .toggle-track::before {
+    transform: translateX(20px);
+}
+
+.toggle-label {
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+/* 工具栏样式优化 */
+.toolbar {
+    margin-bottom: 15px;
+    flex-shrink: 0;
+}
+
+/* 交换图标样式 */
+.swap-icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    margin: auto 0;
+}
+
+.swap-icon {
+    width: 32px;
+    height: 32px;
+    padding: 4px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.swap-icon:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: scale(1.1);
+}
+
+.swap-icon:active {
+    transform: scale(0.9);
+}
+
+.swap-icon.rotating {
+    animation: rotate-swap 0.5s ease;
+}
+
+@keyframes rotate-swap {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .diff-container {
+        flex-direction: column;
+    }
+    
+    .editor-container {
+        height: auto;
+        min-height: 200px;
+    }
+}

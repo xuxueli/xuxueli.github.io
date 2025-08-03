@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToolBox - 多功能工具箱</title>
+    <link rel="stylesheet" href="./assets/css/common.css">
+    <link rel="stylesheet" href="./assets/css/index.css">
+</head>
+<body>
+    <div class="container">
+
+        <!--<header class="page-header">
+            <div class="header-left">
+                <h1 class="header-title">ToolBox</h1>
+                <p class="header-description">一站式开发工具箱，提高您的开发效率</p>
+            </div>
+        </header>-->
+
+        <div class="tools-container">
+            <!-- 分类导航 -->
+            <nav class="tools-nav">
+                <a href="#most-used" class="nav-item">最常使用</a>
+                <a href="#basic-tools" class="nav-item">基础工具</a>
+                <a href="#encoding-tools" class="nav-item">编码安全</a>
+                <a href="#datetime-tools" class="nav-item">时间日期</a>
+                <a href="#dev-tools" class="nav-item">开发辅助</a>
+                <a href="#ai-tools" class="nav-item">AI工具</a>
+                <a href="#media-tools" class="nav-item">多媒体</a>
+                <a href="#utility-tools" class="nav-item">实用工具</a>
+            </nav>
+
+            <!-- 最常使用工具 -->
+            <section id="most-used" class="tools-section">
+                <h2 class="section-title">最常使用</h2>
+                <p class="section-desc">展示最近使用的3个工具</p>
+                <div class="tools-grid" id="most-used-grid">
+                    <!-- 这里的内容将由JavaScript动态生成 -->
+                </div>
+            </section>
+
+            <!-- 基础工具类 -->
+            <section id="basic-tools" class="tools-section">
+                <h2 class="section-title">基础工具</h2>
+                <p class="section-desc">常用的数据格式转换和处理工具</p>
+                <div class="tools-grid">
+
+                    <!-- JSON工具 -->
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">
+                                <svg viewBox="0 0 24 24" width="48" height="48">
+                                    <path fill="currentColor" d="M5,3H7V5H5V10A2,2 0 0,1 3,12A2,2 0 0,1 5,14V19H7V21H5C3.93,20.73 3,20.1 3,19V15A2,2 0 0,0 1,13H0V11H1A2,2 0 0,0 3,9V5A2,2 0 0,1 5,3M19,3A2,2 0 0,1 21,5V9A2,2 0 0,0 23,11H24V13H23A2,2 0 0,0 21,15V19A2,2 0 0,1 19,21H17V19H19V14A2,2 0 0,1 21,12A2,2 0 0,1 19,10V5H17V3H19M12,15A1,1 0 0,1 13,16A1,1 0 0,1 12,17A1,1 0 0,1 11,16A1,1 0 0,1 12,15M8,15A1,1 0 0,1 9,16A1,1 0 0,1 8,17A1,1 0 0,1 7,16A1,1 0 0,1 8,15M16,15A1,1 0 0,1 17,16A1,1 0 0,1 16,17A1,1 0 0,1 15,16A1,1 0 0,1 16,15Z" />
+                                </svg>
+                            </div>
+                            <h2>JSON工具</h2>
+                        </div>
+                        <div class="tool-content">
+                            <p>JSON序列化、压缩、转义和去除转义，一站式JSON处理工具</p>
+                            <div class="tool-features">
+                                <span class="feature-tag">序列化</span>
+                                <span class="feature-tag">压缩</span>
+                                <span class="feature-tag">转义</span>
+                            </div>
+                            <a href="./layout.html?tool=json-tools" class="tool-button">进入工具</a>
+                        </div>
+                    </div>
+
+                    <!-- XML工具 -->
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">
+                                <svg viewBox="0 0 24 24" width="48" height="48">
+                                    <path fill="currentColor" d="M12.89,3L14.85,3.4L11.11,21L9.15,20.6L12.89,3M19.59,12L16,8.41V5.58L22.42,12L16,18.41V15.58L19.59,12M1.58,12L8,5.58V8.41L4.41,12L8,15.58V18.41L1.58,12Z" />
+                                </svg>
+                            </div>
+                            <h2>XML工具<span class="soon-tag">开发中</span></h2>
+                        </div>
+                        <div class="tool-content">
+                            <p>XML序列化、反序列化，JSON与XML结构互相转换</p>
+                            <div class="tool-features">
+                                <span class="feature-tag">序列化</span>
+                                <span class="feature-tag">结构转换</span>
+                                <span class="feature-tag">格式化</span>
+                            </div>
+                            <button class="tool-button disabled">敬请期待</button>
+                        </div>
+                    </div>
+
+                    <!-- Form与JSON转换工具 -->
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">
+                                <svg viewBox="0 0 24 24" width="48" height="48">
+                                    <path fill="currentColor" d="M20,19V7H4V19H20M20,3A2,2 0 0,1 22,5V19A2,2 0 0,1 20,21H4A2,2 0 0,1 2,19V5C2,3.89 2.9,3 4,3H20M13,17V15H18V17H13M9.58,13L5.57,9H8.4L11.7,12.3C12.09,12.69 12.09,13.33 11.7,13.72L8.42,17H5.59L9.58,13Z" />
+                                </svg>
+                            </div>
+                            <h2>Form与JSON转换</h2>
+                        </div>
+                        <div class="tool-content">
+                            <p>支持Form格式与JSON格式互相转换，支持数组格式</p>
+                            <div class="tool-features">
+                                <span class="feature-tag">格式转换</span>
+                                <span class="feature-tag">数组支持</span>
+                                <span class="feature-tag">实时预览</span>
+                            </div>
+                            <a href="./layout.html?tool=form-json" class="tool-button">进入工具</a>
+                        </div>
+                    </div>
+
+                    <!-- 字符串对比工具 -->
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">
+                                <svg viewBox="0 0 24 24" width="48" height="48">
+                                    <path fill="currentColor" d="M19.5,3.09L15,7.59V4H13V11H20V9H16.41L20.91,4.5L19.5,3.09M4,13V15H7.59L3.09,19.5L4.5,20.91L9,16.41V20H11V13H4Z" />
+                                </svg>
+                            </div>
+                            <h2>字符串差异对比</h2>
+                        </div>
+                        <div class="tool-content">
+                            <p>对比两段文本的差异，支持格式化JSON，高亮显示差异部分</p>
+                            <div class="tool-features">
+                                <span class="feature-tag">对比差异</span>
+                                <span class="feature-tag">JSON格式化</span>
+                                <span class="feature-tag">高亮显示</span>
+                            </div>
+                            <a href="./layout.html?tool=string-diff" class="tool-button">进入工具</a>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- 编码安全类 -->
+            <section id="encoding-tools" class="tools-section">
+                <h2 class="section-title">编码安全</h2>
+                <p class="section-desc">编码转换和安全相关工具</p>
+                <div class="tools-grid">
+
+                    <!-- 编码转换工具集 -->
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">
+                                <svg viewBox="0 0 24 24" width="48" height="48">
+                                    <path fill="currentColor" d="M14.6,16.6L19.2,12L14.6,7.4L16,6L22,12L16,18L14.6,16.6M9.4,16.6L4.8,12L9.4,7.4L8,6L2,12L8,18L9.4,16.6Z" />
+                                </svg>
+                            </div>
+                            <h2>编码转换工具<span class="soon-tag">开发中</span></h2>
+                        </div>
+                        <div class="tool-content">
+                            <p>支持Base64、URL、Unicode、HTML实体编解码，MD5/SHA等哈希计算</p>
+                            <div class="tool-features">
+                                <span class="feature-tag">Base64</span>
+                                <span class="feature-tag">URL编码</span>
+                                <span class="feature-tag">哈希计算</span>
+                            </div>
+                            <button class="tool-button disabled">敬请期待</button>
+                        </div>
+                    </div>
+
+                    <!-- 密码生成器 -->
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">
+                                <svg viewBox="0 0 24 24" width="48" height="48">
+                                    <path fill="currentColor" d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z" />
+                                </svg>
+                            </div>
+                            <h2>密码生成器</h2>
+                        </div>
+                        <div class="tool-content">
+                            <p>生成随机安全密码，支持自定义规则和密码强度评估</p>
+                            <div class="tool-features">
+                                <span class="feature-tag">随机生成</span>
+                                <span class="feature-tag">自定义规则</span>
+                                <span class="feature-tag">强度评估</span>
+                            </div>
+                            <a href="./layout.html?tool=password-generator" class="tool-button">进入工具</a>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- 时间日期类 -->
+            <section id="datetime-tools" class="tools-section">
+                <h2 class="section-title">时间日期</h2>
+                <p class="section-desc">时间和日期处理相关工具</p>
+                <div class="tools-grid">
+                    <!-- Cron表达式生成器 -->
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">
+                                <svg viewBox="0 0 24 24" width="48" height="48">
+                                    <path fill="currentColor" d="M15,13H16.5V15.82L18.94,17.23L18.19,18.53L15,16.69V13M19,8H5V19H9.67C9.24,18.09 9,17.07 9,16A7,7 0 0,1 16,9C17.07,9 18.09,9.24 19,9.67V8M5,21C3.89,21 3,20.1 3,19V5C3,3.89 3.89,3 5,3H6V1H8V3H16V1H18V3H19A2,2 0 0,1 21,5V11.1C22.24,12.36 23,14.09 23,16A7,7 0 0,1 16,23C14.09,23 12.36,22.24 11.1,21H5M16,11.15A4.85,4.85 0 0,0 11.15,16C11.15,18.68 13.32,20.85 16,20.85A4.85,4.85 0 0,0 20.85,16C20.85,13.32 18.68,11.15 16,11.15Z" />
+                                </svg>
+                            </div>
+                            <h2>Cron表达式生成器</h2>
+                        </div>
+                        <div class="tool-content">
+                            <p>可视化编辑Cron表达式，预览触发时间，提供常用表达式模板</p>
+                            <div class="tool-features">
+                                <span class="feature-tag">可视化编辑</span>
+                                <span class="feature-tag">时间预览</span>
+                                <span class="feature-tag">表达式模板</span>
+                            </div>
+                            <a href="./layout.html?tool=cron-generator" class="tool-button">进入工具</a>
+                        </div>
+                    </div>
+
+                    <!-- 时间工具 -->
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">
+                                <svg viewBox="0 0 24 24" width="48" height="48">
+                                    <path fill="currentColor" d="M12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C17.5 22 22 17.5 22 12S17.5 2 12 2M17 13H11V7H12.5V11.5H17V13Z" />
+                                </svg>
+                            </div>
+                            <h2>时间工具<span class="soon-tag">开发中</span></h2>
+                        </div>
+                        <div class="tool-content">
+                            <p>时间戳转换、日期计算、时区转换等时间处理工具</p>
+                            <div class="tool-features">
+                                <span class="feature-tag">时间戳</span>
+                                <span class="feature-tag">日期计算</span>
+                                <span class="feature-tag">时区转换</span>
+                            </div>
+                            <button class="tool-button disabled">敬请期待</button>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- 开发辅助类 -->
+            <section id="dev-tools" class="tools-section">
+                <h2 class="section-title">开发辅助</h2>
+                <p class="section-desc">提高开发效率的辅助工具</p>
+                <div class="tools-grid">
+
+                    <!-- 格式化工具集 -->
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">
+                                <svg viewBox="0 0 24 24" width="48" height="48">
+                                    <path fill="currentColor" d="M21,16.5C21,16.88 20.79,17.21 20.47,17.38L12.57,21.82C12.41,21.94 12.21,22 12,22C11.79,22 11.59,21.94 11.43,21.82L3.53,17.38C3.21,17.21 3,16.88 3,16.5V7.5C3,7.12 3.21,6.79 3.53,6.62L11.43,2.18C11.59,2.06 11.79,2 12,2C12.21,2 12.41,2.06 12.57,2.18L20.47,6.62C20.79,6.79 21,7.12 21,7.5V16.5M12,4.15L6.04,7.5L12,10.85L17.96,7.5L12,4.15M5,15.91L11,19.29V12.58L5,9.21V15.91M19,15.91V9.21L13,12.58V19.29L19,15.91Z" />
+                                </svg>
+                            </div>
+                            <h2>格式化工具<span class="soon-tag">开发中</span></h2>
+                        </div>
+                        <div class="tool-content">
+                            <p>支持XML、SQL、CSS、HTML等多种格式的代码格式化</p>
+                            <div class="tool-features">
+                                <span class="feature-tag">XML</span>
+                                <span class="feature-tag">SQL</span>
+                                <span class="feature-tag">CSS/HTML</span>
+                            </div>
+                            <button class="tool-button disabled">敬请期待</button>
+                        </div>
+                    </div>
+
+                    <!-- 代码工具集 -->
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">
+                                <svg viewBox="0 0 24 24" width="48" height="48">
+                                    <path fill="currentColor" d="M3,3H21V21H3V3M13,15H15.5L14.5,19H16.5L17.5,15H21V13H18L19,9H21V7H19.5L20.5,3H18.5L17.5,7H15V7H17L16,11H13V7H11V11H7V7H5V13H11V15H7V19H9V15H13V19H11V21H15V15Z" />
+                                </svg>
+                            </div>
+                            <h2>代码工具<span class="soon-tag">开发中</span></h2>
+                        </div>
+                        <div class="tool-content">
+                            <p>代码美化、压缩、对比等代码处理工具</p>
+                            <div class="tool-features">
+                                <span class="feature-tag">代码美化</span>
+                                <span class="feature-tag">代码压缩</span>
+                                <span class="feature-tag">代码对比</span>
+                            </div>
+                            <button class="tool-button disabled">敬请期待</button>
+                        </div>
+                    </div>
+
+                    <!-- API工具集 -->
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">
+                                <svg viewBox="0 0 24 24" width="48" height="48">
+                                    <path fill="currentColor" d="M7 7H5A2 2 0 0 0 3 9V17H5V13H7V17H9V9A2 2 0 0 0 7 7M7 11H5V9H7M14 7H10V17H12V13H14A2 2 0 0 0 16 11V9A2 2 0 0 0 14 7M14 11H12V9H14M20 9V15H21V17H17V15H18V9H17V7H21V9Z" />
+                                </svg>
+                            </div>
+                            <h2>API工具<span class="soon-tag">开发中</span></h2>
+                        </div>
+                        <div class="tool-content">
+                            <p>API测试、Mock数据生成、HTTP请求工具</p>
+                            <div class="tool-features">
+                                <span class="feature-tag">API测试</span>
+                                <span class="feature-tag">Mock数据</span>
+                                <span class="feature-tag">HTTP请求</span>
+                            </div>
+                            <button class="tool-button disabled">敬请期待</button>
+                        </div>
+                    </div>
+
+                    <!-- 正则表达式工具 -->
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">
+                                <svg viewBox="0 0 24 24" width="48" height="48">
+                                    <path fill="currentColor" d="M16,16.92C15.67,16.97 15.34,17 15,17C14.66,17 14.33,16.97 14,16.92V13.41L11.5,15.89C11,15.5 10.5,15 10.11,14.5L12.59,12H9.08C9.03,11.67 9,11.34 9,11C9,10.66 9.03,10.33 9.08,10H12.59L10.11,7.5C10.3,7.25 10.5,7 10.76,6.76V6.76C11,6.5 11.25,6.3 11.5,6.11L14,8.59V5.08C14.33,5.03 14.66,5 15,5C15.34,5 15.67,5.03 16,5.08V8.59L18.5,6.11C19,6.5 19.5,7 19.89,7.5L17.41,10H20.92C20.97,10.33 21,10.66 21,11C21,11.34 20.97,11.67 20.92,12H17.41L19.89,14.5C19.7,14.75 19.5,15 19.24,15.24V15.24C19,15.5 18.75,15.7 18.5,15.89L16,13.41V16.92H16V16.92M5,19A2,2 0 0,1 7,17A2,2 0 0,1 9,19A2,2 0 0,1 7,21A2,2 0 0,1 5,19H5Z" />
+                                </svg>
+                            </div>
+                            <h2>正则表达式工具<span class="soon-tag">开发中</span></h2>
+                        </div>
+                        <div class="tool-content">
+                            <p>正则表达式测试、生成，提供常用正则表达式库</p>
+                            <div class="tool-features">
+                                <span class="feature-tag">正则测试</span>
+                                <span class="feature-tag">正则生成</span>
+                                <span class="feature-tag">正则库</span>
+                            </div>
+                            <button class="tool-button disabled">敬请期待</button>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- AI工具类 -->
+            <section id="ai-tools" class="tools-section">
+                <h2 class="section-title">AI工具</h2>
+                <p class="section-desc">AI相关的工具和功能</p>
+                <div class="tools-grid">
+
+                    <!-- 提示词优化工具 -->
+                    <!--<div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">
+                                <svg viewBox="0 0 24 24" width="48" height="48">
+                                    <path fill="currentColor" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8M12,10A2,2 0 0,0 10,12A2,2 0 0,0 12,14A2,2 0 0,0 14,12A2,2 0 0,0 12,10Z" />
+                                </svg>
+                            </div>
+                            <h2>提示词优化</h2>
+                        </div>
+                        <div class="tool-content">
+                            <p>优化大模型提示词，提高AI输出质量，支持流式返回结果</p>
+                            <div class="tool-features">
+                                <span class="feature-tag">提示词优化</span>
+                                <span class="feature-tag">流式返回</span>
+                                <span class="feature-tag">AI辅助</span>
+                            </div>
+                            <a href="./layout.html?tool=prompt-optimizer" class="tool-button">进入工具</a>
+                        </div>
+                    </div>-->
+
+                </div>
+            </section>
+
+            <!-- 多媒体类 -->
+            <section id="media-tools" class="tools-section">
+                <h2 class="section-title">多媒体</h2>
+                <p class="section-desc">图片和颜色处理工具</p>
+                <div class="tools-grid">
+                    <!-- 颜色工具集 -->
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">
+                                <svg viewBox="0 0 24 24" width="48" height="48">
+                                    <path fill="currentColor" d="M17.5,12A1.5,1.5 0 0,1 16,10.5A1.5,1.5 0 0,1 17.5,9A1.5,1.5 0 0,1 19,10.5A1.5,1.5 0 0,1 17.5,12M14.5,8A1.5,1.5 0 0,1 13,6.5A1.5,1.5 0 0,1 14.5,5A1.5,1.5 0 0,1 16,6.5A1.5,1.5 0 0,1 14.5,8M9.5,8A1.5,1.5 0 0,1 8,6.5A1.5,1.5 0 0,1 9.5,5A1.5,1.5 0 0,1 11,6.5A1.5,1.5 0 0,1 9.5,8M6.5,12A1.5,1.5 0 0,1 5,10.5A1.5,1.5 0 0,1 6.5,9A1.5,1.5 0 0,1 8,10.5A1.5,1.5 0 0,1 6.5,12M12,3A9,9 0 0,0 3,12A9,9 0 0,0 12,21A1.5,1.5 0 0,0 13.5,19.5C13.5,19.11 13.35,18.76 13.11,18.5C12.88,18.23 12.73,17.88 12.73,17.5A1.5,1.5 0 0,1 14.23,16H16A5,5 0 0,0 21,11C21,6.58 16.97,3 12,3Z" />
+                                </svg>
+                            </div>
+                            <h2>颜色工具<span class="soon-tag">开发中</span></h2>
+                        </div>
+                        <div class="tool-content">
+                            <p>颜色选择器、颜色格式转换、调色板生成</p>
+                            <div class="tool-features">
+                                <span class="feature-tag">颜色选择</span>
+                                <span class="feature-tag">格式转换</span>
+                                <span class="feature-tag">调色板</span>
+                            </div>
+                            <button class="tool-button disabled">敬请期待</button>
+                        </div>
+                    </div>
+
+                    <!-- 图片工具集 -->
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">
+                                <svg viewBox="0 0 24 24" width="48" height="48">
+                                    <path fill="currentColor" d="M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z" />
+                                </svg>
+                            </div>
+                            <h2>图片工具<span class="soon-tag">开发中</span></h2>
+                        </div>
+                        <div class="tool-content">
+                            <p>图片压缩、Base64转换、图片格式转换</p>
+                            <div class="tool-features">
+                                <span class="feature-tag">图片压缩</span>
+                                <span class="feature-tag">Base64</span>
+                                <span class="feature-tag">格式转换</span>
+                            </div>
+                            <button class="tool-button disabled">敬请期待</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 实用工具类 -->
+            <section id="utility-tools" class="tools-section">
+                <h2 class="section-title">实用工具</h2>
+                <p class="section-desc">常用的实用工具集合</p>
+                <div class="tools-grid">
+                    <!-- 单位换算工具 -->
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">
+                                <svg viewBox="0 0 24 24" width="48" height="48">
+                                    <path fill="currentColor" d="M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M19,19H5V5H19V19M17,17H7V7H17V17Z" />
+                                </svg>
+                            </div>
+                            <h2>单位换算工具<span class="soon-tag">开发中</span></h2>
+                        </div>
+                        <div class="tool-content">
+                            <p>长度、重量、面积、数据大小等单位换算</p>
+                            <div class="tool-features">
+                                <span class="feature-tag">长度单位</span>
+                                <span class="feature-tag">重量单位</span>
+                                <span class="feature-tag">数据大小</span>
+                            </div>
+                            <button class="tool-button disabled">敬请期待</button>
+                        </div>
+                    </div>
+
+                    <!-- 文本工具集 -->
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">
+                                <svg viewBox="0 0 24 24" width="48" height="48">
+                                    <path fill="currentColor" d="M14,17H7V15H14M17,13H7V11H17M17,9H7V7H17M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3Z" />
+                                </svg>
+                            </div>
+                            <h2>文本工具<span class="soon-tag">开发中</span></h2>
+                        </div>
+                        <div class="tool-content">
+                            <p>文本统计、去重、排序、替换等文本处理工具</p>
+                            <div class="tool-features">
+                                <span class="feature-tag">文本统计</span>
+                                <span class="feature-tag">文本去重</span>
+                                <span class="feature-tag">文本排序</span>
+                            </div>
+                            <button class="tool-button disabled">敬请期待</button>
+                        </div>
+                    </div>
+
+                    <!-- 更多工具卡片 -->
+                    <div class="tool-card new-tool">
+                        <div class="tool-header">
+                            <div class="tool-icon">
+                                <svg viewBox="0 0 24 24" width="48" height="48">
+                                    <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+                                </svg>
+                            </div>
+                            <h2>更多工具</h2>
+                        </div>
+                        <div class="tool-content">
+                            <p>更多实用开发工具即将推出，敬请期待</p>
+                            <div class="tool-features">
+                                <span class="feature-tag">即将推出</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer class="footer">
+            <p>ToolBox - 提高开发效率的多功能工具箱</p>
+        </footer>
+    </div>
+
+    <script src="./assets/js/tool-usage.js"></script>
+    <script src="./assets/js/index.js"></script>
+</body>
+</html> 

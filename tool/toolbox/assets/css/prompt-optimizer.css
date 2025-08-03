@@ -1,0 +1,96 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.prompt-optimizer-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    height: 100%;
+    box-sizing: border-box;
+    flex: 1;
+    min-height: 0;
+}
+
+.input-section, .output-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 0;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.input-section {
+    flex: 0 0 auto;
+}
+
+.output-section {
+    flex: 1 1 auto;
+}
+
+.input-section textarea {
+    flex: 1;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    resize: none;
+    font-family: monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    background-color: white;
+    color: var(--text-color);
+}
+
+.output-content {
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: white;
+    color: var(--text-color);
+    font-family: var(--font-family);
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-y: auto;
+}
+
+/* 调整markdown-body的样式 */
+.markdown-body {
+    font-family: var(--font-family) !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    background-color: transparent !important;
+}
+
+.markdown-body pre {
+    background-color: #f6f8fa !important;
+    border-radius: 4px !important;
+    padding: 16px !important;
+    margin: 8px 0 !important;
+}
+
+.markdown-body code {
+    font-family: var(--font-family-mono) !important;
+    font-size: 13px !important;
+    background-color: rgba(175, 184, 193, 0.2) !important;
+    padding: 0.2em 0.4em !important;
+    border-radius: 4px !important;
+} 
