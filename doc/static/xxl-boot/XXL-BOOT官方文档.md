@@ -1,6 +1,8 @@
 ## 《快速开发平台 XXL-BOOT》
 
+[![Actions Status](https://github.com/xuxueli/xxl-boot/workflows/Java%20CI/badge.svg)](https://github.com/xuxueli/xxl-boot/actions)
 [![GitHub release](https://img.shields.io/github/release/xuxueli/xxl-boot.svg)](https://github.com/xuxueli/xxl-boot/releases)
+[![GitHub stars](https://img.shields.io/github/stars/xuxueli/xxl-boot)](https://github.com/xuxueli/xxl-boot/)
 [![License](https://img.shields.io/badge/license-GPLv3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html)
 [![donate](https://img.shields.io/badge/%24-donate-ff69b4.svg?style=flat-square)](https://www.xuxueli.com/page/donate.html)
 
@@ -267,6 +269,14 @@ docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAdd
 - 6、【新增】系统工具：提供Entity、业务代码、SQL、页面交互等……前后端一站式代码生成工具，辅助快速进行敏捷迭代开发。
 - 7、【扩展】分布式扩展：系统设计预留丰富扩展能力，可低成本扩展接入RPC、MQ、JOB、CONF、KV、SSO…等分布式中间件能力。
 - 8、【升级】升级依赖版本，如slf4j、poi、spring、gson、mysql…等。
+
+### 版本 v1.1.0 Release Notes[2025-08-03]
+- 1、【重构】登录认证重构，集成XXL-SSO提供登录认证能力，可扩展支持单点登录、分布式认证...等多场景登录诉求；
+- 2、【重构】权限认证重构，支持注解式/API方式快速鉴权，便捷集成系统RBAC权限系统，提升系统安全性、以及二次开发效率体验；
+- 3、【升级】升级依赖版本，如slf4j、xxl-tool、spring、gson、mysql-connector…等；
+
+### 版本 v1.1.1 Release Notes[迭代中]
+- 1、【ING】代码生成：支持交互层代码生成，包括ui及js；层级目录支持；
 
 
 ### TODO LIST
