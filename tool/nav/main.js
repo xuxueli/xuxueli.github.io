@@ -10,7 +10,7 @@
         $searchEngine = document.querySelector('#searchEngine')
 
     // init
-    if (localStorage.version != version) {
+    if (localStorage.version !== version) {
         localStorage.version = version
         localStorage.newWindow = 1
         localStorage.searchEngine = 'https://www.baidu.com/s?wd='
