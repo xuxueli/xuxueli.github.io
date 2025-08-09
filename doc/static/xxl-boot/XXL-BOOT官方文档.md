@@ -54,9 +54,9 @@ XXL-BOOT 是一个快速开发平台，易学易用、简化开发、丰富扩�
 - [社区交流](https://www.xuxueli.com/page/community.html)
 
 ### 1.4 环境
-- Maven3+
-- Jdk1.8+
-- Mysql8.0+
+- Maven：3+
+- Jdk：17+
+- Mysql：8.0+
 
 ### 1.5 发展历程
 XXL-BOOT 前身为 xxl-permission、xxl-code-generator 等多个历史项目，以及 XXL-JOB、XXL-CONF 等系列开源软件所所沉淀中后台能力，经过整合演进最终诞生。
@@ -275,9 +275,12 @@ docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAdd
 - 2、【重构】权限认证重构，支持注解式/API方式快速鉴权，便捷集成系统RBAC权限系统，提升系统安全性、以及二次开发效率体验；
 - 3、【升级】升级依赖版本，如slf4j、xxl-tool、spring、gson、mysql-connector…等；
 
-### 版本 v1.1.1 Release Notes[迭代中]
-- 1、【ING】代码生成：支持交互层代码生成，包括ui及js；层级目录支持；
+### 版本 v1.2.0 Release Notes[2025-08-10]
+- 1、【升级】项目升级 SpringBoot3 + JDK17；
+- 2、【升级】升级多项依赖至较新版本，如xxl-sso、jakarta、spring等，适配JDK17；
 
+### 版本 v1.2.1 Release Notes[迭代中]
+- 1、【ING】代码生成：支持交互层代码生成，包括ui及js；层级目录支持；
 
 ### TODO LIST
 - 1、代码生成：支持交互层代码生成，包括ui及js；层级目录支持；
