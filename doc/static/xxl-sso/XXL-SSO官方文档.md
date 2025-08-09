@@ -495,9 +495,9 @@ Native登录认证 OpenAPI 接口列表：
 测试用例运行结果：
 ```
 15:39:42.831 logback [main] INFO  NativeClientTest - 登录成功：token = eyJ1c2VySWQiOiIxMDAwIiwiZXhwaXJlVGltZSI6MCwidmVyc2lvbiI6IjA2ZmRhOGFhZmU2MzRhMzBhYzYzZWQ4ZjM1YjBjNTExIiwiYXV0b1JlbmV3IjpmYWxzZX0
-15:39:42.838 logback [main] INFO  NativeClientTest - 当前为登录状态：登陆用户 = LoginInfo{userId='1000', userName='user', realName='null', extraInfo=null, roleList=[role01], permissionList=[user:query, user:add], expireTime='1753601982825', version=06fda8aafe634a30ac63ed8f35b0c511, autoRenew=false}
-15:39:42.841 logback [main] INFO  NativeClientTest - 模拟请求APP应用接口：请求成功，登陆用户 = LoginInfo{userId='1000', userName='user', realName='null', extraInfo=null, roleList=[role01], permissionList=[user:query, user:add], expireTime='1753601982825', version=06fda8aafe634a30ac63ed8f35b0c511, autoRenew=false}
-15:39:43.174 logback [main] INFO  NativeClientTest - 模拟请求APP应用接口：请求成功，登陆用户 = LoginInfo{userId='1000', userName='user', realName='null', extraInfo=null, roleList=[role01], permissionList=[user:query, user:add], expireTime='1753601982825', version=06fda8aafe634a30ac63ed8f35b0c511, autoRenew=false}
+15:39:42.838 logback [main] INFO  NativeClientTest - 当前为登录状态：登陆用户 = LoginInfo{userId='1000', userName='user', realName='null', extraInfo=null, roleList=[role01], permissionList=[user:query, user:add], expireTime='1753601982825', signature=06fda8aafe634a30ac63ed8f35b0c511, autoRenew=false}
+15:39:42.841 logback [main] INFO  NativeClientTest - 模拟请求APP应用接口：请求成功，登陆用户 = LoginInfo{userId='1000', userName='user', realName='null', extraInfo=null, roleList=[role01], permissionList=[user:query, user:add], expireTime='1753601982825', signature=06fda8aafe634a30ac63ed8f35b0c511, autoRenew=false}
+15:39:43.174 logback [main] INFO  NativeClientTest - 模拟请求APP应用接口：请求成功，登陆用户 = LoginInfo{userId='1000', userName='user', realName='null', extraInfo=null, roleList=[role01], permissionList=[user:query, user:add], expireTime='1753601982825', signature=06fda8aafe634a30ac63ed8f35b0c511, autoRenew=false}
 15:39:43.177 logback [main] INFO  NativeClientTest - 注销成功
 15:39:43.180 logback [main] INFO  NativeClientTest - 当前为注销状态
 15:39:43.181 logback [main] INFO  NativeClientTest - 模拟请求APP应用接口：请求失败：not login for path:/
@@ -857,10 +857,18 @@ Response<String> result = XxlSsoHelper.hasPermission(LoginInfo loginInfo, String
 - 5、【新增】安全性：针对系统框架多个模块落地安全性设计，包括：登录Token安全设计、客户端登录凭证Cookie安全设计、CAS跳转Ticket安全设计 等；
 - 6、【优化】升级多项依赖至较新版本；
 
-### 5.4 版本 v1.2.1 Release Notes [迭代中]
-- 1、【优化】LoginStore优化，针对可选接口添加默认实现，避免实现类组件中进行不必要的方法重写；
-- 2、【ING】集成WebFlux、Spring-Cloud-Gateway，并提供接入示例；
-- 3、【ING】增强用户增强安全性：登陆用户数据中，新增客户端信息如ip、ua等，防止token被窃取；
+### 5.4 版本 v1.3.0 Release Notes [2025-08-10]
+- 1、【优化】登录持久化组件优化，LoginStore可选接口添加默认实现，避免扩展组件进行不必要方法重写；
+- 2、【安全】登录信息安全升级，登录态签名支持扩展及自定义；
+- 2、【优化】升级多项依赖至较新版本，如jedis等；
+
+### 5.5 版本 v2.0.0 Release Notes [2025-08-10]
+- 1、【升级】项目升级JDK17；
+- 2、【升级】升级多项依赖至较新版本，如jakarta、spring等，适配JDK17；
+
+### 5.6 版本 v2.0.1 Release Notes [迭代中]
+- 3、【ING】集成WebFlux、Spring-Cloud-Gateway，并提供接入示例；
+- 4、【ING】增强用户增强安全性：登陆用户数据中，新增客户端信息如ip、ua等，防止token被窃取；
 
 
 ### TODO LIST
@@ -870,6 +878,9 @@ Response<String> result = XxlSsoHelper.hasPermission(LoginInfo loginInfo, String
 - 4、集成网关支持；集成WebFlux, Spring-Cloud-Gateway等；
 - 5、支持认证分组，分组内共享登陆状态，分组之间登录态隔离；
 - 6、账号中心模块：提供开箱即用账号中心模块，进一步提升用户接入体验；
+- 7、隔离升级：
+  - 租户：store数据，前后端key 隔离；
+  - 多端：隔离登陆态，map存多token（用户最长有效期，map维护本次有效期）；
 
 
 ## 六、其他
