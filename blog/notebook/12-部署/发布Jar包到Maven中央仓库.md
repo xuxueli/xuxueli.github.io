@@ -8,12 +8,12 @@
 
 ### 相关地址
 
-| 名称             | 地址                                                           | 说明                                                         
-|----------------|--------------------------------------------------------------|------------------------------------------------------------
-| 工单管理           | https://issues.sonatype.org/                                 | 申请上传资格和groupId 的地方。注册账号、创建和管理issue，Jar包的发布是以解决issue的方式起步的。 
-| 构件仓库[旧版]       | https://oss.sonatype.org/                                    | Jar包上传的位置，Release 之后就会同步到maven中央仓库。
-| 发布镜像[新版]       | https://central.sonatype.com/publishing/namespaces    | Jar包上传;
-| 仓库镜像           | http://search.maven.org/ 或 http://mvnrepository.com/         | 最终Jar包可以在这里搜索到。
+| 名称             | 地址                                                              | 说明                                                         
+|----------------|-----------------------------------------------------------------|------------------------------------------------------------
+| 工单管理           | https://issues.sonatype.org/                                    | 申请上传资格和groupId 的地方。注册账号、创建和管理issue，Jar包的发布是以解决issue的方式起步的。 
+| 构件仓库           | https://central.sonatype.com/publishing/namespaces              | Jar包上传;同步到maven中央仓库;
+| 构件仓库(旧版)       | https://oss.sonatype.org/                                       | Jar包上传的位置，Release 之后就会同步到maven中央仓库。
+| 仓库镜像           | http://search.maven.org/ 或 http://mvnrepository.com/            | 最终Jar包可以在这里搜索到。
 
 
 ### 一、申请上传资格和groupId
