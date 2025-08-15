@@ -1,7 +1,9 @@
 ## 《Java爬虫框架XXL-CRAWLER》
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-crawler/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-crawler/)
+[![Actions Status](https://github.com/xuxueli/xxl-crawler/workflows/Java%20CI/badge.svg)](https://github.com/xuxueli/xxl-crawler/actions)
+[![Maven Central](https://img.shields.io/maven-central/v/com.xuxueli/xxl-crawler)](https://central.sonatype.com/artifact/com.xuxueli/xxl-crawler/)
 [![GitHub release](https://img.shields.io/github/release/xuxueli/xxl-crawler.svg)](https://github.com/xuxueli/xxl-crawler/releases)
+[![GitHub stars](https://img.shields.io/github/stars/xuxueli/xxl-crawler)](https://github.com/xuxueli/xxl-crawler/)
 ![License](https://img.shields.io/github/license/xuxueli/xxl-crawler.svg)
 [![donate](https://img.shields.io/badge/%24-donate-ff69b4.svg?style=flat-square)](https://www.xuxueli.com/page/donate.html)
 
@@ -313,6 +315,16 @@ public abstract int getUrlNum(); | 获取待采集URL数量；
 - 3、【重构】重构核心功能模块，提升扩展性；修复历史代码隐藏问题，提升系统稳定习惯。
 - 4、【升级】多个依赖升级至更新版本，如jsoup、selenium等。
 
+### v1.4.1 Release Notes[2024-01-06]
+- 1、【修复】PageSelect注解取数值逻辑修复；
+
+### v1.5.0 Release Notes[2025-08-16]
+- 1、【升级】项目升级JDK17；
+- 2、【升级】代码兼容改造，适配JDK17；
+- 3、【升级】多个依赖升级至更新版本，如jsoup、selenium等。
+
+### v1.5.1 Release Notes[迭代中]
+- 1、【TODO】爬虫扩散规则抽象，支持自定义；包括深度、URL正则、以及自定义编码等；
 
 ### TODO LIST
 - 1、扩展SelectType；

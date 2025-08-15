@@ -1,7 +1,7 @@
 ## 《RPC服务框架XXL-RPC》
 
 [![Actions Status](https://github.com/xuxueli/xxl-rpc/workflows/Java%20CI/badge.svg)](https://github.com/xuxueli/xxl-rpc/actions)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-rpc/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-rpc/)
+[![Maven Central](https://img.shields.io/maven-central/v/com.xuxueli/xxl-rpc-core)](https://central.sonatype.com/artifact/com.xuxueli/xxl-rpc-core)
 [![GitHub release](https://img.shields.io/github/release/xuxueli/xxl-rpc.svg)](https://github.com/xuxueli/xxl-rpc/releases)
 [![GitHub stars](https://img.shields.io/github/stars/xuxueli/xxl-rpc)](https://github.com/xuxueli/xxl-rpc/)
 ![License](https://img.shields.io/github/license/xuxueli/xxl-rpc.svg)
@@ -561,9 +561,12 @@ public class Demo2ServiceImpl implements Demo2Service {
 - 4、【优化】优化获取本地IP地址逻辑，调整了获取本地地址顺序；
 - 5、【升级】多个项目依赖升级至较新稳定版本；
 
-#### v.1.9.1 Release Notes[迭代中]
-- 1、【TODO】新增SimpleHttpServer，仅支持同步请求，简化CallType复杂度；
+#### v2.0.0 Release Notes[2025-08-16]
+- 1、【升级】项目升级JDK17；
+- 2、【升级】项目部分依赖升级，如netty、fastjson2、spring等，适配JDK17；
 
+#### v2.0.1 Release Notes[迭代中]
+- 1、【TODO】新增SimpleHttpServer，仅支持同步请求，简化CallType复杂度；
 
 #### TODO LIST
 - 提高系统可用性，以部分功能暂时不可达为代价，防止服务整体缓慢或雪崩

@@ -917,10 +917,12 @@ Java服务可参考XXL-RPC实现方案，XXL-RPC原生基于XXL-CONF的 Restful 
 ### 7.16 版本 v1.7.1 Release Notes[迭代中]
 - 1、【强化】注解方式（@XxlConf）配置更新逻辑调整，Proxy情况下赋值逻辑优化；
 - 2、【升级】升级多项maven依赖至较新版本；
-- 3、【迭代中】XXL-CONF 配置历史Diff及一键回滚能力完善；
-- 4、【迭代中】启动预热优化，加载当前AppName下全量配置预热；
-- 5、【迭代中】首页报表数据处理；Sample示例，动态线程池处理，动态JDBC处理等；
-- 6、【迭代中】Springboot 微服务 接入 注册中心 Sample示例；
+- 3、【优化】XXL-CONF更名“配置中心与注册中心”、AppName实体由应用更名为服务，统一话术理解；管理端菜单层级调整，提升操作易用性；
+- 4、【ING】XXL-CONF 配置历史Diff及一键回滚能力完善；
+- 5、【ING】启动预热优化，加载当前AppName下全量配置预热；
+- 6、【ING】首页报表数据处理；Sample示例，动态线程池处理，动态JDBC处理等；
+- 7、【ING】Springboot 微服务 接入 注册中心 Sample示例；
+- 8、【升级】升级多项maven依赖至较新版本，如 xxl-tool、gson、junit 等；
 
 ### TODO LIST
 - 支持托管配置文件，properties或yml，待考虑，不利于配置复用与细粒度管理；

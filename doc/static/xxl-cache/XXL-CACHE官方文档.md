@@ -1,7 +1,7 @@
 # 《多级缓存框架XXL-CACHE》
 
 [![Actions Status](https://github.com/xuxueli/xxl-cache/workflows/Java%20CI/badge.svg)](https://github.com/xuxueli/xxl-cache/actions)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-cache-core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.xuxueli/xxl-cache-core/)
+[![Maven Central](https://img.shields.io/maven-central/v/com.xuxueli/xxl-cache-core)](https://central.sonatype.com/artifact/com.xuxueli/xxl-cache-core/)
 [![GitHub release](https://img.shields.io/github/release/xuxueli/xxl-cache.svg)](https://github.com/xuxueli/xxl-cache/releases)
 [![GitHub stars](https://img.shields.io/github/stars/xuxueli/xxl-cache)](https://github.com/xuxueli/xxl-cache/)
 ![License](https://img.shields.io/github/license/xuxueli/xxl-cache.svg)
@@ -213,8 +213,19 @@ XXL-CACHE 定位多级缓存框架，高效组合本地缓存和分布式缓存(
 - 1、【增强】多序列化协议支持：针对L2缓存，组件化抽象Serializer，可灵活扩展更多序列化协议；如 JDK、HESSIAN2、JSON、PROTOSTUFF、KRYO 等；
 - 2、【优化】移除冗余依赖，精简Core体积；
 
-### v1.2.1 Release Notes[迭代中]
-- 1、[迭代中]缓存监控：L1、L2缓存命中率，L1缓存容量、内容占用等；
+### v1.3.1 Release Notes[2025-08-16]
+- 1、【优化】L1缓存广播发布/订阅断连重连优化(ISSUE-32)；
+- 2、【重构】合并PR-28，重构 getCache 方法并优化性能；
+- 3、【优化】合并PR-35，引入单元测试框架，重写单元测试方法；
+- 4、【升级】多个依赖升级最新版本，如jedis、caffeine等；
+
+### v1.4.0 Release Notes[2025-08-16]
+- 1、【升级】项目升级JDK17；
+- 2、【升级】项目部分依赖升级，如caffeine，适配JDK17；
+
+### v1.4.1 Release Notes[迭代中]
+- 1、【ING】缓存监控：L1、L2缓存命中率，L1缓存容量、内容占用等；
+
 
 ### TODO LIST
 - 1、缓存监控：L1、L2缓存命中率，L1缓存容量、内容占用等；
