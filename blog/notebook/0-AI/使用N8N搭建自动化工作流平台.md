@@ -40,9 +40,7 @@ cd /Users/admin/program/docker/instance/n8n
 mkdir -p ./n8n 
 
 // 运行
-docker run -it --rm \
-  --name n8n \
-  -p 5678:5678 \
+docker run -d -p 5678:5678 --name n8n \
   -v $PWD/n8n:/home/node/.n8n \
   n8nio/n8n:1.108.1
 ```
