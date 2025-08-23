@@ -280,7 +280,15 @@ docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAdd
 - 2、【升级】升级多项依赖至较新版本，如xxl-sso、jakarta、spring等，适配JDK17；
 
 ### 版本 v1.2.1 Release Notes[迭代中]
-- 1、【ING】代码生成：支持交互层代码生成，包括ui及js；层级目录支持；
+- 1、【安全】登录安全升级，密码加密处理算法从Md5改为Sha256；(用户表password字段需要调整长度，执行如下命令)
+```
+ALTER TABLE xxl_boot_user
+    MODIFY COLUMN `password` varchar(100) NOT NULL COMMENT '密码加密信息';
+```
+- 2、【优化】登录态持久化逻辑调整，简化代码逻辑；
+- 3、【优化】异常页面处理逻辑优化，新增兜底落地页配置；
+- 4、【优化】登录信息页面空值处理优化，避免空值影响ftl渲染；
+- 5、【ING】代码生成：支持交互层代码生成，包括ui及js；层级目录支持；
 
 ### TODO LIST
 - 1、代码生成：支持交互层代码生成，包括ui及js；层级目录支持；
