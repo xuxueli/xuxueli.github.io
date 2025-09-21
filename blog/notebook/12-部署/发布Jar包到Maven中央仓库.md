@@ -33,7 +33,6 @@
         <url>https://opensource.org/licenses/GPL-3.0</url>
     </license>
 </licenses>
-
 <!-- scm -->
 <scm>
     <tag>master</tag>
@@ -41,7 +40,6 @@
     <connection>scm:git:https://github.com/xxx/xxx.git</connection>
     <developerConnection>scm:git:git@github.com:xxx/xxx.git</developerConnection>
 </scm>
-
 <!-- developers -->
 <developers>
     <developer>
@@ -87,18 +85,6 @@
             </plugins>
         </build>
         
-        <!-- oss distributionManagement：废弃，老版本 -->
-        <distributionManagement>
-            <snapshotRepository>
-                <id>oss</id>
-                <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-            </snapshotRepository>
-            <repository>
-                <id>oss</id>
-                <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-            </repository>
-        </distributionManagement> -->
-        
     </profile>
 </profiles>
 ```
@@ -113,13 +99,17 @@ setting.xml放在Maven安装文件/conf目录下
   <password>{随机token value}</password>
 </server>
 
-
-<!--  // oss 配置：Token方式，登录 oss->profile->user token生成；  废弃，老版本
-<server>
-  <id>oss</id>
-  <username>{随机token key}</username>
-  <password>{随机token value}</password>
-</server> -->
+// gpg 配置: 
+<profile>
+  <id>gpg</id>
+  <activation>
+    <activeByDefault>true</activeByDefault>
+  </activation>
+  <properties>
+    <gpg.keyname>{密钥名称/邮箱，可选，GPG会使用默认密钥}</gpg.keyname>
+    <gpg.passphrase>{密钥密码，必需}</gpg.passphrase>
+  </properties>
+</profile>
 ```
 
 ### 四、配置gpg-key
@@ -212,7 +202,8 @@ unset http_proxy
 ### 五、发布JAR到构件仓库
 默认使用环境变量配置的maven下的默认配置，修改器setting即可
 ```
-mvn clean deploy -P release -Dgpg.keyname={用户ID} -Dgpg.passphrase={passphrase}
+// 注意：Maven setting.xml 需要配置完成；
+mvn clean deploy -P release 
 ```
 
 ### 五、发布JAR到正式仓库
