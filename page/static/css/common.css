@@ -6,6 +6,7 @@
  * Made By MaterializeCSS.com
  */
 
+/* front web start */
 nav ul a,
 nav .brand-logo {
     color: #444;
@@ -59,3 +60,16 @@ p {
 footer.page-footer {
     margin: 0;
 }
+/* front web start */
+
+/* editormd start */
+#blog-content-view ul > li {
+     list-style-type: disc;
+ }
+#blog-content-view ul > li > ul > li {
+    list-style-type: circle;
+}
+#blog-content-view ul > li > ul > li > ul > li {
+    list-style-type: square;
+}
+/* editormd end */
