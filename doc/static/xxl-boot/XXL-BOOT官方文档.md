@@ -314,6 +314,8 @@ docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAdd
 - 5、【修复】通知消息非空校验优化，修复内容为空时异常提示问题；
 - 6、【升级】升级多项依赖至较新版本；
 
+### 版本 v1.7.0 Release Notes[ING]
+- 1、【ING】代码生成，支持自定义代码层级目录；
 
 ### TODO LIST
 - 1、【ING】代码生成，支持自定义代码层级目录；
