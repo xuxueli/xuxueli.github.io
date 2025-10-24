@@ -21,7 +21,7 @@ XXL-TOOL 是一个Java工具类库，致力于让Java开发更高效。包含 �
 |--------------| ---------------
 | Core模块       | 包含 集合、缓存、日期、反射、断言、……等基础工具。
 | Cache模块      | 一个高性能的 Java 缓存工具，支持多种缓存类型（FIFO、LFU、LRU等）、锁分桶优化、缓存过期策略（写后过期、访问后过期...）、缓存定时清理、缓存加载器、缓存监听器、缓存信息统计...等功能。
-| IO模块         | 一系列处理IO（输入/输出）操作的工具。
+| IO模块         | 一系列处理IO（输入/输出）操作的工具，包括 FileTool、CsvTool、IOTool...等。
 | Concurrent模块 | 一系列并发编程工具，具备良好的线程安全、高并发及高性能优势，包括MessageQueue（高性能内存队列，30W+ TPS）、CyclicThread（后台循环线程）、TimeWheel（时间轮组件）、TokenBucket（令牌桶/限流器）等。
 | Http模块       | 一系列处理Http通讯、IP、Cookie等相关工具。
 | Json模块       | json序列化、反序列化工具封装，基于Gson。
@@ -81,14 +81,13 @@ XXL-TOOL 前身为  XXL-EXCEL、XXL-EMOJI 两个独立项目，以及 XXL-JOB �
 ### Tool明细
 | 模块         | 工具                |  说明                                  
 |------------|-------------------|-------------------------------------|
+| core       | StringTool        | 字符串工具，提供字符串校验及操作相关能力
+| core       | DateTool          | 日期时间工具，提供日期时间转换及操作相关能力
 | core       | AssertTool        | 断言工具，提供有效性校验能力
 | core       | CollectionTool    | 集合工具，提供集合操作能力
 | core       | ArrayTool         | 数组工具，提供集合操作能力
-| core       | DateTool          | 日期时间工具，提供日期时间转换及操作相关能力
 | core       | MapTool           | Map 工具，提供Map操作能力
-| core       | StringTool        | 字符串工具，提供字符串校验及操作相关能力
 | core       | ObjectTool        | Object工具，提供Object操作能力
-| core       | FileTool          | File工具，提供文件操作能力
 | core       | PropTool          | Prop工具，提供Properties文件操作能力
 | core       | ReflectionTool    | Java反射工具，提供Java反射操作能力
 | core       | ClassTool         | Class类工具，提供Class类操作能力
@@ -110,9 +109,10 @@ XXL-TOOL 前身为  XXL-EXCEL、XXL-EMOJI 两个独立项目，以及 XXL-JOB �
 | freemarker | FtlTool           | 模板引擎工具, 支持根据模板文件实现 动态文本生成、静态文件生成 等，支持邮件发送、网页静态化场景。
 | gson       | GsonTool          | Json序列化及反序列化工具，基于Gson
 | http       | CookieTool        | Cookie工具，提供Cookie读写操作能力
-| http       | HttpTool          | Http工具，提供Http通讯相关能力
+| http       | HttpTool          | 一个高性能 HTTP 请求库，API简洁易用、使用高效方便且性能优越；支持 “常规Http请求、Java对象方式请求、接口&注解代理方式请求” 三种使用方式。
 | http       | IPTool            | IP工具，提供IP地址及端口号相关校验、生成及操作相关能力
-| io         | IOTool            | IO工具，提供IO读写操作能力
+| io         | IOTool            | IO工具，提供丰富IO读写操作能力
+| io         | FileTool          | 一个高性能 File/文件 操作工具，支持丰富文件操作API；针对大文件读写设计分批操作、流式读写能力，降低内存占用、提升文件操作性能。
 | io         | CsvTool           | Csv工具，提供Csv文件读写操作能力
 | jsonrpc    | JsonRpcClient     | 轻量级RPC通讯工具，客户端实现；基于json、http实现
 | jsonrpc    | JsonRpcServer     | 轻量级RPC通讯工具，服务端实现；基于json、http实现
@@ -126,6 +126,7 @@ XXL-TOOL 前身为  XXL-EXCEL、XXL-EMOJI 两个独立项目，以及 XXL-JOB �
 | id         | SnowflakeIdTool   | ID生成工具，雪花算法ID生成工具；
 | id         | UUIDTool          | ID生成工具，UUID生成工具；
 | captcha    | CaptchaTool       | 验证码工具，提供验证码生成能力
+| ...          | ...
 
 
 ### 2.1、Core模块
@@ -338,7 +339,6 @@ logger.info("response2: {}", response2);
 Assertions.assertEquals(response2.getCode(), ResponseCode.CODE_200.getCode());
 ```
 
-
 ### 2.6、Excel模块
 
 **功能定位**
@@ -534,6 +534,8 @@ logger.info(text);
 ```
 
 ### 2.9、Http 模块
+
+一个高性能 HTTP 请求库，API简洁易用、使用高效方便且性能优越；支持 “常规Http请求、Java对象方式请求、接口&注解代理方式请求” 三种使用方式。
 
 参考单元测试，见目录：com.xxl.tool.test.http.HttpToolTest
 
@@ -959,8 +961,55 @@ CaptchaTool captchaTool = CaptchaTool.build()
     ));
 ```
 
+### 2.17、IO 模块
 
-### 2.17、更多
+FileTool：一个高性能 File/文件 操作工具，支持丰富文件操作API；针对大文件读写设计分批操作、流式读写能力，降低内存占用、提升文件操作性能。
+
+**代码示例**： 参考单元测试，见目录：com.xxl.tool.test.io.FileToolTest
+
+```
+FileTool.createFile(testFile);                            // 创建文件
+FileTool.createDirectories(testFilePath);                 // 创建目录
+FileTool.createParentDirectories(testFile);               // 创建文件父目录
+      
+FileTool.isFile(testFile);                                // 判断文件
+FileTool.isDirectory(testFilePath);                       // 判断目录     
+FileTool.isSameFile(file1, file2);                        // 判断文件是否相同                     
+FileTool.exists(testFile);                                // 判断文件是否存在
+      
+FileTool.size(testFile);                                  // 获取文件 或 目录大小
+FileTool.totalLines(testFile);                            // 获取文件行数
+      
+FileTool.delete(testFile);                                // 删除文件或目录
+FileTool.clean(testFilePath);                             // 清空目录
+      
+FileTool.copy(src, dest);                                 // 复制文件
+FileTool.move(src, dest);                                 // 移动文件或目录
+
+FileTool.writeString(testFilePath, content);                       // 写入文件数据
+FileTool.writeLines(testFilePath, Iterable<?> lines);              // 写入文件行数据
+FileTool.writeLines(testFilePath, Supplier<?> lineSupplier);       // 写入文件数据，以迭代方式、流式写入，避免内存溢出
+
+FileTool.readString(testFilePath);                                 // 读取文件数据
+FileTool.readLines(testFilePath);                                  // 读取文件行数据
+FileTool.readLines(testFilePath, Consumer<String> lineConsumer);   // 读取文件行数据，以迭代方式、流式读取，避免内存溢出
+...
+```
+
+IOTool：IO工具，提供丰富IO读写操作能力
+
+**代码示例**： 参考单元测试，见目录：com.xxl.tool.test.io.IOToolTest
+
+```
+IOTool.copy(inputStream, outputStream);                   // 拷贝流
+IOTool.close(closeable);                                  // 关闭流
+IOTool.readBytes(inputStream);                            // 读取字节数组
+IOTool.writeString(testData, outputStream);               // 写入字节数组
+...
+```
+
+
+### 2.18、更多
 略
 
 
@@ -1075,8 +1124,17 @@ CaptchaTool captchaTool = CaptchaTool.build()
 - 4、【强化】JsonRpc优化：标准化错误响应结构体，兼容void接口返回类型，优化错误码定义以及异常处理逻辑；
 - 5、【强化】已有工具能力完善，StringTool增加format、replace等方法；
 
-### 3.16 v2.2.1 Release Notes[ING]
-- 1、【ING】Excel模块：大数据量优化，流式导入导出；自定义默认行高；
+### 3.16 v2.3.0 Release Notes[2025-10-24]
+- 1、【强化】FileTool 工具能力升级，支持“创建、删除、移动、复制、读写”等丰富文件操作API；
+- 2、【性能】FileTool 性能升级，针对大文件读写设计分批操作、流式读写能力，降低内存占用、提升文件操作性能。
+- 3、【优化】IOTool 代码结构优化，提升 性能、易用性和维护性；
+- 4、【优化】字符串工具类优化，修正 isNumeric 方法行为；
+- 5、【优化】ExcelTool 工具优化，新增文件写入前目录初始化以及文件覆盖检测逻辑；
+- 6、【升级】升级依赖版本。
+
+### 3.17 v2.3.1 Release Notes[ING]
+- 1、【优化】HttpTool 优化，支持默认User-Agent设置；
+- 2、【ING】Excel模块：大数据量优化，流式导入导出；自定义默认行高；
 
 
 ### TODO LIST
