@@ -226,21 +226,30 @@ public @interface Permission {
 
 ### 4.7 Docker镜像构建
 除通过原始方式部署外，可以通过以下命令快速构建项目，并启动运行；
+
 ```
-# package
+/**
+* build package
+*/ 
 mvn clean package
 
-# build image
-docker build -t xuxueli/xxl-boot-admin ./xxl-boot-admin
+/**
+* build docker image
+*/ 
+docker build -t xuxueli/xxl-boot-admin:{指定版本} ./xxl-boot-admin
 
 /**
-* 自定义 mysql 等配置，可通过 "PARAMS" 指定，参数格式 PARAMS="--key=value  --key2=value2" ；
+* 如需自定义 mysql 等配置，可通过 "-e PARAMS" 指定，参数格式 PARAMS="--key=value  --key2=value2" ；
 * 配置项参考文件：/xxl-boot/xxl-boot-admin/src/main/resources/application.properties
+* 如需自定义 JVM内存参数 等配置，可通过 "-e JAVA_OPTS" 指定，参数格式 JAVA_OPTS="-Xmx512m" ；
 */
-docker run --name xxl-boot-admin -p 8080:8080 -v /tmp:/data/applogs -e PARAMS="--spring.datasource.url=jdbc:mysql://127.0.0.1:3306/xxl_boot?Unicode=true&characterEncoding=UTF-8" -d xuxueli/xxl-boot-admin
 
-# 其他：docker部署mysql时可能存在网络问题，可通过如下命令获取mysql可用IP
-docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)
+docker run -d \
+-e PARAMS="--spring.datasource.url=jdbc:mysql://127.0.0.1:3306/xxl_boot?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai" \
+-p 8080:8080 \
+-v /tmp:/data/applogs \
+--name xxl-boot-admin \
+xuxueli/xxl-boot-admin:{指定版本}
 ```
 
 
@@ -315,7 +324,9 @@ docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAdd
 - 6、【升级】升级多项依赖至较新版本；
 
 ### 版本 v1.7.0 Release Notes[ING]
-- 1、【ING】代码生成，支持自定义代码层级目录；
+- 1、【升级】升级依赖版本，如 springboot、spring、mybatis、xxl-sso 等；
+- 2、【优化】增加主题皮肤选项并优化界面交互；
+- 3、【ING】代码生成，支持自定义代码层级目录；
 
 ### TODO LIST
 - 1、【ING】代码生成，支持自定义代码层级目录；
