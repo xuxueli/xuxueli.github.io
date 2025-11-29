@@ -944,8 +944,11 @@ xxl.job.logretentiondays=30
 - 下载镜像
 
 ```
-// Docker地址：https://hub.docker.com/r/xuxueli/xxl-job-admin/     (建议指定版本号)
-docker pull xuxueli/xxl-job-admin
+/**
+* Docker地址：https://hub.docker.com/r/xuxueli/xxl-job-admin/     
+* 建议指定版本号拉取镜像；
+*/ 
+docker pull xuxueli/xxl-job-admin:{指定版本}
 ```
 
 - 创建容器并运行
@@ -956,7 +959,13 @@ docker pull xuxueli/xxl-job-admin
 * 配置项参考文件：/xxl-job/xxl-job-admin/src/main/resources/application.properties
 * 如需自定义 JVM内存参数 等配置，可通过 "-e JAVA_OPTS" 指定，参数格式 JAVA_OPTS="-Xmx512m" ；
 */
-docker run -e PARAMS="--spring.datasource.url=jdbc:mysql://127.0.0.1:3306/xxl_job?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai" -p 8080:8080 -v /tmp:/data/applogs --name xxl-job-admin  -d xuxueli/xxl-job-admin:{指定版本}
+
+docker run -d \
+ -e PARAMS="--spring.datasource.url=jdbc:mysql://127.0.0.1:3306/xxl_job?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai" \
+ -p 8080:8080 \
+ -v /tmp:/data/applogs \
+ --name xxl-job-admin \
+ xuxueli/xxl-job-admin:{指定版本}
 ```
 
 
@@ -1749,10 +1758,30 @@ XXL-JOB是一个跨语言的任务调度平台，主要体现在如下几个方�
 
 ### 5.17 调度中心Docker镜像构建
 可以通过以下命令快速构建调度中心，并启动运行；
+
 ```
+/**
+* build package
+*/ 
 mvn clean package
-docker build -t xuxueli/xxl-job-admin:{version} ./xxl-job-admin
-docker run --name xxl-job-admin -p 8080:8080 -d xuxueli/xxl-job-admin
+
+/**
+* build docker image
+*/ 
+docker build -t xuxueli/xxl-job-admin:{指定版本} ./xxl-job-admin
+
+/**
+* 如需自定义 mysql 等配置，可通过 "-e PARAMS" 指定，参数格式 PARAMS="--key=value  --key2=value2" ；
+* 配置项参考文件：/xxl-job/xxl-job-admin/src/main/resources/application.properties
+* 如需自定义 JVM内存参数 等配置，可通过 "-e JAVA_OPTS" 指定，参数格式 JAVA_OPTS="-Xmx512m" ；
+*/
+
+docker run -d \
+-e PARAMS="--spring.datasource.url=jdbc:mysql://127.0.0.1:3306/xxl_job?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai" \
+-p 8080:8080 \
+-v /tmp:/data/applogs \
+--name xxl-job-admin \
+xuxueli/xxl-job-admin:{指定版本}
 ```
 
 ### 5.20 避免任务重复执行
@@ -2667,6 +2696,10 @@ public void execute() {
 **备注：**
 - a、本次升级数据模型向前兼容，v3.2.*版本可直接升级不需要进行数据库表调整；
 - b、本次升级针对客户端rollinglog依赖字段做规范约束，如不关注该功能 v2.4.* 及后续版本客户端不需要升级/可兼容，否则需要升级客户端版本；
+
+### 7.42 版本 v3.3.1 Release Notes[ING]
+- 1、【TODO】任务调度触发后分批批量更新，提升调度性能；
+
 
 ### TODO LIST
 - 1、调度隔离：调度中心针对不同执行器，各自维护不同的调度和远程触发组件。
