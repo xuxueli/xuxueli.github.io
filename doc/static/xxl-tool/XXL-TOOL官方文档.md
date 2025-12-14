@@ -14,7 +14,7 @@
 ## 一、简介
 
 ### 1.1 概述
-XXL-TOOL 是一个Java工具类库，致力于让Java开发更高效。包含 “日期、集合、字符串、IO、缓存、并发、Excel、Emoji、Response、Pipeline、Http、Json、JsonRpc、Encrypt、Auth、ID、Serializer、验证码、限流器...” 等数十个模块。
+XXL-TOOL 是一个Java工具类库，致力于让Java开发更高效。包含 “日期、集合、字符串、IO、缓存、并发、Excel、Emoji、Response、Pipeline、Http、Json、JsonRpc、Encrypt、Auth、ID、Serializer、验证码、限流器、BloomFilter...” 等数十个模块。
 
 ### 1.2 组件列表
 | 模块                 | 说明
@@ -186,6 +186,17 @@ MapTool.newHashMap(               // 快速创建map，支持 key-value 键值�
         "k1", 1,
         "k2", 2
 ))
+
+// BeanTool
+UserDTO userDTO = BeanTool.copyProperties(user, UserDTO.class);   // 对象属性拷贝
+
+// ReflectionTool
+ReflectionTool.getMethod(object, "method");                      // 获取对象Method
+ReflectionTool.getField(object, "name");                         // 获取对象Field
+ReflectionTool.setFieldValue(object, field, "123");              // 设置对象Field值
+ReflectionTool.doWithFields(DemoDTO.class, field -> {            // 遍历对象Field
+    logger.info("doWith - field = {}", field);
+});
 
 // …… 更多请查阅API
 ```
@@ -1133,10 +1144,10 @@ trie.startsWith("app");
 ### v1.2.0 Release Notes[2020-04-16]
 - 将 XXL-EXCEL 和 XXL-Emoji 两个单独项目，统一合并至 XXL-TOOL，方便统一迭代维护；
 - excel模块：
-    - 1、Excel 多版本导入导出兼容支持，包括：HSSFWorkbook=2003/xls、XSSFWorkbook=2007/xlsx ；
-    - 2、升级POI至4.1.2版本；
+  - 1、Excel 多版本导入导出兼容支持，包括：HSSFWorkbook=2003/xls、XSSFWorkbook=2007/xlsx ；
+  - 2、升级POI至4.1.2版本；
 - emoji模块：
-    - 1、json组件调整为调整为gson；
+  - 1、json组件调整为调整为gson；
 
 ### v1.3.0 Release Notes[2024-06-09]
 - 1、开源协议变更，由 GPLv3 调整为 Apache2.0 开源协议；
@@ -1169,9 +1180,9 @@ trie.startsWith("app");
 
 ### v1.4.2 Release Notes[2025-05-17]
 - 1、【强化】强化 ExcelTool 工具：一个基于注解的 Excel 与 Java对象 相互转换及导入导出工具；一行代码完成Java对象和Excel之间的转换。
-    - a、Excel转换注解强化，支持忽略期望不导出的列：@ExcelField.ignore
-    - b、Excel列数据 与 Java对象Field 映射逻辑强化，支持根据 fieldName 与 注解名称 匹配，不强要求字段顺序必须保持一致；
-    - c、Excel读取逻辑优化，降低小概率文件释放延迟问题。
+  - a、Excel转换注解强化，支持忽略期望不导出的列：@ExcelField.ignore
+  - b、Excel列数据 与 Java对象Field 映射逻辑强化，支持根据 fieldName 与 注解名称 匹配，不强要求字段顺序必须保持一致；
+  - c、Excel读取逻辑优化，降低小概率文件释放延迟问题。
 - 2、【新增】新增 CsvTool 工具，提供Csv文件读写操作能力
 - 3、【强化】已有工具能力完善，包括：DateTool 等；
 
@@ -1199,20 +1210,20 @@ trie.startsWith("app");
 
 ### v2.2.0 Release Notes[2025-10-08]
 - 1、【强化】缓存工具（CacheTool）重构升级，支持多种缓存策略及特性：
-    - 多种缓存类型实现：FIFO、LFU、LRU、Unlimited...等多种实现；
-    - 锁分桶设计：在保障缓存读写线程安全基础上，降低锁冲突几率，从而提升缓存性能；
-    - 缓存过期策略：支持多种缓存过期策略，如 “写入后过期、访问后过期” 等；
-    - 缓存定时清理：支持 定时清理 过期缓存数据，主动降低缓存占用空间；
-    - 缓存加载器：支持自定义缓存加载器，更灵活进行数据预热、数据初始化等操作；
-    - 缓存监听器：支持自定义缓存监听器，监听缓存数据变化，如缓存清理；
-    - 缓存统计信息：支持统计缓存命中数、未命中数、缓存大小等信息；
+  - 多种缓存类型实现：FIFO、LFU、LRU、Unlimited...等多种实现；
+  - 锁分桶设计：在保障缓存读写线程安全基础上，降低锁冲突几率，从而提升缓存性能；
+  - 缓存过期策略：支持多种缓存过期策略，如 “写入后过期、访问后过期” 等；
+  - 缓存定时清理：支持 定时清理 过期缓存数据，主动降低缓存占用空间；
+  - 缓存加载器：支持自定义缓存加载器，更灵活进行数据预热、数据初始化等操作；
+  - 缓存监听器：支持自定义缓存监听器，监听缓存数据变化，如缓存清理；
+  - 缓存统计信息：支持统计缓存命中数、未命中数、缓存大小等信息；
 - 2、【强化】Http工具（HttpTool）重构升级，支持多种请求策略及特性：
-    - 规范Http请求参数：支持自定义 Url、Method、ContentType、Header、Cookie、ConnectTimeout、ReadTimeout、UseCaches 等；
-    - 请求拦截器：支持自定义请求拦截器，对请求进行预处理、后处理操作；
-    - 请求安全校验：支持自定义Http Authorization信息；
-    - 请求数据传递：支持多种请求数据传递方式，包括Body、Form等；
-    - 基于Java对象Http交互：Http请求提交入参、以及响应结果均支持Java对象，工具底层屏蔽json序列化/反序列化工作，提升开发效率与工具易用性；
-    - 提供链式调用API，提升开发效率及体验；
+  - 规范Http请求参数：支持自定义 Url、Method、ContentType、Header、Cookie、ConnectTimeout、ReadTimeout、UseCaches 等；
+  - 请求拦截器：支持自定义请求拦截器，对请求进行预处理、后处理操作；
+  - 请求安全校验：支持自定义Http Authorization信息；
+  - 请求数据传递：支持多种请求数据传递方式，包括Body、Form等；
+  - 基于Java对象Http交互：Http请求提交入参、以及响应结果均支持Java对象，工具底层屏蔽json序列化/反序列化工作，提升开发效率与工具易用性；
+  - 提供链式调用API，提升开发效率及体验；
 - 3、【强化】Http工具（HttpTool）强化：支持接口代理模式方式的HTTP客户端配置及使用；
   ```
     DemoService demoService = HttpTool.createClient().proxy(DemoService.class);
@@ -1253,11 +1264,11 @@ trie.startsWith("app");
 
 ### TODO LIST
 - Excel模块
-    - 1、自定义默认行高
-    - 2、支持枚举
-    - 3、单表行数限制：2003/xls=65536，2007/xlsx=1048576；行数限制内进行性能测试和优化；
-    - 4、Java已经支持全基础数据类型导入导出，但是Excel仅支持STRING类型CELL，需要字段属性支持定义CELL类型；
-    - 5、Excel导入、导出时，CellType 全类型支持，如string、number、date等；
+  - 1、自定义默认行高
+  - 2、支持枚举
+  - 3、单表行数限制：2003/xls=65536，2007/xlsx=1048576；行数限制内进行性能测试和优化；
+  - 4、Java已经支持全基础数据类型导入导出，但是Excel仅支持STRING类型CELL，需要字段属性支持定义CELL类型；
+  - 5、Excel导入、导出时，CellType 全类型支持，如string、number、date等；
 - emoji模块:升级Emoji版本至最新Release版本：Unicode Emoji 11.0；
 
 
