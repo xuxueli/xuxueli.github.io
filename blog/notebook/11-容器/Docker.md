@@ -153,60 +153,60 @@ Docker Compose 是一个用于定义和运行多容器 Docker 应用程序的工
 基本命令：   
 ```
 // 创建并启动容器
-docker-compose up
+docker compose up
 // 创建并启动容器 （后台方式） 
 docker compose up -d 
 // 停止并移除容器、网络等
-docker-compose down
+docker compose down
 // 启动已存在的容器
-docker-compose start
+docker compose start
 // 停止运行中的容器
-docker-compose stop
+docker compose stop
 // 重启容器
-docker-compose restart
+docker compose restart
 // 列出当前项目中的所有容器
-docker-compose ps
+docker compose ps
 // 查看容器的日志输出
-docker-compose logs
+docker compose logs
 ```
 
 构建与拉取镜像：        
 ```
 // 构建或重新构建服务
-docker-compose build
+docker compose build
 // 拉取服务镜像 
-docker-compose pull
+docker compose pull
 // 推送服务镜像
-docker-compose push
+docker compose push
 ```
 
 管理服务：       
 ```
 // 创建服务但不启动它们
-docker-compose create
+docker compose create
 // 强制停止服务容器
-docker-compose kill
+docker compose kill
 // 移除已停止的服务容器
-docker-compose rm
+docker compose rm
 // 设置服务运行的容器数量
-docker-compose scale 
+docker compose scale 
 ```
 
 执行命令：       
 ```
 // 在运行的容器中执行命令
-docker-compose exec
+docker compose exec
 // 在服务上运行一次性命令
-docker-compose run
+docker compose run
 ```
 
 常用命令：   
 ```
 // maven项目编译打包，然后启动容器
 mvn clean package
-docker-compose up -d                    // 启动容器，并按需构建不存在镜像
-docker-compose up --build               // 启动容器，并强制重新构建镜像
-A=1 B=2 docker-compose up               // 启动容器，并传递参数；脚本中通过 ${A:-default} 承接参数； 
+docker compose up -d                    // 启动容器，并按需构建不存在镜像
+docker compose up --build               // 启动容器，并强制重新构建镜像
+A=1 B=2 docker compose up               // 启动容器，并传递参数；脚本中通过 ${A:-default} 承接参数； 
 ```
 
 ## Docker Hub镜像超时解决
