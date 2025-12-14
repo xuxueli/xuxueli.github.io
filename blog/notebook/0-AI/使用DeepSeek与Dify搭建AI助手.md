@@ -25,7 +25,7 @@ DeepSeek 是一款开创性的开源大语言模型，凭借其先进的算法�
 git clone https://github.com/langgenius/dify.git
 cd dify/docker
 cp .env.example .env
-docker compose up -d    # 如果版本是 Docker Compose V1，使用以下命令：docker-compose up -d； 
+docker compose up -d    # 如果版本是 Docker Compose V1，使用以下命令：docker compose up -d 
 ```
 
 注意：
