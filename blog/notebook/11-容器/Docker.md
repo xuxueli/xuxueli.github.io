@@ -150,40 +150,63 @@ docker run -d \
 
 Docker Compose 是一个用于定义和运行多容器 Docker 应用程序的工具。你可以使用 YAML 文件来配置应用程序的服务，然后通过单个命令启动或停止所有服务。
 
-基本命令：
-
+基本命令：   
 ```
-docker-compose up: 创建并启动容器
-docker-compose down: 停止并移除容器、网络等
-docker-compose start: 启动已存在的容器
-docker-compose stop: 停止运行中的容器
-docker-compose restart: 重启容器
-docker-compose ps: 列出当前项目中的所有容器
-docker-compose logs: 查看容器的日志输出
-```
-
-构建与拉取镜像：
-
-```
-docker-compose build: 构建或重新构建服务
-docker-compose pull: 拉取服务镜像
-docker-compose push: 推送服务镜像
-```
-
-管理服务：
-
-```
-docker-compose create: 创建服务但不启动它们
-docker-compose kill: 强制停止服务容器
-docker-compose rm: 移除已停止的服务容器
-docker-compose scale: 设置服务运行的容器数量
+// 创建并启动容器
+docker-compose up
+// 创建并启动容器 （后台方式） 
+docker compose up -d 
+// 停止并移除容器、网络等
+docker-compose down
+// 启动已存在的容器
+docker-compose start
+// 停止运行中的容器
+docker-compose stop
+// 重启容器
+docker-compose restart
+// 列出当前项目中的所有容器
+docker-compose ps
+// 查看容器的日志输出
+docker-compose logs
 ```
 
-执行命令：
-
+构建与拉取镜像：        
 ```
-docker-compose exec: 在运行的容器中执行命令
-docker-compose run: 在服务上运行一次性命令
+// 构建或重新构建服务
+docker-compose build
+// 拉取服务镜像 
+docker-compose pull
+// 推送服务镜像
+docker-compose push
+```
+
+管理服务：       
+```
+// 创建服务但不启动它们
+docker-compose create
+// 强制停止服务容器
+docker-compose kill
+// 移除已停止的服务容器
+docker-compose rm
+// 设置服务运行的容器数量
+docker-compose scale 
+```
+
+执行命令：       
+```
+// 在运行的容器中执行命令
+docker-compose exec
+// 在服务上运行一次性命令
+docker-compose run
+```
+
+常用命令：   
+```
+// maven项目编译打包，然后启动容器
+mvn clean package
+docker-compose up -d                    // 启动容器，并按需构建不存在镜像
+docker-compose up --build               // 启动容器，并强制重新构建镜像
+A=1 B=2 docker-compose up               // 启动容器，并传递参数；脚本中通过 ${A:-default} 承接参数； 
 ```
 
 ## Docker Hub镜像超时解决
