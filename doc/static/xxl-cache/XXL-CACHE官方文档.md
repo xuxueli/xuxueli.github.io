@@ -87,12 +87,14 @@ xxl.cache.l1.expireAfterWrite=-1
 xxl.cache.l2.provider=redis
 ## L2缓存序列化方式，默认 java
 xxl.cache.l2.serializer=java
-## L2缓存节点配置，多个节点用逗号分隔；示例 “127.0.0.1:6379,127.0.0.1:6380”
+## L2缓存节点配置，多个节点用逗号分隔；示例 “127.0.0.1:6379”、“127.0.0.1:6379,127.0.0.1:6380”
 xxl.cache.l2.nodes=127.0.0.1:6379
 ## L2缓存用户名配置
 xxl.cache.l2.user=
 ## L2缓存密码配置
 xxl.cache.l2.password=
+## L2缓存数据库设置，默认0
+xxl.cache.l2.database=0
 ```
 
 ### 2.3 组件初始化配置
@@ -224,9 +226,12 @@ XXL-CACHE 定位多级缓存框架，高效组合本地缓存和分布式缓存(
 - 1、【升级】项目升级JDK17；
 - 2、【升级】项目部分依赖升级，如caffeine，适配JDK17；
 
-### v1.4.1 Release Notes[迭代中]
-- 1、【ING】缓存监控：L1、L2缓存命中率，L1缓存容量、内容占用等；
-
+### v1.5.0 Release Notes[2025-12-21]
+- 1、【新增】合并PR-46；L2缓存Redis支持指定设置数据库；
+- 2、【优化】合并PR-43；缓存exists逻辑调整，优化L2数据同步L1时序，并避免潜在自动拆箱NPE问题；
+- 3、【优化】缓存变更广播逻辑调整，改为懒加载方式初始化L2变更数据，规避broadcast与set操作时序问题；
+- 4、【优化】合并PR-41；CacheManager，使用computeIfAbsent替代双重检查锁；
+- 5、【升级】项目部分依赖升级，如 jedis、caffeine；
 
 ### TODO LIST
 - 1、缓存监控：L1、L2缓存命中率，L1缓存容量、内容占用等；
