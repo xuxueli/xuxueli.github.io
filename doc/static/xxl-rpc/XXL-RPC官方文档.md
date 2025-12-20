@@ -108,33 +108,68 @@ docker run -p 8080:8080 -v /tmp:/data/applogs --name xxl-conf-admin  -d xuxueli/
 - client配置：/xxl-rpc/xxl-rpc-samples/xxl-rpc-sample-springboot/xxl-rpc-sample-springboot-server/src/main/resources/application.properties
 - server配置：/xxl-rpc/xxl-rpc-samples/xxl-rpc-sample-springboot/xxl-rpc-sample-springboot-client/src/main/resources/application.properties
 
-配置项 | 说明
---- | ---
-xxl.conf.client.appname | 服务唯一标识AppName；字母数字及中划线组成，必填
-xxl.conf.client.env | 服务隔离环境，必填
-xxl.conf.admin.address | XXL-CONF地址信息，多个逗号分隔，必填
-xxl.conf.admin.accesstoken | XXL-CONF地址信息，必填（可以在 XXL-CONF “系统管理->AccessToken” 菜单申请）
-xxl-rpc.invoker.open | 服务消费者，启用开关；
-xxl-rpc.provider.open | 服务提供者，启用开关
-xxl-rpc.provider.port | 服务提供者，服务通讯端口
-xxl-rpc.provider.corePoolSize | 服务提供者，业务线程池core大小，小于0启动默认值
-xxl-rpc.provider.maxPoolSize | 服务提供者，业务线程池max大小，小于0启动默认值
+服务端配置说明：
+```
+# XXL-CONF 注册中心地址，多个逗号分隔
+xxl.conf.admin.address=http://localhost:8080/xxl-conf-admin
+# XXL-CONF 注册中心访问令牌
+xxl.conf.admin.accesstoken=defaultaccesstoken
 
+### xxl-rpc 基础配置，环境
+xxl.rpc.base.env=test
+### xxl-rpc 基础配置，服务AppName
+xxl.rpc.base.appname=xxl-rpc-sample-springboot-server
+### xxl-rpc invoker 是否启动，true则不主动进行服务发现
+xxl.rpc.invoker.enable=false
+### xxl-rpc provider 是否启动，true则启动RPC通讯服务、并主动进行服务注册
+xxl.rpc.provider.enable=true
+### xxl-rpc provider 服务端实现
+xxl.rpc.provider.server=com.xxl.rpc.core.remoting.impl.netty.server.NettyServer
+### xxl-rpc provider 序列化实现
+xxl.rpc.provider.serializer=com.xxl.rpc.core.serializer.impl.JsonbSerializer
+### xxl-rpc provider 序列化白名单package列表，不在白名单列表对象禁止序列化，多个逗号分隔；
+xxl.rpc.provider.serializerAllowPackageList=com,org,io
+### xxl-rpc provider 端口号, 默认 7080
+xxl.rpc.provider.port=7080
+### xxl-rpc provider 业务线程池 corePoolSize 配置，默认 60
+xxl.rpc.provider.corePoolSize=-1
+### xxl-rpc provider 业务线程池 maxPoolSize 配置，默认 300
+xxl.rpc.provider.maxPoolSize=-1
+### xxl-rpc provider 服务地址，默认为空时使用IP:PORT自动生成，用于服务注册发现
+xxl.rpc.provider.address=
+```
+
+客户端配置说明：
+```
+# XXL-CONF 注册中心地址，多个逗号分隔
+xxl.conf.admin.address=http://localhost:8080/xxl-conf-admin
+# XXL-CONF 注册中心访问令牌
+xxl.conf.admin.accesstoken=defaultaccesstoken
+
+# xxl-rpc
+### xxl-rpc 基础配置，环境
+xxl.rpc.base.env=test
+### xxl-rpc 基础配置，服务AppName
+xxl.rpc.base.appname=xxl-rpc-sample-springboot-client
+### xxl-rpc provider 是否启动，true则启动RPC通讯服务、并主动进行服务注册
+xxl.rpc.provider.enable=false
+### xxl-rpc invoker 是否启动，true则不主动进行服务发现
+xxl.rpc.invoker.enable=true
+### xxl-rpc invoker 客户端实现
+xxl.rpc.invoker.client=com.xxl.rpc.core.remoting.impl.netty.client.NettyClient
+### xxl-rpc invoker 序列化实现
+xxl.rpc.invoker.serializer=com.xxl.rpc.core.serializer.impl.JsonbSerializer
+### xxl-rpc invoker 序列化白名单package列表，不在白名单列表对象禁止序列化，多个逗号分隔；
+xxl.rpc.invoker.serializerAllowPackageList=com,org,io
+```
 
 上述配置，本质将会驱动 XxlRpcSpringFactory 配置及初始化，如下：
 ```
 XxlRpcSpringFactory factory = new XxlRpcSpringFactory();
 factory.setBaseConfig(new BaseConfig(env, appname));
-factory.setRegister(new XxlRpcRegister(address, accesstoken));
-factory.setInvokerConfig(new InvokerConfig(invokerOpen));
-factory.setProviderConfig(providerOpen ?
-        new ProviderConfig(
-                NettyServer.class,
-                JsonbSerializer.class,
-                port,
-                corePoolSize,
-                maxPoolSize,
-                null) : new ProviderConfig(providerOpen));
+factory.setRegister(new XxlConfRegister(address, accesstoken));
+factory.setInvokerConfig(new InvokerConfig(...));
+factory.setProviderConfig(new ProviderConfig(...);
 ```
 
 #### 2.1.4、业务代码开发
@@ -322,42 +357,45 @@ XXL-RPC 提供 "泛化调用" 支持，服务调用方不依赖服务方提供�
 开启 "泛化调用" 时服务方不需要做任何调整，仅需要调用方初始化一个泛化调用服务Reference （"XxlRpcGenericService"） 即可。
 
 
-“XxlRpcGenericService#invoke” 请求参数 | 说明
---- | ---
-String iface | 服务接口类名
-String version | 服务版本
-String method | 服务方法
-String[] parameterTypes | 服务方法形参-类型，如 "int、java.lang.Integer、java.util.List、java.util.Map ..."
-Object[] args | 服务方法形参-数据
+| “XxlRpcGenericService.$invoke” 请求参数      | 说明                                        |    
+|------------------------------------------|-----------------------------------------------|
+| String iface                             | 服务接口类名                                        
+| String version                           | 服务版本                                          
+| String method                            | 服务方法                                          
+| String[] parameterTypes                  | 服务方法形参-类型，支持Java基础数据类型；如需复杂数据结构体，通过Map格式传递；   
+| Object[] paramters                       | 服务方法形参-数据                                     
 
+
+泛化调用代码示例：可参考 sample 示例代码；
 
 ```
-// 服务Reference初始化-注解方式示例
+// 注解方式：服务Reference初始化
 @XxlRpcReference
 private XxlRpcGenericService genericService;
 	
-// 服务Reference初始化-API方式示例
-XxlRpcGenericService genericService = (XxlRpcGenericService) new XxlRpcReferenceBean(……).getObject();
+// API方式：服务Reference初始化示例
+XxlRpcReferenceBean referenceBean = new XxlRpcReferenceBean();
+referenceBean.setCallType(callType);
+... ...
 
-// 调用方示例
-Object result = genericService.invoke(
-            "com.xxl.rpc.sample.server.service.Demo2Service",
-            null,
-            "sum",
-            new String[]{"int", "int"},
-            new Object[]{1, 2}
-    );
+XxlRpcGenericService genericService = (T) referenceBean.getObject();
 
+// 调用方示例：不依赖服务方API
+String result = genericService.$invoke(
+        "com.xxl.rpc.sample.server.service.generic.Demo2Service",
+        null,
+        "addUser",
+        new String[]{
+            "com.xxl.rpc.sample.server.service.generic.User2DTO"
+        },
+        new Object[]{
+            Map.of(
+                "name", "jack2",
+                "word", "[SYNC]jack - GenericS"
+            )
+        });
 
-// 服务方示例
-public class Demo2ServiceImpl implements Demo2Service {
-
-    @Override
-    public int sum(int a, int b) {
-        return a + b;
-    }
-
-}
+// 服务方示例：略，同常规方式；
 ```
 
 ## 四、版本更新日志
@@ -551,7 +589,6 @@ public class Demo2ServiceImpl implements Demo2Service {
 - 6、【优化】通讯组件选择HttpServer时，HttpObjectAggregator限制调大至20M，支持大消息传输；
 - 7、【升级】多个项目依赖升级至较新稳定版本，涉及 xxl-rpc-netty-shade、netty、slf4j 等；
 
-
 #### v1.9.0 Release Notes[2025-01-24]
 - 1、【优化】服务底层代码重构优化，精简依赖、减少依赖包体；
 - 2、【调整】内置注册中心XxlRpcRegister(xxl-rpc-admin)迁移，整合至XXL-CONF：
@@ -566,7 +603,18 @@ public class Demo2ServiceImpl implements Demo2Service {
 - 1、【升级】项目升级JDK17；
 - 2、【升级】项目部分依赖升级，如netty、fastjson2、spring等，适配JDK17；
 
-#### v2.0.1 Release Notes[迭代中]
+#### v2.1.0 Release Notes[2025-10-19]
+- 1、【升级】注册中心升级，集成新版 XXL-CONF 的OpenApi 实现 动态服务注册与发现；
+- 2、【升级】框架日志优化，调整日志级别避免冗余日志输出；
+- 3、【升级】项目部分依赖升级，如netty、fastjson2、spring等；
+
+#### v2.2.0 Release Notes[2025-12-21]
+- 1、【新增】泛化调用能力，支持服务调用方直接发起服务调用，不依赖服务方提供的API；
+- 2、【修复】Spring组件初始化逻辑调整，避免小概率情况下客户端初始化失败；
+- 3、【优化】Frameless无框架示例项目配置属性抽取至prop文件，提升配置可维护性及可读性；
+- 4、【升级】项目部分依赖升级，如netty、junit、fastjson2、spring等；
+
+#### v2.2.1 Release Notes[ING]
 - 1、【TODO】新增SimpleHttpServer，仅支持同步请求，简化CallType复杂度；
 
 #### TODO LIST
