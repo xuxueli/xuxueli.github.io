@@ -146,6 +146,21 @@ docker run -d \
 // 配置镜像，ipv6 proxy不生效导致；参考：https://zhuanlan.zhihu.com/p/635984165 
 ```
 
+### Docker Buildx：
+
+```
+// 1. 安装 Docker Buildx
+docker buildx create --use 
+
+// 2. 配置 Docker Buildx 以支持多平台
+docker buildx create --name mybuilder --use
+docker buildx inspect mybuilder --bootstrap
+
+// 4. 构建多平台镜像
+docker buildx build -t xuxueli/xxl-job-admin:{指定版本} ./xxl-job-admin --platform linux/amd64,linux/arm64
+```
+
+
 ## Docker Compose
 
 Docker Compose 是一个用于定义和运行多容器 Docker 应用程序的工具。你可以使用 YAML 文件来配置应用程序的服务，然后通过单个命令启动或停止所有服务。
