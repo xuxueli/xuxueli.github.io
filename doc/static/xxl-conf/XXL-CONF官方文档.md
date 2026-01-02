@@ -25,15 +25,16 @@ XXL-CONF 是一个分布式配置中心与注册中心，提供 动态配置管�
 #### 配置中心
 - 1、简单易用: 接入灵活方便，一分钟上手；
 - 2、轻量级: 仅依赖DB无其他三方依赖，搭建部署及接入简单，一分钟上手；
-- 3、高可用/HA：配置中心支持集群部署，提升配置中心系统容灾和可用性；
-- 4、高性能:得益于配置中心与客户端的本地缓存以及多级缓存设计，因此配置读取性能非常高；单机可承担高并发配置读取；
-- 5、实时性（秒级配置推送）: 借助内部广播机制，配置修改、增删等变更，可以在1s内推送给客户端；
-- 6、线上化管理: 配置中心提供线上化管理界面, 通过Web UI在线操作配置数据，直观高效；
-- 8、动态更新：配置数据变更后，客户端配置数据会实时动态更新、并生效，不需要重启服务机器；
-- 9、最终一致性：底层借助内置广播机制，保障配置数据的最终一致性，从而保证配置数据的同步；
-- 10、多数据类型配置：支持多种数据类型配置，如：String、Boolean、Short、Integer、Long、Float、Double 等；
-- 11、丰富配置接入方式：支持 "API、 注解、Listener" 等多种方式获取配置，可灵活选择使用；
-- 12、配置变更监听功能：支持自定义Listener逻辑，监听配置变更事件，可据此动态刷新JDBC连接池等高级功能；
+- 3、WebUI: 配置中心提供线上化管理界面, 通过Web UI在线操作配置数据，直观高效；
+- 4、高可用/HA：配置中心支持集群部署，提升配置中心系统容灾和可用性；
+- 5、高性能:得益于配置中心与客户端的本地缓存以及多级缓存设计，因此配置读取性能非常高；单机可承担高并发配置读取；
+- 6、实时性保障: 系统设计内部广播机制，针对配置修改、增删等变更，支持秒级推送变更配置到客户端；
+- 7、一致性保障：设计 “启动预热+全量巡检+增量监听” 相结合的一致性保障策略。启动阶段主动初始化全量远程配置至本地，提供周期性配置比对巡检能力以及增量变更感知推动能力，确保配置数据准确性与一致性。
+- 8、动态热更新：配置数据变更后，客户端配置数据会实时动态更新、并生效，不需要重启服务机器；
+- 9、容灾降级：客户端会周期性同步配置数据到本地配置快照文件，在极端情况配置中心不可用时（如配置中心宕机），客户端会降级使用本地配置快照文件，保障系统可用性；
+- 10、多数据类型：支持多种数据类型配置，如：String、Boolean、Short、Integer、Long、Float、Double 等；
+- 11、多接入方式：支持 "API、 注解、Listener" 等多种方式获取配置，可灵活选择使用；
+- 12、配置变更监听：支持自定义Listener逻辑，监听配置变更事件，比如可据此动态刷新JDBC连接池等高级功能；
 - 13、多环境支持：支持自定义环境（命名空间），管理多个环境的的配置数据；环境之间相互隔离；
 - 14、跨语言/OpenAPI：提供语言无关的 配置中心 OpenAPI（RESTFUL 格式），提供拉取配置与实时感知配置变更能力，实现多语言支持；
 - 15、跨机房：得益于配置中心系统设计，服务端为无状态服务，集群各节点提供对等的服务；因此异地跨机房部署时，只需要请求本机房配置中心即可，实现异地多活；
@@ -43,15 +44,14 @@ XXL-CONF 是一个分布式配置中心与注册中心，提供 动态配置管�
 - 19、用户管理：支持在线添加和维护用户，包括普通用户和管理员两种类型用户，灵活管控系统权限；
 - 20、配置权限控制；以项目为维度进行配置权限控制，管理员拥有全部项目权限，普通用户只有分配才拥有项目下配置的查看和管理权限；
 - 21、历史版本回滚：配置变更后及时记录配置变更历史，支持历史配置版本对比及快速回溯；
-- 22、配置快照：客户端从配置中心获取到的配置数据后，会周期性缓存到本地快照文件中，当从配置中心获取配置失败时，将会使用使用本地快照文件中的配置数据；提高系统可用性；
-- 23、容器化：提供官方docker镜像，并实时更新推送dockerhub，进一步实现产品开箱即用；
+- 22、容器化：提供官方docker镜像，并实时更新推送DockerHub，进一步实现产品开箱即用；
 
 #### 注册中心
 - 1、简单易用: 接入灵活方便，一分钟上手；
 - 2、轻量级: 仅依赖DB无其他三方依赖，搭建部署及接入简单，一分钟上手；
 - 3、高可用/HA：注册中心支持集群部署，提升注册中心系统容灾和可用性；
 - 4、高性能:得益于注册中心与客户端的本地缓存以及多级缓存设计，因此注册数据读取性能非常高；单机可承担高并发配置读取；
-- 5、实时性（秒级注册上线）: 借助内部广播机制，新服务上线、下线等变更，可以在1s内推送给客户端；
+- 5、实时性: 借助内部广播机制，新服务上线、下线等变更，支持秒级推送变更配置到客户端；
 - 6、多环境支持：支持自定义环境（命名空间），管理多个环境的的服务注册数据；环境之间相互隔离；
 - 7、跨语言/OpenAPI：提供语言无关的 注册中心 OpenAPI（RESTFUL 格式），提供服务 注册、注销、心跳、查询 等能力，实现多语言支持；
 - 8、跨机房：得益于注册中心系统设计，服务端为无状态服务，集群各节点提供对等的服务；因此异地跨机房部署时，只需要请求本机房配置中心即可，实现异地多活；
@@ -187,20 +187,30 @@ java -jar xxl-conf-admin.jar --spring.datasource.url=jdbc:mysql://127.0.0.1:3306
 - 下载镜像
 
 ```
-// Docker地址：https://hub.docker.com/r/xuxueli/xxl-conf-admin/
-docker pull xuxueli/xxl-conf-admin
+/**
+* Docker地址：https://hub.docker.com/r/xuxueli/xxl-conf-admin/     
+* 建议指定版本号拉取镜像；
+*/ 
+docker pull xuxueli/xxl-conf-admin:{指定版本}
 ```
 
 - 创建容器并运行
 
 ```
-docker run -p 8080:8080 -v /tmp:/data/applogs --name xxl-conf-admin  -d xuxueli/xxl-conf-admin
-
 /**
-* 如需自定义 mysql 等配置，可通过 "PARAMS" 指定，参数格式 RAMS="--key=value  --key2=value2" ；
-* 配置项参考文件：/xxl-conf/xxl-conf-admin/src/main/resources/application.properties
+* 如需自定义 “项目配置文件” 中配置项，比如 mysql 配置，可通过 "-e PARAMS" 指定，参数格式: -e PARAMS="--key=value --key2=value2"；
+* （配置项参考文件：/xxl-conf/xxl-conf-admin/src/main/resources/application.properties）
+* 如需自定义 “JVM内存参数”，可通过 "-e JAVA_OPTS" 指定，参数格式: -e JAVA_OPTS="-Xmx512m"
+* 如需自定义 “日志文件目录”，可通过 "-e LOG_HOME" 指定，参数格式: -e LOG_HOME=/data/applogs
 */
-docker run -e PARAMS="--spring.datasource.url=jdbc:mysql://127.0.0.1:3306/xxl_conf?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true " -p 8080:8080 -v /tmp:/data/applogs --name xxl-conf-admin  -d xuxueli/xxl-conf-admin
+docker run -d \
+-e PARAMS="--spring.datasource.url=jdbc:mysql://127.0.0.1:3306/xxl_conf?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai" \
+-p 8080:8080 \
+-v /tmp:/data/applogs \
+--name xxl-conf-admin \
+xuxueli/xxl-conf-admin:{指定版本}
+
+docker run -p 8080:8080 -v /tmp:/data/applogs --name xxl-conf-admin  -d xuxueli/xxl-conf-admin
 ```
 
 #### XXL-CONF 集群：
@@ -233,17 +243,20 @@ XXL-CONF 集群部署时，项目配置文件保持一致即可。
 
 配置项说明
 ```
-## 当前服务唯一标识，默认根据该AppName查询配置，必填；
-xxl.conf.client.appname=xxl-conf-sample
-
-## 当前环境标识，根据该Env隔离配置，必填；
-xxl.conf.client.env=test
-
 ## XXL-CONF 服务端地址，多个逗号分隔，必填；
 xxl.conf.admin.address=http://localhost:8080/xxl-conf-admin
 
 ## XXL-CONF 底层通讯 Token，进行安全验证，必填；
 xxl.conf.admin.accesstoken=defaultaccesstoken
+
+## XXL-CONF 接入服务Appname，默认根据该Appname查询配置，必填；
+xxl.conf.client.appname=xxl-conf-sample
+
+## XXL-CONF 接入服务环境标识，根据该Env隔离配置，必填；
+xxl.conf.client.env=test
+
+## XXL-CONF 配置数据快照文件目录，配置中心故障时用作降级使用，为空则关闭降级功能，可选：
+xxl.conf.client.filepath=/data/applogs/xxl-conf/
 ```
 
 #### C、设置“XXL-CONF 初始化工厂”
@@ -263,6 +276,7 @@ public SpringXxlConfBootstrap xxlConfBootstrap() {
     xxlConfBootstrap.setEnv(env);
     xxlConfBootstrap.setAddress(address);
     xxlConfBootstrap.setAccesstoken(accesstoken);
+    xxlConfBootstrap.setFilepath(filepath);
 
     return xxlConfBootstrap;
 }
@@ -605,7 +619,6 @@ XXL-CONF拥有极高的容灾性，首先配置数据进行多级存储， 可�
 - DB宕机：对业务系统无影响，业务系统从配置中心磁盘与Client端镜像文件中获取配置数据；
 - 配置中心宕机 + DB宕机 + Client端镜像文件被删除：此时，只需要手动创建一份配置镜像文件，上传到Client端服务指定位置即可，业务无影响；
 
-
 ### 5.9 跨机房（异地多活）
 得益于配置中心集群关系对等特性，集群各节点提供幂等的配置服务；因此，异地跨机房部署时，只需要请求本机房配置中心即可，实现异地多活；
 
@@ -618,6 +631,29 @@ XXL-CONF拥有极高的容灾性，首先配置数据进行多级存储， 可�
 - 1、配置服务加载更快：配置请求本机房内搞定；
 - 2、配置服务更稳定：配置请求不需要跨机房，不需要考虑复杂的网络情况，更加稳定；
 - 2、容灾性：即使一个机房内配置中心全部宕机，仅会影响到本机房内服务加载数据，其他机房不会受到影响。
+
+### 5.10 Docker Compose 快速部署
+支持通过 Docker Compose 方式部署并启动 XXL-CONF，包括：数据库、配置与注册中心。
+
+- 第一步：克隆 XXL-CONF
+```
+git clone --branch "$(curl -s https://api.github.com/repos/xuxueli/xxl-conf/releases/latest | jq -r .tag_name)" https://github.com/xuxueli/xxl-conf.git
+```
+
+- 第二步：构建 XXL-CONF
+```
+// 注意：如下命令需要在项目仓库根目录执行
+mvn clean package -Dmaven.test.skip=true
+```
+
+- 第三步：启动 XXL-CONF
+```
+docker compose down
+docker compose up -d
+
+// 其他：如需调整环境配置，如Mysql密码、端口等，可以在docker-compose.yml中修改；另外，如果需要修改Mysql数据持久化目录，可以通过 MYSQL_PATH 变量在启动时快速设置；
+MYSQL_PATH={自定义数据库持久化目录} docker compose up -d
+```
 
 
 ## 六、总体设计（注册中心）
@@ -959,34 +995,66 @@ Header：
 - 5、【升级】升级多项依赖至较新版本；
   (注意：该版本针对通讯协议进行标准化调整，服务端与客户端需要一并升级；但SDK API向下兼容适配；)
 
-### v2.2.0 Release Notes[ING]
+### v2.2.0 Release Notes[2026-01-02]
 - 1、【升级】升级至 SpringBoot4；升级多项maven依赖至较新版本，如 springboot、spring、mybatis、xxl-sso 等；
-- 2、【优化】增加主题皮肤选项并优化界面交互；
-- 3、【优化】配置管理编辑器优化，提升配置编辑体验；
-- 4、【ING】编辑器升级IDE；
-- 5、【ING】配置历史Diff查看；
-- 6、【ING】配置onChange调整为异步线程处理，避免耗时监听逻辑影响性能；
-- 7、【ING】首页报表数据处理；
+- 2、【新增】容灾降级：客户端会周期性同步配置到本地快照文件（新增配置项设置本地文件目录“xxl.conf.client.filepath”）；在极端情况配置中心不可用时（如配置中心宕机），客户端降级使用本地配置快照文件，保障系统可用性；
+- 3、【增强】一致性保障强化：强加建设 “启动预热+全量巡检+增量监听” 相结合的一致性保障策略。启动阶段主动初始化全量远程配置至本地，提供周期性配置比对巡检能力以及增量变更感知推动能力，确保配置数据准确性与一致性。
+- 4、【新增】新增 Docker Compose 配置，支持一键配置启动调度中心集群；
 
+<details>
+    <summary>Docker Compose启动步骤：</summary>    
+
+    ```
+    // 1、下载 XXL-CONF
+    git clone --branch "$(curl -s https://api.github.com/repos/xuxueli/xxl-conf/releases/latest | jq -r .tag_name)" https://github.com/xuxueli/xxl-conf.git
+    // 2、构建 XXL-CONF
+    mvn clean package -Dmaven.test.skip=true
+    // 3、启动 XXL-CONF
+    MYSQL_PATH={自定义数据库持久化目录} docker compose up -d
+    // 4、停止 XXL-CONF
+    docker compose down
+    ```
+</details>
+
+- 5、【优化】配置编辑器：升级为CodeMirror，提升交互体验；
+- 6、【优化】配置Diff：支持行维度对比配置数据变更，提升配置安全及追溯效率；
+- 7、【重构】配置监听重构为异步队列处理机制，避免耗时监听逻辑影响系统性能；
+- 8、【优化】组件线程代码重构，提升性能以及可维护性；
+- 9、【优化】增加主题皮肤选项并优化界面交互；
+- 10、【优化】操作体验优化：表格交互调整为单行选中模式；禁用分页循环；优化分页限制文案；
+- 11、【优化】交互优化：仪表板统计信息展示完善；新增配置默认选中当前服务；
+- 12、【优化】重构项目依赖管理，将依赖版本统一到父级pom；
+
+**备注：**
+- a、该版本新增支持“启动预热”、“容灾降级”等新特性，客户端SDK依赖需要一并升级；
+- b、该版本新增支持配置变更Diff，相关日志表需要新增字段，需要执行如下SQL脚本
+
+```
+// 表变更SQL脚本：
+alter table xxl_conf_data_log
+    add old_value text not null comment '变更前，配置项Value';
+```
+
+### v2.2.1 Release Notes[ING]
+- 1、【ING】配置同步：配置在Env、Cluster之间，提供快速同步功能；
 
 
 ### TODO LIST
-- 权限管理：列表只展示有权限的项目列表；支持 “管理员、普通用户、只读用户” 角色；只读用户不支持操作，开启审核后普通用户操作需要审核；
-- 灰度发布：将配置推送到指定环境上的指定ip或者指定模块进程；
-- 审核管理：配置发布支持卡空审核，必需其他管理员确认后生效；
-- Group管理：配置、注册 支持group；客户端配置group，服务端group隔离配置；
-- 配置多类型支持，以及编辑器升级：
-  - 配置管理：支持多类型，Text、JSON、Properties、Boolean、Long、Double；
-  - 配置管理：支持日志记录，Diff查看，日志回滚；
-  - 配置编辑器：升级 CodeMirror，支持多类型配置；
-- 配置diff支持；支持一键回滚；
-- 启动预热：启动预热优化，启动时初始化全部配置，env-appkey-group；
-- 配置快照：本地文件定期镜像，极端情况下自动降级；
+- 集群管理：新增“集群（Cluster）”维度，针对配置、注册细化维度为 “env-clustor-appkey”，集群间相互隔离；
+  - 配置数据：key=env-clustor-appkey；value=Map（配置KV）
+  - 注册数据：key=env-clustor-appkey；value=List（注册实例）
+- 配置同步：配置在Env、Cluster之间，提供快速同步功能；
+- 配置治理：
+  - 权限管理：用户拆分“管理员、普通用户、只读用户”三类角色；配置和注册操作，校验是否有权限，然后在看权限类型；
+  - 审核管理：配置发布支持卡空审核，普通用户修改，必需其他管理员确认后生效；
+  - 配置状态：区分 “未发布、已发布” 状态，审核通过发布生效；
+  - 灰度发布：将配置推送到指定环境上的指定ip或者指定模块进程；配置存多份，交互上体现是否存在灰度，可操作推全或回退；
+- 配置多类型，Text、JSON、Properties、Boolean、Long、Double；
 - 多配置注解：线程池、邮箱、jdbc、JavaBean。待评估；
 - 接入示例：
   - Springboot/dubbo 接入服务 注册中心 Sample示例；
   - Sample示例：动态线程池、动态JDBC、动态邮箱；Javabean；
-- 支持托管配置文件，properties或yml，待考虑，不利于配置复用与细粒度管理；
+
 
 ## 七、其他
 
