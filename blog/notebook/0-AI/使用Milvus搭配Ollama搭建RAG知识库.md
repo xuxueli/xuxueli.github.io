@@ -360,7 +360,7 @@ SearchResp searchResp = client.search(searchReq);
 
 #### 8.4、知识库系统交互
 
-知识库系统交互见下文，支持针对文档进行新建、管理、向量化/Embedding、相似度检索等操作。为RAG、
+知识库系统交互见下文，支持针对文档进行新建、管理、向量化/Embedding、相似度检索等操作。
 部分截图如下：
 
 - 知识库管理：
