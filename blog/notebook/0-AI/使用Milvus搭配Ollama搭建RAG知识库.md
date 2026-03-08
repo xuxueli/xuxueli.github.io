@@ -263,9 +263,115 @@ qwen3.5:2b                          324d162be6ca    2.7 GB    3 hours ago
 qwen3-embedding:0.6b                ac6da0dfba84    639 MB    4 hours ago    
 ```
 
-### 7、Java接入示例
 
-#### 7.1、Maven依赖引入
+### 7、RAG系统设计
+
+RAG 知识库的核心价值在于「结构化检索（关系型）+ 语义检索（向量）」的融合，实体模型设计需同时兼顾关系型数据的结构化关联能力和向量数据的语义匹配能力，既要保证实体间的逻辑关联清晰，又要实现基于语义的精准检索。以下聚焦「关系型 + 向量数据融合」的实体模型设计，包含核心实体定义、数据存储分工、关联逻辑、落地实现四大核心模块。
+#### 7.1、核心设计原则（融合版）
+
+- **分工明确**：关系型数据库（MySQL）存储「实体元数据、关联关系、检索过滤条件」，向量数据库（Milvus）存储「文本语义向量」，避免单库承载所有压力；
+- **双向关联**：关系型数据与向量数据通过唯一 ID（chunk_id）绑定，支持「从关系型维度筛选→向量语义检索」「从向量检索结果→回溯关系型元数据」；
+- **轻量化融合**：向量数据仅存储核心检索单元（Chunk）的向量，不冗余存储文档 / 实体的全量向量，关系型数据补充向量无法表达的结构化信息（如实体类型、文档来源）。
+
+#### 7.2、核心实体模型（关系型 + 向量融合）
+
+**实体分工总览**：
+
+| 数据类型	       | 存储载体                       | 	存储内容                                                              | 	核心作用        |     
+|-------------|----------------------------|--------------------------------------------------------------------|-------------------|
+| 关系型数据       | 	MySQL/PostgreSQL	         | 文档 / Chunk / 业务实体的元数据、实体间关联关系、检索过滤字段（状态 / 租户 / 类型）	                | 结构化筛选、实体关联、结果回溯   |
+| 向量数据        | 	Milvus/PGVector/FAISS     | 	Chunk 的 Embedding 向量、向量索引（IVF_FLAT/HNSW）                          | 	语义相似度检索          |
+
+**关系型实体表设计（核心元数据 + 关联）**：
+
+- **Knowledge**（知识库实体，关系型）：存储知识库定义元数据，维护知识库Embedding模型、向量数据库设置信息。
+- **Document**（文档实体，关系型）：存储文档级结构化元数据，是所有子实体的根节点，不存储完整内容和向量。
+- **Chunk**（文本块实体，关系型）：
+  存储 Chunk 的元数据，仅保留向量 ID（与向量库绑定），不存储原始向量，是关系型与向量数据的核心桥梁。
+
+
+- **向量数据模型设计（语义检索核心）**：
+  Milvus 中创建「knowledge_vector_collection」集合，与关系型 Chunk 表的vector_id一一对应：
+
+### 8、RAG关键代码
+#### 8.1、Maven依赖引入
+使用SpringAI进行模型与向量数据库集成，需要添加如下依赖：
+```
+<!-- milvus -->
+<dependency>
+    <groupId>io.milvus</groupId>
+    <artifactId>milvus-sdk-java</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.ai</groupId>
+    <artifactId>spring-ai-starter-model-ollama</artifactId>
+</dependency>
+```
+
+#### 8.2、知识数据向量化入库
+
+核心流程为：「文档分块 → 向量化 → Milvus 入库」
+
+```
+// 1、初始化Embedding模型
+EmbeddingModel embeddingModel = OllamaEmbeddingModel
+                .builder()
+                .defaultOptions(OllamaEmbeddingOptions
+                        .builder()
+                        .model(EMBEDDING_MODEL_NAME)
+                        .dimensions(VECTOR_DIMENSION)
+                        .build())
+                .ollamaApi(ollamaApi)
+                .build();
+
+// 2、知识文档正文分块
+List<String> chunks = splitDocument(doc.getContent());
+
+// 3、Chunk文档向量化处理
+List<float[]> vectors = embeddingModel.embed(texts);
+
+// 4、知识数据向量化入库
+List<JsonObject> vectorData = process(vectors);
+UpsertResp upsertResp = client.upsert(UpsertReq.builder()
+                .collectionName(collectionName)
+                .data(vectorData)
+                .build());
+```
+
+#### 8.3、知识相似度检索
+
+核心流程为：「问题向量化 → Milvus 检索」
+
+```
+// 1、问题向量化
+float[] keywordVector = embed(List.of(keyword)).get(0);
+
+// 2、向量 检索
+SearchReq searchReq = SearchReq.builder()
+                    .collectionName(buildCollectionName(kbId))                          		
+                    .data(Collections.singletonList(new FloatVec(keywordVector)))  
+                    .annsField("contentVector")                                         			
+                    .outputFields(Arrays.asList("id", "chunkId", "contentVector"))     
+                    .limit(TOP_K_COUNT)
+                    .searchParams(Map.of("radius", SIMILARITY_THRESHOLD))   // 相似度阈值
+                    .build();
+SearchResp searchResp = client.search(searchReq);
+```
+
+#### 8.4、知识库系统交互
+
+知识库系统交互见下文，支持针对文档进行新建、管理、向量化/Embedding、相似度检索等操作。为RAG、
+部分截图如下：
+
+- 知识库管理：
+  ![输入图片说明](https://www.xuxueli.com/blog/static/images/img_292.png "在这里输入图片标题")
+
+- 知识相似度检索：
+  ![输入图片说明](https://www.xuxueli.com/blog/static/images/img_293.png "在这里输入图片标题")
+
+### 9、Java接入示例
+
+#### 9.1、Maven依赖引入
 
 使用SpringAI进行模型集成，需要添加如下依赖：
 
@@ -283,7 +389,7 @@ qwen3-embedding:0.6b                ac6da0dfba84    639 MB    4 hours ago
 </dependency>
 ```
 
-#### 7.2、Embedding 代码示例
+#### 9.2、Embedding 代码示例
 
 使用Ollama集成Embedding模型 "qwen3-embedding"，针对内容进行向量转化。示例代码如下：
 
@@ -336,7 +442,7 @@ qwen3-embedding:0.6b                ac6da0dfba84    639 MB    4 hours ago
     }
 ```
 
-#### 7.3、Milvus集成Embedding模型示例
+#### 9.3、Milvus集成Embedding模型示例
 
 集成Milvus与Embedding模型，初始化Milvus数据库与集合。预先针对待查询数据进行向量处理与存储，然后针对查询输入数据进行向量转化并发起查询。示例代码如下：
 
@@ -583,7 +689,7 @@ qwen3-embedding:0.6b                ac6da0dfba84    639 MB    4 hours ago
     }
 ```
 
-#### 7.4、Milvus常规操作示例
+#### 9.4、Milvus常规操作示例
 
 针对Milvus的数据库、集合、数据、索引等操作，示例代码如下：
 
@@ -916,18 +1022,3 @@ qwen3-embedding:0.6b                ac6da0dfba84    639 MB    4 hours ago
         }
     }
 ```
-
-### 8、RAG知识库代码
-
-代码见：https://github.com/xuxueli/xxl-boot
-
-RAG知识库管理：
-
-![输入图片说明](https://www.xuxueli.com/blog/static/images/img_292.png "在这里输入图片标题")
-
-RAG知识相似度检索：
-
-![输入图片说明](https://www.xuxueli.com/blog/static/images/img_293.png "在这里输入图片标题")
-
-
-
