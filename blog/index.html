@@ -213,26 +213,35 @@
 <script type="text/javascript">
     $(function() {
 
-        // blogPath
-        var originUrl = decodeURI(window.location.href);
-        if (originUrl.indexOf(".md") > -1) {
-            originUrl = originUrl.substr(0, originUrl.indexOf(".md")+3);
+        // parse url param
+        const getUrlParam = (url, paramName) => {
+            const regex = new RegExp(`[?&]${paramName}=([^&]*)`);
+            const matches = url.match(regex);
+            return matches ? decodeURIComponent(matches[1]) : null;
+        };
+
+        // 1、originUrl: remove suffix  "http://xxxxxxx.com/blog/?blog=AI/ollama-deepseek"
+        let originUrl = decodeURI(window.location.href);
+        const suffixes = [".md", "#"];
+        for (const suffix of suffixes) {
+            const index = originUrl.indexOf(suffix);
+            if (index > -1) {
+                originUrl = originUrl.substring(0, index + suffix.length);
+            }
         }
-        var blogPath;
-        if (originUrl.indexOf("?blog=") > -1) {
-            blogPath = originUrl.substr(originUrl.indexOf("?blog=") + 6, originUrl.length);
-        }
-        if (!blogPath) {
-            blogPath = "./notebook/目录.md";
-        } else {
-            var title = originUrl.substr(originUrl.lastIndexOf("/")+1);
-            title = title.substr(0, title.indexOf(".md"))
-            document.title = title;
-        }
+        console.log('originUrl: ' + originUrl);
+
+        // 2、blogPath：get blog path from url param "?blog=AI/ollama-deepseek"
+        let blogPath =  getUrlParam(originUrl, "blog") || "目录";
+        console.log('blogPath: ' + blogPath);
+
+        // 3、finalBlogPath：build final blog file path "./notebook/AI/ollama-deepseek.md"
+        const BLOG_PATH_TEMPLATE = "./notebook/{path}.md";
+        let finalBlogPath = BLOG_PATH_TEMPLATE.replace("{path}", blogPath);
+        console.log('finalBlogPath: ' + finalBlogPath);
 
         // init
-        $.get(blogPath, function(markdown) {
-
+        $.get(finalBlogPath, function(markdown) {
             editormd.katexURL  = {
                 css : "../page/static/plugins/katex/katex.min",
                 js  : "../page/static/plugins/katex/katex.min"
@@ -253,6 +262,18 @@
                 flowChart       : true,  // 默认不解析
                 sequenceDiagram : true,  // 默认不解析
             });
+
+            // 提取第一个 h2 标签内容作为页面 title
+            setTimeout(function() {
+                var blogContent = document.getElementById("blog-content-view");
+                var h2Element = blogContent.querySelector("h2");
+                if (h2Element) {
+                    var titleText = h2Element.textContent.trim();
+                    if (titleText) {
+                        document.title = titleText;
+                    }
+                }
+            }, 100);
 
             // 获取Markdown源码
             //console.log(testEditormdView.getMarkdown());
