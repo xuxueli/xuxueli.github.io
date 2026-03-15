@@ -1,5 +1,5 @@
 <h2 style="color:#4db6ac !important" >使用OpenClaw+Skill自动发布微信公众号文章</h2>
-> 【原创】2026/03/07
+> 【原创】2026/03/15
 
 [TOCM]
 
@@ -7,9 +7,9 @@
 
 ## 一、OpenClaw 介绍
 
-**OpenClaw** 是一个强大的开源**个人 AI 助手框架**，它可以运行在你自己的电脑上，通过各种聊天工具（微信、Telegram、Discord、Slack 等）与你对话，帮你完成各种任务。
+**OpenClaw** 是一款‌**本地优先、可自托管**的AI自动化代理工具‌，可以运行在你自己的电脑上，通过各种聊天工具（飞书、QQ、Telegram 等）与你对话，帮你完成各种任务。
 
-### 什么是 OpenClaw？
+### 1.1 什么是 OpenClaw？
 
 你可以把它理解为：一个**本地运行的 AI 助手**，它能够：
 - 帮你回复消息
@@ -19,7 +19,7 @@
 - 管理文件
 - 定时执行任务
 
-### 核心特点
+### 1.2 核心特点
 
 | 特点 | 说明 |
 |------|------|
@@ -29,7 +29,7 @@
 | 🛠️ 可扩展 | 通过 Skill 无限扩展能力 |
 | 🔔 主动提醒 | 支持定时任务、心跳检查 |
 
-### 谁在用 OpenClaw？
+### 1.3 谁在用 OpenClaw？
 
 - 个人用户：作为私人 AI 助手
 - 开发者：作为编程辅助工具
@@ -40,17 +40,50 @@
 
 ---
 
-## 二、Skill 介绍
+## 二、Agent Skill 介绍
 
-### 什么是 Skill？
+**Agent Skill** 是一种可复用、模块化的执行单元，用于定义 AI Agent 如何完成特定任务。它封装了具体的**操作流程、工具调用逻辑和执行规范**，让 AI 能够“知道怎么做”而不是仅仅“知道做什么”。
 
-**Skill（技能）**是 OpenClaw 的扩展模块，就像手机上的 App。每个 Skill 让 AI 完成特定任务，比如：
+### 2.1 什么是 Skill？
+
+**Skill** 是 Agent 的扩展模块，就像手机上的 App。每个 Skill 让 AI 完成特定任务，比如：
 - 发送邮件
 - 搜索网页
 - 发布公众号
 - 控制浏览器
 
-### Skill 标准格式
+### 2.2 Skill 核心特征
+
+| 特点         | 说明                                        |
+|------------|-------------------------------------------|
+| ‌原子性       | 一个 Skill 只负责完成一项具体任务，例如“发送邮件”或“生成 PPT”。   |
+| ‌可复用性      | Skill 可以被多个 Agent 调用，适用于不同场景。             |
+| ‌自主性       | Skill 不需要用户显式指令即可执行，具备一定的独立性。             |
+| ‌标准化接口     | 遵循统一规范，便于系统集成和调用。                         |
+
+### 2.3 MCP 与 Skill 的区别
+
+MCP 和 Skill 都是提升 AI 执行能力的工具，但它们在功能和定位上存在本质差异。
+
+| 特性       | MCP（Model Context Protocol）                                             | Skill                                                   |
+|----------|-------------------------------------------------------------------------|---------------------------------------------------------|
+| 定义       | MCP 是一种标准化接口协议，解决的是 AI 如何连接外部工具和数据源的问题。它像是 USB 接口，为 AI 提供统一的工具接入方式。     | Skill 是对具体任务的封装，告诉 AI 如何使用已连接的工具完成任务。它更关注“怎么做”的问题。      |
+| 本质       | 工具连接协议                                                                  | 任务执行模块                                                  |
+| 功能       | 解决“能不能连”的问题：连接外部系统（如数据库、API、文件系统等）。                                     | 解决“怎么做”的问题：定义任务流程、调用工具、处理数据、输出结果。                       |
+| ‌比喻‌     | 插头，让 AI 能够“插上”外部设备。                                                     | 使用说明书，告诉 AI 如何使用工具完成特定任务。                               |
+| 应用场景     | 通过 MCP，AI 可以调用 GitHub API、发送邮件、访问数据库等。                                  | 一个“自动撰写公众号文章”的 Skill，会包含文章结构、内容生成、格式排版等步骤。              |
+
+### 2.4 OpenClaw 与 Skill 的关系
+
+OpenClaw 是一个 AI Agent 运行时框架，它通过 Skill 实现对现实世界的操作能力。
+在 OpenClaw 中，Skill 是其核心能力单元，是实现 AI 自动化任务的关键。Skill 被视为 AI 的“能力包”，是实现从“能听懂”到“能做事”的关键一步。
+
+**OpenClaw 中 Skill 的作用**：
+- ‌能力扩展‌：通过加载不同的 Skill，OpenClaw 可以实现如“发布公众号文章”、“自动整理数据”、“生成报告”等复杂任务。
+- ‌模块化设计‌：Skill 以模块化形式存在，便于复用和组合。
+- ‌执行闭环‌：Skill 将 AI 的意图转化为具体操作，形成“思考 → 执行 → 结果”的闭环。
+
+### 2.5 Skill 标准格式
 
 一个完整的 Skill 通常包含以下文件：
 
@@ -64,7 +97,7 @@ my-skill/
 └── README.md        # 使用说明
 ```
 
-### SKILL.md 格式示例
+### 2.6 SKILL.md 格式示例
 
 ```markdown
 # 技能名称
@@ -85,7 +118,7 @@ my-skill/
 输出: 结果xxx
 ```
 
-### 如何使用 Skill
+### 2.7 如何使用 Skill
 
 当你想让 AI 完成某个任务时，只需要告诉它：
 - "帮我发布公众号文章"
@@ -98,48 +131,92 @@ AI 会自动调用对应的 Skill 来完成。
 
 ## 三、ClawHub 技能市场
 
-**ClawHub** (https://clawhub.ai) 是 OpenClaw 官方的技能市场，汇聚了社区开发的数千个 Skills！
+**ClawHub** (https://clawhub.ai) 是 OpenClaw 官方的技能市场，汇聚了社区开发的海量 Skills！
 
-### 如何下载 Skill
+ClawHub 相当于 AI 智能体的“应用商店”或“npm 包管理器”，它让开发者和用户可以快速发现、安装、管理并扩展 AI 助手的能力 。通过集成 ClawHub，OpenClaw 能从一个只会聊天的模型，进化为能执行任务、自动化办公与开发的实用工具。
 
-使用 `npx skills` 命令：
+### 3.1 如何下载 Skill
 
-```bash
-# 搜索技能
-npx skills find <关键词>
-
-# 安装技能
-npx skills add <owner/repo@skill> -g -y
-
-# 查看已安装
-npx skills list
-```
-
-### 如何新建 Skill
+要将 ClawHub 技能市场集成到 OpenClaw 中，主要有两种方式：
+- 图形化操作（OpenClaw WebUI）：更适合新手，访问 OpenClaw 控制台后可点击左侧“技能市场”，可以浏览、搜索以及一键安装技能。
+- 命令行工具（ClawHub CLI）：推荐使用 CLI 方式，可获得更高的灵活性和效率：
 
 ```bash
-# 初始化一个新 Skill
-npx skills init my-awesome-skill
+# 1. 全局安装 ClawHub CLI
+npm install -g clawhub@latest
 
-# 查看目录结构
-ls my-awesome-skill/
+# 2. 搜索技能（例如办公类）
+clawhub search --keyword "办公自动化"
+
+# 3. 安装单个技能（以文件处理为例）
+clawhub install file-processor
+
+# 4. 批量安装多个常用技能
+clawhub install email-manager data-analyzer meeting-minutes
+
+# 5. 查看已安装技能
+clawhub list --installed
+
+# 6. 更新所有技能至最新版本
+clawhub update --all
+
 ```
 
-### Top 5 热门 Skills
+### 3.2 如何发布一个 Skill
 
-以下是安装量较高的部分 Skills：
+新建 Skill 是实现个性化功能扩展的关键。每个 Skill 实际上是一个包含元数据和执行逻辑的文件夹，遵循标准化结构。
 
-| 排名 | Skill 名称 | 功能 | 安装量 |
-|------|-----------|------|--------|
-| 1 | baoyu-post-to-wechat | 发布公众号文章 | 11.3K |
-| 2 | wechat-article-writer | 微信文章写作 | 875 |
-| 3 | wechat-article-publisher | 公众号文章发布 | 676 |
-| 4 | agent-browser | 浏览器自动化控制 | 135 |
-| 5 | unit-test-boundary-conditions | 单元测试边界条件 | 373 |
+**第一步：创建 Skill 目录**
+
+```
+mkdir my-skill
+cd my-skill
+
+```
+
+**第二步：编写 SKILL.md（必选）‌**
+这是 Skill 的说明书，定义名称、描述和元信息：
+
+```
+---
+name: my-first-skill
+description: 这是一个示例技能，用于演示如何创建 Skill
+metadata:
+  openclaw:
+    emoji: 🚀
+    requires:
+      bins:
+        - curl
+---
+
+# 我的第一个技能
+
+## 使用方法
+告诉 AI：“请使用 my-first-skill 完成任务”，它将执行预设操作。
+
+```
+
+**‌第三步：添加可执行脚本（如 scripts/run.sh）**
+
+```
+#!/bin/bash
+echo "Hello from my custom skill!"
+```
+
+**第四步：配置 config.json（可选）‌**
+用于定义输入参数、环境变量等。
+
+
+**第五步：发布到 ClawHub（可选）**
+```
+clawhub publish ./my-skill
+```
+
+发布后，你的 Skill 将进入社区仓库，供他人搜索和安装 。
 
 ---
 
-## 四、OpenClaw 发布公众号配置步骤
+## 四、OpenClaw 发布公众号配置
 
 ### 4.1 wechat-publisher 技能介绍
 
@@ -151,34 +228,28 @@ ls my-awesome-skill/
 - 代码高亮显示
 - 图片自动上传到微信图床
 
-**来源**：https://github.com/0731coderlee-sudo/wechat-publisher
+**来源**：
+- https://github.com/0731coderlee-sudo/wechat-publisher
+- https://clawhub.ai/0731coderlee-sudo/wechat-publisher
 
 ### 4.2 安装 wechat-publisher
 
-**方法一：通过 npx skills 安装**
+可通过 npx skills 安装：
 
-```bash
+```
 npx skills add 0731coderlee-sudo/wechat-publisher -g -y
 ```
 
-**方法二：手动克隆**
-
-```bash
-# 克隆项目
-git clone https://github.com/0731coderlee-sudo/wechat-publisher.git
-cd wechat-publisher
-
-# 安装依赖
-npm install @wenyan-md/cli
-```
+另外，也可以通过 OpenClaw 对话安装：
+>输入 "安装 https://clawhub.ai/0731coderlee-sudo/wechat-publisher 技能"
 
 ### 4.3 配置 AppID 和 AppSecret
 
 **第一步：获取凭证**
 
-1. 登录 https://mp.weixin.qq.com/
-2. 进入「设置与开发」→「基本配置」
-3. 获取「开发者ID(AppID)」和「开发者密码(AppSecret)」
+1. 登录 https://developers.weixin.qq.com/platform 
+2. 进入「控制台 - 选择公众号」→「基础信息」
+3. 获取「开发者ID(AppID)」和「开发密钥(AppSecret)」
 
 **第二步：配置到 OpenClaw**
 
@@ -186,6 +257,14 @@ npm install @wenyan-md/cli
 
 ```bash
 ## 微信公众号凭证
+export WECHAT_APP_ID=你的AppID
+export WECHAT_APP_SECRET=你的AppSecret
+```
+
+另外，也支持通过 OpenClaw 对话输入如下信息进行设置：
+
+```
+设置 公众号凭证，信息如下：
 export WECHAT_APP_ID=你的AppID
 export WECHAT_APP_SECRET=你的AppSecret
 ```
@@ -202,62 +281,44 @@ curl ifconfig.me
 
 **第二步：添加到公众号后台**
 
-1. 登录 https://mp.weixin.qq.com/
-2. 进入「设置与开发」→「基本配置」
+1. 登录 https://developers.weixin.qq.com/platform
+2. 进入「控制台 - 选择公众号」→「基础信息」
 3. 找到「IP白名单」
 4. 添加刚才查询到的 IP 地址
 
 ---
 
-## 五、实战：发布 XXL-JOB 最新版本文章
+## 五、实战：使用 OpenClaw 自动发布公众号文章
 
-下面演示完整的操作流程。
+下面演示 使用OpenClaw+Skill自动发布微信公众号文章 的完整操作流程。
 
 ### 步骤 1：让 AI 帮你写文章
 
-告诉 OpenClaw 你的需求：
+告诉 OpenClaw 你的需求（PS：这个需求大纲本身也是 OpenClaw 生成的）：
 
 ```
-"帮我查询 XXL-JOB 最新发布的版本，生成一篇公众号文章"
+“ 
+  帮我写一篇公众号文章，讲解 《怎么借助 OpenClaw 和 Skill 发布微信公众号文章》"
+  文章大纲包括：
+  1、OpenClaw介绍：给一些使用案例
+  2、Agent Skill：体系化分析介绍
+  3、ClawHub：介绍如何下线使用、如何发布技能
+  4、OpenClaw发布公众号配置： 包括必需技能安装、密钥等开发者信息配置等；
+  5、实战案例：给出发布公众号文章的操作全流程
+  
+  文章Theme选择：lapis
+  文章封面图：从 https://picsum.photos/470/200 中随机获取一张图片当作封面图；
+  
+  文章生成好之后，自动发布到微信公众号平台。
+”
 ```
 
 AI 会自动：
-- 查询 GitHub 最新 Release 信息
-- 获取项目介绍和特性
+- 查询网络获取 OpenClaw、ClawHub 等相关知识；
+- 结合文章主体与要求，分析提炼关键信息；
 - 生成 Markdown 格式文章
 
-### 步骤 2：文章格式要求
-
-文章顶部必须包含 frontmatter：
-
-```yaml
----
-title: 文章标题
-cover: 封面图URL
----
-
-# 正文内容
-...
-```
-
-**注意：**
-- title：文章标题（必填）
-- cover：封面图地址（必填，建议 1080×864）
-
-### 步骤 3：一键发布
-
-```bash
-cd ~/.openclaw/workspace/wechat-publisher
-
-# 设置环境变量（如果还没配置）
-export WECHAT_APP_ID=你的AppID
-export WECHAT_APP_SECRET=你的AppSecret
-
-# 发布文章
-./scripts/publish.sh 你的文章.md
-```
-
-### 步骤 4：成功输出
+### 步骤 2：OpenClaw 成功输出
 
 ```
 🚀 开始发布文章...
@@ -266,17 +327,17 @@ export WECHAT_APP_SECRET=你的AppSecret
 ✅ 发布成功，Media ID: UqLqFEOAfH9W00FdAVE-xxx
 ```
 
-### 步骤 5：手动发布
+### 步骤 3：手动发布
 
-文章已推送到**草稿箱**，你需要：
+文章已推送到公众号平台**草稿箱**，你需要：
 1. 登录公众号后台 https://mp.weixin.qq.com/
-2. 进入「新的创作」→「图文消息」
-3. 点击「从草稿箱选取」
-4. 预览并发布
+2. 进入「内容管理」→「草稿箱」
+3. 预览并操作发布
 
----
+### 完整操作流程总结
 
-## 六、完整操作流程总结
+至此已经实现自动生成公众号文章并发布到公众号，完整流程如下。
+后续若有类似文章发布需要，只需要将需求告诉 OpenClaw，即可完成文章自动生成与发布（即第6、7步）。
 
 ```
 ┌────────────────────────────────────────────────────────┐
@@ -307,7 +368,7 @@ export WECHAT_APP_SECRET=你的AppSecret
 
 ---
 
-## 七、常见问题
+## 六、常见问题
 
 **Q1: 发布失败显示 IP 不在白名单？**
 > 确保将服务器公网 IP 添加到公众号后台白名单
@@ -325,9 +386,9 @@ npx skills list
 
 ---
 
-## 八、总结
+## 七、总结
 
-通过 OpenClaw + wechat-publisher 技能，你可以：
+通过 OpenClaw + Skill(wechat-publisher) ，你可以：
 
 - ✅ 让 AI 自动写文章
 - ✅ 一键发布到公众号草稿箱
@@ -347,4 +408,4 @@ npx skills list
 
 ---
 
-*本文由 AI 自动生成*
+*本文由 🦞大人 自动生成*
