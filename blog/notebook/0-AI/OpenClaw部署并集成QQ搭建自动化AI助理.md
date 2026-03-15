@@ -85,3 +85,9 @@ openclaw channels add --channel qqbot --token "你的AppID:你的AppSecret"
 依次完成OpenClaw安装、模型配置、QQ Channel配置后，可对话体验OpenClaw：**养虾成功，更多Skills及价值研究挖掘中**～
 
 ![img](https://www.xuxueli.com/blog/static/images/2026/img_20260315_03.png)
+
+
+资料：
+- [OpenClaw官方文档](https://docs.openclaw.ai/zh-CN/start/wizard)
+- [OpenClaw集成飞书](https://help.aliyun.com/zh/simple-application-server/use-cases/openclaw-integrated-fly-book)
+- [OpenClaw集成QQ](https://help.aliyun.com/zh/simple-application-server/use-cases/openclaw-qq-integration)
