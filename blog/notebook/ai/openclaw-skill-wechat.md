@@ -243,6 +243,8 @@ npx skills add 0731coderlee-sudo/wechat-publisher -g -y
 另外，也可以通过 OpenClaw 对话安装：
 >输入 "安装 https://clawhub.ai/0731coderlee-sudo/wechat-publisher 技能"
 
+![img](https://www.xuxueli.com/blog/static/images/2026/img_20260315_04.png)
+
 ### 4.3 配置 AppID 和 AppSecret
 
 **第一步：获取凭证**
@@ -269,6 +271,8 @@ export WECHAT_APP_ID=你的AppID
 export WECHAT_APP_SECRET=你的AppSecret
 ```
 
+![img](https://www.xuxueli.com/blog/static/images/2026/img_20260315_05.png)
+
 ### 4.4 配置 IP 白名单
 
 ⚠️ **这是关键步骤！**
@@ -281,10 +285,12 @@ curl ifconfig.me
 
 **第二步：添加到公众号后台**
 
-1. 登录 https://developers.weixin.qq.com/platform
+1. 登录 https://developers.weixin.qq. com/platform
 2. 进入「控制台 - 选择公众号」→「基础信息」
 3. 找到「IP白名单」
 4. 添加刚才查询到的 IP 地址
+
+![img](https://www.xuxueli.com/blog/static/images/2026/img_20260315_06.png)
 
 ---
 
@@ -298,7 +304,7 @@ curl ifconfig.me
 
 ```
 “ 
-  帮我写一篇公众号文章，讲解 《怎么借助 OpenClaw 和 Skill 发布微信公众号文章》"
+  写一篇公众号文章，标题 《使用OpenClaw+Skill自动生成与发布微信公众号文章》"
   文章大纲包括：
   1、OpenClaw介绍：给一些使用案例
   2、Agent Skill：体系化分析介绍
@@ -306,12 +312,14 @@ curl ifconfig.me
   4、OpenClaw发布公众号配置： 包括必需技能安装、密钥等开发者信息配置等；
   5、实战案例：给出发布公众号文章的操作全流程
   
-  文章Theme选择：lapis
+  文章Theme选择：默认
   文章封面图：从 https://picsum.photos/470/200 中随机获取一张图片当作封面图；
   
   文章生成好之后，自动发布到微信公众号平台。
 ”
 ```
+
+![img](https://www.xuxueli.com/blog/static/images/2026/img_20260315_07.png)
 
 AI 会自动：
 - 查询网络获取 OpenClaw、ClawHub 等相关知识；
@@ -327,12 +335,16 @@ AI 会自动：
 ✅ 发布成功，Media ID: UqLqFEOAfH9W00FdAVE-xxx
 ```
 
+![img](https://www.xuxueli.com/blog/static/images/2026/img_20260315_08.png)
+
 ### 步骤 3：手动发布
 
 文章已推送到公众号平台**草稿箱**，你需要：
 1. 登录公众号后台 https://mp.weixin.qq.com/
 2. 进入「内容管理」→「草稿箱」
 3. 预览并操作发布
+
+![img](https://www.xuxueli.com/blog/static/images/2026/img_20260315_09.png)
 
 ### 完整操作流程总结
 

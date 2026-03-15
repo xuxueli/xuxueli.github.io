@@ -226,7 +226,7 @@
         for (const suffix of suffixes) {
             const index = originUrl.indexOf(suffix);
             if (index > -1) {
-                originUrl = originUrl.substring(0, index + suffix.length);
+                originUrl = originUrl.substring(0, index);
             }
         }
         console.log('originUrl: ' + originUrl);
