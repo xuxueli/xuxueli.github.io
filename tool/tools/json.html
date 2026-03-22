@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>JSON 工具 — Dev Tools</title>
+<style>
+  :root{--bg:#ffffff;--surface:#f5f7fa;--border:#e5e9ec;--accent:#6366f1;--text:#1f2937;--muted:#6b7280;--radius:10px}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column}
+
+  /* Nav */
+  nav{display:flex;align-items:center;gap:12px;padding:14px 24px;background:#fff;border-bottom:1px solid var(--border)}
+  nav a{color:var(--muted);text-decoration:none;font-size:.88rem}
+  nav a:hover{color:var(--text)}
+  nav .sep{color:var(--border)}
+  nav .cur{color:var(--text);font-weight:600}
+
+  h1{padding:28px 24px 0;font-size:1.4rem;font-weight:800}
+  h1 span{color:var(--accent)}
+
+  /* Tabs */
+  .tabs{display:flex;gap:4px;padding:20px 24px 0;flex-wrap:wrap}
+  .tab{padding:8px 18px;border-radius:999px;font-size:.85rem;font-weight:600;cursor:pointer;
+    border:1px solid var(--border);background:transparent;color:var(--muted);transition:.15s}
+  .tab:hover{color:var(--text)}
+  .tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+  /* Layout */
+  .workspace{flex:1;display:flex;flex-direction:column;gap:16px;padding:20px 24px 32px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:700px){.row{grid-template-columns:1fr}}
+
+  .pane{display:flex;flex-direction:column;gap:8px}
+  .pane label{font-size:.8rem;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+  textarea{
+    flex:1;min-height:280px;
+    background:#fff;border:1px solid var(--border);border-radius:var(--radius);
+    color:var(--text);font-family:'Fira Code','Consolas',monospace;font-size:.88rem;
+    padding:14px;resize:vertical;outline:none;line-height:1.6;transition:border-color .2s;
+    box-shadow:0 1px 2px rgba(0,0,0,.02);
+  }
+  textarea:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent22,rgba(99,102,241,.15))}
+
+  /* Buttons */
+  .actions{display:flex;gap:8px;flex-wrap:wrap}
+  .btn{padding:9px 20px;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;
+    border:1px solid var(--border);background:#fff;color:var(--text);transition:.15s}
+  .btn:hover{background:#f5f7fa;border-color:var(--accent)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.primary:hover{opacity:.92}
+  .btn.danger{color:#ef4444;border-color:#ef444555}
+  .btn.danger:hover{background:#fef2f2}
+
+  /* Toast */
+  #toast{
+    position:fixed;bottom:28px;right:28px;
+    background:#fff;border:1px solid var(--border);
+    border-radius:8px;padding:10px 18px;font-size:.85rem;
+    opacity:0;transform:translateY(8px);transition:.25s;pointer-events:none;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+  }
+  #toast.show{opacity:1;transform:translateY(0)}
+
+  /* Error */
+  .error{color:#ef4444;font-size:.8rem;min-height:18px;margin-top:2px}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html">🏠 工具箱</a>
+  <span class="sep">›</span>
+  <span class="cur">🗂️ JSON 工具</span>
+</nav>
+
+<h1><span>{}</span> JSON 工具</h1>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('format')">格式化 / 压缩</button>
+  <button class="tab" onclick="switchTab('escape')">转义 / 去转义</button>
+  <button class="tab" onclick="switchTab('validate')">校验</button>
+</div>
+
+<div class="workspace">
+
+  <!-- ── Format / Compress ── -->
+  <div id="tab-format">
+    <div class="row">
+      <div class="pane">
+        <label>输入 JSON</label>
+        <textarea id="fIn" placeholder='{"name":"hello","age":1}'></textarea>
+        <div class="error" id="fErr"></div>
+        <div class="actions">
+          <button class="btn primary" onclick="doFormat()">格式化</button>
+          <button class="btn primary" onclick="doMinify()">压缩</button>
+          <button class="btn" onclick="loadSample()">示例</button>
+          <button class="btn danger" onclick="clearPane('fIn','fOut','fErr')">清空</button>
+        </div>
+      </div>
+      <div class="pane">
+        <label>输出</label>
+        <textarea id="fOut" readonly placeholder="结果将显示在这里…"></textarea>
+        <div class="actions">
+          <button class="btn" onclick="copy('fOut')">📋 复制</button>
+          <button class="btn" onclick="swap('fIn','fOut')">⇅ 互换</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Escape / Unescape ── -->
+  <div id="tab-escape" style="display:none">
+    <div class="row">
+      <div class="pane">
+        <label>输入</label>
+        <textarea id="eIn" placeholder='{"msg":"hello\nworld"}'></textarea>
+        <div class="actions">
+          <button class="btn primary" onclick="doEscape()">转义</button>
+          <button class="btn primary" onclick="doUnescape()">去转义</button>
+          <button class="btn danger" onclick="clearPane('eIn','eOut')">清空</button>
+        </div>
+      </div>
+      <div class="pane">
+        <label>输出</label>
+        <textarea id="eOut" readonly></textarea>
+        <div class="actions">
+          <button class="btn" onclick="copy('eOut')">📋 复制</button>
+          <button class="btn" onclick="swap('eIn','eOut')">⇅ 互换</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Validate ── -->
+  <div id="tab-validate" style="display:none">
+    <div class="pane">
+      <label>输入 JSON</label>
+      <textarea id="vIn" placeholder="粘贴 JSON 进行校验…" style="min-height:320px"></textarea>
+      <div class="actions" style="margin-top:8px">
+        <button class="btn primary" onclick="doValidate()">校验</button>
+        <button class="btn danger" onclick="clearPane('vIn','vOut')">清空</button>
+      </div>
+      <div id="vOut" style="margin-top:14px;padding:14px 18px;border-radius:var(--radius);display:none;font-size:.88rem;line-height:1.7;background:#fff;border:1px solid var(--border)"></div>
+    </div>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+const tabs=['format','escape','validate'];
+function switchTab(t){
+  tabs.forEach(id=>{
+    document.getElementById('tab-'+id).style.display=id===t?'block':'none';
+  });
+  document.querySelectorAll('.tab').forEach((el,i)=>{
+    el.classList.toggle('active',tabs[i]===t);
+  });
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+function copy(id){
+  const v=document.getElementById(id).value;
+  if(!v){showToast('没有内容');return}
+  navigator.clipboard.writeText(v).then(()=>showToast('已复制 ✓'));
+}
+
+function swap(a,b){
+  const ta=document.getElementById(a),tb=document.getElementById(b);
+  [ta.value,tb.value]=[tb.value,ta.value];
+}
+
+function clearPane(...ids){
+  ids.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.value='',el.textContent='',el.style.display='none';
+  });
+}
+
+function setErr(id,msg){
+  const el=document.getElementById(id);
+  if(el) el.textContent=msg;
+}
+
+function parseJSON(src,errId){
+  try{return{ok:true,data:JSON.parse(src)}}
+  catch(e){setErr(errId,'❌ '+e.message);return{ok:false}}
+}
+
+function doFormat(){
+  setErr('fErr','');
+  const src=document.getElementById('fIn').value.trim();
+  if(!src) return;
+  const r=parseJSON(src,'fErr');
+  if(r.ok) document.getElementById('fOut').value=JSON.stringify(r.data,null,2);
+}
+
+function doMinify(){
+  setErr('fErr','');
+  const src=document.getElementById('fIn').value.trim();
+  if(!src) return;
+  const r=parseJSON(src,'fErr');
+  if(r.ok) document.getElementById('fOut').value=JSON.stringify(r.data);
+}
+
+function loadSample(){
+  document.getElementById('fIn').value=JSON.stringify({
+    name:"DevTools",version:"1.0",
+    features:["JSON格式化","压缩","转义"],
+    config:{indent:2,colorize:true}
+  });
+  setErr('fErr','');
+}
+
+function doEscape(){
+  const src=document.getElementById('eIn').value;
+  document.getElementById('eOut').value=src.replace(/\\/g,'\\\\').replace(/"/g,'\\"')
+    .replace(/\n/g,'\\n').replace(/\r/g,'\\r').replace(/\t/g,'\\t');
+}
+
+function doUnescape(){
+  try{
+    const src=document.getElementById('eIn').value;
+    // wrap in quotes if not already a JSON string
+    const wrapped = src.startsWith('"') ? src : '"'+src+'"';
+    document.getElementById('eOut').value=JSON.parse(wrapped);
+  }catch{
+    document.getElementById('eOut').value=document.getElementById('eIn').value
+      .replace(/\\n/g,'\n').replace(/\\r/g,'\r').replace(/\\t/g,'\t')
+      .replace(/\\"/g,'"').replace(/\\\\/g,'\\');
+  }
+}
+
+function doValidate(){
+  const src=document.getElementById('vIn').value.trim();
+  const out=document.getElementById('vOut');
+  out.style.display='block';
+  if(!src){out.style.background='#fff';out.innerHTML='请输入内容';return}
+  try{
+    const data=JSON.parse(src);
+    const lines=src.split('\n').length;
+    const size=(new Blob([src]).size/1024).toFixed(2);
+    out.style.background='#ecfdf5';out.style.border='1px solid #10b98155';
+    out.innerHTML=`<b style="color:#059669">✅ JSON 有效</b><br>
+      行数：${lines} &nbsp;|&nbsp; 大小：${size} KB<br>
+      类型：${Array.isArray(data)?'Array':'Object'}
+      ${Array.isArray(data)?' &nbsp;|&nbsp; 元素数：'+data.length:''}`;
+  }catch(e){
+    out.style.background='#fef2f2';out.style.border='1px solid #ef444455';
+    out.innerHTML=`<b style="color:#ef4444">❌ JSON 无效</b><br>${e.message}`;
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>编码转换 — Dev Tools</title>
+<style>
+  :root{--bg:#ffffff;--surface:#f5f7fa;--border:#e5e9ec;--accent:#10b981;--text:#1f2937;--muted:#6b7280;--radius:10px}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column}
+  nav{display:flex;align-items:center;gap:12px;padding:14px 24px;background:#fff;border-bottom:1px solid var(--border)}
+  nav a{color:var(--muted);text-decoration:none;font-size:.88rem}nav a:hover{color:var(--text)}
+  nav .sep{color:var(--border)}nav .cur{color:var(--text);font-weight:600}
+  h1{padding:28px 24px 0;font-size:1.4rem;font-weight:800}h1 span{color:var(--accent)}
+
+  /* Tabs */
+  .tabs{display:flex;gap:4px;padding:20px 24px 0;flex-wrap:wrap}
+  .tab{padding:7px 16px;border-radius:999px;font-size:.83rem;font-weight:600;cursor:pointer;
+    border:1px solid var(--border);background:transparent;color:var(--muted);transition:.15s}
+  .tab:hover{color:var(--text)}
+  .tab.active{background:var(--accent);border-color:var(--accent);color:#000}
+
+  .workspace{flex:1;padding:20px 24px 40px;display:flex;flex-direction:column;gap:14px}
+
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:680px){.row{grid-template-columns:1fr}}
+  .pane{display:flex;flex-direction:column;gap:6px}
+  .pane label{font-size:.78rem;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+  textarea{
+    min-height:160px;background:#fff;border:1px solid var(--border);border-radius:var(--radius);
+    color:var(--text);font-family:'Fira Code','Consolas',monospace;font-size:.87rem;
+    padding:12px;resize:vertical;outline:none;line-height:1.6;transition:border-color .2s;
+    box-shadow:0 1px 2px rgba(0,0,0,.02);
+  }
+  textarea:focus{border-color:var(--accent)}
+  .actions{display:flex;gap:8px;flex-wrap:wrap}
+  .btn{padding:9px 20px;border-radius:8px;font-size:.84rem;font-weight:600;cursor:pointer;
+    border:1px solid var(--border);background:#fff;color:var(--text);transition:.15s}
+  .btn:hover{background:#f5f7fa;border-color:var(--accent)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#000}
+  .btn.primary:hover{opacity:.88}
+  .btn.danger{color:#ef4444;border-color:#ef444455}
+  .btn.danger:hover{background:#fef2f2}
+
+  /* Hash section */
+  .hash-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:10px;margin-top:6px}
+  .hash-row{background:#fff;border:1px solid var(--border);border-radius:8px;
+    display:flex;align-items:center;gap:0;overflow:hidden}
+  .hash-label{padding:10px 14px;font-size:.78rem;font-weight:700;color:var(--accent);
+    white-space:nowrap;min-width:80px;border-right:1px solid var(--border)}
+  .hash-val{flex:1;padding:10px 12px;font-family:'Fira Code',monospace;font-size:.78rem;
+    color:var(--text);word-break:break-all;cursor:pointer}
+  .hash-val:hover{color:var(--accent)}
+
+  #toast{position:fixed;bottom:28px;right:28px;background:#fff;border:1px solid var(--border);
+    border-radius:8px;padding:10px 18px;font-size:.85rem;opacity:0;transform:translateY(8px);transition:.25s;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+  #toast.show{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html">🏠 工具箱</a>
+  <span class="sep">›</span>
+  <span class="cur">⚙️ 编码转换</span>
+</nav>
+
+<h1><span>&lt;/&gt;</span> 编码转换</h1>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('base64')">Base64</button>
+  <button class="tab" onclick="switchTab('url')">URL 编码</button>
+  <button class="tab" onclick="switchTab('unicode')">Unicode</button>
+  <button class="tab" onclick="switchTab('html')">HTML 实体</button>
+  <button class="tab" onclick="switchTab('hash')">哈希计算</button>
+</div>
+
+<div class="workspace">
+
+<!-- ── Base64 ── -->
+<div id="tab-base64">
+  <div class="row">
+    <div class="pane">
+      <label>原始文本</label>
+      <textarea id="b64In" placeholder="输入文本…"></textarea>
+      <div class="actions">
+        <button class="btn primary" onclick="b64Enc()">编码 →</button>
+        <button class="btn danger" onclick="clearTwo('b64In','b64Out')">清空</button>
+      </div>
+    </div>
+    <div class="pane">
+      <label>Base64</label>
+      <textarea id="b64Out" placeholder="Base64 结果…"></textarea>
+      <div class="actions">
+        <button class="btn primary" onclick="b64Dec()">← 解码</button>
+        <button class="btn" onclick="copy('b64Out')">📋 复制</button>
+        <button class="btn" onclick="swap('b64In','b64Out')">⇅ 互换</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── URL ── -->
+<div id="tab-url" style="display:none">
+  <div class="row">
+    <div class="pane">
+      <label>原始文本</label>
+      <textarea id="urlIn" placeholder="https://example.com/path?q=中文"></textarea>
+      <div class="actions">
+        <button class="btn primary" onclick="urlEnc()">编码 →</button>
+        <button class="btn danger" onclick="clearTwo('urlIn','urlOut')">清空</button>
+      </div>
+    </div>
+    <div class="pane">
+      <label>URL 编码</label>
+      <textarea id="urlOut"></textarea>
+      <div class="actions">
+        <button class="btn primary" onclick="urlDec()">← 解码</button>
+        <button class="btn" onclick="copy('urlOut')">📋 复制</button>
+        <button class="btn" onclick="swap('urlIn','urlOut')">⇅ 互换</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Unicode ── -->
+<div id="tab-unicode" style="display:none">
+  <div class="row">
+    <div class="pane">
+      <label>原始文本</label>
+      <textarea id="uniIn" placeholder="中文字符…"></textarea>
+      <div class="actions">
+        <button class="btn primary" onclick="uniEnc()">编码 →</button>
+        <button class="btn danger" onclick="clearTwo('uniIn','uniOut')">清空</button>
+      </div>
+    </div>
+    <div class="pane">
+      <label>Unicode 转义</label>
+      <textarea id="uniOut" placeholder="\u4e2d\u6587…"></textarea>
+      <div class="actions">
+        <button class="btn primary" onclick="uniDec()">← 解码</button>
+        <button class="btn" onclick="copy('uniOut')">📋 复制</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── HTML Entity ── -->
+<div id="tab-html" style="display:none">
+  <div class="row">
+    <div class="pane">
+      <label>原始 HTML</label>
+      <textarea id="htIn" placeholder="<div class=&quot;test&quot;>Hello & World</div>"></textarea>
+      <div class="actions">
+        <button class="btn primary" onclick="htEnc()">转义 →</button>
+        <button class="btn danger" onclick="clearTwo('htIn','htOut')">清空</button>
+      </div>
+    </div>
+    <div class="pane">
+      <label>HTML 实体</label>
+      <textarea id="htOut"></textarea>
+      <div class="actions">
+        <button class="btn primary" onclick="htDec()">← 反转义</button>
+        <button class="btn" onclick="copy('htOut')">📋 复制</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Hash ── -->
+<div id="tab-hash" style="display:none">
+  <div class="pane" style="max-width:600px">
+    <label>输入文本</label>
+    <textarea id="hashIn" placeholder="输入要计算哈希的内容…" style="min-height:120px"></textarea>
+    <div class="actions" style="margin-top:4px">
+      <button class="btn primary" onclick="calcHash()">计算哈希</button>
+      <button class="btn danger" onclick="clearHash()">清空</button>
+    </div>
+  </div>
+  <div class="hash-grid" id="hashGrid"></div>
+</div>
+
+</div><!-- /workspace -->
+<div id="toast"></div>
+
+<script>
+const TABS=['base64','url','unicode','html','hash'];
+function switchTab(t){
+  TABS.forEach(id=>document.getElementById('tab-'+id).style.display=id===t?'block':'none');
+  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',TABS[i]===t));
+}
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000)}
+function copy(id){navigator.clipboard.writeText(document.getElementById(id).value).then(()=>showToast('已复制 ✓'))}
+function swap(a,b){const ta=document.getElementById(a),tb=document.getElementById(b);[ta.value,tb.value]=[tb.value,ta.value]}
+function clearTwo(a,b){document.getElementById(a).value='';document.getElementById(b).value=''}
+
+// Base64
+function b64Enc(){try{document.getElementById('b64Out').value=btoa(unescape(encodeURIComponent(document.getElementById('b64In').value)))}catch(e){showToast('编码失败：'+e.message)}}
+function b64Dec(){try{document.getElementById('b64In').value=decodeURIComponent(escape(atob(document.getElementById('b64Out').value.trim())))}catch(e){showToast('解码失败：'+e.message)}}
+
+// URL
+function urlEnc(){document.getElementById('urlOut').value=encodeURIComponent(document.getElementById('urlIn').value)}
+function urlDec(){try{document.getElementById('urlIn').value=decodeURIComponent(document.getElementById('urlOut').value)}catch(e){showToast('解码失败：'+e.message)}}
+
+// Unicode
+function uniEnc(){document.getElementById('uniOut').value=[...document.getElementById('uniIn').value].map(c=>{const cp=c.codePointAt(0);return cp>127?'\\u'+cp.toString(16).padStart(4,'0'):c}).join('')}
+function uniDec(){try{document.getElementById('uniIn').value=document.getElementById('uniOut').value.replace(/\\u([0-9a-fA-F]{4})/g,(_,h)=>String.fromCodePoint(parseInt(h,16)))}catch(e){showToast('解码失败')}}
+
+// HTML entities
+function htEnc(){document.getElementById('htOut').value=document.getElementById('htIn').value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+function htDec(){const d=document.createElement('div');d.innerHTML=document.getElementById('htOut').value;document.getElementById('htIn').value=d.textContent}
+
+// Hash — Web Crypto
+async function calcHash(){
+  const txt=document.getElementById('hashIn').value;
+  if(!txt){showToast('请输入内容');return}
+  const enc=new TextEncoder().encode(txt);
+  const algos=['SHA-1','SHA-256','SHA-384','SHA-512'];
+  const grid=document.getElementById('hashGrid');
+  grid.innerHTML='<div style="color:var(--muted);font-size:.82rem">计算中…</div>';
+  const results=await Promise.all(algos.map(a=>crypto.subtle.digest(a,enc).then(buf=>{
+    return{name:a,val:[...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('')};
+  })));
+  // MD5 — pure JS fallback
+  results.unshift({name:'MD5',val:md5(txt)});
+  grid.innerHTML='';
+  results.forEach(r=>{
+    const row=document.createElement('div');row.className='hash-row';
+    row.innerHTML=`<span class="hash-label">${r.name}</span><span class="hash-val" title="点击复制" onclick="navigator.clipboard.writeText('${r.val}').then(()=>showToast('已复制 ${r.name} ✓'))">${r.val}</span>`;
+    grid.appendChild(row);
+  });
+}
+
+function clearHash(){
+  document.getElementById('hashIn').value='';
+  document.getElementById('hashGrid').innerHTML='';
+}
+
+/* ── Tiny MD5 (RFC 1321) ── */
+function md5(s){
+  function safeAdd(x,y){const lsw=(x&0xFFFF)+(y&0xFFFF);return((((x>>16)+(y>>16)+(lsw>>16))<<16)|(lsw&0xFFFF))}
+  function bitRotateLeft(num,cnt){return(num<<cnt)|(num>>>(32-cnt))}
+  function md5cmn(q,a,b,x,s,t){return safeAdd(bitRotateLeft(safeAdd(safeAdd(a,q),safeAdd(x,t)),s),b)}
+  function md5ff(a,b,c,d,x,s,t){return md5cmn((b&c)|((~b)&d),a,b,x,s,t)}
+  function md5gg(a,b,c,d,x,s,t){return md5cmn((b&d)|(c&(~d)),a,b,x,s,t)}
+  function md5hh(a,b,c,d,x,s,t){return md5cmn(b^c^d,a,b,x,s,t)}
+  function md5ii(a,b,c,d,x,s,t){return md5cmn(c^(b|(~d)),a,b,x,s,t)}
+  // encode UTF-8
+  s=unescape(encodeURIComponent(s));
+  const n8=s.length,n32=Math.ceil((n8+9)/64)*16;
+  const M=new Int32Array(n32);
+  for(let i=0;i<n8;i++) M[i>>2]|=(s.charCodeAt(i)&0xFF)<<((i%4)*8);
+  M[n8>>2]|=0x80<<((n8%4)*8);M[n32-2]=n8*8;
+  let a=0x67452301,b=0xefcdab89,c=0x98badcfe,d=0x10325476;
+  for(let i=0;i<n32;i+=16){
+    const[A,B,C,D]=[a,b,c,d];
+    a=md5ff(a,b,c,d,M[i+0],7,-680876936);d=md5ff(d,a,b,c,M[i+1],12,-389564586);c=md5ff(c,d,a,b,M[i+2],17,606105819);b=md5ff(b,c,d,a,M[i+3],22,-1044525330);
+    a=md5ff(a,b,c,d,M[i+4],7,-176418897);d=md5ff(d,a,b,c,M[i+5],12,1200080426);c=md5ff(c,d,a,b,M[i+6],17,-1473231341);b=md5ff(b,c,d,a,M[i+7],22,-45705983);
+    a=md5ff(a,b,c,d,M[i+8],7,1770035416);d=md5ff(d,a,b,c,M[i+9],12,-1958414417);c=md5ff(c,d,a,b,M[i+10],17,-42063);b=md5ff(b,c,d,a,M[i+11],22,-1990404162);
+    a=md5ff(a,b,c,d,M[i+12],7,1804603682);d=md5ff(d,a,b,c,M[i+13],12,-40341101);c=md5ff(c,d,a,b,M[i+14],17,-1502002290);b=md5ff(b,c,d,a,M[i+15],22,1236535329);
+    a=md5gg(a,b,c,d,M[i+1],5,-165796510);d=md5gg(d,a,b,c,M[i+6],9,-1069501632);c=md5gg(c,d,a,b,M[i+11],14,643717713);b=md5gg(b,c,d,a,M[i+0],20,-373897302);
+    a=md5gg(a,b,c,d,M[i+5],5,-701558691);d=md5gg(d,a,b,c,M[i+10],9,38016083);c=md5gg(c,d,a,b,M[i+15],14,-660478335);b=md5gg(b,c,d,a,M[i+4],20,-405537848);
+    a=md5gg(a,b,c,d,M[i+9],5,568446438);d=md5gg(d,a,b,c,M[i+14],9,-1019803690);c=md5gg(c,d,a,b,M[i+3],14,-187363961);b=md5gg(b,c,d,a,M[i+8],20,1163531501);
+    a=md5gg(a,b,c,d,M[i+13],5,-1444681467);d=md5gg(d,a,b,c,M[i+2],9,-51403784);c=md5gg(c,d,a,b,M[i+7],14,1735328473);b=md5gg(b,c,d,a,M[i+12],20,-1926607734);
+    a=md5hh(a,b,c,d,M[i+5],4,-378558);d=md5hh(d,a,b,c,M[i+8],11,-2022574463);c=md5hh(c,d,a,b,M[i+11],16,1839030562);b=md5hh(b,c,d,a,M[i+14],23,-35309556);
+    a=md5hh(a,b,c,d,M[i+1],4,-1530992060);d=md5hh(d,a,b,c,M[i+4],11,1272893353);c=md5hh(c,d,a,b,M[i+7],16,-155497632);b=md5hh(b,c,d,a,M[i+10],23,-1094730640);
+    a=md5hh(a,b,c,d,M[i+13],4,681279174);d=md5hh(d,a,b,c,M[i+0],11,-358537222);c=md5hh(c,d,a,b,M[i+3],16,-722521979);b=md5hh(b,c,d,a,M[i+6],23,76029189);
+    a=md5hh(a,b,c,d,M[i+9],4,-640364487);d=md5hh(d,a,b,c,M[i+12],11,-421815835);c=md5hh(c,d,a,b,M[i+15],16,530742520);b=md5hh(b,c,d,a,M[i+2],23,-995338651);
+    a=md5ii(a,b,c,d,M[i+0],6,-198630844);d=md5ii(d,a,b,c,M[i+7],10,1126891415);c=md5ii(c,d,a,b,M[i+14],15,-1416354905);b=md5ii(b,c,d,a,M[i+5],21,-57434055);
+    a=md5ii(a,b,c,d,M[i+12],6,1700485571);d=md5ii(d,a,b,c,M[i+3],10,-1894986606);c=md5ii(c,d,a,b,M[i+10],15,-1051523);b=md5ii(b,c,d,a,M[i+1],21,-2054922799);
+    a=md5ii(a,b,c,d,M[i+8],6,1873313359);d=md5ii(d,a,b,c,M[i+15],10,-30611744);c=md5ii(c,d,a,b,M[i+6],15,-1560198380);b=md5ii(b,c,d,a,M[i+13],21,1309151649);
+    a=md5ii(a,b,c,d,M[i+4],6,-145523070);d=md5ii(d,a,b,c,M[i+11],10,-1120210379);c=md5ii(c,d,a,b,M[i+2],15,718787259);b=md5ii(b,c,d,a,M[i+9],21,-343485551);
+    a=safeAdd(a,A);b=safeAdd(b,B);c=safeAdd(c,C);d=safeAdd(d,D);
+  }
+  return[a,b,c,d].map(n=>{let s='';for(let i=0;i<4;i++)s+=((n>>>(i*8))&0xFF).toString(16).padStart(2,'0');return s}).join('');
+}
+</script>
+</body>
+</html>

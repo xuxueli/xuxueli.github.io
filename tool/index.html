@@ -1,187 +1,205 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>XXL开源社区 | 工具 </title>
-    <link rel="icon" href="../favicon.ico">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Dev Tools — 开发者工具箱</title>
+<style>
+  :root {
+    --bg:#ffffff; --surface:#f5f7fa; --border:#e5e9ec;
+    --accent:#6366f1; --accent2:#ec4899;
+    --text:#1f2937; --muted:#6b7280;
+    --radius:12px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
 
-    <!-- CSS  -->
-    <link href="../page/static/plugins/material-design-icons/3.0.1/material-icons.css?family=Material+Icons" rel="stylesheet">
-    <link href="../page/static/plugins/materialize/1.0.0/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  /* ── Header ── */
+  header{
+    padding:48px 24px 32px;
+    text-align:center;
+    background:linear-gradient(135deg,#f5f7fa 0%,#ffffff 100%);
+    border-bottom:1px solid var(--border);
+  }
+  header .logo{font-size:2.2rem;font-weight:900;letter-spacing:-1px}
+  header .logo span{color:var(--accent)}
+  header p{color:var(--muted);margin-top:8px;font-size:.95rem}
 
-    <!-- common -->
-    <link rel="stylesheet" href="../page/static/css/common.css" />
+  /* ── Search ── */
+  .search-wrap{
+    max-width:480px;margin:28px auto 0;
+    position:relative;
+  }
+  .search-wrap input{
+    width:100%;padding:12px 44px 12px 16px;
+    background:#fff;border:1px solid var(--border);
+    border-radius:999px;color:var(--text);font-size:.95rem;outline:none;
+    transition:border-color .2s;
+    box-shadow:0 1px 3px rgba(0,0,0,.04);
+  }
+  .search-wrap input:focus{border-color:var(--accent)}
+  .search-wrap svg{position:absolute;right:14px;top:50%;transform:translateY(-50%);opacity:.4;pointer-events:none}
 
+  /* ── Main ── */
+  main{max-width:960px;margin:0 auto;padding:40px 20px 80px}
+
+  /* ── Category ── */
+  .category{margin-bottom:44px}
+  .category-header{
+    display:flex;align-items:center;gap:10px;
+    margin-bottom:18px;
+  }
+  .category-icon{
+    width:32px;height:32px;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;font-size:1rem;
+  }
+  .category-title{font-size:1.05rem;font-weight:700;letter-spacing:.5px}
+  .category-count{font-size:.75rem;color:var(--muted);
+    background:var(--surface);border:1px solid var(--border);
+    padding:2px 8px;border-radius:99px;margin-left:4px}
+
+  /* ── Cards grid ── */
+  .cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+    gap:14px;
+  }
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--radius);padding:20px 18px;
+    text-decoration:none;color:inherit;
+    transition:border-color .2s,transform .15s,box-shadow .2s;
+    display:block;
+    position:relative;overflow:hidden;
+  }
+  .card::before{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(135deg,var(--card-color,var(--accent)) 0%,transparent 60%);
+    opacity:0;transition:opacity .25s;
+  }
+  .card:hover{border-color:var(--card-color,var(--accent));transform:translateY(-2px);
+    box-shadow:0 8px 24px rgba(0,0,0,.08);}
+  .card:hover::before{opacity:.08}
+  .card .card-icon{font-size:1.6rem;margin-bottom:10px}
+  .card .card-name{font-weight:700;font-size:.95rem;margin-bottom:4px}
+  .card .card-desc{font-size:.78rem;color:var(--muted);line-height:1.5}
+  .card .card-tag{
+    display:inline-block;margin-top:10px;
+    font-size:.68rem;padding:2px 8px;border-radius:99px;
+    background:rgba(0,0,0,.05);color:var(--muted);
+  }
+
+  /* ── Footer ── */
+  footer{text-align:center;padding:24px;color:var(--muted);font-size:.8rem;border-top:1px solid var(--border)}
+
+  /* hide filtered */
+  .card.hidden{display:none}
+  .category.all-hidden{display:none}
+</style>
 </head>
 <body>
 
+<header>
+  <div class="logo"><span>{</span> Dev Tools <span>}</span></div>
+  <p>常用开发者工具箱 · 纯前端 · 无需联网</p>
+  <div class="search-wrap">
+    <input type="text" id="search" placeholder="搜索工具…" autocomplete="off"/>
+    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+    </svg>
+  </div>
+</header>
 
-<!-- header start -->
-<nav class="white" role="navigation">
-    <div class="nav-wrapper container">
-        <a id="logo-container" href="../index.html" class="brand-logo" style="white-space:nowrap;" >
-            <img src="https://www.xuxueli.com/doc/static/xxl-job/images/xxl-logo.jpg"
-                 style="width: 38px;vertical-align:middle;" >
-            XXL开源社区
-        </a>
+<main id="main">
 
-        <!-- pc-nav -->
-        <ul class="right hide-on-med-and-down">
-            <li><a href="../index.html">首页</a></li>
-            <li><a href="../page/projects.html">项目</a></li>
-            <li><a href="../blog">博客</a></li>
-            <li><a href="../page/community.html">社区</a></li>
-            <li><a href="../page/donate.html" >赞助</a></li>
-
-            <!-- Dropdown Trigger -->
-            <li><a class="dropdown-trigger active" href="#!" data-target="dropdown1"><i class="material-icons">more_vert</i></a></li>
-
-        </ul>
-        <!-- pc-nav dropdown -->
-        <ul id="dropdown1" class="dropdown-content" style="color: black;" >
-            <li class="active" ><a href="../tool" >工具</a></li>
-            <li><a href="../page/fuli.html" >福利</a></li>
-        </ul>
-
-        <!-- mobile-nav -->
-        <ul id="nav-mobile" class="sidenav">
-            <li>
-                <div class="center" style="padding: 20px;" >
-                    <img src="https://www.xuxueli.com/doc/static/xxl-job/images/xxl-logo.jpg" style="width: 80px;vertical-align:middle;" >
-                    <br>
-                    <h5 style="color: #4db6ac !important;" >XXL开源社区</h5>
-                </div>
-            </li>
-
-            <li class="divider"></li>
-            <li class="active" ><a href="../index.html">首页</a></li>
-            <li><a href="../page/projects.html">项目</a></li>
-            <li><a href="../blog">博客</a></li>
-            <li><a href="../page/community.html">社区</a></li>
-            <li><a href="../page/donate.html" >赞助</a></li>
-
-            <li class="divider"></li>
-            <li class="active" ><a href="../tool">工具</a></li>
-            <li><a href="../page/fuli.html" >福利</a></li>
-        </ul>
-
-        <!-- menu icon -->
-        <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+  <!-- ── 数据处理 ── -->
+  <div class="category" data-cat="数据处理">
+    <div class="category-header">
+      <div class="category-icon" style="background:#6c63ff22;color:#6c63ff">📦</div>
+      <span class="category-title">数据处理</span>
+      <span class="category-count">2</span>
     </div>
-</nav>
-<!-- header end -->
+    <div class="cards">
 
-<!-- content -->
-<div class="section no-pad-bot">
-    <div class="container">
+      <a class="card" href="tools/json.html" style="--card-color:#6c63ff" data-name="JSON工具 序列化 压缩 转义 格式化">
+        <div class="card-icon">🗂️</div>
+        <div class="card-name">JSON 工具</div>
+        <div class="card-desc">格式化、压缩、转义与去转义，一站式 JSON 处理</div>
+        <span class="card-tag">JSON</span>
+      </a>
 
-        <div class="row2">
-
-            <br>
-            <div>
-                <h5>工具列表：</h5>
-                <ul>
-                    <li style="padding: 10px;" >
-                        <a href="./json">1、JSON格式化 </a>
-                    </li>
-                    <li style="padding: 10px;" >
-                        <a href="./nav">2、一键导航 </a>
-                    </li>
-                    <li style="padding: 10px;" >
-                        <a href="./toolbox">3、ToolBox </a>
-                    </li>
-                    <li style="padding: 10px;" >
-                        ……
-                    </li>
-                </ul>
-            </div>
-
-            <div style="margin-top: 150px;"></div>
-
-        </div>
+      <a class="card" href="tools/diff.html" style="--card-color:#f59e0b" data-name="字符串差异对比 文本 diff">
+        <div class="card-icon">🔍</div>
+        <div class="card-name">文本差异对比</div>
+        <div class="card-desc">对比两段文本差异，支持 JSON 格式化，高亮显示变更</div>
+        <span class="card-tag">Diff</span>
+      </a>
 
     </div>
-</div>
+  </div>
 
-<!-- footer start -->
-<footer class="page-footer teal">
-    <div class="container">
-        <div class="row">
-            <div class="col l5 s12">
-                <h5 class="white-text">About</h5>
-                <p class="grey-text text-lighten-4">
-                    【XXL开源社区】成立于2015年，是专门为支持开源软件项目而创办的一个非盈利性组织，负责发行和维护XXL系列开源软件，崇尚开放、自由和分享。
-                </p>
-            </div>
-            <div class="col offset-l1 l3 s12">
-                <h5 class="white-text">Link</h5>
-                <ul>
-                    <li>
-                        <a class="grey-text text-lighten-3" href="https://github.com/xuxueli" target="_blank">Github</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="col l3 s12">
-                <h5 class="white-text">Follow us</h5>
-                <ul>
-                    <li>
-                        <img src="https://www.xuxueli.com/blog/static/images/img_wechat_official_account_qrcode.png" width="80">
-                        <br>
-                        (关注公众号)
-                    </li>
-                </ul>
-            </div>
-        </div>
+  <!-- ── 编码 & 加密 ── -->
+  <div class="category" data-cat="编码与加密">
+    <div class="category-header">
+      <div class="category-icon" style="background:#10b98122;color:#10b981">🔐</div>
+      <span class="category-title">编码与加密</span>
+      <span class="category-count">2</span>
     </div>
-    <div class="footer-copyright">
-        <div class="container">
-            Copyright (c) 2015-present, xuxueli.
-            <a class="grey-text text-lighten-4 right" ></a>
-        </div>
+    <div class="cards">
+
+      <a class="card" href="tools/encode.html" style="--card-color:#10b981" data-name="编码转换 Base64 URL Unicode HTML MD5 SHA 哈希">
+        <div class="card-icon">⚙️</div>
+        <div class="card-name">编码转换</div>
+        <div class="card-desc">Base64、URL、Unicode、HTML 实体编解码及哈希计算</div>
+        <span class="card-tag">Encode</span>
+      </a>
+
+      <a class="card" href="tools/password.html" style="--card-color:#ff6584" data-name="密码生成器 随机 强度 安全">
+        <div class="card-icon">🔑</div>
+        <div class="card-name">密码生成器</div>
+        <div class="card-desc">生成随机安全密码，自定义规则，强度可视化评估</div>
+        <span class="card-tag">Security</span>
+      </a>
+
     </div>
-</footer>
-<!-- footer end -->
+  </div>
 
-<!-- fork me
-<a href="https://github.com/xuxueli"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
--->
+  <!-- ── 时间 & 日期 ── -->
+  <div class="category" data-cat="时间与日期">
+    <div class="category-header">
+      <div class="category-icon" style="background:#3b82f622;color:#3b82f6">🕐</div>
+      <span class="category-title">时间与日期</span>
+      <span class="category-count">1</span>
+    </div>
+    <div class="cards">
 
+      <a class="card" href="tools/time.html" style="--card-color:#3b82f6" data-name="时间工具 时间戳 日期计算 时区转换">
+        <div class="card-icon">🗓️</div>
+        <div class="card-name">时间工具</div>
+        <div class="card-desc">时间戳转换、日期加减计算、多时区对照</div>
+        <span class="card-tag">Time</span>
+      </a>
+
+    </div>
+  </div>
+
+</main>
+
+<footer>Dev Tools · 纯静态前端 · 数据不离本机</footer>
+
+<script>
+const searchEl = document.getElementById('search');
+searchEl.addEventListener('input', () => {
+  const q = searchEl.value.trim().toLowerCase();
+  document.querySelectorAll('.card').forEach(c => {
+    const txt = (c.dataset.name + ' ' + c.textContent).toLowerCase();
+    c.classList.toggle('hidden', q.length > 0 && !txt.includes(q));
+  });
+  document.querySelectorAll('.category').forEach(cat => {
+    const visible = [...cat.querySelectorAll('.card')].some(c => !c.classList.contains('hidden'));
+    cat.classList.toggle('all-hidden', !visible);
+  });
+});
+</script>
 </body>
-
-<script src="../page/static/plugins/jquery/2.2.4/jquery.min.js"></script>
-<script src="../page/static/plugins/materialize/1.0.0/js/materialize.min.js"></script>
-<script>
-    $(function () {
-        $('.sidenav').sidenav();
-        $(".dropdown-trigger").dropdown();
-    });
-</script>
-
-
-<!-- google start -->
-<script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-    ga('create', 'UA-105336587-1', 'auto');
-    ga('send', 'pageview');
-
-</script>
-<!-- google end -->
-
-<!-- baidu start -->
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?2a4e116e8983ca87e083a41b552fe6a2";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
-</script>
-<!-- baidu end -->
-
 </html>

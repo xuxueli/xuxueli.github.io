@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>时间工具 — Dev Tools</title>
+<style>
+  :root{--bg:#ffffff;--surface:#f5f7fa;--border:#e5e9ec;--accent:#3b82f6;--text:#1f2937;--muted:#6b7280;--radius:10px}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column}
+  nav{display:flex;align-items:center;gap:12px;padding:14px 24px;background:#fff;border-bottom:1px solid var(--border)}
+  nav a{color:var(--muted);text-decoration:none;font-size:.88rem}nav a:hover{color:var(--text)}
+  nav .sep{color:var(--border)}nav .cur{color:var(--text);font-weight:600}
+  h1{padding:28px 24px 0;font-size:1.4rem;font-weight:800}h1 span{color:var(--accent)}
+
+  .tabs{display:flex;gap:4px;padding:20px 24px 0;flex-wrap:wrap}
+  .tab{padding:7px 16px;border-radius:999px;font-size:.83rem;font-weight:600;cursor:pointer;
+    border:1px solid var(--border);background:transparent;color:var(--muted);transition:.15s}
+  .tab:hover{color:var(--text)}.tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+  .workspace{flex:1;padding:22px 24px 40px;display:flex;flex-direction:column;gap:18px}
+
+  .card{background:#f5f7fa;border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+  .card h2{font-size:.82rem;font-weight:700;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:14px}
+
+  .field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+  .field label{font-size:.78rem;color:var(--muted);font-weight:600}
+  .field input,.field select{
+    background:#fff;border:1px solid var(--border);border-radius:8px;
+    color:var(--text);font-size:.9rem;padding:9px 12px;outline:none;transition:border-color .2s;
+    font-family:inherit;box-shadow:0 1px 2px rgba(0,0,0,.02);
+  }
+  .field input:focus,.field select:focus{border-color:var(--accent)}
+
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:600px){.row2{grid-template-columns:1fr}}
+
+  .result-box{
+    background:#fff;border:1px solid var(--border);border-radius:8px;
+    padding:12px 14px;font-family:'Fira Code',monospace;font-size:.88rem;
+    color:var(--text);min-height:42px;line-height:1.7;cursor:pointer;
+    transition:border-color .2s;
+  }
+  .result-box:hover{border-color:var(--accent)}
+  .result-label{font-size:.72rem;color:var(--muted);margin-bottom:4px;font-weight:600;letter-spacing:.4px;text-transform:uppercase}
+
+  .actions{display:flex;gap:8px;flex-wrap:wrap}
+  .btn{padding:9px 20px;border-radius:8px;font-size:.84rem;font-weight:600;cursor:pointer;
+    border:1px solid var(--border);background:#fff;color:var(--text);transition:.15s}
+  .btn:hover{background:#f5f7fa;border-color:var(--accent)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.primary:hover{opacity:.88}
+
+  /* Live clock */
+  #clock{
+    font-size:2.8rem;font-weight:300;font-family:'Fira Code',monospace;
+    color:var(--accent);text-align:center;letter-spacing:.08em;padding:10px 0 4px;
+  }
+  #clockDate{text-align:center;color:var(--muted);font-size:.9rem;margin-bottom:8px}
+
+  /* Timezone table */
+  .tz-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+  .tz-card{background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px 14px}
+  .tz-name{font-size:.75rem;color:var(--muted);margin-bottom:2px}
+  .tz-time{font-family:'Fira Code',monospace;font-size:1.05rem;font-weight:600}
+  .tz-offset{font-size:.72rem;color:var(--muted);margin-top:2px}
+
+  #toast{position:fixed;bottom:28px;right:28px;background:#fff;border:1px solid var(--border);
+    border-radius:8px;padding:10px 18px;font-size:.85rem;opacity:0;transform:translateY(8px);transition:.25s;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+  #toast.show{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html">🏠 工具箱</a>
+  <span class="sep">›</span>
+  <span class="cur">🗓️ 时间工具</span>
+</nav>
+
+<h1><span>⏱</span> 时间工具</h1>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('ts')">时间戳转换</button>
+  <button class="tab" onclick="switchTab('calc')">日期计算</button>
+  <button class="tab" onclick="switchTab('tz')">时区对照</button>
+</div>
+
+<div class="workspace">
+
+<!-- ── 时间戳转换 ── -->
+<div id="tab-ts">
+  <div id="clock"></div>
+  <div id="clockDate"></div>
+
+  <div class="row2">
+    <!-- ts → date -->
+    <div class="card">
+      <h2>时间戳 → 日期</h2>
+      <div class="field">
+        <label>时间戳（秒 / 毫秒）</label>
+        <input type="text" id="tsIn" placeholder="1700000000 或 1700000000000"/>
+      </div>
+      <div class="actions" style="margin-bottom:14px">
+        <button class="btn primary" onclick="ts2date()">转换</button>
+        <button class="btn" onclick="tsNow()">当前时间戳</button>
+      </div>
+      <div class="result-label">本地时间</div>
+      <div class="result-box" id="tsLocal" onclick="copyEl(this)" title="点击复制">—</div>
+      <div class="result-label" style="margin-top:10px">UTC 时间</div>
+      <div class="result-box" id="tsUtc" onclick="copyEl(this)" title="点击复制">—</div>
+      <div class="result-label" style="margin-top:10px">ISO 8601</div>
+      <div class="result-box" id="tsIso" onclick="copyEl(this)" title="点击复制">—</div>
+    </div>
+
+    <!-- date → ts -->
+    <div class="card">
+      <h2>日期 → 时间戳</h2>
+      <div class="field">
+        <label>日期时间</label>
+        <input type="datetime-local" id="dtIn"/>
+      </div>
+      <div class="actions" style="margin-bottom:14px">
+        <button class="btn primary" onclick="date2ts()">转换</button>
+        <button class="btn" onclick="dtNow()">填入当前</button>
+      </div>
+      <div class="result-label">Unix 秒</div>
+      <div class="result-box" id="dtSec" onclick="copyEl(this)" title="点击复制">—</div>
+      <div class="result-label" style="margin-top:10px">Unix 毫秒</div>
+      <div class="result-box" id="dtMs" onclick="copyEl(this)" title="点击复制">—</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── 日期计算 ── -->
+<div id="tab-calc" style="display:none">
+  <div class="row2">
+    <!-- diff -->
+    <div class="card">
+      <h2>两日期差值</h2>
+      <div class="field"><label>开始日期</label><input type="date" id="diffA"/></div>
+      <div class="field"><label>结束日期</label><input type="date" id="diffB"/></div>
+      <div class="actions" style="margin-bottom:14px">
+        <button class="btn primary" onclick="calcDiff()">计算差值</button>
+      </div>
+      <div id="diffResult" style="display:none;background:#252836;border:1px solid var(--border);border-radius:8px;padding:14px;line-height:2;font-size:.9rem"></div>
+    </div>
+
+    <!-- add -->
+    <div class="card">
+      <h2>日期加减</h2>
+      <div class="field"><label>基准日期</label><input type="date" id="addBase"/></div>
+      <div class="field">
+        <label>加减数量</label>
+        <div style="display:flex;gap:8px">
+          <input type="number" id="addNum" placeholder="数量" style="flex:1"/>
+          <select id="addUnit">
+            <option value="d">天</option>
+            <option value="w">周</option>
+            <option value="m">月</option>
+            <option value="y">年</option>
+          </select>
+        </div>
+      </div>
+      <div class="actions" style="margin-bottom:14px">
+        <button class="btn primary" onclick="calcAdd()">+  加</button>
+        <button class="btn" onclick="calcSub()">−  减</button>
+      </div>
+      <div id="addResult" style="display:none;background:#252836;border:1px solid var(--border);border-radius:8px;padding:14px;font-size:.95rem"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── 时区对照 ── -->
+<div id="tab-tz" style="display:none">
+  <div class="card" style="margin-bottom:14px">
+    <h2>选择参考时间</h2>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+      <div class="field" style="flex:1;min-width:200px;margin:0">
+        <label>日期时间（留空 = 当前时间）</label>
+        <input type="datetime-local" id="tzBase"/>
+      </div>
+      <button class="btn primary" onclick="renderTz()">刷新时区</button>
+      <button class="btn" onclick="document.getElementById('tzBase').value='';renderTz()">当前时间</button>
+    </div>
+  </div>
+  <div class="tz-grid" id="tzGrid"></div>
+</div>
+
+</div>
+<div id="toast"></div>
+
+<script>
+/* ── Tab ── */
+const TABS=['ts','calc','tz'];
+function switchTab(t){
+  TABS.forEach(id=>document.getElementById('tab-'+id).style.display=id===t?'block':'none');
+  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',TABS[i]===t));
+  if(t==='tz') renderTz();
+}
+
+/* ── Toast ── */
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000)}
+function copyEl(el){navigator.clipboard.writeText(el.textContent).then(()=>showToast('已复制 ✓'))}
+
+/* ── Live Clock ── */
+function tickClock(){
+  const now=new Date();
+  document.getElementById('clock').textContent=now.toLocaleTimeString('zh-CN',{hour12:false});
+  document.getElementById('clockDate').textContent=now.toLocaleDateString('zh-CN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+}
+setInterval(tickClock,1000);tickClock();
+
+/* ── Timestamp → Date ── */
+function ts2date(){
+  let v=document.getElementById('tsIn').value.trim();
+  if(!v){showToast('请输入时间戳');return}
+  let n=Number(v);
+  if(isNaN(n)){showToast('无效数值');return}
+  if(n<1e10) n*=1000; // seconds → ms
+  const d=new Date(n);
+  document.getElementById('tsLocal').textContent=d.toLocaleString('zh-CN');
+  document.getElementById('tsUtc').textContent=d.toUTCString();
+  document.getElementById('tsIso').textContent=d.toISOString();
+}
+function tsNow(){
+  document.getElementById('tsIn').value=Math.floor(Date.now()/1000);
+  ts2date();
+}
+
+/* ── Date → Timestamp ── */
+function date2ts(){
+  const v=document.getElementById('dtIn').value;
+  if(!v){showToast('请选择日期时间');return}
+  const ms=new Date(v).getTime();
+  document.getElementById('dtSec').textContent=Math.floor(ms/1000);
+  document.getElementById('dtMs').textContent=ms;
+}
+function dtNow(){
+  const now=new Date();
+  const pad=n=>String(n).padStart(2,'0');
+  document.getElementById('dtIn').value=`${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  date2ts();
+}
+
+/* ── Date Diff ── */
+function calcDiff(){
+  const a=document.getElementById('diffA').value;
+  const b=document.getElementById('diffB').value;
+  if(!a||!b){showToast('请选择两个日期');return}
+  const da=new Date(a),db=new Date(b);
+  const ms=Math.abs(db-da);
+  const days=Math.floor(ms/86400000);
+  const weeks=Math.floor(days/7);
+  const rem=days%7;
+  const yrs=Math.floor(days/365);
+  const res=document.getElementById('diffResult');
+  res.style.display='block';
+  res.innerHTML=`
+    📅 <b>${days}</b> 天<br>
+    🗓 <b>${weeks}</b> 周 <b>${rem}</b> 天<br>
+    📆 约 <b>${yrs}</b> 年<br>
+    ⏱ <b>${(ms/3600000).toFixed(1)}</b> 小时 / <b>${(ms/60000).toFixed(0)}</b> 分钟
+  `;
+}
+
+/* ── Date Add/Sub ── */
+function addDate(sign){
+  const base=document.getElementById('addBase').value;
+  const num=+document.getElementById('addNum').value;
+  const unit=document.getElementById('addUnit').value;
+  if(!base||isNaN(num)){showToast('请填写基准日期和数量');return}
+  const d=new Date(base+'T00:00:00');
+  const delta=sign*num;
+  if(unit==='d') d.setDate(d.getDate()+delta);
+  else if(unit==='w') d.setDate(d.getDate()+delta*7);
+  else if(unit==='m') d.setMonth(d.getMonth()+delta);
+  else if(unit==='y') d.setFullYear(d.getFullYear()+delta);
+  const res=document.getElementById('addResult');
+  res.style.display='block';
+  res.textContent='结果：'+d.toLocaleDateString('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit'})+' ('+d.toDateString()+')';
+}
+function calcAdd(){addDate(1)}
+function calcSub(){addDate(-1)}
+
+/* ── Timezones ── */
+const TZ_LIST=[
+  {label:'本地时间',tz:Intl.DateTimeFormat().resolvedOptions().timeZone},
+  {label:'UTC',tz:'UTC'},
+  {label:'北京 / 上海',tz:'Asia/Shanghai'},
+  {label:'东京',tz:'Asia/Tokyo'},
+  {label:'首尔',tz:'Asia/Seoul'},
+  {label:'新加坡',tz:'Asia/Singapore'},
+  {label:'迪拜',tz:'Asia/Dubai'},
+  {label:'莫斯科',tz:'Europe/Moscow'},
+  {label:'巴黎',tz:'Europe/Paris'},
+  {label:'伦敦',tz:'Europe/London'},
+  {label:'纽约',tz:'America/New_York'},
+  {label:'洛杉矶',tz:'America/Los_Angeles'},
+  {label:'芝加哥',tz:'America/Chicago'},
+  {label:'圣保罗',tz:'America/Sao_Paulo'},
+  {label:'悉尼',tz:'Australia/Sydney'},
+];
+
+function renderTz(){
+  const base=document.getElementById('tzBase').value;
+  const ref=base?new Date(base):new Date();
+  const grid=document.getElementById('tzGrid');
+  grid.innerHTML='';
+  TZ_LIST.forEach(({label,tz})=>{
+    let timeStr,offsetStr;
+    try{
+      timeStr=ref.toLocaleString('zh-CN',{timeZone:tz,hour12:false,
+        year:'numeric',month:'2-digit',day:'2-digit',
+        hour:'2-digit',minute:'2-digit',second:'2-digit'});
+      const fmt=new Intl.DateTimeFormat('en',{timeZone:tz,timeZoneName:'short'});
+      const parts=fmt.formatToParts(ref);
+      offsetStr=parts.find(p=>p.type==='timeZoneName')?.value||tz;
+    }catch{timeStr='—';offsetStr=''}
+    const card=document.createElement('div');card.className='tz-card';
+    card.innerHTML=`<div class="tz-name">${label}</div>
+      <div class="tz-time">${timeStr}</div>
+      <div class="tz-offset">${offsetStr} · ${tz}</div>`;
+    grid.appendChild(card);
+  });
+}
+
+// init
+dtNow();
+const todayStr=new Date().toISOString().slice(0,10);
+document.getElementById('diffA').value=todayStr;
+document.getElementById('diffB').value=todayStr;
+document.getElementById('addBase').value=todayStr;
+</script>
+</body>
+</html>

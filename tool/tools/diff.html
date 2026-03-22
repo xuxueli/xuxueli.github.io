@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>文本差异对比 — Dev Tools</title>
+<style>
+  :root{--bg:#ffffff;--surface:#f5f7fa;--border:#e5e9ec;--accent:#f59e0b;--text:#1f2937;--muted:#6b7280;--radius:10px}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column}
+  nav{display:flex;align-items:center;gap:12px;padding:14px 24px;background:#fff;border-bottom:1px solid var(--border)}
+  nav a{color:var(--muted);text-decoration:none;font-size:.88rem}nav a:hover{color:var(--text)}
+  nav .sep{color:var(--border)} nav .cur{color:var(--text);font-weight:600}
+  h1{padding:28px 24px 0;font-size:1.4rem;font-weight:800}h1 span{color:var(--accent)}
+
+  .workspace{flex:1;padding:20px 24px 40px;display:flex;flex-direction:column;gap:16px}
+
+  .options{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .toggle{display:flex;align-items:center;gap:6px;font-size:.85rem;color:var(--muted);cursor:pointer;user-select:none}
+  .toggle input{accent-color:var(--accent);width:15px;height:15px}
+
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:680px){.row{grid-template-columns:1fr}}
+  .pane{display:flex;flex-direction:column;gap:6px}
+  .pane label{font-size:.78rem;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+  textarea{
+    min-height:220px;background:#fff;border:1px solid var(--border);border-radius:var(--radius);
+    color:var(--text);font-family:'Fira Code','Consolas',monospace;font-size:.86rem;
+    padding:12px;resize:vertical;outline:none;line-height:1.6;transition:border-color .2s;
+    box-shadow:0 1px 2px rgba(0,0,0,.02);
+  }
+  textarea:focus{border-color:var(--accent)}
+
+  .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+  .btn{padding:9px 20px;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;
+    border:1px solid var(--border);background:#fff;color:var(--text);transition:.15s}
+  .btn:hover{background:#f5f7fa;border-color:var(--accent)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#000}
+  .btn.primary:hover{opacity:.88}
+  .btn.danger{color:#ef4444;border-color:#ef444455}
+  .btn.danger:hover{background:#fef2f2}
+
+  /* Diff output */
+  #diffOut{
+    background:#fff;border:1px solid var(--border);border-radius:var(--radius);
+    padding:16px;font-family:'Fira Code','Consolas',monospace;font-size:.83rem;
+    line-height:1.7;overflow-x:auto;white-space:pre-wrap;word-break:break-all;
+    display:none;min-height:120px;
+  }
+  .diff-add{background:#ecfdf5;color:#059669;display:block}
+  .diff-del{background:#fef2f2;color:#dc2626;display:block}
+  .diff-eq {color:var(--muted);display:block}
+  .diff-hdr{color:var(--accent);font-weight:700;display:block;margin-top:4px}
+
+  /* Stats bar */
+  #stats{display:none;gap:20px;flex-wrap:wrap;margin-top:0}
+  .stat{background:#f5f7fa;border:1px solid var(--border);border-radius:8px;
+    padding:8px 16px;font-size:.82rem}
+  .stat b{color:var(--text)}
+  .stat.add b{color:#059669}
+  .stat.del b{color:#dc2626}
+
+  #toast{position:fixed;bottom:28px;right:28px;background:#fff;border:1px solid var(--border);
+    border-radius:8px;padding:10px 18px;font-size:.85rem;opacity:0;transform:translateY(8px);transition:.25s;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+  #toast.show{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html">🏠 工具箱</a>
+  <span class="sep">›</span>
+  <span class="cur">🔍 文本差异对比</span>
+</nav>
+
+<h1><span>≠</span> 文本差异对比</h1>
+
+<div class="workspace">
+
+  <div class="options">
+    <label class="toggle"><input type="checkbox" id="optJson"> 自动格式化 JSON</label>
+    <label class="toggle"><input type="checkbox" id="optIgnoreWs"> 忽略空白差异</label>
+    <label class="toggle"><input type="checkbox" id="optIgnoreCase"> 忽略大小写</label>
+  </div>
+
+  <div class="row">
+    <div class="pane">
+      <label>原始文本 A</label>
+      <textarea id="textA" placeholder="粘贴原始内容…"></textarea>
+    </div>
+    <div class="pane">
+      <label>修改文本 B</label>
+      <textarea id="textB" placeholder="粘贴修改后的内容…"></textarea>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn primary" onclick="runDiff()">▶ 对比</button>
+    <button class="btn" onclick="loadSample()">示例</button>
+    <button class="btn danger" onclick="doClear()">清空</button>
+  </div>
+
+  <div id="stats" style="display:none;gap:12px;flex-wrap:wrap">
+    <div class="stat"><b id="sTotal">0</b> 行差异</div>
+    <div class="stat add"><b id="sAdd">0</b> 行新增</div>
+    <div class="stat del"><b id="sDel">0</b> 行删除</div>
+    <div class="stat"><b id="sEq">0</b> 行相同</div>
+  </div>
+
+  <div id="diffOut"></div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ── LCS-based line diff ── */
+function lcs(a,b){
+  const m=a.length,n=b.length;
+  const dp=Array.from({length:m+1},()=>new Int32Array(n+1));
+  for(let i=1;i<=m;i++) for(let j=1;j<=n;j++)
+    dp[i][j]=a[i-1]===b[j-1]?dp[i-1][j-1]+1:Math.max(dp[i-1][j],dp[i][j-1]);
+  const ops=[];
+  let i=m,j=n;
+  while(i>0||j>0){
+    if(i>0&&j>0&&a[i-1]===b[j-1]){ops.push({type:'eq',val:a[i-1]});i--;j--;}
+    else if(j>0&&(i===0||dp[i][j-1]>=dp[i-1][j])){ops.push({type:'add',val:b[j-1]});j--;}
+    else{ops.push({type:'del',val:a[i-1]});i--;}
+  }
+  return ops.reverse();
+}
+
+function normalize(s){
+  let v=s;
+  if(document.getElementById('optIgnoreWs').checked) v=v.replace(/\s+/g,' ').trim();
+  if(document.getElementById('optIgnoreCase').checked) v=v.toLowerCase();
+  return v;
+}
+
+function tryFormatJson(s){
+  try{return JSON.stringify(JSON.parse(s),null,2)}catch{return s}
+}
+
+function runDiff(){
+  let a=document.getElementById('textA').value;
+  let b=document.getElementById('textB').value;
+  if(document.getElementById('optJson').checked){a=tryFormatJson(a);b=tryFormatJson(b);}
+  const aLines=a.split('\n').map(normalize);
+  const bLines=b.split('\n').map(normalize);
+  const aOrig=a.split('\n');
+  const bOrig=b.split('\n');
+
+  const ops=lcs(aLines,bLines);
+  // re-map ops to original lines
+  let ai=0,bi=0;
+  const result=[];
+  ops.forEach(op=>{
+    if(op.type==='eq'){result.push({type:'eq',val:aOrig[ai]});ai++;bi++;}
+    else if(op.type==='del'){result.push({type:'del',val:aOrig[ai]});ai++;}
+    else{result.push({type:'add',val:bOrig[bi]});bi++;}
+  });
+
+  let addC=0,delC=0,eqC=0;
+  const out=document.getElementById('diffOut');
+  out.style.display='block';
+  out.innerHTML='';
+
+  // group consecutive changes for readability
+  let i=0;
+  while(i<result.length){
+    const op=result[i];
+    if(op.type==='eq'){
+      // show up to 3 context lines
+      const span=document.createElement('span');
+      span.className='diff-eq';
+      span.textContent='  '+op.val;
+      out.appendChild(span);
+      eqC++;i++;
+    } else {
+      const span=document.createElement('span');
+      span.className=op.type==='add'?'diff-add':'diff-del';
+      span.textContent=(op.type==='add'?'+ ':' - ')+op.val;
+      out.appendChild(span);
+      if(op.type==='add')addC++;else delC++;
+      i++;
+    }
+  }
+
+  if(addC===0&&delC===0){
+    out.innerHTML='<span style="color:#059669;font-weight:700">✅ 两段文本完全相同</span>';
+  }
+
+  document.getElementById('sAdd').textContent=addC;
+  document.getElementById('sDel').textContent=delC;
+  document.getElementById('sEq').textContent=eqC;
+  document.getElementById('sTotal').textContent=addC+delC;
+  document.getElementById('stats').style.display='flex';
+}
+
+function doClear(){
+  document.getElementById('textA').value='';
+  document.getElementById('textB').value='';
+  document.getElementById('diffOut').style.display='none';
+  document.getElementById('stats').style.display='none';
+}
+
+function loadSample(){
+  document.getElementById('textA').value=`function hello(name) {
+  console.log("Hello, " + name);
+  return name;
+}
+
+const x = 42;
+const msg = "old message";`;
+
+  document.getElementById('textB').value=`function hello(name, greeting = "Hello") {
+  console.log(greeting + ", " + name + "!");
+  return name.trim();
+}
+
+const x = 42;
+const msg = "new message";
+const extra = true;`;
+  runDiff();
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+</script>
+</body>
+</html>
