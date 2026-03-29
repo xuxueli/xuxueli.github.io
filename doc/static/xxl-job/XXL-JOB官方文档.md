@@ -929,6 +929,9 @@ xxl.job.i18n=zh_CN
 xxl.job.triggerpool.fast.max=300
 xxl.job.triggerpool.slow.max=200
 
+### 调度触发后，批量更新任务批次数量【必填】
+xxl.job.schedule.batchsize=100
+
 ### 调度中心日志表数据保存天数 [必填]：过期日志自动清理；限制大于等于7时生效，否则, 如-1，关闭自动清理功能；
 xxl.job.logretentiondays=30
 ```
@@ -1288,8 +1291,8 @@ public void demoJobHandler() throws Exception {
 }
 ```
 
-- 依赖1：参考 [Ollama本地化部署大模型](https://www.xuxueli.com/blog/?blog=ai/ollama-deepseek) ，执行器示例部署“qwen2.5:1.5b”模型，也可自定选择其他模型版本。
-- 依赖2：参考 [使用DeepSeek与Dify搭建AI助手](https://www.xuxueli.com/blog/?blog=ai/dify-deepseek)，执行器示例新建Dify DifyWork应用，并在开始节点添加“input”参数，可结合实际情况调整。
+- 依赖1：参考 [Ollama本地化部署大模型](https://www.xuxueli.com/blog/?blog=./notebook/13-AI/%E4%BD%BF%E7%94%A8Ollama%E6%9C%AC%E5%9C%B0%E5%8C%96%E9%83%A8%E7%BD%B2DeepSeek.md) ，执行器示例部署“qwen2.5:1.5b”模型，也可自定选择其他模型版本。
+- 依赖2：参考 [使用DeepSeek与Dify搭建AI助手](https://www.xuxueli.com/blog/?blog=./notebook/13-AI/%E4%BD%BF%E7%94%A8DeepSeek%E4%B8%8EDify%E6%90%AD%E5%BB%BAAI%E5%8A%A9%E6%89%8B.md)，执行器示例新建Dify DifyWork应用，并在开始节点添加“input”参数，可结合实际情况调整。
 - 依赖3：启动示例 “AI执行器” 相关配置文件说明如下：
 
 ```
@@ -1841,8 +1844,10 @@ cat .env
 - 第四步：启动 XXL-JOB
 ```
 // 启动 
-docker compose down
 docker compose up -d
+
+// 停止
+docker compose down
 ```
 
 ### 5.25 优雅停机
@@ -2783,8 +2788,15 @@ public void execute() {
 - 10、【优化】统一项目依赖管理结构，依赖版本统一到父级pom提升可维护性；
 
 ### 7.44 版本 v3.4.0 Release Notes[ING]
-- 1、【TODO】调度触发性能优化：调度触发后任务分批批量更新，提升调度性能；
-- 2、【TODO】执行器内嵌容器调整：由Netty调整为Tomcat，简化项目依赖；
+- 1、【新增】调度性能提升：任务触发后分批批量更新，高频调度场景可百倍降低SQL操作合并执行，提升调度性能；
+  （任务触发后批量更新配置“xxl.job.schedule.batchsize”）
+- 2、【调整】固定频率调度策略调整，修复小概率下触发时间偏差问题；
+- 3、【调整】Docker基础镜像调整为eclipse-temurin；
+- 4、【优化】父POM依赖配置优化，移除容易配置；合并PR-3926；
+- 5、【升级】升级多项maven依赖至较新版本；
+- 6、【优化】调度日志优化：支持执行器维度查看调度日志；新增调度日志索引，提升查询效率；
+  （数据库新增索引脚本：``` create index I_jobgroup on xxl_job_log (job_group); ``` ）
+- 7、【TODO】调度中心OpenAPI完善，提供任务管理能力；封装Agent Skill并推送ClawHub；
 
 
 ### TODO LIST
@@ -2823,11 +2835,10 @@ public void execute() {
     - 调度日志：全局配置：废弃； 新增“调度日志策略”：任务维度自定义，保留3天、7天、1个月、3个月、一年、永久；
     - 执行日志：新增“执行RollingLog开关”：任务维度自定义，支持：RollingLog、普通日志（slf4j输出）、关闭（不输出）；
 - 21、AccessToken：废弃全局配置；支持在线管理，动态生成、动态启停；
-- 22、任务执行后分批批量更新，提升调度性能；
-- 23、任务管理OpenAPI;
-- 24、调度中心启动参数线上配置：告警发送邮箱、Token，支持线上配置生效，修改不需重启机器；
-- 25、执行器内嵌server切换tomcat，精简依赖；
-- 26、日志策略新增：
+- 22、任务管理OpenAPI;
+- 23、调度中心启动参数线上配置：告警发送邮箱、Token，支持线上配置生效，修改不需重启机器；
+- 24、执行器内嵌server切换tomcat，精简依赖；
+- 25、日志策略新增：
     - 调度日志策略：任务级设置，最少保留1天。
     - 执行日志策略：可选 RollingLog、slf4jLog；
     - 清理逻辑，性能重构。
