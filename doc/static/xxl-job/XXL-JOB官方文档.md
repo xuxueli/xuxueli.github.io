@@ -1271,14 +1271,16 @@ public void demoJobHandler() throws Exception {
 - 执行器代码：xxl-job-executor-sample-springboot-ai
 
 **执行器内置任务列表：**
+
 - a、ollamaJobHandler： OllamaChat任务，支持自定义prompt、input等输入信息。示例任务入参如下：
 ```
 {
     "input": "{输入信息，必填信息}",
     "prompt": "{模型prompt，可选信息}",
-    "model": "{模型实现，如qwen3:0.6b，可选信息}"
+    "model": "{模型实现，如qwen3.5:2b，可选信息}"
 }
 ```
+
 - b、difyWorkflowJobHandler：DifyWorkflow 任务，支持自定义inputs、user、baseUrl、apiKey 等输入信息，示例参数如下；
 ```
 {
@@ -1288,6 +1290,14 @@ public void demoJobHandler() throws Exception {
     "user": "xxl-job",                  // 用户标识，选填
     "baseUrl": "http://localhost/v1",   // Dify应用的 访问API 地址，需要从 Dify 系统获取；
     "apiKey": "xxx"                     // Dify应用的 API-Key，需要从 Dify 系统获取；
+}
+```
+
+- c、openClawJobHandler： OpenClaw任务，支持自定义prompt、input等输入信息。示例任务入参如下：
+```
+{
+    "input": "{输入信息，必填信息}",
+    "prompt": "{模型prompt，可选信息}"
 }
 ```
 
@@ -2787,16 +2797,51 @@ public void execute() {
 - 9、【升级】升级多项maven依赖至较新版本，如 spring、netty、xxl-sso、xxl-tool 等；
 - 10、【优化】统一项目依赖管理结构，依赖版本统一到父级pom提升可维护性；
 
-### 7.44 版本 v3.4.0 Release Notes[ING]
-- 1、【新增】调度性能提升：任务触发后分批批量更新，高频调度场景可百倍降低SQL操作合并执行，提升调度性能；
-  （任务触发后批量更新配置“xxl.job.schedule.batchsize”）
-- 2、【调整】固定频率调度策略调整，修复小概率下触发时间偏差问题；
-- 3、【调整】Docker基础镜像调整为eclipse-temurin；
-- 4、【优化】父POM依赖配置优化，移除容易配置；合并PR-3926；
-- 5、【升级】升级多项maven依赖至较新版本；
-- 6、【优化】调度日志优化：支持执行器维度查看调度日志；新增调度日志索引，提升查询效率；
-  （数据库新增索引脚本：``` create index I_jobgroup on xxl_job_log (job_group); ``` ）
-- 7、【TODO】调度中心OpenAPI完善，提供任务管理能力；封装Agent Skill并推送ClawHub；
+### 7.44 版本 v3.4.0 Release Notes[2026-04-05]
+- 1、【新增】AI执行器集成OpenClaw: 新增“openClawJobHandler”内置AI任务，与OpenClaw集成打通，支持快速开发AI类任务；
+- 2、【增强】任务调度后分批合并更新：高频调度场景可百倍降低SQL操作合并执行，提升调度性能；
+  （任务调度后批量合并更新配置“xxl.job.schedule.batchsize”）
+- 3、【优化】调度日志支持执行器维度查看，提升体验；新增调度日志索引，提升查询性能；
+- 4、【优化】一致性哈希路由算法优化，重构哈希环逻辑提升代码简洁性；
+- 5、【优化】Cron解析工具优化，解决day-of-month使用L时会跳过非31天的月份问题；
+- 6、【优化】执行器注册表主键调整为long数据类型，防止大规模执行器集群注册数据溢出；
+- 7、【优化】任务参数长度调整，最长支持2048字符；
+- 8、【优化】执行器名称长度调整，最长支持64字符；
+- 9、【修复】固定间隔模式调度策略调整，修复小概率下触发时间偏差问题；
+- 10、【调整】Docker基础镜像调整为eclipse-temurin；
+- 11、【优化】父POM依赖配置优化，移除容易配置；合并PR-3926；
+- 12、【优化】调度组件触发判断优化，合并PR-2502；
+- 13、【优化】调度日志调整，完善日志参数信息，合并PR-2761；
+- 14、【重构】代码重构优化：I18N国际化、属性加载、报表SQL等逻辑重构，合并PR-2888、PR-3006、PR-3027、PR-3198、PR-3285；
+- 15、【重构】告警组件初始化重构，提升代码可维护性，合并PR-2903；
+- 16、【升级】升级多项maven依赖至较新版本；
+
+**备注：**     
+数据库升级脚本：
+``` 
+-- 任务日志表：添加索引
+create index I_jobgroup on xxl_job_log (job_group);
+
+-- 执行器表：修改字段长度
+alter table xxl_job_group
+    modify title varchar(64) not null comment '执行器名称';
+
+-- 执行器注册表：修改自增ID类型
+alter table xxl_job_registry
+    modify id bigint(20)   NOT NULL AUTO_INCREMENT;
+    
+-- 任务表：修改字段长度
+alter table xxl_job_info
+    modify executor_param text null comment '任务参数';
+    
+-- 日志表：修改字段长度
+alter table xxl_job_log
+    modify executor_param text null comment '任务参数';
+```
+
+### 7.45 版本 v3.4.1 Release Notes[ING]
+- 1、【TODO】调度中心OpenAPI完善，提供任务管理能力；封装Agent Skill并推送ClawHub；
+- 2、【TODO】AccessToken升级：执行器维度隔离，支持线上化配置；升级双端OpenApi，适配AccessToken升级；
 
 
 ### TODO LIST
