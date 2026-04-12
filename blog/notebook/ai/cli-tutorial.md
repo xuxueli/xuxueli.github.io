@@ -1,4 +1,4 @@
-<h2 style="color:#4db6ac !important" >CLI开发指南：使用Python Click构建命令行工具</h2>
+<h2 style="color:#4db6ac !important" >CLI开发指南：使用Python与Node构建命令行工具</h2>
 > 【原创】2016/06/15
 
 [TOCM]
@@ -7,9 +7,11 @@
 
 ## 一、CLI 说明
 
-在现代软件开发中，命令行界面（CLI）仍然是许多开发者和系统管理员不可或缺的工具。Python 提供了强大的 `click` 库，用于快速构建功能强大、易于使用的命令行应用程序。本指南将带你从零开始，使用 `click` 构建一个结构清晰、功能完整的 CLI 工具。
+在现代软件开发中，命令行界面（CLI）仍然是许多开发者和系统管理员不可或缺的工具。
 
-## 二、Click 介绍
+## 二、Python Click 介绍
+
+Python 提供了强大的 `click` 库，用于快速构建功能强大、易于使用的命令行应用程序。本指南将带你从零开始，使用 `click` 构建一个结构清晰、功能完整的 CLI 工具。
 
 Click 是一个 Python 包，用于以可组合的方式创建漂亮的命令行界面。它具有高度可配置性，并支持命令嵌套、参数处理、选项解析等功能。Click 的设计哲学是"命令行界面应该像函数一样简单"，因此它非常适合构建结构化的 CLI 应用。
 
@@ -179,7 +181,7 @@ Click 是一个强大而灵活的 Python 库，能够帮助你快速构建功能
 - [中文文档](https://click-docs-zh-cn.readthedocs.io/zh/latest/)
 - [GitHub](https://github.com/pallets/click)
 
-## 三、Calculator CLI 示例
+## 三、Calculator CLI 示例（Python实现）
 
 一个简单而强大的命令行计算器 CLI 工具，支持基本的算术运算。
 
@@ -807,3 +809,375 @@ echo "========================================="
 
 ```
 
+## 四、Calculator CLI 示例（Node实现）
+
+一个简单而强大的命令行计算器 CLI 工具，支持基本的算术运算。
+
+### 4.1、项目结构
+
+```
+cli2/
+├── src/                        # 源代码目录
+│   ├── calculator.js          # 计算器核心模块
+│   └── cli.js                 # CLI 命令行入口
+├── tests/                      # 测试目录
+│   └── calculator.test.js     # 单元测试文件
+├── package.json               # 项目配置（已更新路径）
+├── install.sh                 # 安装脚本
+├── uninstall.sh               # 卸载脚本
+└── .gitignore                 # Git 忽略配置（新增）
+```
+
+核心文件说明：
+- 模块化目录结构 - 源代码放在 src/ 目录下，与 Python 版本保持一致
+- 测试目录 - 新增 tests/ 目录，包含完整的单元测试
+- Git 配置 - 添加 .gitignore 文件，忽略 node_modules 等不必要文件
+- 路径更新 - package.json 中的路径已更新为 src/cli.js
+
+### 4.2、使用指南
+
+CLI 安装、卸载、使用方式、命令示例等，参考 “章节三”。
+
+### 4.3、核心代码
+
+- cli2/src/calculator.js ：计算器核心模块
+
+```
+/**
+ * 计算器核心模块，提供基本算术运算功能
+ */
+
+class Calculator {
+    /**
+     * 两个数相加
+     * @param {number} a - 第一个数
+     * @param {number} b - 第二个数
+     * @returns {number} a 和 b 的和
+     */
+    static add(a, b) {
+        return a + b;
+    }
+
+    /**
+     * 从第一个数减去第二个数
+     * @param {number} a - 第一个数
+     * @param {number} b - 第二个数
+     * @returns {number} a 和 b 的差
+     */
+    static subtract(a, b) {
+        return a - b;
+    }
+
+    /**
+     * 两个数相乘
+     * @param {number} a - 第一个数
+     * @param {number} b - 第二个数
+     * @returns {number} a 和 b 的积
+     */
+    static multiply(a, b) {
+        return a * b;
+    }
+
+    /**
+     * 第一个数除以第二个数
+     * @param {number} a - 被除数
+     * @param {number} b - 除数
+     * @returns {number} a 除以 b 的商
+     * @throws {Error} 当除数为零时抛出
+     */
+    static divide(a, b) {
+        if (b === 0) {
+            throw new Error("除数不能为零");
+        }
+        return a / b;
+    }
+}
+
+module.exports = Calculator;
+```
+
+- cli2/src/cli.js ：CLI 命令行入口
+
+```
+#!/usr/bin/env node
+
+/**
+ * 计算器应用程序的命令行入口
+ */
+
+const { Command } = require('commander');
+const Calculator = require('./calculator');
+const packageJson = require('../package.json');
+
+const program = new Command();
+
+program
+    .name('calc')
+    .description('计算器命令行工具 - 一个简单的命令行计算器')
+    .version(packageJson.version);
+
+program
+    .command('add <a> <b>')
+    .description('两个数相加：A + B')
+    .action((a, b) => {
+        const numA = parseFloat(a);
+        const numB = parseFloat(b);
+        const result = Calculator.add(numA, numB);
+        console.log(`结果: ${numA} + ${numB} = ${result}`);
+    });
+
+program
+    .command('subtract <a> <b>')
+    .description('从 A 减去 B：A - B')
+    .action((a, b) => {
+        const numA = parseFloat(a);
+        const numB = parseFloat(b);
+        const result = Calculator.subtract(numA, numB);
+        console.log(`结果: ${numA} - ${numB} = ${result}`);
+    });
+
+program
+    .command('multiply <a> <b>')
+    .description('两个数相乘：A × B')
+    .action((a, b) => {
+        const numA = parseFloat(a);
+        const numB = parseFloat(b);
+        const result = Calculator.multiply(numA, numB);
+        console.log(`结果: ${numA} × ${numB} = ${result}`);
+    });
+
+program
+    .command('divide <a> <b>')
+    .description('A 除以 B：A ÷ B')
+    .action((a, b) => {
+        const numA = parseFloat(a);
+        const numB = parseFloat(b);
+        try {
+            const result = Calculator.divide(numA, numB);
+            console.log(`结果: ${numA} ÷ ${numB} = ${result}`);
+        } catch (error) {
+            console.error(`错误: ${error.message}`);
+            process.exit(1);
+        }
+    });
+
+program.parse(process.argv);
+```
+
+- cli2/tests/calculator.test.js ：单元测试文件
+
+```
+/**
+ * 计算器模块的单元测试
+ */
+
+const Calculator = require('../src/calculator');
+
+// 简单的测试函数
+function assert(condition, message) {
+    if (!condition) {
+        throw new Error(message || '断言失败');
+    }
+}
+
+function testAdd() {
+    console.log('测试: 加法');
+    assert(Calculator.add(2, 3) === 5, '2 + 3 应该等于 5');
+    assert(Calculator.add(-1, 1) === 0, '-1 + 1 应该等于 0');
+    assert(Calculator.add(0, 0) === 0, '0 + 0 应该等于 0');
+    console.log('✓ 加法测试通过\n');
+}
+
+function testSubtract() {
+    console.log('测试: 减法');
+    assert(Calculator.subtract(5, 3) === 2, '5 - 3 应该等于 2');
+    assert(Calculator.subtract(1, 1) === 0, '1 - 1 应该等于 0');
+    assert(Calculator.subtract(0, 5) === -5, '0 - 5 应该等于 -5');
+    console.log('✓ 减法测试通过\n');
+}
+
+function testMultiply() {
+    console.log('测试: 乘法');
+    assert(Calculator.multiply(2, 3) === 6, '2 × 3 应该等于 6');
+    assert(Calculator.multiply(-2, 3) === -6, '-2 × 3 应该等于 -6');
+    assert(Calculator.multiply(0, 5) === 0, '0 × 5 应该等于 0');
+    console.log('✓ 乘法测试通过\n');
+}
+
+function testDivide() {
+    console.log('测试: 除法');
+    assert(Calculator.divide(6, 3) === 2, '6 ÷ 3 应该等于 2');
+    assert(Calculator.divide(5, 2) === 2.5, '5 ÷ 2 应该等于 2.5');
+    assert(Calculator.divide(0, 5) === 0, '0 ÷ 5 应该等于 0');
+    
+    // 测试除以零
+    try {
+        Calculator.divide(5, 0);
+        throw new Error('应该抛出错误');
+    } catch (error) {
+        assert(error.message === '除数不能为零', '除以零应该抛出错误');
+    }
+    console.log('✓ 除法测试通过\n');
+}
+
+// 运行所有测试
+try {
+    console.log('=========================================');
+    console.log('运行计算器测试');
+    console.log('=========================================\n');
+    
+    testAdd();
+    testSubtract();
+    testMultiply();
+    testDivide();
+    
+    console.log('=========================================');
+    console.log('所有测试通过！✓');
+    console.log('=========================================');
+} catch (error) {
+    console.error('测试失败:', error.message);
+    process.exit(1);
+}
+```
+
+- cli2/package.json ：项目配置
+
+```
+{
+  "name": "calculator-cli",
+  "version": "1.0.0",
+  "description": "一个简单的命令行计算器",
+  "main": "src/calculator.js",
+  "bin": {
+    "calc": "./src/cli.js"
+  },
+  "scripts": {
+    "start": "node src/cli.js",
+    "test": "node tests/calculator.test.js"
+  },
+  "keywords": [
+    "calculator",
+    "cli",
+    "command-line"
+  ],
+  "author": "开发者",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^11.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
+```
+
+- cli2/install.sh ：安装脚本
+
+```
+#!/bin/bash
+
+# 计算器命令行工具安装脚本
+# 此脚本用于安装计算器 CLI 应用程序
+
+set -e  # 遇到错误时退出
+
+echo "========================================="
+echo "计算器命令行工具 - 安装程序"
+echo "========================================="
+echo ""
+
+# 检查是否安装了 Node.js
+if ! command -v node &> /dev/null; then
+    echo "错误: 未安装 Node.js。"
+    echo "请先安装 Node.js 14.0 或更高版本。"
+    exit 1
+fi
+
+echo "✓ 找到 Node.js: $(node --version)"
+
+# 检查是否安装了 npm
+if ! command -v npm &> /dev/null; then
+    echo "错误: 未安装 npm。"
+    echo "请先安装 npm。"
+    exit 1
+fi
+
+echo "✓ 找到 npm: $(npm --version)"
+echo ""
+
+# 获取脚本所在目录
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# 进入项目目录
+cd "$SCRIPT_DIR"
+
+echo "正在安装依赖..."
+npm install
+echo "✓ 依赖安装完成"
+echo ""
+
+echo "正在全局链接计算器命令行工具..."
+npm link
+echo "✓ 计算器命令行工具安装成功"
+echo ""
+
+# 验证安装
+if command -v calc &> /dev/null; then
+    echo "========================================="
+    echo "安装完成！"
+    echo "========================================="
+    echo ""
+    echo "现在可以使用计算器了："
+    echo "  calc --help          # 显示帮助信息"
+    echo "  calc add 5 3         # 两个数相加"
+    echo "  calc subtract 10 4   # 两个数相减"
+    echo "  calc multiply 6 7    # 两个数相乘"
+    echo "  calc divide 20 4     # 两个数相除"
+    echo ""
+    echo "版本: $(calc --version)"
+else
+    echo "警告: 安装完成，但在 PATH 中找不到 'calc' 命令。"
+    echo "您可能需要将 npm 的全局 bin 目录添加到 PATH 环境变量中。"
+fi
+```
+
+- cli2/uninstall.sh ：卸载脚本
+
+```
+#!/bin/bash
+
+# 计算器命令行工具卸载脚本
+# 此脚本用于卸载计算器 CLI 应用程序
+
+set -e  # 遇到错误时退出
+
+echo "========================================="
+echo "计算器命令行工具 - 卸载程序"
+echo "========================================="
+echo ""
+
+# 获取脚本所在目录
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# 进入项目目录
+cd "$SCRIPT_DIR"
+
+echo "正在卸载计算器命令行工具..."
+npm unlink -g calculator-cli 2>/dev/null || true
+echo "✓ 全局链接已移除"
+echo ""
+
+echo "正在删除 node_modules..."
+rm -rf node_modules
+echo "✓ node_modules 已删除"
+echo ""
+
+echo "正在删除 package-lock.json..."
+rm -f package-lock.json
+echo "✓ package-lock.json 已删除"
+echo ""
+
+echo "========================================="
+echo "卸载完成！"
+echo "========================================="
+```
