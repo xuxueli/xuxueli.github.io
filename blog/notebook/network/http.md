@@ -1,5 +1,5 @@
 <h2 style="color:#4db6ac !important" >HTTP</h2>
-> 本文内容来源于书籍和网络。
+> 本文内容来源于书籍和网络。2014-06-01
 
 [TOCM]
 
