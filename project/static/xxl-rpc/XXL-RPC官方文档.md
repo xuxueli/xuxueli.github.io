@@ -89,7 +89,7 @@ docker pull xuxueli/xxl-conf-admin
 docker run -p 8080:8080 -v /tmp:/data/applogs --name xxl-conf-admin  -d xuxueli/xxl-conf-admin
 ```
 
-![输入图片说明](https://www.xuxueli.com/doc/static/xxl-conf/images/img_12.png "在这里输入图片标题")
+![输入图片说明](https://www.xuxueli.com/project/static/xxl-conf/images/img_12.png "在这里输入图片标题")
 
 #### 2.1.2、配置 “maven依赖”
 
@@ -234,7 +234,7 @@ timeout | 服务超时时间，单位毫秒；选填；
 上述代码底层将发送一次 XXL-RPC 请求，client 项目调用了 server 项目中的服务，夸JVM进行了一次RPC通讯。
 
 访问该Controller地址即可进行测试：http://127.0.0.1:8081/?name=jack
-![输入图片说明](https://www.xuxueli.com/doc/static/xxl-rpc/images/img_02.png "在这里输入图片标题")
+![输入图片说明](https://www.xuxueli.com/project/static/xxl-rpc/images/img_02.png "在这里输入图片标题")
 
 ### 2.2、frameless 无框架版本
 
@@ -287,7 +287,7 @@ System.out.println(userDTO);
 ## 三、系统设计
 
 ### 3.1 系统架构图
-![输入图片说明](https://www.xuxueli.com/doc/static/xxl-rpc/images/img_DNq6.png "在这里输入图片标题")
+![输入图片说明](https://www.xuxueli.com/project/static/xxl-rpc/images/img_DNq6.png "在这里输入图片标题")
 
 ### 3.2 核心思想
 提供稳定高性能的RPC远程服务调用功能，简化分布式服务通讯开发。
@@ -304,7 +304,7 @@ System.out.println(userDTO);
 | Boot | 服务启动引导模块，提供SpringBoot、无框架等技术栈快速集成能力，如SpringBoot可全程配置化接入、注解式开发等。           |
 
 ### 3.4 RPC工作原理
-![输入图片说明](https://www.xuxueli.com/doc/static/xxl-rpc/images/img_XEVY.png "在这里输入图片标题")
+![输入图片说明](https://www.xuxueli.com/project/static/xxl-rpc/images/img_XEVY.png "在这里输入图片标题")
 
 概念：
 - 1、serialization：序列化，通讯数据需要经过序列化，从而支持在网络中传输；
@@ -322,12 +322,12 @@ RPC通讯，可大致划分为四个步骤，可参考上图进行理解：（XX
 - 4、consumer接收响应：consumer接受到相应数据后，首先会deserialization获取原始数据，然后根据stub生成调用返回结果，返回给请求调用处。结束。
 
 ### 3.5 TCP通讯模型
-![输入图片说明](https://www.xuxueli.com/doc/static/xxl-rpc/images/img_b1IX.png "在这里输入图片标题")
+![输入图片说明](https://www.xuxueli.com/project/static/xxl-rpc/images/img_b1IX.png "在这里输入图片标题")
 
 consumer和provider采用NIO方式通讯，其中TCP通讯方案可选NETTY具体选型，高吞吐高并发；但是仅仅依靠单个TCP连接进行数据传输存在瓶颈和风险，因此XXL-RPC在consumer端自身实现了内部连接池，consumer和provider之间为了一个连接池，当尽情底层通讯是会取出一条TCP连接进行通讯（可参考上图）。
 
 ### 3.6 sync-over-async 原理
-![输入图片说明](https://www.xuxueli.com/doc/static/xxl-rpc/images/img_pMtS.png "在这里输入图片标题")
+![输入图片说明](https://www.xuxueli.com/project/static/xxl-rpc/images/img_pMtS.png "在这里输入图片标题")
 
 XXL-RPC采用NIO进行底层通讯，但是NIO是异步通讯模型，调用线程并不会阻塞获取调用结果，因此，XXL-RPC实现了在异步通讯模型上的同步调用，即“sync-over-async”，实现原理如下，可参考上图进行理解：
 
