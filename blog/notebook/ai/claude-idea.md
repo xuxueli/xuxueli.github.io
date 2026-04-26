@@ -88,7 +88,7 @@ Agent Team 是 Claude Code 的实验性功能，需设置 CLAUDE_CODE_EXPERIMENT
 }
 ```
 
-### 3.3、Claude Code 命令行使用
+### 3.3、Claude Code 命令使用
 
 打开终端，并进入项目所在的目录
 ```
@@ -105,7 +105,7 @@ Quick safety check: Is This a project you created or one yuo trust? ...
 
 输入 ```/status``` 确认模型、Base URL、API Key 是否配置正确。然后，可以在 Claude Code 中对话使用。
 
-### Claude Code 常见命令
+### 3.4、Claude Code 常见命令
 
 | 命令                | 说明                                      | 示例                        |
 |:------------------|:----------------------------------------|:--------------------------|
@@ -173,3 +173,4 @@ Claude Code IDE 插件支持在 JetBrains 系列 IDE中使用。
 - Claude官网地址：https://claude.com/product/claude-code
 - Claude官方文档：https://code.claude.com/docs/zh-CN/overview
 - Aliyun CodingPlan文档：https://help.aliyun.com/zh/model-studio/claude-code-coding-plan 
+- Claude Code教程：https://www.runoob.com/claude-code/claude-code-tutorial.html 

@@ -243,7 +243,7 @@ npx skills add 0731coderlee-sudo/wechat-publisher -g -y
 另外，也可以通过 OpenClaw 对话安装：
 >输入 "安装 https://clawhub.ai/0731coderlee-sudo/wechat-publisher 技能"
 
-![img](https://www.xuxueli.com/blog/static/images/default/2026/img_20260315_04.png)
+![img](https://www.xuxueli.com/blog/static/images/2026/img_20260315_04.png)
 
 ### 4.3 配置 AppID 和 AppSecret
 
@@ -271,7 +271,7 @@ export WECHAT_APP_ID=你的AppID
 export WECHAT_APP_SECRET=你的AppSecret
 ```
 
-![img](https://www.xuxueli.com/blog/static/images/default/2026/img_20260315_05.png)
+![img](https://www.xuxueli.com/blog/static/images/2026/img_20260315_05.png)
 
 ### 4.4 配置 IP 白名单
 
@@ -290,7 +290,7 @@ curl ifconfig.me
 3. 找到「IP白名单」
 4. 添加刚才查询到的 IP 地址
 
-![img](https://www.xuxueli.com/blog/static/images/default/2026/img_20260315_06.png)
+![img](https://www.xuxueli.com/blog/static/images/2026/img_20260315_06.png)
 
 ---
 
@@ -319,7 +319,7 @@ curl ifconfig.me
 ”
 ```
 
-![img](https://www.xuxueli.com/blog/static/images/default/2026/img_20260315_07.png)
+![img](https://www.xuxueli.com/blog/static/images/2026/img_20260315_07.png)
 
 AI 会自动：
 - 查询网络获取 OpenClaw、ClawHub 等相关知识；
@@ -335,7 +335,7 @@ AI 会自动：
 ✅ 发布成功，Media ID: UqLqFEOAfH9W00FdAVE-xxx
 ```
 
-![img](https://www.xuxueli.com/blog/static/images/default/2026/img_20260315_08.png)
+![img](https://www.xuxueli.com/blog/static/images/2026/img_20260315_08.png)
 
 ### 步骤 3：手动发布
 
@@ -344,7 +344,7 @@ AI 会自动：
 2. 进入「内容管理」→「草稿箱」
 3. 预览并操作发布
 
-![img](https://www.xuxueli.com/blog/static/images/default/2026/img_20260315_09.png)
+![img](https://www.xuxueli.com/blog/static/images/2026/img_20260315_09.png)
 
 ### 完整操作流程总结
 
