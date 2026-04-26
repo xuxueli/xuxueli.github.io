@@ -61,14 +61,14 @@ openclaw onboard
 #### 4、OpenClaw体验
 在上述配置完成后，需重启OpenClaw服务使配置生效，OpenClaw将加载新配置的百炼模型，然后可进行后续的验证操作。
 
-![img](https://www.xuxueli.com/blog/static/images/2026/img_20260315_01.png)
+![img](https://www.xuxueli.com/blog/static/images/default/2026/img_20260315_01.png)
 
 ### 5、QQ Channel集成
 
 #### 5.1、QQ机器人创建
 前往[腾讯QQ开放平台](https://q.qq.com/)官网，在龙虾专用入口单击创建机器人，生成新的QQ机器人，并获取机器人的AppID和AppSecret。
 
-![img](https://www.xuxueli.com/blog/static/images/2026/img_20260315_02.png)
+![img](https://www.xuxueli.com/blog/static/images/default/2026/img_20260315_02.png)
 
 #### 5.2、OpenClaw配置集成：
 
@@ -84,7 +84,7 @@ openclaw channels add --channel qqbot --token "你的AppID:你的AppSecret"
 ### 6、OpenClaw体验
 依次完成OpenClaw安装、模型配置、QQ Channel配置后，可对话体验OpenClaw：**养虾成功，更多Skills及价值研究挖掘中**～
 
-![img](https://www.xuxueli.com/blog/static/images/2026/img_20260315_03.png)
+![img](https://www.xuxueli.com/blog/static/images/default/2026/img_20260315_03.png)
 
 
 资料：

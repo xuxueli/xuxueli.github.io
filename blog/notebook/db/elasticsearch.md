@@ -91,7 +91,7 @@ Elasticsearch 拥有一个丰富的生态系统，包括：
 ### 1、索引与文档
 在了解 Elasticsearch 的过程中，索引（Index）和文档（Document）是两个最基本也是最重要的概念。理解它们的作用和关系，有助于更好地掌握如何使用 Elasticsearch 存储、搜索和分析数据。
 
-<div align="center"> <img src="https://www.xuxueli.com/blog/static/images/img_282.png" width="350px"> </div><br>
+<div align="center"> <img src="https://www.xuxueli.com/blog/static/images/default/img_282.png" width="350px"> </div><br>
 
 （Type，注：Elasticsearch 7.0以后弃用了Type）
 
@@ -163,7 +163,7 @@ Elasticsearch 的分布式架构由几个关键组件组成：集群、节点、
 - **集群状态**：集群的状态可以是健康的（Green）、部分健康的（Yellow）或者不健康的（Red），根据集群中分片的分布和副本的状态来判断。
 - **动态扩展**：集群可以根据需要动态扩展，可以增加节点、增加分片副本或者增加集群中的分片数量。
 
-<div align="center"> <img src="https://www.xuxueli.com/blog/static/images/img_283.png" width="350px"> </div><br>
+<div align="center"> <img src="https://www.xuxueli.com/blog/static/images/default/img_283.png" width="350px"> </div><br>
 
 #### 2.2、节点
 Elasticsearch中的节点（Node）指的是Elasticsearch实例的运行实例，即一个独立的Elasticsearch服务进程。每个节点都是一个独立的工作单元，负责存储数据、参与数据处理（如索引、搜索、聚合等）以及参与集群的协调工作。

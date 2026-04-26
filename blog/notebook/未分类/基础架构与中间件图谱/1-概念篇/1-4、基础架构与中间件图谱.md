@@ -20,7 +20,7 @@
 - 其他关键字：封装、平台、门槛、监控、扩展性、高可用；
 
 ### 基础架构与中间件，图谱
-![image](https://www.xuxueli.com/blog/static/images/img_infrastructure_middleware_map.png )
+![image](https://www.xuxueli.com/blog/static/images/default/img_infrastructure_middleware_map.png )
 
 > 深入阐述
 

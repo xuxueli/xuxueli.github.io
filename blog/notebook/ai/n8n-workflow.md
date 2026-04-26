@@ -64,7 +64,7 @@ docker run -d -p 5678:5678 --name n8n \
 
 接下来，点击“Save”。您应该会看到一条绿色消息，显示“Connection tested successfully”。
 
-![img](https://www.xuxueli.com/blog/static/images/img_285.png)
+![img](https://www.xuxueli.com/blog/static/images/default/img_285.png)
 
 **步骤 3：工作流运行**  
 点击底部的“Chat”，并输入“Hello”，此时工作量将会自动运行，输出响应结果。

@@ -22,7 +22,7 @@
 打开微信，前往 “我的 -> 设置 -> 插件”，选中打开“微信ClawBot”插件。
 当前插件仅新版可见，如果看不到需要升级微信版本、并重新进入上述插件。
 
-![img](https://www.xuxueli.com/blog/static/images/2026/img_20260322_01.jpg)
+![img](https://www.xuxueli.com/blog/static/images/default/2026/img_20260322_01.jpg)
 
 **第二步：ClawBot插件安装** 
 
@@ -33,11 +33,11 @@ npx -y @tencent-weixin/openclaw-weixin-cli@latest install
 ```
 
 上述命令执行完成后，将会显示「连接二维码」，可以通过微信扫码连接：
-![img](https://www.xuxueli.com/blog/static/images/2026/img_20260322_02.jpg)
+![img](https://www.xuxueli.com/blog/static/images/default/2026/img_20260322_02.jpg)
 
 **第三步：微信扫码连接ClawBot**
 
 使用微信扫描上一步中二维码，可以启用ClawBot插件并绑定OpenClaw。
 然后，支持微信聊天的方式快速与“龙虾”高效互动。更多内容可自行探索～
 
-![img](https://www.xuxueli.com/blog/static/images/2026/img_20260322_03.jpg)
+![img](https://www.xuxueli.com/blog/static/images/default/2026/img_20260322_03.jpg)

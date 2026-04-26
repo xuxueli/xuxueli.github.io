@@ -52,7 +52,7 @@ ComfyUI/
 
 至此，ComfyUI与Z-Image已安装配置完成。启动 ComfyUI 可看到如下界面：
 
-![img](https://www.xuxueli.com/blog/static/images/img_286.jpg)
+![img](https://www.xuxueli.com/blog/static/images/default/img_286.jpg)
 
 
 ### 4、生成第一张图片
@@ -64,14 +64,14 @@ ComfyUI/
 进入 ComfyUI 后点击"创建空白工作流"，可参考下图进行工作流配置。这里我们采用提示词：
 > 极具氛围感的暗调人像，一位优雅的中国美女在黑暗的房间里。一束强光通过遮光板，在她的脸上投射出一个清晰的闪电形状的光影，正好照亮一只眼睛。高对比度，明暗交界清晰，神秘感，莱卡相机色调。
 
-![img](https://www.xuxueli.com/blog/static/images/img_287.jpg)
+![img](https://www.xuxueli.com/blog/static/images/default/img_287.jpg)
 
 **步骤 2：运行工作流**
 
 生图工作流配置完成后，点击"运行"按钮后等待一段时间，即可看到生成的图片。针对步骤1中提示词，所生成图片如下：
 > 本文案例使用 macmini m4 运行，生成图片速度略慢（如有提速建议可反馈联系），可借助本案例体验生图效果。
 
-![img](https://www.xuxueli.com/blog/static/images/img_288.png)
+![img](https://www.xuxueli.com/blog/static/images/default/img_288.png)
 
 
 ### 参考资料

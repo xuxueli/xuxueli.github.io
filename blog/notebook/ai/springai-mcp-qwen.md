@@ -10,7 +10,7 @@
 MCP（Model Context Protocol，模型上下文协议）是一种开放协议，旨在实现 大型语言模型（LLM） 应用与外部数据源、工具和服务之间的无缝集成，类似于网络中的 HTTP 协议或邮件中的 SMTP 协议。
 MCP 协议通过标准化模型与外部资源的交互方式，提升 LLM 应用的功能性、灵活性和可扩展性。
 
-![img](https://www.xuxueli.com/blog/static/images/img_278.png)
+![img](https://www.xuxueli.com/blog/static/images/default/img_278.png)
 
 **MCP核心概念**
 
@@ -29,7 +29,7 @@ MCP 的架构由四个关键部分组成：
 
 MCP 就像 USB-C 一样，可以让不同设备能够通过相同的接口连接在一起。
 
-![img](https://www.xuxueli.com/blog/static/images/img_279.jpeg)
+![img](https://www.xuxueli.com/blog/static/images/default/img_279.jpeg)
 
 **MCP 工作原理**
 
@@ -85,7 +85,7 @@ Spring AI MCP，它是模型上下文协议（Model Context Protocol，MCP）的
 **总体结构**
 
 MCP 的核心是客户端-服务器（CS）架构，一个应用可以连接多个服务器。
-![img](https://www.xuxueli.com/blog/static/images/img_277.png)
+![img](https://www.xuxueli.com/blog/static/images/default/img_277.png)
 
 Spring AI MCP 采用模块化架构，包含以下组件：
 - Spring AI 应用： 使用 Spring AI 框架构建希望通过 MCP 访问数据的生成式 AI 应用。
@@ -227,13 +227,13 @@ Available Tools = ListToolsResult[tools=[Tool[name=getWeatherByCity, description
 
 第二步：配置 Qwen2.5 模型
 
-![img](https://www.xuxueli.com/blog/static/images/img_279.png)
+![img](https://www.xuxueli.com/blog/static/images/default/img_279.png)
 
 第三步：开启MCP并使用
 
-![img](https://www.xuxueli.com/blog/static/images/img_280.png)
+![img](https://www.xuxueli.com/blog/static/images/default/img_280.png)
 
-![img](https://www.xuxueli.com/blog/static/images/img_281.png)
+![img](https://www.xuxueli.com/blog/static/images/default/img_281.png)
 
 
 ### 5、总结思考
