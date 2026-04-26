@@ -49,6 +49,7 @@ export NVM_DIR="$HOME/.nvm"
 通过nvm命令安装指定版本的nodejs + npm。
 https://nodejs.cn/en/download 
 
+安装：
 ```
 # 下载并安装 Node.js（可能需要重新启动终端）
 nvm install 24   
@@ -56,6 +57,34 @@ nvm install 24
 node -v 
 # 验证环境中是否存在正确的 npm 版本 
 npm -v 
+```
+
+升级：
+```
+# 查看远程的可用版本（LTS 长期支持）
+nvm ls-remote --lts
+
+# 安装指定版本的 Node.js 和 npm
+nvm install {新版本}
+
+# 查看当前使用版本
+nvm current
+
+# 切换到指定版本
+nvm use {新版本}
+
+# 验证安装的版本
+node -v
+npm -v
+```
+
+卸载版本：
+```
+# 查看已安装版本
+nvm list
+nvm ls
+# 删除指定版本
+nvm uninstall {旧版本}
 ```
 
 更换npm的源
