@@ -3,149 +3,151 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>微信公众号文章编辑器</title>
+<title>公众号文章编辑器 — Dev Tools</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif; background: #f0f2f5; color: #333; }
+  :root{--bg:#ffffff;--surface:#f5f7fa;--border:#e5e9ec;--accent:#07c160;--text:#1f2937;--muted:#6b7280;--radius:10px}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
 
-  .app-header {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-    color: #fff; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
-  }
-  .app-header h1 { font-size: 20px; font-weight: 600; letter-spacing: 1px; }
-  .app-header .badge { background: #07c160; color: #fff; font-size: 11px; padding: 2px 8px; border-radius: 10px; margin-left: 10px; }
+  /* ── Nav ── */
+  nav{display:flex;align-items:center;gap:12px;padding:14px 24px;background:#fff;border-bottom:1px solid var(--border)}
+  nav a{color:var(--muted);text-decoration:none;font-size:.88rem;transition:color .2s}nav a:hover{color:var(--text)}
+  nav .sep{color:var(--border)}
+  nav .cur{color:var(--text);font-weight:600}
 
-  .main-layout { display: flex; height: calc(100vh - 58px); }
+  .main-layout{display:flex;flex:1;overflow:hidden}
 
-  .sidebar { width: 220px; background: #fff; border-right: 1px solid #e8e8e8; overflow-y: auto; flex-shrink: 0; }
-  .sidebar-title { padding: 14px 16px 10px; font-size: 12px; color: #888; font-weight: 600; letter-spacing: 1px; border-bottom: 1px solid #f0f0f0; }
-  .template-item { padding: 12px 16px; cursor: pointer; border-bottom: 1px solid #f5f5f5; transition: all 0.2s; display: flex; align-items: center; gap: 10px; }
-  .template-item:hover { background: #f7f9ff; }
-  .template-item.active { background: #e6f4ff; border-right: 3px solid #1677ff; }
-  .template-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-  .template-info { flex: 1; min-width: 0; }
-  .template-name { font-size: 13px; font-weight: 500; color: #333; }
-  .template-desc { font-size: 11px; color: #999; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* ── Sidebar ── */
+  .sidebar{width:220px;background:#fff;border-right:1px solid var(--border);overflow-y:auto;flex-shrink:0}
+  .sidebar-title{padding:14px 16px 10px;font-size:12px;color:var(--muted);font-weight:600;letter-spacing:1px;border-bottom:1px solid var(--border)}
+  .template-item{padding:12px 16px;cursor:pointer;border-bottom:1px solid #f5f5f5;transition:all .2s;display:flex;align-items:center;gap:10px}
+  .template-item:hover{background:#f7f9ff}
+  .template-item.active{background:#e6f7ee;border-right:3px solid var(--accent)}
+  .template-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  .template-info{flex:1;min-width:0}
+  .template-name{font-size:13px;font-weight:500;color:var(--text)}
+  .template-desc{font-size:11px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-  .editor-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: #f8f9fa; }
-  .editor-toolbar { background: #fff; padding: 10px 16px; border-bottom: 1px solid #e8e8e8; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-  .editor-toolbar label { font-size: 12px; color: #666; margin-right: 4px; }
-  .editor-toolbar input[type="text"] { border: 1px solid #d9d9d9; border-radius: 6px; padding: 5px 10px; font-size: 13px; color: #333; transition: border-color 0.2s; width: 180px; }
-  .editor-toolbar input[type="text"]:focus { outline: none; border-color: #1677ff; }
-  .toolbar-sep { width: 1px; height: 24px; background: #e8e8e8; margin: 0 4px; }
+  /* ── Editor ── */
+  .editor-panel{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--surface)}
 
-  .editor-area { flex: 1; overflow-y: auto; padding: 24px; display: flex; justify-content: center; }
-  .editor-wrapper { width: 680px; max-width: 100%; background: #fff; min-height: 600px; border-radius: 8px; box-shadow: 0 2px 16px rgba(0,0,0,0.08); overflow: hidden; }
-  .article-editable { min-height: 600px; outline: none; padding: 0; font-size: 15px; line-height: 1.8; color: #333; }
-  .article-editable:focus { outline: none; }
+  .editor-area{flex:1;overflow-y:auto;padding:24px;display:flex;justify-content:center}
+  .editor-wrapper{width:680px;max-width:100%;background:#fff;min-height:600px;border-radius:8px;box-shadow:0 2px 16px rgba(0,0,0,.06);overflow:hidden}
+  .article-editable{min-height:600px;outline:none;padding:0;font-size:15px;line-height:1.8;color:var(--text)}
+  .article-editable:focus{outline:none}
 
-  .right-panel { width: 260px; background: #fff; border-left: 1px solid #e8e8e8; display: flex; flex-direction: column; flex-shrink: 0; }
-  .right-tabs { display: flex; border-bottom: 1px solid #e8e8e8; }
-  .right-tab { flex: 1; padding: 12px 8px; text-align: center; font-size: 13px; cursor: pointer; color: #666; border-bottom: 2px solid transparent; transition: all 0.2s; }
-  .right-tab.active { color: #1677ff; border-bottom-color: #1677ff; font-weight: 500; }
-  .right-content { flex: 1; overflow-y: auto; padding: 16px; }
+  /* ── Right Panel ── */
+  .right-panel{width:280px;background:#fff;border-left:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+  .right-tabs{display:flex;border-bottom:1px solid var(--border)}
+  .right-tab{flex:1;padding:12px 8px;text-align:center;font-size:13px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all .2s}
+  .right-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500}
+  .right-content{flex:1;overflow-y:auto;padding:16px}
 
-  .field-group { margin-bottom: 16px; }
-  .field-label { font-size: 12px; color: #666; margin-bottom: 6px; font-weight: 500; }
-  .field-input { width: 100%; border: 1px solid #d9d9d9; border-radius: 6px; padding: 8px 10px; font-size: 13px; color: #333; resize: vertical; font-family: inherit; transition: border-color 0.2s; }
-  .field-input:focus { outline: none; border-color: #1677ff; }
+  .field-group{margin-bottom:14px}
+  .field-label{font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:500;display:flex;align-items:center;justify-content:space-between}
+  .field-input{width:100%;border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:13px;color:var(--text);resize:vertical;font-family:inherit;transition:border-color .2s;background:#fff}
+  .field-input:focus{outline:none;border-color:var(--accent)}
 
-  .color-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
-  .color-swatch { width: 28px; height: 28px; border-radius: 6px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; flex-shrink: 0; }
-  .color-swatch:hover, .color-swatch.active { border-color: #1677ff; transform: scale(1.1); }
+  .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;padding:6px 0;border-bottom:1px dashed var(--border)}
+  .section-header-title{font-size:12px;font-weight:600;color:var(--text)}
+  .section-header-actions{display:flex;gap:4px}
 
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 16px; border-radius: 8px; font-size: 14px; cursor: pointer; border: none; transition: all 0.2s; font-weight: 500; }
-  .btn-primary { background: #1677ff; color: #fff; }
-  .btn-primary:hover { background: #0958d9; }
-  .btn-success { background: #07c160; color: #fff; }
-  .btn-success:hover { background: #06ad56; }
-  .btn-outline { background: #fff; color: #666; border: 1px solid #d9d9d9; }
-  .btn-outline:hover { border-color: #1677ff; color: #1677ff; }
-  .btn-block { width: 100%; margin-bottom: 10px; }
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:14px;cursor:pointer;border:none;transition:all .2s;font-weight:500}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-primary:hover{opacity:.88}
+  .btn-outline{background:#fff;color:var(--muted);border:1px solid var(--border)}
+  .btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+  .btn-block{width:100%;margin-bottom:10px}
+  .btn-sm{padding:4px 10px;font-size:12px;border-radius:6px}
+  .btn-danger{background:#fff;color:#ef4444;border:1px solid #fca5a5}
+  .btn-danger:hover{background:#fef2f2}
+  .btn-add{background:var(--surface);color:var(--accent);border:1px dashed var(--accent);width:100%;padding:10px;font-size:13px}
+  .btn-add:hover{background:#e6f7ee}
 
-  .copy-area { padding: 16px; border-top: 1px solid #e8e8e8; }
-  .copy-hint { font-size: 11px; color: #999; margin-top: 6px; text-align: center; }
+  .copy-area{padding:16px;border-top:1px solid var(--border)}
+  .copy-hint{font-size:11px;color:var(--muted);margin-top:6px;text-align:center}
 
-  .toast { position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(-20px); background: rgba(0,0,0,0.75); color: #fff; padding: 10px 24px; border-radius: 24px; font-size: 14px; opacity: 0; pointer-events: none; transition: all 0.3s; z-index: 9999; }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:rgba(0,0,0,.75);color:#fff;padding:10px 24px;border-radius:24px;font-size:14px;opacity:0;pointer-events:none;transition:all .3s;z-index:9999}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-  ::-webkit-scrollbar { width: 5px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: #d0d0d0; border-radius: 10px; }
-  ::-webkit-scrollbar-thumb:hover { background: #aaa; }
+  ::-webkit-scrollbar{width:5px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:#d0d0d0;border-radius:10px}
+  ::-webkit-scrollbar-thumb:hover{background:#aaa}
 
-  @media (max-width: 900px) { .sidebar { width: 180px; } .right-panel { display: none; } .editor-wrapper { width: 100%; } }
-  @media (max-width: 600px) { .sidebar { display: none; } .editor-area { padding: 12px; } }
+  @media(max-width:900px){.sidebar{width:180px}.right-panel{display:none}.editor-wrapper{width:100%}}
+  @media(max-width:600px){.sidebar{display:none}.editor-area{padding:12px}}
 </style>
 </head>
 <body>
 
-<div class="app-header">
-  <div style="display:flex;align-items:center">
-    <h1>✍️ 公众号文章编辑器</h1>
-    <span class="badge">纯内联样式</span>
+<!-- ── 导航栏 ── -->
+<nav>
+  <a href="../index.html">🧰 工具箱</a>
+  <span class="sep">/</span>
+  <span class="cur">公众号文章编辑器</span>
+  <div style="margin-left:auto;display:flex;gap:8px">
+    <button class="btn btn-outline" onclick="resetContent()" style="padding:5px 12px;font-size:12px">🔄 重置</button>
+    <button class="btn btn-primary" onclick="copyArticle()" style="padding:5px 12px;font-size:12px;background:var(--accent)">📋 复制全文</button>
+    <button class="btn btn-outline" onclick="copyHTML()" style="padding:5px 12px;font-size:12px">💻 复制HTML</button>
   </div>
-  <div style="display:flex;gap:10px">
-    <button class="btn btn-outline" onclick="resetContent()" style="padding:6px 14px;font-size:13px;color:#fff;border-color:rgba(255,255,255,0.3)">🔄 重置</button>
-    <button class="btn btn-success" onclick="copyArticle()" style="padding:6px 14px;font-size:13px">📋 复制全文</button>
-  </div>
-</div>
+</nav>
 
+<!-- ── Main Layout ── -->
 <div class="main-layout">
+  <!-- 左侧模板 -->
   <div class="sidebar">
     <div class="sidebar-title">选择模板</div>
     <div id="templateList"></div>
   </div>
+
+  <!-- 中间编辑区 -->
   <div class="editor-panel">
-    <div class="editor-toolbar">
-      <label>标题：</label>
-      <input type="text" id="articleTitle" placeholder="输入文章标题..." oninput="updateTitle(this.value)">
-      <div class="toolbar-sep"></div>
-      <label>副标题：</label>
-      <input type="text" id="articleSub" placeholder="副标题/摘要..." style="width:160px" oninput="updateSub(this.value)">
-      <div class="toolbar-sep"></div>
-      <label>作者：</label>
-      <input type="text" id="articleAuthor" placeholder="作者名" style="width:90px" oninput="updateMeta()" value="原创作者">
-      <div class="toolbar-sep"></div>
-      <label>日期：</label>
-      <input type="text" id="articleDate" placeholder="日期" style="width:100px" oninput="updateMeta()">
-    </div>
     <div class="editor-area">
       <div class="editor-wrapper">
         <div id="articleContent" class="article-editable" contenteditable="true" spellcheck="false"></div>
       </div>
     </div>
   </div>
+
+  <!-- 右侧面板 -->
   <div class="right-panel">
     <div class="right-tabs">
       <div class="right-tab active" onclick="switchTab('edit')">✏️ 内容块</div>
       <div class="right-tab" onclick="switchTab('style')">🎨 样式</div>
     </div>
+
     <div class="right-content" id="tabEdit">
-      <div class="field-group"><div class="field-label">💡 标签栏文字</div><input type="text" class="field-input" id="coverTag" placeholder="如：深度好文 | 原创分享" oninput="updateTag(this.value)"></div>
-      <div class="field-group"><div class="field-label">📝 引言/摘要段落</div><textarea class="field-input" rows="3" id="coverDesc" placeholder="文章开头摘要..." oninput="updateDesc(this.value)"></textarea></div>
-      <div class="field-group"><div class="field-label">📌 第一节标题</div><input type="text" class="field-input" id="sec1Title" placeholder="第一小节标题" oninput="updateSections()"></div>
-      <div class="field-group"><div class="field-label">📄 第一节正文</div><textarea class="field-input" rows="4" id="sec1Body" placeholder="第一节正文内容..." oninput="updateSections()"></textarea></div>
-      <div class="field-group"><div class="field-label">📌 第二节标题</div><input type="text" class="field-input" id="sec2Title" placeholder="第二小节标题" oninput="updateSections()"></div>
-      <div class="field-group"><div class="field-label">📄 第二节正文</div><textarea class="field-input" rows="4" id="sec2Body" placeholder="第二节正文内容..." oninput="updateSections()"></textarea></div>
-      <div class="field-group"><div class="field-label">💬 金句/引用</div><textarea class="field-input" rows="2" id="quoteText" placeholder="一句让人印象深刻的话..." oninput="updateSections()"></textarea></div>
-      <div class="field-group"><div class="field-label">🔚 结尾语</div><input type="text" class="field-input" id="footerText" placeholder="感谢阅读，欢迎转发~" oninput="updateMeta()"></div>
+      <!-- 基本信息 -->
+      <div style="font-size:12px;color:var(--muted);font-weight:600;letter-spacing:1px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">📄 基本信息</div>
+      <div class="field-group"><div class="field-label">📝 文章标题</div><input type="text" class="field-input" id="articleTitle" placeholder="输入文章标题..." oninput="updateField('title',this.value)"></div>
+      <div class="field-group"><div class="field-label">✍️ 作者</div><input type="text" class="field-input" id="articleAuthor" placeholder="作者名" oninput="updateField('author',this.value)" value="原创作者"></div>
+      <div class="field-group"><div class="field-label">📅 日期</div><input type="text" class="field-input" id="articleDate" placeholder="日期" oninput="updateField('date',this.value)"></div>
+
+      <!-- 正文章节 -->
+      <div style="font-size:12px;color:var(--muted);font-weight:600;letter-spacing:1px;margin-bottom:10px;margin-top:6px;padding-bottom:6px;border-bottom:1px solid var(--border);">📚 正文章节</div>
+      <div class="field-group"><div class="field-label">📝 引言/摘要</div><textarea class="field-input" rows="3" id="coverDesc" placeholder="文章开头摘要..." oninput="updateField('desc',this.value)"></textarea></div>
+
+      <!-- 动态章节区域 -->
+      <div id="sectionsContainer"></div>
+
+      <button class="btn btn-add" onclick="addSection()">➕ 添加新章节</button>
+
+      <!-- 引用 & 结尾 -->
+      <div style="font-size:12px;color:var(--muted);font-weight:600;letter-spacing:1px;margin-bottom:10px;margin-top:14px;padding-bottom:6px;border-bottom:1px solid var(--border);">💬 引用与结尾</div>
+      <div class="field-group"><div class="field-label">💬 金句/引用</div><textarea class="field-input" rows="2" id="quoteText" placeholder="一句让人印象深刻的话..." oninput="updateField('quote',this.value)"></textarea></div>
+      <div class="field-group"><div class="field-label">🔚 结尾语</div><input type="text" class="field-input" id="footerText" placeholder="感谢阅读，欢迎转发~" oninput="updateField('footer',this.value)"></div>
     </div>
+
     <div class="right-content" id="tabStyle" style="display:none">
-      <div class="field-group"><div class="field-label">封面风格 / 快速选色</div><div class="color-row" id="colorSwatches"></div></div>
-      <div class="field-group" style="margin-top:16px"><div class="field-label">📱 预览模式</div>
+      <div class="field-group">
+        <div class="field-label">📱 预览模式</div>
         <div style="display:flex;gap:8px;margin-top:6px">
           <button class="btn btn-outline" style="flex:1;font-size:12px" onclick="setWidth(480)">手机</button>
           <button class="btn btn-outline" style="flex:1;font-size:12px" onclick="setWidth(600)">平板</button>
           <button class="btn btn-outline" style="flex:1;font-size:12px" onclick="setWidth(680)">桌面</button>
         </div>
       </div>
-    </div>
-    <div class="copy-area">
-      <button class="btn btn-success btn-block" onclick="copyArticle()">📋 复制全文到剪贴板</button>
-      <button class="btn btn-primary btn-block" onclick="copyHTML()">💻 复制 HTML 源码</button>
-      <div class="copy-hint">✅ 纯内联样式，粘贴到公众号即可使用</div>
     </div>
   </div>
 </div>
@@ -155,263 +157,268 @@
 <script>
 // ========== 模板配置 ==========
 const templates = [
-  { id: 'tpl-01', icon: '🏢', name: '极简商务', desc: '深色封面·专业感', color: '#2c5364' },
-  { id: 'tpl-02', icon: '🌟', name: '温暖橙调', desc: '活力橙黄·正能量', color: '#f7971e' },
-  { id: 'tpl-03', icon: '💻', name: '科技蓝', desc: '深蓝·数字感', color: '#0078ff' },
-  { id: 'tpl-04', icon: '✨', name: '优雅粉紫', desc: '渐变紫粉·时尚感', color: '#8b5cf6' },
-  { id: 'tpl-05', icon: '🌿', name: '自然绿意', desc: '森林绿·治愈系', color: '#71b280' },
-  { id: 'tpl-06', icon: '🔐', name: '暗黑极客', desc: 'Dark·程序员风', color: '#58a6ff' },
-  { id: 'tpl-07', icon: '📰', name: '杂志风', desc: '报刊排版·冲击感', color: '#e02020' },
-  { id: 'tpl-08', icon: '🎀', name: '小清新卡片', desc: '白卡片·轻盈感', color: '#1677ff' },
-  { id: 'tpl-09', icon: '🏮', name: '中国风', desc: '红色·传统美学', color: '#c0392b' },
-  { id: 'tpl-10', icon: '📚', name: '知识卡片', desc: '深灰·Newsletter', color: '#2d3748' },
+  { id:'tpl-01', icon:'🏢', name:'极简商务', desc:'深色封面·专业感', color:'#2c5364' },
+  { id:'tpl-02', icon:'🌟', name:'温暖橙调', desc:'活力橙黄·正能量', color:'#f7971e' },
+  { id:'tpl-03', icon:'💻', name:'科技蓝', desc:'深蓝·数字感', color:'#0078ff' },
+  { id:'tpl-04', icon:'✨', name:'优雅粉紫', desc:'渐变紫粉·时尚感', color:'#8b5cf6' },
+  { id:'tpl-05', icon:'🌿', name:'自然绿意', desc:'森林绿·治愈系', color:'#71b280' },
+  { id:'tpl-06', icon:'🔐', name:'暗黑极客', desc:'Dark·程序员风', color:'#58a6ff' },
+  { id:'tpl-07', icon:'📰', name:'杂志风', desc:'报刊排版·冲击感', color:'#e02020' },
+  { id:'tpl-08', icon:'🎀', name:'小清新卡片', desc:'白卡片·轻盈感', color:'#1677ff' },
+  { id:'tpl-09', icon:'🏮', name:'中国风', desc:'红色·传统美学', color:'#c0392b' },
+  { id:'tpl-10', icon:'📚', name:'知识卡片', desc:'深灰·Newsletter', color:'#2d3748' },
 ];
 
 let currentTpl = 'tpl-01';
+
+// ========== 文章数据（动态章节） ==========
 let articleData = {
   title: '写下你的文章标题',
-  sub: '副标题 · 简短有力的一句话',
   author: '原创作者',
-  date: new Date().toLocaleDateString('zh-CN', {year:'numeric',month:'long',day:'numeric'}),
-  tag: '原创好文',
+  date: new Date().toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric'}),
   desc: '在这里写下开篇摘要，吸引读者继续阅读。一两句话点明文章的核心价值和你想传达的主旨。',
-  sec1Title: '第一章：开篇',
-  sec1Body: '在这里填写第一节的正文内容。你可以讲述背景、引出问题，或者直接进入主题。建议每段保持在200字以内，便于手机阅读。',
-  sec2Title: '第二章：深入探讨',
-  sec2Body: '这里是第二节的内容。你可以展开论述、举例说明，或者引入数据和案例来支撑你的观点，让文章更有说服力。',
+  sections: [
+    { title: '第一章：开篇', body: '在这里填写第一节的正文内容。你可以讲述背景、引出问题，或者直接进入主题。建议每段保持在200字以内，便于手机阅读。' },
+    { title: '第二章：深入探讨', body: '这里是第二节的内容。你可以展开论述、举例说明，或者引入数据和案例来支撑你的观点，让文章更有说服力。' },
+  ],
   quote: '优秀的文章，不是写出来的，而是改出来的。',
   footer: '感谢阅读！如果觉得有帮助，欢迎点赞、转发支持 ❤️',
 };
 
-// ========== 内联样式模板构建器 ==========
-// 所有样式均以 inline style 输出，确保微信公众号编辑器兼容
-
+// ========== 通用 ==========
 const S = {
-  // 通用
-  bodyText: 'font-size:15px;color:#444;line-height:1.9;margin-bottom:16px;',
-  bodyText555: 'font-size:15px;color:#555;line-height:1.9;margin-bottom:14px;',
-  bodyText666: 'font-size:14px;color:#666;line-height:1.85;',
+  bodyText:'font-size:15px;color:#444;line-height:1.9;margin-bottom:16px;',
+  bodyText555:'font-size:15px;color:#555;line-height:1.9;margin-bottom:14px;',
+  bodyText666:'font-size:14px;color:#666;line-height:1.85;',
 };
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
-function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-function buildTemplate(id, d) {
+// ========== 每个模板生成一个章节 HTML ==========
+function buildSectionHtml(id, sec, idx, total, d) {
+  const num = String(idx+1).padStart(2,'0');
+  const isLast = idx === total - 1;
   const builders = {
 
-    // ===== T01 极简商务 =====
+    'tpl-01': () => `
+<h2 style="font-size:18px;font-weight:700;color:#0f2027;margin:28px 0 12px;padding-left:14px;border-left:4px solid #2c5364;">${esc(sec.title)}</h2>
+<p style="${S.bodyText}">${esc(sec.body)}</p>`,
+
+    'tpl-02': () => `
+<h2 style="font-size:17px;font-weight:700;color:#e67e00;margin:24px 0 10px;display:flex;align-items:center;gap:8px;">
+  <span style="display:inline-block;width:20px;height:20px;background:linear-gradient(135deg,#f7971e,#ffd200);border-radius:50%;flex-shrink:0;"></span>${esc(sec.title)}
+</h2>
+<p style="${S.bodyText555}">${esc(sec.body)}</p>`,
+
+    'tpl-03': () => `
+<h2 style="font-size:17px;font-weight:700;color:#050d21;margin:24px 0 12px;"><span style="color:#0078ff;">${num} /</span> ${esc(sec.title)}</h2>
+<p style="${S.bodyText555}">${esc(sec.body)}</p>`,
+
+    'tpl-04': () => `
+<h2 style="font-size:18px;font-weight:700;background:linear-gradient(90deg,#8b5cf6,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:24px 0 10px;">${esc(sec.title)}</h2>
+<p style="${S.bodyText555}">${esc(sec.body)}</p>`,
+
+    'tpl-05': () => `
+<h2 style="font-size:17px;font-weight:700;color:#134e5e;margin:24px 0 10px;display:flex;align-items:center;gap:10px;">${esc(sec.title)}<span style="flex:1;height:1px;background:linear-gradient(90deg,#71b280,transparent);"></span></h2>
+<p style="${S.bodyText555}">${esc(sec.body)}</p>`,
+
+    'tpl-06': () => `
+<h2 style="font-size:16px;font-weight:700;color:#58a6ff;margin:24px 0 12px;font-family:'SF Mono',Consolas,monospace;"><span style="color:#f0883e;">## </span>${esc(sec.title)}</h2>
+<p style="font-size:14px;color:#c9d1d9;line-height:1.9;margin-bottom:14px;">${esc(sec.body)}</p>`,
+
+    'tpl-07': () => `
+<h2 style="font-size:18px;font-weight:900;color:#111;margin:28px 0 10px;letter-spacing:-0.5px;text-transform:uppercase;">${esc(sec.title)}</h2>
+<p style="font-size:15px;color:#444;line-height:1.85;margin-bottom:14px;">${esc(sec.body)}</p>`,
+
+    'tpl-08': () => `
+<section style="background:#fff;border-radius:16px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,.05);margin-bottom:14px;">
+  <h2 style="font-size:16px;font-weight:700;color:#222;margin:0 0 10px;">📌 ${esc(sec.title)}</h2>
+  <p style="${S.bodyText666}">${esc(sec.body)}</p>
+</section>`,
+
+    'tpl-09': () => `
+<h2 style="font-size:18px;font-weight:700;color:#8b1a1a;margin:28px 0 12px;text-align:center;">◆ ${esc(sec.title)} ◆</h2>
+<p style="font-size:15px;color:#444;line-height:2;margin-bottom:16px;text-align:justify;">${esc(sec.body)}</p>`,
+
+    'tpl-10': () => `
+<section style="border:1px solid #e8e8e8;border-radius:12px;overflow:hidden;margin-bottom:16px;">
+  <section style="background:#2d3748;color:#fff;padding:12px 20px;font-size:14px;font-weight:700;display:flex;align-items:center;gap:10px;">
+    <section style="background:rgba(255,255,255,.2);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;">${idx+1}</section>${esc(sec.title)}
+  </section>
+  <section style="padding:16px 20px;"><p style="${S.bodyText555}">${esc(sec.body)}</p></section>
+</section>`,
+  };
+  return builders[id] ? builders[id]() : '';
+}
+
+// ========== 引用块 HTML ==========
+function buildQuoteHtml(id, d) {
+  const q = d.quote;
+  if (!q) return '';
+  const builders = {
+    'tpl-01': ()=>`<section style="background:#e8f4f8;border-left:4px solid #2c5364;padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0;color:#2c5364;font-size:14px;line-height:1.8;">"${esc(q)}"</section>`,
+    'tpl-02': ()=>`<section style="background:#fff9e6;border:1px solid #ffd200;border-radius:12px;padding:16px 20px;margin:16px 0;font-size:14px;color:#665500;line-height:1.8;">💡 ${esc(q)}</section>`,
+    'tpl-03': ()=>`<section style="background:#f6f8fa;border:1px solid #e1e4e8;border-radius:8px;padding:14px 18px;font-family:'SF Mono',Consolas,monospace;font-size:13px;color:#333;margin:16px 0;line-height:1.6;">// ${esc(q)}</section>`,
+    'tpl-04': ()=>`<section style="border-left:3px solid #8b5cf6;padding:12px 18px;background:#faf5ff;border-radius:0 12px 12px 0;font-size:14px;color:#6d28d9;margin:16px 0;line-height:1.8;">"${esc(q)}"</section>`,
+    'tpl-05': ()=>`<section style="background:#f0faf2;border:1px solid #71b280;border-radius:12px;padding:16px 20px;font-size:14px;color:#2d6a4f;margin:16px 0;line-height:1.8;">🌱 ${esc(q)}</section>`,
+    'tpl-06': ()=>`<section style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:16px;font-size:12px;color:#e6edf3;margin:16px 0;font-family:'SF Mono',Consolas,monospace;line-height:1.6;">/** ${esc(q)} */</section>`,
+    'tpl-07': ()=>`<section style="font-size:20px;font-weight:700;color:#e02020;border-top:3px solid #e02020;border-bottom:3px solid #e02020;padding:16px 0;margin:24px 0;line-height:1.4;">"${esc(q)}"</section>`,
+    'tpl-08': ()=>`<section style="background:#fff;border-radius:16px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,.05);margin-bottom:14px;border-left:3px solid #1677ff;"><p style="font-size:15px;color:#1677ff;font-weight:600;line-height:1.8;margin:0;">"${esc(q)}"</p></section>`,
+    'tpl-09': ()=>`<section style="border:1px solid #e9b7b7;border-radius:4px;padding:16px 20px;background:#fff9f9;color:#8b1a1a;font-size:14px;line-height:1.9;margin:16px 0;text-align:center;">「${esc(q)}」</section>`,
+    'tpl-10': ()=>`<section style="border:1px solid #e8e8e8;border-left:3px solid #4a5568;border-radius:12px;margin-bottom:16px;"><section style="padding:16px 20px;"><p style="font-size:15px;font-style:italic;color:#4a5568;line-height:1.8;margin:0;">"${esc(q)}"</p></section></section>`,
+  };
+  return builders[id] ? builders[id]() : '';
+}
+
+// ========== 整体模板构建 ==========
+function buildTemplate(id, d) {
+  const secs = d.sections || [];
+  const secsHtml = secs.map((s,i)=>buildSectionHtml(id, s, i, secs.length, d)).join('\n');
+  const quoteHtml = buildQuoteHtml(id, d);
+
+  const builders = {
     'tpl-01': () => `
 <section style="padding:32px 40px;font-family:'PingFang SC',sans-serif;">
   <section style="background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);padding:48px 40px;margin:-32px -40px 32px;color:#fff;">
-    <section style="display:inline-block;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);padding:4px 12px;border-radius:4px;font-size:12px;letter-spacing:2px;margin-bottom:16px;">${esc(d.tag)}</section>
     <h1 style="font-size:26px;font-weight:700;line-height:1.3;margin:0 0 12px;color:#fff;">${esc(d.title)}</h1>
-    <p style="font-size:14px;color:rgba(255,255,255,0.7);margin:0;">${esc(d.author)}  |  ${esc(d.date)}</p>
+    <p style="font-size:14px;color:rgba(255,255,255,.7);margin:0;">${esc(d.author)}  |  ${esc(d.date)}</p>
   </section>
   <p style="${S.bodyText}">${esc(d.desc)}</p>
-  <h2 style="font-size:18px;font-weight:700;color:#0f2027;margin:28px 0 12px;padding-left:14px;border-left:4px solid #2c5364;">${esc(d.sec1Title)}</h2>
-  <p style="${S.bodyText}">${esc(d.sec1Body)}</p>
-  <section style="background:#e8f4f8;border-left:4px solid #2c5364;padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0;color:#2c5364;font-size:14px;line-height:1.8;">"${esc(d.quote)}"</section>
-  <h2 style="font-size:18px;font-weight:700;color:#0f2027;margin:28px 0 12px;padding-left:14px;border-left:4px solid #2c5364;">${esc(d.sec2Title)}</h2>
-  <p style="${S.bodyText}">${esc(d.sec2Body)}</p>
+  ${secsHtml}
+  ${quoteHtml}
   <section style="margin-top:40px;padding-top:20px;border-top:1px solid #eee;display:flex;justify-content:space-between;align-items:center;color:#999;font-size:12px;">
     <span>${esc(d.author)}</span><span>${esc(d.footer)}</span>
   </section>
 </section>`,
 
-    // ===== T02 温暖橙调 =====
     'tpl-02': () => `
 <section style="font-family:'PingFang SC',sans-serif;">
   <section style="background:linear-gradient(160deg,#f7971e 0%,#ffd200 100%);padding:48px 36px 40px;">
-    <h1 style="font-size:26px;font-weight:800;color:#fff;line-height:1.3;margin:0;text-shadow:0 2px 8px rgba(0,0,0,0.15);">${esc(d.title)}</h1>
-    <p style="margin:14px 0 0;font-size:13px;color:rgba(255,255,255,0.85);">✍️ ${esc(d.author)}  📅 ${esc(d.date)}</p>
+    <h1 style="font-size:26px;font-weight:800;color:#fff;line-height:1.3;margin:0;text-shadow:0 2px 8px rgba(0,0,0,.15);">${esc(d.title)}</h1>
+    <p style="margin:14px 0 0;font-size:13px;color:rgba(255,255,255,.85);">✍️ ${esc(d.author)}  📅 ${esc(d.date)}</p>
   </section>
   <section style="padding:32px 36px;">
     <p style="${S.bodyText555}">${esc(d.desc)}</p>
-    <h2 style="font-size:17px;font-weight:700;color:#e67e00;margin:24px 0 10px;display:flex;align-items:center;gap:8px;">
-      <span style="display:inline-block;width:20px;height:20px;background:linear-gradient(135deg,#f7971e,#ffd200);border-radius:50%;flex-shrink:0;"></span>${esc(d.sec1Title)}
-    </h2>
-    <p style="${S.bodyText555}">${esc(d.sec1Body)}</p>
-    <section style="background:#fff9e6;border:1px solid #ffd200;border-radius:12px;padding:16px 20px;margin:16px 0;font-size:14px;color:#665500;line-height:1.8;">💡 ${esc(d.quote)}</section>
-    <h2 style="font-size:17px;font-weight:700;color:#e67e00;margin:24px 0 10px;display:flex;align-items:center;gap:8px;">
-      <span style="display:inline-block;width:20px;height:20px;background:linear-gradient(135deg,#f7971e,#ffd200);border-radius:50%;flex-shrink:0;"></span>${esc(d.sec2Title)}
-    </h2>
-    <p style="${S.bodyText555}">${esc(d.sec2Body)}</p>
+    ${secsHtml}
+    ${quoteHtml}
   </section>
   <section style="padding:20px 36px;border-top:1px solid #f5f5f5;font-size:12px;color:#bbb;text-align:center;">${esc(d.footer)} · ${esc(d.author)}</section>
 </section>`,
 
-    // ===== T03 科技蓝 =====
     'tpl-03': () => `
 <section style="font-family:'PingFang SC',sans-serif;background:#fff;">
   <section style="background:#050d21;padding:52px 36px 44px;position:relative;overflow:hidden;">
-    <p style="font-size:11px;letter-spacing:3px;color:#0078ff;text-transform:uppercase;margin:0 0 16px;font-weight:600;">${esc(d.tag)}</p>
     <h1 style="font-size:26px;font-weight:800;color:#fff;line-height:1.3;margin:0;">${esc(d.title)}</h1>
     <section style="width:48px;height:3px;background:#0078ff;margin:18px 0;"></section>
-    <p style="font-size:13px;color:rgba(255,255,255,0.5);margin:0;">${esc(d.sub)}</p>
-  </section>
-  <section style="padding:32px 36px;">
+    <section style="padding:32px 36px;">
     <p style="${S.bodyText555}">${esc(d.desc)}</p>
-    <h2 style="font-size:17px;font-weight:700;color:#050d21;margin:24px 0 12px;"><span style="color:#0078ff;">01 /</span> ${esc(d.sec1Title)}</h2>
-    <p style="${S.bodyText555}">${esc(d.sec1Body)}</p>
-    <section style="background:#f6f8fa;border:1px solid #e1e4e8;border-radius:8px;padding:14px 18px;font-family:'SF Mono',Consolas,monospace;font-size:13px;color:#333;margin:16px 0;line-height:1.6;">// ${esc(d.quote)}</section>
-    <h2 style="font-size:17px;font-weight:700;color:#050d21;margin:24px 0 12px;"><span style="color:#0078ff;">02 /</span> ${esc(d.sec2Title)}</h2>
-    <p style="${S.bodyText555}">${esc(d.sec2Body)}</p>
+    ${secsHtml}
+    ${quoteHtml}
   </section>
   <section style="padding:20px 36px;border-top:1px solid #f0f0f0;font-size:12px;color:#bbb;">${esc(d.author)}  ·  ${esc(d.date)}  ·  ${esc(d.footer)}</section>
 </section>`,
 
-    // ===== T04 优雅粉紫 =====
     'tpl-04': () => `
 <section style="font-family:'PingFang SC',sans-serif;">
   <section style="background:linear-gradient(135deg,#8b5cf6 0%,#ec4899 100%);padding:52px 36px 44px;">
-    <section style="display:inline-block;background:rgba(255,255,255,0.2);color:#fff;font-size:12px;padding:3px 12px;border-radius:20px;margin:0 0 16px;letter-spacing:1px;">${esc(d.tag)}</section>
     <h1 style="font-size:26px;font-weight:800;color:#fff;line-height:1.35;margin:0;">${esc(d.title)}</h1>
-    <p style="margin:14px 0 0;font-size:13px;color:rgba(255,255,255,0.75);">${esc(d.sub)}</p>
   </section>
   <section style="padding:32px 36px;">
     <p style="${S.bodyText555}">${esc(d.desc)}</p>
-    <h2 style="font-size:18px;font-weight:700;background:linear-gradient(90deg,#8b5cf6,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:24px 0 10px;">${esc(d.sec1Title)}</h2>
-    <p style="${S.bodyText555}">${esc(d.sec1Body)}</p>
-    <section style="border-left:3px solid #8b5cf6;padding:12px 18px;background:#faf5ff;border-radius:0 12px 12px 0;font-size:14px;color:#6d28d9;margin:16px 0;line-height:1.8;">"${esc(d.quote)}"</section>
-    <h2 style="font-size:18px;font-weight:700;background:linear-gradient(90deg,#8b5cf6,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:24px 0 10px;">${esc(d.sec2Title)}</h2>
-    <p style="${S.bodyText555}">${esc(d.sec2Body)}</p>
+    ${secsHtml}
+    ${quoteHtml}
   </section>
   <section style="padding:20px 36px;font-size:12px;color:#ccc;text-align:center;border-top:1px solid #f5f5f5;">${esc(d.footer)}</section>
 </section>`,
 
-    // ===== T05 自然绿意 =====
     'tpl-05': () => `
 <section style="font-family:'PingFang SC',sans-serif;">
   <section style="background:linear-gradient(160deg,#134e5e 0%,#71b280 100%);padding:52px 36px 44px;">
     <h1 style="font-size:26px;font-weight:800;color:#fff;line-height:1.3;margin:0;">${esc(d.title)}</h1>
-    <p style="margin:14px 0 0;font-size:13px;color:rgba(255,255,255,0.7);">🌿 ${esc(d.author)}  ·  ${esc(d.date)}</p>
+    <p style="margin:14px 0 0;font-size:13px;color:rgba(255,255,255,.7);">🌿 ${esc(d.author)}  ·  ${esc(d.date)}</p>
   </section>
   <section style="padding:32px 36px;">
     <p style="${S.bodyText555}">${esc(d.desc)}</p>
-    <h2 style="font-size:17px;font-weight:700;color:#134e5e;margin:24px 0 10px;display:flex;align-items:center;gap:10px;">${esc(d.sec1Title)}<span style="flex:1;height:1px;background:linear-gradient(90deg,#71b280,transparent);"></span></h2>
-    <p style="${S.bodyText555}">${esc(d.sec1Body)}</p>
-    <section style="background:#f0faf2;border:1px solid #71b280;border-radius:12px;padding:16px 20px;font-size:14px;color:#2d6a4f;margin:16px 0;line-height:1.8;">🌱 ${esc(d.quote)}</section>
-    <h2 style="font-size:17px;font-weight:700;color:#134e5e;margin:24px 0 10px;display:flex;align-items:center;gap:10px;">${esc(d.sec2Title)}<span style="flex:1;height:1px;background:linear-gradient(90deg,#71b280,transparent);"></span></h2>
-    <p style="${S.bodyText555}">${esc(d.sec2Body)}</p>
+    ${secsHtml}
+    ${quoteHtml}
   </section>
   <section style="padding:20px 36px;font-size:12px;color:#aaa;border-top:1px solid #f0f0f0;">${esc(d.footer)}  —  ${esc(d.author)}</section>
 </section>`,
 
-    // ===== T06 暗黑极客 =====
     'tpl-06': () => `
 <section style="font-family:'PingFang SC',sans-serif;background:#0d1117;color:#c9d1d9;">
   <section style="background:#161b22;border-bottom:1px solid #30363d;padding:48px 36px;">
     <p style="color:#58a6ff;font-size:12px;margin:0 0 12px;font-family:'SF Mono',Consolas,monospace;">$ cat article.md</p>
     <h1 style="font-size:24px;font-weight:700;color:#e6edf3;line-height:1.3;margin:0;">${esc(d.title)}</h1>
-    <p style="margin:12px 0 0;font-size:12px;color:#8b949e;font-family:'SF Mono',Consolas,monospace;"># ${esc(d.author)} | ${esc(d.date)} | ${esc(d.tag)}</p>
+    <p style="margin:12px 0 0;font-size:12px;color:#8b949e;font-family:'SF Mono',Consolas,monospace;"># ${esc(d.author)} | ${esc(d.date)}</p>
   </section>
   <section style="padding:32px 36px;">
     <p style="font-size:14px;color:#c9d1d9;line-height:1.9;margin-bottom:14px;">${esc(d.desc)}</p>
-    <h2 style="font-size:16px;font-weight:700;color:#58a6ff;margin:24px 0 12px;font-family:'SF Mono',Consolas,monospace;"><span style="color:#f0883e;">## </span>${esc(d.sec1Title)}</h2>
-    <p style="font-size:14px;color:#c9d1d9;line-height:1.9;margin-bottom:14px;">${esc(d.sec1Body)}</p>
-    <section style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:16px;font-size:12px;color:#e6edf3;margin:16px 0;font-family:'SF Mono',Consolas,monospace;line-height:1.6;">/** ${esc(d.quote)} */</section>
-    <h2 style="font-size:16px;font-weight:700;color:#58a6ff;margin:24px 0 12px;font-family:'SF Mono',Consolas,monospace;"><span style="color:#f0883e;">## </span>${esc(d.sec2Title)}</h2>
-    <p style="font-size:14px;color:#c9d1d9;line-height:1.9;margin-bottom:14px;">${esc(d.sec2Body)}</p>
+    ${secsHtml}
+    ${quoteHtml}
   </section>
   <section style="padding:20px 36px;border-top:1px solid #21262d;font-size:11px;color:#484f58;"># ${esc(d.footer)} | ${esc(d.author)}</section>
 </section>`,
 
-    // ===== T07 杂志风 =====
     'tpl-07': () => `
 <section style="font-family:'PingFang SC',sans-serif;">
   <section style="background:#fff;padding:40px 36px 20px;border-bottom:4px solid #222;">
-    <p style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#e02020;font-weight:700;margin:0 0 12px;">${esc(d.tag)}</p>
     <h1 style="font-size:32px;font-weight:900;color:#111;line-height:1.15;margin:0;letter-spacing:-1px;">${esc(d.title)}</h1>
     <section style="width:100%;height:2px;background:#222;margin:20px 0 16px;"></section>
     <p style="font-size:14px;color:#555;line-height:1.7;margin:0;">${esc(d.desc)}</p>
   </section>
   <section style="padding:32px 36px;">
-    <h2 style="font-size:18px;font-weight:900;color:#111;margin:28px 0 10px;letter-spacing:-0.5px;text-transform:uppercase;">${esc(d.sec1Title)}</h2>
-    <p style="font-size:15px;color:#444;line-height:1.85;margin-bottom:14px;">${esc(d.sec1Body)}</p>
-    <section style="font-size:20px;font-weight:700;color:#e02020;border-top:3px solid #e02020;border-bottom:3px solid #e02020;padding:16px 0;margin:24px 0;line-height:1.4;">"${esc(d.quote)}"</section>
-    <h2 style="font-size:18px;font-weight:900;color:#111;margin:28px 0 10px;letter-spacing:-0.5px;text-transform:uppercase;">${esc(d.sec2Title)}</h2>
-    <p style="font-size:15px;color:#444;line-height:1.85;margin-bottom:14px;">${esc(d.sec2Body)}</p>
+    ${secsHtml}
+    ${quoteHtml}
   </section>
   <section style="padding:16px 36px;border-top:2px solid #222;display:flex;justify-content:space-between;font-size:11px;color:#888;letter-spacing:1px;text-transform:uppercase;">
     <span>${esc(d.author)}</span><span>${esc(d.date)}</span>
   </section>
 </section>`,
 
-    // ===== T08 小清新卡片 =====
     'tpl-08': () => `
 <section style="padding:24px 28px;font-family:'PingFang SC',sans-serif;background:#fafafa;">
-  <section style="background:#fff;border-radius:20px;padding:32px 28px;box-shadow:0 8px 32px rgba(0,0,0,0.08);margin-bottom:20px;">
+  <section style="background:#fff;border-radius:20px;padding:32px 28px;box-shadow:0 8px 32px rgba(0,0,0,.08);margin-bottom:20px;">
     <p style="font-size:40px;margin:0 0 12px;">✨</p>
     <h1 style="font-size:22px;font-weight:800;color:#222;line-height:1.35;margin:0;">${esc(d.title)}</h1>
     <p style="font-size:13px;color:#888;margin:10px 0 0;line-height:1.7;">${esc(d.desc)}</p>
     <section style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;">
-      <span style="background:#f0f7ff;color:#1677ff;padding:3px 10px;border-radius:20px;font-size:12px;">${esc(d.tag)}</span>
       <span style="background:#f0f7ff;color:#1677ff;padding:3px 10px;border-radius:20px;font-size:12px;">${esc(d.author)}</span>
       <span style="background:#f0f7ff;color:#1677ff;padding:3px 10px;border-radius:20px;font-size:12px;">${esc(d.date)}</span>
     </section>
   </section>
-  <section style="background:#fff;border-radius:16px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,0.05);margin-bottom:14px;">
-    <h2 style="font-size:16px;font-weight:700;color:#222;margin:0 0 10px;">🗂 ${esc(d.sec1Title)}</h2>
-    <p style="${S.bodyText666}">${esc(d.sec1Body)}</p>
-  </section>
-  <section style="background:#fff;border-radius:16px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,0.05);margin-bottom:14px;border-left:3px solid #1677ff;">
-    <p style="font-size:15px;color:#1677ff;font-weight:600;line-height:1.8;margin:0;">"${esc(d.quote)}"</p>
-  </section>
-  <section style="background:#fff;border-radius:16px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,0.05);margin-bottom:14px;">
-    <h2 style="font-size:16px;font-weight:700;color:#222;margin:0 0 10px;">📌 ${esc(d.sec2Title)}</h2>
-    <p style="${S.bodyText666}">${esc(d.sec2Body)}</p>
-  </section>
+  ${secsHtml}
+  ${quoteHtml}
   <p style="text-align:center;font-size:12px;color:#ccc;padding:10px 0;margin:0;">${esc(d.footer)}</p>
 </section>`,
 
-    // ===== T09 中国风 =====
     'tpl-09': () => `
 <section style="font-family:'PingFang SC','STSong',serif;">
   <section style="background:linear-gradient(160deg,#8b1a1a 0%,#c0392b 50%,#e74c3c 100%);padding:52px 40px 44px;position:relative;overflow:hidden;">
-    <section style="display:inline-block;border:1px solid rgba(255,220,0,0.6);color:#ffd700;font-size:11px;padding:3px 12px;letter-spacing:2px;margin:0 0 16px;">${esc(d.tag)}</section>
     <h1 style="font-size:26px;font-weight:700;color:#fff;line-height:1.4;margin:0;letter-spacing:2px;">${esc(d.title)}</h1>
-    <p style="margin:14px 0 0;font-size:13px;color:rgba(255,220,0,0.8);letter-spacing:1px;">✦ ${esc(d.sub)} ✦</p>
+    <p style="margin:14px 0 0;font-size:13px;color:rgba(255,220,0,.8);letter-spacing:1px;">✦ ${esc(d.desc)} ✦</p>
   </section>
   <section style="padding:32px 40px;">
-    <p style="font-size:15px;color:#444;line-height:2;margin-bottom:16px;text-align:justify;">${esc(d.desc)}</p>
-    <h2 style="font-size:18px;font-weight:700;color:#8b1a1a;margin:28px 0 12px;text-align:center;">◆ ${esc(d.sec1Title)} ◆</h2>
-    <p style="font-size:15px;color:#444;line-height:2;margin-bottom:16px;text-align:justify;">${esc(d.sec1Body)}</p>
-    <section style="border:1px solid #e9b7b7;border-radius:4px;padding:16px 20px;background:#fff9f9;color:#8b1a1a;font-size:14px;line-height:1.9;margin:16px 0;text-align:center;">「${esc(d.quote)}」</section>
-    <h2 style="font-size:18px;font-weight:700;color:#8b1a1a;margin:28px 0 12px;text-align:center;">◆ ${esc(d.sec2Title)} ◆</h2>
-    <p style="font-size:15px;color:#444;line-height:2;margin-bottom:16px;text-align:justify;">${esc(d.sec2Body)}</p>
+    ${secsHtml}
+    ${quoteHtml}
   </section>
   <section style="padding:20px 40px;text-align:center;border-top:1px solid #f5d0d0;font-size:12px;color:#bbb;">— ${esc(d.author)} · ${esc(d.date)} —</section>
 </section>`,
 
-    // ===== T10 知识卡片 =====
     'tpl-10': () => `
 <section style="padding:28px 32px;font-family:'PingFang SC',sans-serif;">
   <section style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
     <section style="background:linear-gradient(135deg,#2d3748,#4a5568);color:#fff;font-size:12px;font-weight:700;padding:6px 14px;border-radius:6px;letter-spacing:1px;">WEEKLY</section>
-    <span style="font-size:12px;color:#aaa;">${esc(d.tag)} · ${esc(d.date)}</span>
+    <span style="font-size:12px;color:#aaa;">${esc(d.date)}</span>
   </section>
   <section style="background:linear-gradient(135deg,#2d3748 0%,#4a5568 100%);border-radius:16px;padding:36px 32px;margin-bottom:24px;">
-    <p style="font-size:64px;font-weight:900;color:rgba(255,255,255,0.08);line-height:1;margin:0 0 -20px;">01</p>
+    <p style="font-size:64px;font-weight:900;color:rgba(255,255,255,.08);line-height:1;margin:0 0 -20px;">01</p>
     <h1 style="font-size:22px;font-weight:800;color:#fff;line-height:1.3;margin:0;">${esc(d.title)}</h1>
-    <p style="margin:12px 0 0;font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7;">${esc(d.desc)}</p>
+    <p style="margin:12px 0 0;font-size:13px;color:rgba(255,255,255,.6);line-height:1.7;">${esc(d.desc)}</p>
   </section>
-  <section style="border:1px solid #e8e8e8;border-radius:12px;overflow:hidden;margin-bottom:16px;">
-    <section style="background:#2d3748;color:#fff;padding:12px 20px;font-size:14px;font-weight:700;display:flex;align-items:center;gap:10px;">
-      <section style="background:rgba(255,255,255,0.2);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;">1</section>${esc(d.sec1Title)}
-    </section>
-    <section style="padding:16px 20px;"><p style="${S.bodyText555}">${esc(d.sec1Body)}</p></section>
-  </section>
-  <section style="border:1px solid #e8e8e8;border-left:3px solid #4a5568;border-radius:12px;margin-bottom:16px;">
-    <section style="padding:16px 20px;"><p style="font-size:15px;font-style:italic;color:#4a5568;line-height:1.8;margin:0;">"${esc(d.quote)}"</p></section>
-  </section>
-  <section style="border:1px solid #e8e8e8;border-radius:12px;overflow:hidden;margin-bottom:16px;">
-    <section style="background:#2d3748;color:#fff;padding:12px 20px;font-size:14px;font-weight:700;display:flex;align-items:center;gap:10px;">
-      <section style="background:rgba(255,255,255,0.2);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;">2</section>${esc(d.sec2Title)}
-    </section>
-    <section style="padding:16px 20px;"><p style="${S.bodyText555}">${esc(d.sec2Body)}</p></section>
-  </section>
+  ${secsHtml}
+  ${quoteHtml}
   <p style="text-align:center;font-size:11px;color:#ccc;margin:16px 0 0;">${esc(d.footer)} · ${esc(d.author)}</p>
 </section>`,
-
   };
 
   return builders[id] ? builders[id]() : '<p>请选择模板</p>';
@@ -419,9 +426,8 @@ function buildTemplate(id, d) {
 
 // ========== 渲染 ==========
 function renderTemplateList() {
-  const list = document.getElementById('templateList');
-  list.innerHTML = templates.map(t => `
-    <div class="template-item ${t.id === currentTpl ? 'active' : ''}" onclick="selectTemplate('${t.id}')">
+  document.getElementById('templateList').innerHTML = templates.map(t => `
+    <div class="template-item ${t.id===currentTpl?'active':''}" onclick="selectTemplate('${t.id}')">
       <div class="template-icon" style="background:${t.color}22;color:${t.color}">${t.icon}</div>
       <div class="template-info">
         <div class="template-name">${t.name}</div>
@@ -441,78 +447,95 @@ function renderArticle() {
   document.getElementById('articleContent').innerHTML = buildTemplate(currentTpl, articleData);
 }
 
-// ========== 更新数据 ==========
-function updateTitle(v) { articleData.title = v || '写下你的文章标题'; renderArticle(); }
-function updateSub(v) { articleData.sub = v || '副标题 · 简短有力的一句话'; renderArticle(); }
-function updateTag(v) { articleData.tag = v || '原创好文'; renderArticle(); }
-function updateDesc(v) { articleData.desc = v; renderArticle(); }
-function updateSections() {
-  articleData.sec1Title = document.getElementById('sec1Title').value || '第一章：开篇';
-  articleData.sec1Body = document.getElementById('sec1Body').value || '';
-  articleData.sec2Title = document.getElementById('sec2Title').value || '第二章：深入探讨';
-  articleData.sec2Body = document.getElementById('sec2Body').value || '';
-  articleData.quote = document.getElementById('quoteText').value || '';
+// ========== 右侧章节编辑区渲染 ==========
+function renderSectionsPanel() {
+  const container = document.getElementById('sectionsContainer');
+  const secs = articleData.sections;
+  container.innerHTML = secs.map((sec, i) => `
+    <div class="field-group" style="background:var(--surface);border-radius:8px;padding:12px;margin-bottom:10px;border:1px solid var(--border);">
+      <div class="section-header">
+        <span class="section-header-title">📌 章节 ${i+1}</span>
+        <div class="section-header-actions">
+          ${i > 0 ? `<button class="btn btn-sm btn-outline" onclick="moveSection(${i},-1)" title="上移">⬆️</button>` : ''}
+          ${i < secs.length-1 ? `<button class="btn btn-sm btn-outline" onclick="moveSection(${i},1)" title="下移">⬇️</button>` : ''}
+          ${secs.length > 1 ? `<button class="btn btn-sm btn-danger" onclick="removeSection(${i})" title="删除">✕</button>` : ''}
+        </div>
+      </div>
+      <div class="field-label">标题</div>
+      <input type="text" class="field-input" value="${esc(sec.title).replace(/"/g,'&quot;')}" placeholder="章节标题" oninput="updateSectionField(${i},'title',this.value)" style="margin-bottom:8px">
+      <div class="field-label">正文</div>
+      <textarea class="field-input" rows="3" placeholder="章节正文..." oninput="updateSectionField(${i},'body',this.value)">${esc(sec.body)}</textarea>
+    </div>
+  `).join('');
+}
+
+// ========== 章节操作 ==========
+function addSection() {
+  const num = articleData.sections.length + 1;
+  articleData.sections.push({ title: `第${num}章：新章节`, body: '' });
+  renderSectionsPanel();
   renderArticle();
 }
-function updateMeta() {
-  articleData.author = document.getElementById('articleAuthor').value || '原创作者';
-  articleData.date = document.getElementById('articleDate').value || '';
-  articleData.footer = document.getElementById('footerText').value || '';
+
+function removeSection(idx) {
+  if (articleData.sections.length <= 1) return;
+  articleData.sections.splice(idx, 1);
+  renderSectionsPanel();
+  renderArticle();
+}
+
+function moveSection(idx, dir) {
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= articleData.sections.length) return;
+  const secs = articleData.sections;
+  [secs[idx], secs[newIdx]] = [secs[newIdx], secs[idx]];
+  renderSectionsPanel();
+  renderArticle();
+}
+
+function updateSectionField(idx, field, value) {
+  articleData.sections[idx][field] = value;
+  renderArticle();
+}
+
+// ========== 通用字段更新 ==========
+function updateField(field, value) {
+  if (field === 'title') articleData.title = value || '写下你的文章标题';
+  else if (field === 'author') articleData.author = value || '原创作者';
+  else if (field === 'date') articleData.date = value || '';
+  else if (field === 'desc') articleData.desc = value;
+  else if (field === 'quote') articleData.quote = value;
+  else if (field === 'footer') articleData.footer = value;
   renderArticle();
 }
 
 // ========== Tab ==========
 function switchTab(tab) {
-  document.querySelectorAll('.right-tab').forEach((el, i) => {
-    el.classList.toggle('active', (tab === 'edit' && i === 0) || (tab === 'style' && i === 1));
+  document.querySelectorAll('.right-tab').forEach((el,i) => {
+    el.classList.toggle('active', (tab==='edit'&&i===0)||(tab==='style'&&i===1));
   });
-  document.getElementById('tabEdit').style.display = tab === 'edit' ? 'block' : 'none';
-  document.getElementById('tabStyle').style.display = tab === 'style' ? 'block' : 'none';
-}
-
-// ========== 颜色快速选 ==========
-const colorPresets = ['#2c5364','#f7971e','#0078ff','#8b5cf6','#71b280','#58a6ff','#e02020','#1677ff','#c0392b','#2d3748'];
-function renderColorSwatches() {
-  document.getElementById('colorSwatches').innerHTML = colorPresets.map((c, i) => `
-    <div class="color-swatch" style="background:${c}" title="${c}" onclick="quickSwitchByColor(${i})"></div>
-  `).join('');
-}
-function quickSwitchByColor(idx) {
-  selectTemplate(templates[idx].id);
-  document.querySelectorAll('.color-swatch').forEach((el, i) => el.classList.toggle('active', i === idx));
+  document.getElementById('tabEdit').style.display = tab==='edit'?'block':'none';
+  document.getElementById('tabStyle').style.display = tab==='style'?'block':'none';
 }
 
 // ========== 宽度 ==========
-function setWidth(w) { document.querySelector('.editor-wrapper').style.width = w + 'px'; }
+function setWidth(w) { document.querySelector('.editor-wrapper').style.width = w+'px'; }
 
-// ========== 复制：富文本 ==========
+// ========== 复制 ==========
 function copyArticle() {
   const el = document.getElementById('articleContent');
   const range = document.createRange();
   range.selectNodeContents(el);
   const sel = window.getSelection();
-  sel.removeAllRanges();
-  sel.addRange(range);
-  try {
-    document.execCommand('copy');
-    sel.removeAllRanges();
-    showToast('✅ 已复制！可直接粘贴到公众号编辑器');
-  } catch(e) {
-    showToast('❌ 复制失败，请手动全选复制');
-  }
+  sel.removeAllRanges(); sel.addRange(range);
+  try { document.execCommand('copy'); sel.removeAllRanges(); showToast('✅ 已复制！可直接粘贴到公众号编辑器'); }
+  catch(e) { showToast('❌ 复制失败，请手动全选复制'); }
 }
 
-// ========== 复制：纯内联 HTML 源码 ==========
 function copyHTML() {
   const html = document.getElementById('articleContent').innerHTML;
-  navigator.clipboard.writeText(html).then(() => {
-    showToast('✅ 内联 HTML 源码已复制！');
-  }).catch(() => {
-    // fallback
-    const ta = document.createElement('textarea');
-    ta.value = html; document.body.appendChild(ta);
-    ta.select(); document.execCommand('copy');
-    document.body.removeChild(ta);
+  navigator.clipboard.writeText(html).then(()=>showToast('✅ 内联 HTML 源码已复制！')).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=html;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
     showToast('✅ 内联 HTML 源码已复制！');
   });
 }
@@ -520,52 +543,45 @@ function copyHTML() {
 // ========== 重置 ==========
 function resetContent() {
   if (!confirm('确定要重置所有内容吗？')) return;
-  document.getElementById('articleTitle').value = '写下你的文章标题';
-  document.getElementById('articleSub').value = '';
-  document.getElementById('coverTag').value = '原创好文';
-  document.getElementById('coverDesc').value = '在这里写下开篇摘要，吸引读者继续阅读。一两句话点明文章的核心价值和你想传达的主旨。';
-  document.getElementById('sec1Title').value = '第一章：开篇';
-  document.getElementById('sec1Body').value = '在这里填写第一节的正文内容。';
-  document.getElementById('sec2Title').value = '第二章：深入探讨';
-  document.getElementById('sec2Body').value = '这里是第二节的内容。';
-  document.getElementById('quoteText').value = '优秀的文章，不是写出来的，而是改出来的。';
-  document.getElementById('footerText').value = '感谢阅读！如果觉得有帮助，欢迎点赞、转发支持 ❤️';
   articleData = {
-    title: '写下你的文章标题', sub: '副标题 · 简短有力的一句话', author: '原创作者',
-    date: new Date().toLocaleDateString('zh-CN', {year:'numeric',month:'long',day:'numeric'}),
-    tag: '原创好文', desc: '在这里写下开篇摘要，吸引读者继续阅读。一两句话点明文章的核心价值和你想传达的主旨。',
-    sec1Title: '第一章：开篇', sec1Body: '在这里填写第一节的正文内容。',
-    sec2Title: '第二章：深入探讨', sec2Body: '这里是第二节的内容。',
-    quote: '优秀的文章，不是写出来的，而是改出来的。',
-    footer: '感谢阅读！如果觉得有帮助，欢迎点赞、转发支持 ❤️',
+    title:'写下你的文章标题', author:'原创作者',
+    date:new Date().toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric'}),
+    desc:'在这里写下开篇摘要，吸引读者继续阅读。一两句话点明文章的核心价值和你想传达的主旨。',
+    sections: [
+      { title:'第一章：开篇', body:'在这里填写第一节的正文内容。' },
+      { title:'第二章：深入探讨', body:'这里是第二节的内容。' },
+    ],
+    quote:'优秀的文章，不是写出来的，而是改出来的。',
+    footer:'感谢阅读！如果觉得有帮助，欢迎点赞、转发支持 ❤️',
   };
+  syncFieldsFromData();
+  renderSectionsPanel();
   renderArticle();
+}
+
+// ========== 数据 → 表单同步 ==========
+function syncFieldsFromData() {
+  document.getElementById('articleTitle').value = articleData.title;
+  document.getElementById('articleAuthor').value = articleData.author;
+  document.getElementById('articleDate').value = articleData.date;
+  document.getElementById('coverDesc').value = articleData.desc;
+  document.getElementById('quoteText').value = articleData.quote;
+  document.getElementById('footerText').value = articleData.footer;
 }
 
 // ========== Toast ==========
 function showToast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg; el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2800);
+  const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2800);
 }
 
 // ========== 初始化 ==========
 function init() {
-  document.getElementById('articleDate').value = new Date().toLocaleDateString('zh-CN', {year:'numeric',month:'long',day:'numeric'});
-  document.getElementById('articleTitle').value = articleData.title;
-  document.getElementById('coverTag').value = articleData.tag;
-  document.getElementById('coverDesc').value = articleData.desc;
-  document.getElementById('sec1Title').value = articleData.sec1Title;
-  document.getElementById('sec1Body').value = articleData.sec1Body;
-  document.getElementById('sec2Title').value = articleData.sec2Title;
-  document.getElementById('sec2Body').value = articleData.sec2Body;
-  document.getElementById('quoteText').value = articleData.quote;
-  document.getElementById('footerText').value = articleData.footer;
+  syncFieldsFromData();
   renderTemplateList();
-  renderColorSwatches();
+  renderSectionsPanel();
   renderArticle();
 }
-
 init();
 </script>
 </body>
