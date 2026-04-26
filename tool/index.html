@@ -16,17 +16,17 @@
 
   /* ── Header ── */
   header{
-    padding:48px 24px 32px;
+    padding:20px 24px 16px;
     text-align:center;
     background:linear-gradient(135deg,#f5f7fa 0%,#ffffff 100%);
     border-bottom:1px solid var(--border);
   }
-  header .logo{font-size:2.2rem;font-weight:900;letter-spacing:-1px}
+  header .logo{font-size:1.4rem;font-weight:900;letter-spacing:-1px}
   header .logo span{color:var(--accent)}
-  header p{color:var(--muted);margin-top:8px;font-size:.95rem}
+  header p{color:var(--muted);margin-top:4px;font-size:.82rem}
   .back-home{
     display:inline-flex;align-items:center;gap:6px;
-    margin-bottom:16px;
+    margin-bottom:8px;
     color:var(--muted);font-size:.85rem;text-decoration:none;
     padding:5px 12px;border-radius:99px;
     border:1px solid var(--border);background:#fff;
@@ -36,7 +36,7 @@
 
   /* ── Search ── */
   .search-wrap{
-    max-width:480px;margin:28px auto 0;
+    max-width:480px;margin:12px auto 0;
     position:relative;
   }
   .search-wrap input{
@@ -50,35 +50,35 @@
   .search-wrap svg{position:absolute;right:14px;top:50%;transform:translateY(-50%);opacity:.4;pointer-events:none}
 
   /* ── Main ── */
-  main{max-width:960px;margin:0 auto;padding:40px 20px 80px}
+  main{max-width:960px;margin:0 auto;padding:16px 20px 32px}
 
   /* ── Category ── */
-  .category{margin-bottom:44px}
+  .category{margin-bottom:16px}
   .category-header{
-    display:flex;align-items:center;gap:10px;
-    margin-bottom:18px;
+    display:flex;align-items:center;gap:8px;
+    margin-bottom:6px;
   }
   .category-icon{
-    width:32px;height:32px;border-radius:8px;
-    display:flex;align-items:center;justify-content:center;font-size:1rem;
+    width:22px;height:22px;border-radius:5px;
+    display:flex;align-items:center;justify-content:center;font-size:.75rem;
   }
-  .category-title{font-size:1.05rem;font-weight:700;letter-spacing:.5px}
-  .category-count{font-size:.75rem;color:var(--muted);
+  .category-title{font-size:.82rem;font-weight:700;letter-spacing:.5px}
+  .category-count{font-size:.65rem;color:var(--muted);
     background:var(--surface);border:1px solid var(--border);
-    padding:2px 8px;border-radius:99px;margin-left:4px}
+    padding:1px 6px;border-radius:99px;margin-left:2px}
 
   /* ── Cards grid ── */
   .cards{
     display:grid;
     grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-    gap:14px;
+    gap:8px;
   }
   .card{
     background:var(--surface);border:1px solid var(--border);
-    border-radius:var(--radius);padding:20px 18px;
+    border-radius:8px;padding:10px 14px;
     text-decoration:none;color:inherit;
     transition:border-color .2s,transform .15s,box-shadow .2s;
-    display:block;
+    display:flex;align-items:center;gap:10px;
     position:relative;overflow:hidden;
   }
   .card::before{
@@ -86,15 +86,18 @@
     background:linear-gradient(135deg,var(--card-color,var(--accent)) 0%,transparent 60%);
     opacity:0;transition:opacity .25s;
   }
-  .card:hover{border-color:var(--card-color,var(--accent));transform:translateY(-2px);
-    box-shadow:0 8px 24px rgba(0,0,0,.08);}
+  .card:hover{border-color:var(--card-color,var(--accent));transform:translateY(-1px);
+    box-shadow:0 4px 16px rgba(0,0,0,.07);}
   .card:hover::before{opacity:.08}
-  .card .card-icon{font-size:1.6rem;margin-bottom:10px}
-  .card .card-name{font-weight:700;font-size:.95rem;margin-bottom:4px}
-  .card .card-desc{font-size:.78rem;color:var(--muted);line-height:1.5}
+  .card .card-icon{font-size:1.2rem;flex-shrink:0}
+  .card .card-info{flex:1;min-width:0}
+  .card .card-name{font-weight:600;font-size:.84rem;margin-bottom:2px}
+  .card .card-desc{font-size:.7rem;color:var(--muted);line-height:1.35;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    display:block}
   .card .card-tag{
-    display:inline-block;margin-top:10px;
-    font-size:.68rem;padding:2px 8px;border-radius:99px;
+    flex-shrink:0;
+    font-size:.6rem;padding:1px 7px;border-radius:99px;
     background:rgba(0,0,0,.05);color:var(--muted);
   }
 
@@ -134,17 +137,15 @@
     </div>
     <div class="cards">
 
-      <a class="card" href="tools/json.html" style="--card-color:#6c63ff" data-name="JSON工具 序列化 压缩 转义 格式化">
+      <a class="card" href="tools/json.html" style="--card-color:#6c63ff" data-name="JSON工具 序列化 压缩 转义 格式化" title="格式化、压缩、转义与去转义，一站式 JSON 处理">
         <div class="card-icon">🗂️</div>
-        <div class="card-name">JSON 工具</div>
-        <div class="card-desc">格式化、压缩、转义与去转义，一站式 JSON 处理</div>
+        <div class="card-info"><div class="card-name">JSON 工具</div><div class="card-desc">格式化、压缩、转义与去转义，一站式 JSON 处理</div></div>
         <span class="card-tag">JSON</span>
       </a>
 
-      <a class="card" href="tools/diff.html" style="--card-color:#f59e0b" data-name="字符串差异对比 文本 diff">
+      <a class="card" href="tools/diff.html" style="--card-color:#f59e0b" data-name="字符串差异对比 文本 diff" title="对比两段文本差异，支持 JSON 格式化，高亮显示变更">
         <div class="card-icon">🔍</div>
-        <div class="card-name">文本差异对比</div>
-        <div class="card-desc">对比两段文本差异，支持 JSON 格式化，高亮显示变更</div>
+        <div class="card-info"><div class="card-name">文本差异对比</div><div class="card-desc">对比两段文本差异，支持 JSON 格式化，高亮显示变更</div></div>
         <span class="card-tag">Diff</span>
       </a>
 
@@ -160,17 +161,15 @@
     </div>
     <div class="cards">
 
-      <a class="card" href="tools/encode.html" style="--card-color:#10b981" data-name="编码转换 Base64 URL Unicode HTML MD5 SHA 哈希">
+      <a class="card" href="tools/encode.html" style="--card-color:#10b981" data-name="编码转换 Base64 URL Unicode HTML MD5 SHA 哈希" title="Base64、URL、Unicode、HTML 实体编解码及哈希计算">
         <div class="card-icon">⚙️</div>
-        <div class="card-name">编码转换</div>
-        <div class="card-desc">Base64、URL、Unicode、HTML 实体编解码及哈希计算</div>
+        <div class="card-info"><div class="card-name">编码转换</div><div class="card-desc">Base64、URL、Unicode、HTML 实体编解码及哈希计算</div></div>
         <span class="card-tag">Encode</span>
       </a>
 
-      <a class="card" href="tools/password.html" style="--card-color:#ff6584" data-name="密码生成器 随机 强度 安全">
+      <a class="card" href="tools/password.html" style="--card-color:#ff6584" data-name="密码生成器 随机 强度 安全" title="生成随机安全密码，自定义规则，强度可视化评估">
         <div class="card-icon">🔑</div>
-        <div class="card-name">密码生成器</div>
-        <div class="card-desc">生成随机安全密码，自定义规则，强度可视化评估</div>
+        <div class="card-info"><div class="card-name">密码生成器</div><div class="card-desc">生成随机安全密码，自定义规则，强度可视化评估</div></div>
         <span class="card-tag">Security</span>
       </a>
 
@@ -186,10 +185,9 @@
     </div>
     <div class="cards">
 
-      <a class="card" href="tools/time.html" style="--card-color:#3b82f6" data-name="时间工具 时间戳 日期计算 时区转换">
+      <a class="card" href="tools/time.html" style="--card-color:#3b82f6" data-name="时间工具 时间戳 日期计算 时区转换" title="时间戳转换、日期加减计算、多时区对照">
         <div class="card-icon">🗓️</div>
-        <div class="card-name">时间工具</div>
-        <div class="card-desc">时间戳转换、日期加减计算、多时区对照</div>
+        <div class="card-info"><div class="card-name">时间工具</div><div class="card-desc">时间戳转换、日期加减计算、多时区对照</div></div>
         <span class="card-tag">Time</span>
       </a>
 
@@ -205,10 +203,9 @@
     </div>
     <div class="cards">
 
-      <a class="card" href="tools/wechat-editor.html" style="--card-color:#07c160" data-name="公众号文章编辑器 微信 模板 排版 内联样式 WeChat Editor">
+      <a class="card" href="tools/wechat-editor.html" style="--card-color:#07c160" data-name="公众号编辑器 微信 模板 排版 内联样式 WeChat Editor" title="10 套精美模板，纯内联样式，一键复制粘贴到微信公众号">
         <div class="card-icon">📝</div>
-        <div class="card-name">公众号文章编辑器</div>
-        <div class="card-desc">10 套精美模板，纯内联样式，一键复制粘贴到微信公众号</div>
+        <div class="card-info"><div class="card-name">公众号编辑器</div><div class="card-desc">10 套精美模板，纯内联样式，一键复制粘贴到微信公众号</div></div>
         <span class="card-tag">WeChat</span>
       </a>
 
