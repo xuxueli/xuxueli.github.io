@@ -41,7 +41,8 @@
   .right-tabs{display:flex;border-bottom:1px solid var(--border)}
   .right-tab{flex:1;padding:12px 8px;text-align:center;font-size:13px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all .2s}
   .right-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500}
-  .right-content{flex:1;overflow-y:auto;padding:16px}
+  .right-content{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;align-items:center}
+  .right-content-inner{width:100%;max-width:260px}
 
   .field-group{margin-bottom:14px}
   .field-label{font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:500;display:flex;align-items:center;justify-content:space-between}
@@ -66,6 +67,11 @@
 
   .copy-area{padding:16px;border-top:1px solid var(--border)}
   .copy-hint{font-size:11px;color:var(--muted);margin-top:6px;text-align:center}
+
+  /* ── 回到顶部按钮 ── */
+  .scroll-top-btn{position:fixed;right:24px;bottom:24px;width:40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(7,193,96,.3);opacity:0;pointer-events:none;transition:all .3s;z-index:100}
+  .scroll-top-btn.visible{opacity:1;pointer-events:auto}
+  .scroll-top-btn:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(7,193,96,.4)}
 
   .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:rgba(0,0,0,.75);color:#fff;padding:10px 24px;border-radius:24px;font-size:14px;opacity:0;pointer-events:none;transition:all .3s;z-index:9999}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -118,6 +124,7 @@
     </div>
 
     <div class="right-content" id="tabEdit">
+      <div class="right-content-inner">
       <!-- 基本信息 -->
       <div style="font-size:12px;color:var(--muted);font-weight:600;letter-spacing:1px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">📄 基本信息</div>
       <div class="field-group"><div class="field-label">📝 文章标题</div><input type="text" class="field-input" id="articleTitle" placeholder="输入文章标题..." oninput="updateField('title',this.value)"></div>
@@ -137,9 +144,11 @@
       <div style="font-size:12px;color:var(--muted);font-weight:600;letter-spacing:1px;margin-bottom:10px;margin-top:14px;padding-bottom:6px;border-bottom:1px solid var(--border);">💬 引用与结尾</div>
       <div class="field-group"><div class="field-label">💬 金句/引用</div><textarea class="field-input" rows="2" id="quoteText" placeholder="一句让人印象深刻的话..." oninput="updateField('quote',this.value)"></textarea></div>
       <div class="field-group"><div class="field-label">🔚 结尾语</div><input type="text" class="field-input" id="footerText" placeholder="感谢阅读，欢迎转发~" oninput="updateField('footer',this.value)"></div>
+      </div>
     </div>
 
     <div class="right-content" id="tabStyle" style="display:none">
+      <div class="right-content-inner">
       <div class="field-group">
         <div class="field-label">📱 预览模式</div>
         <div style="display:flex;gap:8px;margin-top:6px">
@@ -148,11 +157,13 @@
           <button class="btn btn-outline" style="flex:1;font-size:12px" onclick="setWidth(680)">桌面</button>
         </div>
       </div>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
+<button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollEditorTop()" title="回到顶部">⬆</button>
 
 <script>
 // ========== 模板配置 ==========
@@ -278,11 +289,16 @@ function buildTemplate(id, d) {
   const builders = {
     'tpl-01': () => `
 <section style="padding:32px 40px;font-family:'PingFang SC',sans-serif;">
-  <section style="background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);padding:48px 40px;margin:-32px -40px 32px;color:#fff;">
-    <h1 style="font-size:26px;font-weight:700;line-height:1.3;margin:0 0 12px;color:#fff;">${esc(d.title)}</h1>
-    <p style="font-size:14px;color:rgba(255,255,255,.7);margin:0;">${esc(d.author)}  |  ${esc(d.date)}</p>
+  <section data-header style="margin-bottom:24px;">
+    <h1 style="font-size:24px;font-weight:700;line-height:1.4;margin:0 0 12px;color:#000;">${esc(d.title)}</h1>
+    <section style="display:flex;align-items:center;gap:8px;">
+      <span style="font-size:14px;color:#576b95;">${esc(d.author)}</span>
+      <span style="font-size:12px;color:#999;">${esc(d.date)}</span>
+    </section>
   </section>
-  <p style="${S.bodyText}">${esc(d.desc)}</p>
+  <section style="background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);padding:32px 28px;margin-bottom:24px;border-radius:8px;">
+    <p style="font-size:15px;color:rgba(255,255,255,.85);line-height:1.8;margin:0;">${esc(d.desc)}</p>
+  </section>
   ${secsHtml}
   ${quoteHtml}
   <section style="margin-top:40px;padding-top:20px;border-top:1px solid #eee;display:flex;justify-content:space-between;align-items:center;color:#999;font-size:12px;">
@@ -291,100 +307,121 @@ function buildTemplate(id, d) {
 </section>`,
 
     'tpl-02': () => `
-<section style="font-family:'PingFang SC',sans-serif;">
-  <section style="background:linear-gradient(160deg,#f7971e 0%,#ffd200 100%);padding:48px 36px 40px;">
-    <h1 style="font-size:26px;font-weight:800;color:#fff;line-height:1.3;margin:0;text-shadow:0 2px 8px rgba(0,0,0,.15);">${esc(d.title)}</h1>
-    <p style="margin:14px 0 0;font-size:13px;color:rgba(255,255,255,.85);">✍️ ${esc(d.author)}  📅 ${esc(d.date)}</p>
+<section style="padding:32px 36px;font-family:'PingFang SC',sans-serif;">
+  <section data-header style="margin-bottom:24px;">
+    <h1 style="font-size:24px;font-weight:700;line-height:1.4;margin:0 0 12px;color:#000;">${esc(d.title)}</h1>
+    <section style="display:flex;align-items:center;gap:8px;">
+      <span style="font-size:14px;color:#576b95;">${esc(d.author)}</span>
+      <span style="font-size:12px;color:#999;">${esc(d.date)}</span>
+    </section>
   </section>
-  <section style="padding:32px 36px;">
-    <p style="${S.bodyText555}">${esc(d.desc)}</p>
-    ${secsHtml}
-    ${quoteHtml}
+  <section style="background:linear-gradient(160deg,#f7971e 0%,#ffd200 100%);padding:28px 24px;margin-bottom:24px;border-radius:8px;">
+    <p style="font-size:15px;color:rgba(255,255,255,.95);line-height:1.8;margin:0;text-shadow:0 1px 4px rgba(0,0,0,.1);">${esc(d.desc)}</p>
   </section>
-  <section style="padding:20px 36px;border-top:1px solid #f5f5f5;font-size:12px;color:#bbb;text-align:center;">${esc(d.footer)} · ${esc(d.author)}</section>
+  ${secsHtml}
+  ${quoteHtml}
+  <section style="margin-top:40px;padding-top:20px;border-top:1px solid #f5f5f5;font-size:12px;color:#bbb;text-align:center;">${esc(d.footer)} · ${esc(d.author)}</section>
 </section>`,
 
     'tpl-03': () => `
-<section style="font-family:'PingFang SC',sans-serif;background:#fff;">
-  <section style="background:#050d21;padding:52px 36px 44px;position:relative;overflow:hidden;">
-    <h1 style="font-size:26px;font-weight:800;color:#fff;line-height:1.3;margin:0;">${esc(d.title)}</h1>
-    <section style="width:48px;height:3px;background:#0078ff;margin:18px 0;"></section>
-    <section style="padding:32px 36px;">
-    <p style="${S.bodyText555}">${esc(d.desc)}</p>
-    ${secsHtml}
-    ${quoteHtml}
+<section style="padding:32px 36px;font-family:'PingFang SC',sans-serif;background:#fff;">
+  <section data-header style="margin-bottom:24px;">
+    <h1 style="font-size:24px;font-weight:700;line-height:1.4;margin:0 0 12px;color:#000;">${esc(d.title)}</h1>
+    <section style="display:flex;align-items:center;gap:8px;">
+      <span style="font-size:14px;color:#576b95;">${esc(d.author)}</span>
+      <span style="font-size:12px;color:#999;">${esc(d.date)}</span>
+    </section>
   </section>
-  <section style="padding:20px 36px;border-top:1px solid #f0f0f0;font-size:12px;color:#bbb;">${esc(d.author)}  ·  ${esc(d.date)}  ·  ${esc(d.footer)}</section>
+  <section style="background:#050d21;padding:28px 24px;margin-bottom:24px;border-radius:8px;">
+    <section style="width:48px;height:3px;background:#0078ff;margin:0 0 16px;"></section>
+    <p style="${S.bodyText555}color:#ccc;">${esc(d.desc)}</p>
+  </section>
+  ${secsHtml}
+  ${quoteHtml}
+  <section style="margin-top:40px;padding-top:20px;border-top:1px solid #f0f0f0;font-size:12px;color:#bbb;">${esc(d.author)}  ·  ${esc(d.date)}  ·  ${esc(d.footer)}</section>
 </section>`,
 
     'tpl-04': () => `
-<section style="font-family:'PingFang SC',sans-serif;">
-  <section style="background:linear-gradient(135deg,#8b5cf6 0%,#ec4899 100%);padding:52px 36px 44px;">
-    <h1 style="font-size:26px;font-weight:800;color:#fff;line-height:1.35;margin:0;">${esc(d.title)}</h1>
+<section style="padding:32px 36px;font-family:'PingFang SC',sans-serif;">
+  <section data-header style="margin-bottom:24px;">
+    <h1 style="font-size:24px;font-weight:700;line-height:1.4;margin:0 0 12px;color:#000;">${esc(d.title)}</h1>
+    <section style="display:flex;align-items:center;gap:8px;">
+      <span style="font-size:14px;color:#576b95;">${esc(d.author)}</span>
+      <span style="font-size:12px;color:#999;">${esc(d.date)}</span>
+    </section>
   </section>
-  <section style="padding:32px 36px;">
-    <p style="${S.bodyText555}">${esc(d.desc)}</p>
-    ${secsHtml}
-    ${quoteHtml}
+  <section style="background:linear-gradient(135deg,#8b5cf6 0%,#ec4899 100%);padding:28px 24px;margin-bottom:24px;border-radius:8px;">
+    <p style="font-size:15px;color:rgba(255,255,255,.9);line-height:1.8;margin:0;">${esc(d.desc)}</p>
   </section>
-  <section style="padding:20px 36px;font-size:12px;color:#ccc;text-align:center;border-top:1px solid #f5f5f5;">${esc(d.footer)}</section>
+  ${secsHtml}
+  ${quoteHtml}
+  <section style="margin-top:40px;padding-top:20px;font-size:12px;color:#ccc;text-align:center;border-top:1px solid #f5f5f5;">${esc(d.footer)}</section>
 </section>`,
 
     'tpl-05': () => `
-<section style="font-family:'PingFang SC',sans-serif;">
-  <section style="background:linear-gradient(160deg,#134e5e 0%,#71b280 100%);padding:52px 36px 44px;">
-    <h1 style="font-size:26px;font-weight:800;color:#fff;line-height:1.3;margin:0;">${esc(d.title)}</h1>
-    <p style="margin:14px 0 0;font-size:13px;color:rgba(255,255,255,.7);">🌿 ${esc(d.author)}  ·  ${esc(d.date)}</p>
+<section style="padding:32px 36px;font-family:'PingFang SC',sans-serif;">
+  <section data-header style="margin-bottom:24px;">
+    <h1 style="font-size:24px;font-weight:700;line-height:1.4;margin:0 0 12px;color:#000;">${esc(d.title)}</h1>
+    <section style="display:flex;align-items:center;gap:8px;">
+      <span style="font-size:14px;color:#576b95;">${esc(d.author)}</span>
+      <span style="font-size:12px;color:#999;">${esc(d.date)}</span>
+    </section>
   </section>
-  <section style="padding:32px 36px;">
-    <p style="${S.bodyText555}">${esc(d.desc)}</p>
-    ${secsHtml}
-    ${quoteHtml}
+  <section style="background:linear-gradient(160deg,#134e5e 0%,#71b280 100%);padding:28px 24px;margin-bottom:24px;border-radius:8px;">
+    <p style="font-size:15px;color:rgba(255,255,255,.9);line-height:1.8;margin:0;">${esc(d.desc)}</p>
   </section>
-  <section style="padding:20px 36px;font-size:12px;color:#aaa;border-top:1px solid #f0f0f0;">${esc(d.footer)}  —  ${esc(d.author)}</section>
+  ${secsHtml}
+  ${quoteHtml}
+  <section style="margin-top:40px;padding-top:20px;font-size:12px;color:#aaa;border-top:1px solid #f0f0f0;">${esc(d.footer)}  —  ${esc(d.author)}</section>
 </section>`,
 
     'tpl-06': () => `
-<section style="font-family:'PingFang SC',sans-serif;background:#0d1117;color:#c9d1d9;">
-  <section style="background:#161b22;border-bottom:1px solid #30363d;padding:48px 36px;">
-    <p style="color:#58a6ff;font-size:12px;margin:0 0 12px;font-family:'SF Mono',Consolas,monospace;">$ cat article.md</p>
-    <h1 style="font-size:24px;font-weight:700;color:#e6edf3;line-height:1.3;margin:0;">${esc(d.title)}</h1>
-    <p style="margin:12px 0 0;font-size:12px;color:#8b949e;font-family:'SF Mono',Consolas,monospace;"># ${esc(d.author)} | ${esc(d.date)}</p>
+<section style="padding:32px 36px;font-family:'PingFang SC',sans-serif;background:#0d1117;color:#c9d1d9;">
+  <section data-header style="margin-bottom:24px;">
+    <h1 style="font-size:24px;font-weight:700;line-height:1.4;margin:0 0 12px;color:#e6edf3;">${esc(d.title)}</h1>
+    <section style="display:flex;align-items:center;gap:8px;">
+      <span style="font-size:14px;color:#58a6ff;">${esc(d.author)}</span>
+      <span style="font-size:12px;color:#8b949e;">${esc(d.date)}</span>
+    </section>
   </section>
-  <section style="padding:32px 36px;">
-    <p style="font-size:14px;color:#c9d1d9;line-height:1.9;margin-bottom:14px;">${esc(d.desc)}</p>
-    ${secsHtml}
-    ${quoteHtml}
+  <section style="background:#161b22;border:1px solid #30363d;padding:28px 24px;margin-bottom:24px;border-radius:8px;">
+    <p style="font-size:14px;color:#c9d1d9;line-height:1.9;margin:0;">${esc(d.desc)}</p>
   </section>
-  <section style="padding:20px 36px;border-top:1px solid #21262d;font-size:11px;color:#484f58;"># ${esc(d.footer)} | ${esc(d.author)}</section>
+  ${secsHtml}
+  ${quoteHtml}
+  <section style="margin-top:40px;padding-top:20px;border-top:1px solid #21262d;font-size:11px;color:#484f58;"># ${esc(d.footer)} | ${esc(d.author)}</section>
 </section>`,
 
     'tpl-07': () => `
-<section style="font-family:'PingFang SC',sans-serif;">
-  <section style="background:#fff;padding:40px 36px 20px;border-bottom:4px solid #222;">
-    <h1 style="font-size:32px;font-weight:900;color:#111;line-height:1.15;margin:0;letter-spacing:-1px;">${esc(d.title)}</h1>
-    <section style="width:100%;height:2px;background:#222;margin:20px 0 16px;"></section>
+<section style="padding:32px 36px;font-family:'PingFang SC',sans-serif;">
+  <section data-header style="margin-bottom:24px;">
+    <h1 style="font-size:24px;font-weight:700;line-height:1.4;margin:0 0 12px;color:#000;">${esc(d.title)}</h1>
+    <section style="display:flex;align-items:center;gap:8px;">
+      <span style="font-size:14px;color:#576b95;">${esc(d.author)}</span>
+      <span style="font-size:12px;color:#999;">${esc(d.date)}</span>
+    </section>
+  </section>
+  <section style="background:#f8f8f8;padding:20px 24px;margin-bottom:24px;border-bottom:4px solid #222;border-radius:8px 8px 0 0;">
     <p style="font-size:14px;color:#555;line-height:1.7;margin:0;">${esc(d.desc)}</p>
   </section>
-  <section style="padding:32px 36px;">
-    ${secsHtml}
-    ${quoteHtml}
-  </section>
-  <section style="padding:16px 36px;border-top:2px solid #222;display:flex;justify-content:space-between;font-size:11px;color:#888;letter-spacing:1px;text-transform:uppercase;">
+  ${secsHtml}
+  ${quoteHtml}
+  <section style="margin-top:40px;padding-top:20px;border-top:2px solid #222;display:flex;justify-content:space-between;font-size:11px;color:#888;letter-spacing:1px;text-transform:uppercase;">
     <span>${esc(d.author)}</span><span>${esc(d.date)}</span>
   </section>
 </section>`,
 
     'tpl-08': () => `
 <section style="padding:24px 28px;font-family:'PingFang SC',sans-serif;background:#fafafa;">
-  <section style="background:#fff;border-radius:20px;padding:32px 28px;box-shadow:0 8px 32px rgba(0,0,0,.08);margin-bottom:20px;">
-    <p style="font-size:40px;margin:0 0 12px;">✨</p>
-    <h1 style="font-size:22px;font-weight:800;color:#222;line-height:1.35;margin:0;">${esc(d.title)}</h1>
-    <p style="font-size:13px;color:#888;margin:10px 0 0;line-height:1.7;">${esc(d.desc)}</p>
-    <section style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;">
-      <span style="background:#f0f7ff;color:#1677ff;padding:3px 10px;border-radius:20px;font-size:12px;">${esc(d.author)}</span>
-      <span style="background:#f0f7ff;color:#1677ff;padding:3px 10px;border-radius:20px;font-size:12px;">${esc(d.date)}</span>
+  <section data-header style="margin-bottom:20px;">
+    <h1 style="font-size:24px;font-weight:700;line-height:1.4;margin:0 0 12px;color:#000;">${esc(d.title)}</h1>
+    <section style="display:flex;align-items:center;gap:8px;">
+      <span style="font-size:14px;color:#576b95;">${esc(d.author)}</span>
+      <span style="font-size:12px;color:#999;">${esc(d.date)}</span>
     </section>
+  </section>
+  <section style="background:#fff;border-radius:20px;padding:24px;box-shadow:0 8px 32px rgba(0,0,0,.08);margin-bottom:20px;">
+    <p style="font-size:15px;color:#555;line-height:1.8;margin:0;">${esc(d.desc)}</p>
   </section>
   ${secsHtml}
   ${quoteHtml}
@@ -392,28 +429,37 @@ function buildTemplate(id, d) {
 </section>`,
 
     'tpl-09': () => `
-<section style="font-family:'PingFang SC','STSong',serif;">
-  <section style="background:linear-gradient(160deg,#8b1a1a 0%,#c0392b 50%,#e74c3c 100%);padding:52px 40px 44px;position:relative;overflow:hidden;">
-    <h1 style="font-size:26px;font-weight:700;color:#fff;line-height:1.4;margin:0;letter-spacing:2px;">${esc(d.title)}</h1>
-    <p style="margin:14px 0 0;font-size:13px;color:rgba(255,220,0,.8);letter-spacing:1px;">✦ ${esc(d.desc)} ✦</p>
+<section style="padding:32px 40px;font-family:'PingFang SC','STSong',serif;">
+  <section data-header style="margin-bottom:24px;">
+    <h1 style="font-size:24px;font-weight:700;line-height:1.4;margin:0 0 12px;color:#000;">${esc(d.title)}</h1>
+    <section style="display:flex;align-items:center;gap:8px;">
+      <span style="font-size:14px;color:#576b95;">${esc(d.author)}</span>
+      <span style="font-size:12px;color:#999;">${esc(d.date)}</span>
+    </section>
   </section>
-  <section style="padding:32px 40px;">
-    ${secsHtml}
-    ${quoteHtml}
+  <section style="background:linear-gradient(160deg,#8b1a1a 0%,#c0392b 50%,#e74c3c 100%);padding:28px 24px;margin-bottom:24px;border-radius:8px;">
+    <p style="margin:0;font-size:14px;color:rgba(255,220,0,.8);letter-spacing:1px;line-height:1.8;">✦ ${esc(d.desc)} ✦</p>
   </section>
-  <section style="padding:20px 40px;text-align:center;border-top:1px solid #f5d0d0;font-size:12px;color:#bbb;">— ${esc(d.author)} · ${esc(d.date)} —</section>
+  ${secsHtml}
+  ${quoteHtml}
+  <section style="margin-top:40px;padding-top:20px;text-align:center;border-top:1px solid #f5d0d0;font-size:12px;color:#bbb;">— ${esc(d.author)} · ${esc(d.date)} —</section>
 </section>`,
 
     'tpl-10': () => `
 <section style="padding:28px 32px;font-family:'PingFang SC',sans-serif;">
-  <section style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+  <section style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
     <section style="background:linear-gradient(135deg,#2d3748,#4a5568);color:#fff;font-size:12px;font-weight:700;padding:6px 14px;border-radius:6px;letter-spacing:1px;">WEEKLY</section>
     <span style="font-size:12px;color:#aaa;">${esc(d.date)}</span>
   </section>
-  <section style="background:linear-gradient(135deg,#2d3748 0%,#4a5568 100%);border-radius:16px;padding:36px 32px;margin-bottom:24px;">
-    <p style="font-size:64px;font-weight:900;color:rgba(255,255,255,.08);line-height:1;margin:0 0 -20px;">01</p>
-    <h1 style="font-size:22px;font-weight:800;color:#fff;line-height:1.3;margin:0;">${esc(d.title)}</h1>
-    <p style="margin:12px 0 0;font-size:13px;color:rgba(255,255,255,.6);line-height:1.7;">${esc(d.desc)}</p>
+  <section data-header style="margin-bottom:20px;">
+    <h1 style="font-size:24px;font-weight:700;line-height:1.4;margin:0 0 12px;color:#000;">${esc(d.title)}</h1>
+    <section style="display:flex;align-items:center;gap:8px;">
+      <span style="font-size:14px;color:#576b95;">${esc(d.author)}</span>
+      <span style="font-size:12px;color:#999;">${esc(d.date)}</span>
+    </section>
+  </section>
+  <section style="background:linear-gradient(135deg,#2d3748 0%,#4a5568 100%);border-radius:16px;padding:28px 24px;margin-bottom:24px;">
+    <p style="margin:0;font-size:13px;color:rgba(255,255,255,.7);line-height:1.7;">${esc(d.desc)}</p>
   </section>
   ${secsHtml}
   ${quoteHtml}
@@ -521,22 +567,38 @@ function switchTab(tab) {
 // ========== 宽度 ==========
 function setWidth(w) { document.querySelector('.editor-wrapper').style.width = w+'px'; }
 
-// ========== 复制 ==========
-function copyArticle() {
+// ========== 复制（仅正文，不含标题/作者/时间） ==========
+function getBodyHTML() {
   const el = document.getElementById('articleContent');
+  const clone = el.cloneNode(true);
+  clone.removeAttribute('contenteditable');
+  clone.removeAttribute('id');
+  // 移除带 data-header 属性的元素
+  clone.querySelectorAll('[data-header]').forEach(h => h.remove());
+  return { element: clone, html: clone.innerHTML };
+}
+
+function copyArticle() {
+  const { element } = getBodyHTML();
+  // 临时插入DOM用于选中复制
+  element.style.position = 'fixed';
+  element.style.left = '-9999px';
+  element.style.top = '0';
+  document.body.appendChild(element);
   const range = document.createRange();
-  range.selectNodeContents(el);
+  range.selectNodeContents(element);
   const sel = window.getSelection();
   sel.removeAllRanges(); sel.addRange(range);
-  try { document.execCommand('copy'); sel.removeAllRanges(); showToast('✅ 已复制！可直接粘贴到公众号编辑器'); }
-  catch(e) { showToast('❌ 复制失败，请手动全选复制'); }
+  try { document.execCommand('copy'); sel.removeAllRanges(); showToast('✅ 已复制正文！可直接粘贴到公众号编辑器'); }
+  catch(e) { sel.removeAllRanges(); showToast('❌ 复制失败，请手动全选复制'); }
+  finally { document.body.removeChild(element); }
 }
 
 function copyHTML() {
-  const html = document.getElementById('articleContent').innerHTML;
-  navigator.clipboard.writeText(html).then(()=>showToast('✅ 内联 HTML 源码已复制！')).catch(()=>{
+  const { html } = getBodyHTML();
+  navigator.clipboard.writeText(html).then(()=>showToast('✅ 正文 HTML 源码已复制！')).catch(()=>{
     const ta=document.createElement('textarea');ta.value=html;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
-    showToast('✅ 内联 HTML 源码已复制！');
+    showToast('✅ 正文 HTML 源码已复制！');
   });
 }
 
@@ -575,12 +637,29 @@ function showToast(msg) {
   setTimeout(()=>el.classList.remove('show'),2800);
 }
 
+// ========== 回到顶部 ==========
+function scrollEditorTop() {
+  const editorArea = document.querySelector('.editor-area');
+  if (editorArea) editorArea.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// 监听编辑区滚动，显示/隐藏回到顶部按钮
+function setupScrollListener() {
+  const editorArea = document.querySelector('.editor-area');
+  const btn = document.getElementById('scrollTopBtn');
+  if (!editorArea || !btn) return;
+  editorArea.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', editorArea.scrollTop > 200);
+  });
+}
+
 // ========== 初始化 ==========
 function init() {
   syncFieldsFromData();
   renderTemplateList();
   renderSectionsPanel();
   renderArticle();
+  setupScrollListener();
 }
 init();
 </script>
