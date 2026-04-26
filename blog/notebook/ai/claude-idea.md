@@ -44,12 +44,12 @@ claude update
 
 ### 3.2、Claude Code 配置 Coding Plan
 
-a、初始化配置文件： `~/.claude/settings.json` 
+**a、初始化「流程配置文件」**： `~/.claude/settings.json` 
 ```
 vi ~/.claude/settings.json
 ```
 
-b、编辑配置文件：
+**b、编辑「流程配置文件」**：
 
 将 YOUR_API_KEY 替换为 Coding Plan 专属API Key；保存配置文件，重新打开一个终端即可生效。
 ```
@@ -67,7 +67,7 @@ b、编辑配置文件：
 }
 ```
 
-c、 编辑或新增 `~/.claude.json` 文件：
+**c、 编辑或新增「客户端配置文件」**： `~/.claude.json`
 
 将hasCompletedOnboarding 字段的值设置为 true。该步骤可避免启动Claude Code时报错：Unable to connect to Anthropic services。
 ```
@@ -76,7 +76,7 @@ c、 编辑或新增 `~/.claude.json` 文件：
 }
 ```
 
-d、开启 Agent Team功能（可选）：
+**d、开启 Agent Team功能（可选）**：
 
 Agent Team 是 Claude Code 的实验性功能，需设置 CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS 环境变量为 1 来启用。变量设置方式：
 ```
@@ -130,9 +130,36 @@ Claude Code IDE 插件支持在 JetBrains 系列 IDE中使用。
 ![img](https://www.xuxueli.com/blog/static/images/2026/img_20260426_03.jpg)
 
 
-## 五、实战演示：使用Claude Code编写Java代码
+## 五、实战演示
 
+### 5.1、简单任务
 
+**a、发布任务：**
+
+- 任务描述：“分析项目的 pom 依赖版本，帮我升级到最新版本。注意：先计划，找我确认后再执行”
+- 补充说明：为避免任务执行偏离目标，强烈建议「先计划，再执行」，参考文末最佳实践建议。
+
+![img](https://www.xuxueli.com/blog/static/images/2026/img_20260426_04.jpg)
+
+**b、生成计划：**
+
+Claude Code 接受任务后，将会按照要求生成执行计划：
+- 1. 扫描项目依赖关系，并生成依赖树。
+- 2. 使用 Web Search 查询 Maven Central，获取每个依赖的最新版本。
+- 3. 生成修改建议，列出需要升级的依赖及其新版本。
+- 4. 等待用户确认后，修改 pom.xml 文件，升级依赖版本。
+
+![img](https://www.xuxueli.com/blog/static/images/2026/img_20260426_05.jpg)
+
+**c、执行计划：**
+
+Claude Code 生成执行计划后将输出修改建议，用户确认后 Claude Code 将会修改 pom.xml 文件，进行依赖版本升级。
+
+![img](https://www.xuxueli.com/blog/static/images/2026/img_20260426_06.jpg)
+
+### 5.2、复杂任务
+
+略，更复杂的任务或使用方式，可参考文末官网文档。
 
 ## 六、最佳实践
 
