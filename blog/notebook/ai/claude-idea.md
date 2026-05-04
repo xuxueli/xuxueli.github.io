@@ -44,12 +44,30 @@ claude update
 
 ### 3.2、Claude Code 配置 Coding Plan
 
-**a、初始化「流程配置文件」**： `~/.claude/settings.json` 
+**a、初始化或编辑「流程配置文件」**： 
+
+- 方式一：CC Switch
+
+CC-Switch 是一款开源桌面应用，提供图形化界面来管理和切换多个 API Provider 配置，支持 Claude Code、Codex、Gemini CLI 等主流 AI 编程工具。
+
+针对Mac环境推荐Homebrew方式安装，安装后可通过图形界面添加和管理 Coding Plan 配置文件（API Key等）。详细可参考 [CC Switch文档](https://www.ccswitch.io/zh/docs?section=getting-started&item=installation)
+
+```
+# 添加 tap
+brew tap farion1231/ccswitch
+
+# 安装
+brew install --cask cc-switch
+
+# 更新
+brew upgrade --cask cc-switch
+```
+
+- 方式二：手动方式
+
 ```
 vi ~/.claude/settings.json
 ```
-
-**b、编辑「流程配置文件」**：
 
 将 YOUR_API_KEY 替换为 Coding Plan 专属API Key；保存配置文件，重新打开一个终端即可生效。
 ```
@@ -67,24 +85,12 @@ vi ~/.claude/settings.json
 }
 ```
 
-**c、 编辑或新增「客户端配置文件」**： `~/.claude.json`
+**b、 初始化或编辑「客户端配置文件」**： `~/.claude.json`
 
 将hasCompletedOnboarding 字段的值设置为 true。该步骤可避免启动Claude Code时报错：Unable to connect to Anthropic services。
 ```
 {
     "hasCompletedOnboarding": true
-}
-```
-
-**d、开启 Agent Team功能（可选）**：
-
-Agent Team 是 Claude Code 的实验性功能，需设置 CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS 环境变量为 1 来启用。变量设置方式：
-```
-{
-  "env": {
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
-    ...
-  }
 }
 ```
 
@@ -200,4 +206,6 @@ Claude Code 生成执行计划后将输出修改建议，用户确认后 Claude 
 - Claude官网地址：https://claude.com/product/claude-code
 - Claude官方文档：https://code.claude.com/docs/zh-CN/overview
 - Aliyun CodingPlan文档：https://help.aliyun.com/zh/model-studio/claude-code-coding-plan 
-- Claude Code教程：https://www.runoob.com/claude-code/claude-code-tutorial.html 
+- Claude Code教程：https://www.runoob.com/claude-code/claude-code-tutorial.html
+- CC Switch：https://github.com/farion1231/cc-switch
+- CC Switch文档：https://www.ccswitch.io/zh/docs?section=getting-started&item=installation
