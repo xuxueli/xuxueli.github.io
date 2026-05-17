@@ -184,13 +184,13 @@ npx skills add vercel-labs/agent-skills
 # 明确指定 GitHub 仓库，拉取全套技能（功能同格式1）
 npx skills add https://github.com/vercel-labs/agent-skills
 
-# 格式3：精准安装单个技能（子目录路径）
-# 仅安装仓库中的 web-design-guidelines 子技能
-npx skills add https://github.com/vercel-labs/agent-skills/tree/main/skills/web-design-guidelines
-
-# 格式4：指定技能名称安装（单个技能）
+# 格式3：指定技能名称安装（单个技能）
 # 从 GitHub 仓库安装技能，只安装仓库里 pptx 单个技能
 npx skills add https://github.com/anthropics/skills --skill pptx
+
+# 格式4：精准安装单个技能（子目录路径）
+# 仅安装仓库中的 web-design-guidelines 子技能
+npx skills add https://github.com/vercel-labs/agent-skills/tree/main/skills/web-design-guidelines
 
 # 格式5：本地技能安装（本地技能）
 # 直接加载当前目录下的本地技能文件夹，用于开发/测试自定义技能
@@ -212,48 +212,60 @@ npx skills add ./my-local-skills
 **常用组合示例**：
 
 ```bash
-# 安装多个指定技能
+# 1、指定 AI 工具：
+npx skills add vercel-labs/agent-skills --skill pptx -a opencode                  # 安装 pptx 技能，到 opencode
+npx skills add vercel-labs/agent-skills --skill pptx -a opencode -a claude-code   # 安装 pptx 技能，到 opencode 和 claude-code
+npx skills add vercel-labs/skills --skill find-skills --agent '*'                 # 安装 find-skills 技能，到所有 Agent
+
+# 2、全局、项目级安装：
+npx skills add vercel-labs/agent-skills --skill pptx -g              # 全局安装
+npx skills add vercel-labs/agent-skills --skill pptx                 # 项目级 
+
+# 3、安装多个指定技能：
 npx skills add vercel-labs/agent-skills --skill pptx --skill skill-creator
 
-# 全局安装到多个 Agent
-npx skills add vercel-labs/agent-skills -a claude-code -a opencode -g
-
-# 安装所有技能（谨慎使用）
+# 4、安装所有技能（谨慎使用）
 npx skills add vercel-labs/agent-skills --all
 
-# 仅列出可用技能，不实际安装
+# 5、仅列出可用技能，不实际安装
 npx skills add vercel-labs/agent-skills --list
 ```
 
 #### 4.3 其他常用命令
 
 ```bash
-# 搜索技能
-npx skills find [query]
+# 1、列出已安装Skill
+npx skills list                # 项目级
+npx skills ls -g               # 全局级
+npx skills ls -a opencode      # 按 AI 工具过滤
+npx skills ls --json           # JSON 输出，方便脚本
 
-# 移除已安装的技能
-npx skills remove [skills]
-# 或简写
-npx skills rm [skills]
+# 2、搜索Skill
+npx skills find                # 交互式搜索
+npx skills find [query]        # 带关键词搜索
 
-# 列出已安装的技能
-npx skills list
-# 或简写
-npx skills ls
+# 3、更新Skill
 
-# 检查技能更新
+npx skills update              # 更新所有项目级 Skill
+npx skills update [skill-name] # 只更新某个
+npx skills update -g           # 只更新全局 Skill
+npx skills update -p           # 只更新项目级 Skill
+npx skills upgrade             # 同 update
+
+# 4、删除Skill
+npx skills remove              # 交互式选择要删的
+npx skills remove [skills]     # 按名称删除
+npx skills remove -g           # 从全局删除
+npx skills rm [skills]         # 简写 
+npx skills rm --all            # 删除所有（需确认）
+
+# 5、检查技能更新
 npx skills check
 
-# 更新所有技能
-npx skills update
-
-# 更新指定技能
-npx skills update [skill-name]
-
-# 创建新技能模板
+# 6、创建新技能模板
 npx skills init [name]
 
-# 生成锁定文件用于更新跟踪
+# 7、生成锁定文件用于更新跟踪
 npx skills generate-lock
 ```
 
@@ -323,12 +335,14 @@ description: 这个技能的简短描述，说明适用场景
 
 **不同 Agent 的全局路径**：
 
-| Agent | 全局路径 |
-|-------|----------|
-| Claude Code | `~/.claude/skills/` |
-| GitHub Copilot | `~/.copilot/skills/` |
-| OpenCode | `~/.config/opencode/skills/` |
-| Cursor | `~/.cursor/skills/` |
+| Agent             | 全局路径                      |
+|-------------------|---------------------------|
+| 标准路径              |     `~/.agent/skills/`    |
+| Claude Code       | `~/.claude/skills/`       |
+| GitHub Copilot    | `~/.copilot/skills/`      |
+| OpenCode          | `~/.config/opencode/skills/` |
+| Cursor            | `~/.cursor/skills/`       |
+
 
 **安装方式对比**：
 
@@ -652,6 +666,7 @@ npx skills 为 AI 助手提供了一种标准化的能力扩展机制：
 - Skills 在线目录: https://www.skills.sh/
 - Vercel Agent Skills: https://github.com/vercel-labs/agent-skills
 - Anthropic Skills: https://github.com/anthropics/skills
+- npx skills 命令行指南：https://01mvp.com/docs/skills/npx-skills-cli
 
 ---
 
