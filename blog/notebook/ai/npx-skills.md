@@ -1,4 +1,4 @@
-<h2 style="color:#4db6ac !important" >SKILL实战：npx skills操作指南</h2>
+<h2 style="color:#4db6ac !important" >扩展 AI 能力：npx skills 实战手册</h2>
 > 【原创】2026/05/17
 
 [TOCM]
@@ -165,11 +165,8 @@ npx skills find [query]
 
 **使用示例**：
 ```bash
-# 查找与设计相关的技能
-npx skills find design
-
-# 查找前端相关技能
-npx skills find frontend
+# 查找 pptx 相关的技能
+npx skills find pptx
 ```
 
 #### 4.2 技能安装：`npx skills add`
@@ -191,11 +188,11 @@ npx skills add https://github.com/vercel-labs/agent-skills
 # 仅安装仓库中的 web-design-guidelines 子技能
 npx skills add https://github.com/vercel-labs/agent-skills/tree/main/skills/web-design-guidelines
 
-# 格式4：指定技能名称安装
-# 从 GitHub 仓库安装技能，只安装仓库里 pptx "单个技能"
+# 格式4：指定技能名称安装（单个技能）
+# 从 GitHub 仓库安装技能，只安装仓库里 pptx 单个技能
 npx skills add https://github.com/anthropics/skills --skill pptx
 
-# 格式5：本地技能安装
+# 格式5：本地技能安装（本地技能）
 # 直接加载当前目录下的本地技能文件夹，用于开发/测试自定义技能
 npx skills add ./my-local-skills
 ```
@@ -216,7 +213,7 @@ npx skills add ./my-local-skills
 
 ```bash
 # 安装多个指定技能
-npx skills add vercel-labs/agent-skills --skill frontend-design --skill skill-creator
+npx skills add vercel-labs/agent-skills --skill pptx --skill skill-creator
 
 # 全局安装到多个 Agent
 npx skills add vercel-labs/agent-skills -a claude-code -a opencode -g
