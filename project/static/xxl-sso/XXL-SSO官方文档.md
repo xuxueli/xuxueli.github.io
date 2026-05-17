@@ -888,7 +888,15 @@ Response<String> result = XxlSsoHelper.hasPermission(LoginInfo loginInfo, String
 ### v2.3.1 Release Notes [2025-12-20]
 - 1、【升级】升级多项依赖至较新版本，如 jedis、xxl-tool、spring 等；
 
-### v2.3.2 Release Notes [ING]
+### v2.3.2 Release Notes [2025-12-28]
+- 1、【升级】重构项目依赖管理，将依赖版本统一到父级pom；
+- 2、【升级】升级多项依赖至较新版本，如 xxl-tool 等；
+
+### v2.4.0 Release Notes [2026-04-05]
+- 1、【优化】SSO操作提示优化，明确错误提示原因，提升问题的定位效率；
+- 2、【升级】升级多项依赖至较新版本，如 jedis、xxl-tool、spring 等；
+
+### v2.4.1 Release Notes [ING]
 - 1、【ING】集成WebFlux、Spring-Cloud-Gateway，并提供接入示例；（支持 interceptor、filter、webflux、gateway）
 - 2、【ING】增强用户增强安全性：登陆用户数据中，新增客户端信息如ip、ua等，防止token被窃取；
 
@@ -898,11 +906,22 @@ Response<String> result = XxlSsoHelper.hasPermission(LoginInfo loginInfo, String
 - 2、认证中心与接入端交互数据加密，临时AccessToken阅后即焚，增强安全性；
 - 3、CAS认证中心，支持维护客户端应用；防止跳转非法第三方导致登陆信息泄露；
 - 4、集成网关支持；集成WebFlux, Spring-Cloud-Gateway等；
-- 5、支持认证分组，分组内共享登陆状态，分组之间登录态隔离；
-- 6、账号中心模块：提供开箱即用账号中心模块，进一步提升用户接入体验；
-- 7、隔离升级：
+- 5、分组隔离：分组内共享登陆状态，分组之间登录态隔离；
   - 租户：store数据，前后端key 隔离；
   - 多端：隔离登陆态，map存多token（用户最长有效期，map维护本次有效期）；
+- 6、统一身份管控：提供开箱即用“统一身份管控中心”，提升用户接入体验；
+  - 领域：
+    - 身份空间（应用）：空间定义、组织定义；
+    - 统一用户：用户管理
+    - 统一认证：sso、oauth、多因子
+    - 统一授权：权限定义，授权管理；
+    - 安全审计：登陆、sso日志
+  - 服务：
+    - admin：身份管控中心。用户（账号密码）、应用（域名，角色及权限设置），应用授权 + 权限分配。（系统自身管理员权限控制）
+    - server：cas认证中心。中心登陆，应用入口。应用授权及检验。
+    - client：统一身份管控客户端。sso接入；用户登陆、权限检验。
+    - core：依赖；
+    - sample：示例。
 
 
 ## 六、其他
