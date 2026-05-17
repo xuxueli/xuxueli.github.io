@@ -335,13 +335,13 @@ description: 这个技能的简短描述，说明适用场景
 
 **不同 Agent 的全局路径**：
 
-| Agent             | 全局路径                      |
-|-------------------|---------------------------|
-| 标准路径              |     `~/.agent/skills/`    |
-| Claude Code       | `~/.claude/skills/`       |
-| GitHub Copilot    | `~/.copilot/skills/`      |
+| Agent             | 全局路径                         |
+|-------------------|------------------------------|
+| 标准路径              | `~/.agent/skills/`           |
+| Claude Code       | `~/.claude/skills/`          |
+| GitHub Copilot    | `~/.copilot/skills/`         |
 | OpenCode          | `~/.config/opencode/skills/` |
-| Cursor            | `~/.cursor/skills/`       |
+| Cursor            | `~/.cursor/skills/`          |
 
 
 **安装方式对比**：
@@ -555,6 +555,21 @@ cat skills-lock.json
 
 # 手动安装指定版本（如果支持）
 # 或从 Git 历史恢复旧的锁文件
+```
+
+**Q6：npx安装的技能，opencode 如何关联使用？**
+
+- 全部安装方式：默认技能安装在 `~/.agent/skills/` 或 `~/.config/opencode/skills/` 目录下，opencode 会自动识别并加载这些技能，无需额外配置。
+- 项目安装方式：默认技能安装在 `项目/.agent/skills/` 目录下，不是默认路径，需要在 skills.paths 中添加项目路径，示例：
+
+```json
+{
+  "skills": {
+    "paths": [
+      "./.agent/skills"
+    ]
+  }
+}
 ```
 
 ---
