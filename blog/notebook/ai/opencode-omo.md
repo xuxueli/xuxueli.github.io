@@ -213,12 +213,21 @@ OMO 内置了多个专业化 Agent，每个 Agent 负责不同的核心职责，
 
 OpenCode 提供多种产品形态，包括：CLI、Web、客户端、IDE插件等，用户可以根据自己的使用习惯选择安装。
 
-- 客户端下载：https://opencode.ai/zh/download
-- CLI安装：Mac用户可执行如下命令安装：
+- **CLI方式安装**：
+
+官方提供终端一键安装脚本，适用于 Mac、Linux、Windows 等系统。针对Mac用户可进行brew方式安装：
 
 ```bash
 brew install anomalyco/tap/opencode
 ```
+
+![img](https://www.xuxueli.com/blog/static/images/2026/img_20260523_06.jpg)
+
+- **客户端安装**：
+
+OpenCode 官方同时提供桌面客户端，可直接下载安装：[OpenCode下载地址](https://opencode.ai/zh/download)
+
+![img](https://www.xuxueli.com/blog/static/images/2026/img_20260523_07.jpg)
 
 ### 4.2 LLM模型配置
 
