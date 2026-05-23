@@ -1,5 +1,5 @@
 <h2 style="color:#4db6ac !important" >开源AI Agent：OpenCode集成OMO原理及实践</h2>
-> 【原创】2026/04/26
+> 【原创】2026/05/23
 
 [TOCM]
 
