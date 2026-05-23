@@ -307,7 +307,7 @@ OpenCode 接受任务输入后，会自动触发 `Prometheus` 智能代理进行
 
 ![img](https://www.xuxueli.com/blog/static/images/2026/img_20260523_02.jpg)
 
-#### Step 4：启动运行
+#### Step 4：部署运行
 
 任务整体完成后，可以让 OpenCode 直接运行项目。OpenCode 会自动启动开发服务器，参考下图。
 
