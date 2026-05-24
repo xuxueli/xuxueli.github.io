@@ -168,22 +168,33 @@ specify init --here --ai opencode
 
 检查是否可用以下 Slash Commands（斜杠命令）：
 
-| 命令 | 功能描述 | 阶段 |
-| --- | --- | --- |
-| /speckit.constitution | 建立项目原则和非谈判性准则 | 0. 准备 |
-| /speckit.specify | 定义“做什么”和“为什么”，生成规格文档 | 1. 规格化 |
-| /speckit.clarify | (可选) 在规划前通过提问澄清模糊需求 | 1.5 澄清 |
-| /speckit.plan | 基于规格和技术栈生成技术实施计划 | 2. 规划 |
-| /speckit.tasks | 将计划分解为可执行的、有序的任务列表 | 3. 任务分解 |
-| /speckit.analyze | (可选) 分析任务一致性和覆盖率 | 3.5 分析 |
-| /speckit.implement | 执行任务，生成代码和测试 | 4. 实现 |
+| 命令                      | 功能描述                         | 必选             | 阶段         |
+|-------------------------|------------------------------|----------------|------------|
+| /speckit.constitution   | 建立项目原则和非谈判性准则                | /              | 0. 准备      |
+| /speckit.specify        | 定义“做什么”和“为什么”，生成规格文档         | 是              | 1. 规格化     |
+| /speckit.clarify        | 在规划前通过提问澄清模糊需求               | /              | 1.5 澄清     |
+| /speckit.plan           | 基于规格和技术栈生成技术实施计划             | 是              | 2. 规划      |
+| /speckit.tasks          | 将计划分解为可执行的、有序的任务列表           | 是              | 3. 任务分解    |
+| /speckit.analyze        | 分析任务一致性和覆盖率                  | /              | 3.5 分析     |
+| /speckit.implement      | 执行任务，生成代码和测试                 | 是              | 4. 实现      |
 
 ‌典型工作流示例：‌
-- /speckit.constitution 设定代码质量和测试标准。
-- /speckit.specify 描述你要构建的功能（例如：“创建一个用户注册系统...”）。
-- /speckit.plan 指定技术栈（例如：“使用 Node.js + Express + MongoDB”）。
-- /speckit.tasks 生成待办事项。
-- /speckit.implement 让 AI 开始编写代码。
+- /speckit.constitution - 设定项目原则（例如：代码质量、测试标准）
+- /speckit.specify - 描述你的需求（例如：“创建一个用户注册系统...”）
+- /speckit.plan - 制定实施计划
+- /speckit.tasks - 生成待办任务
+- /speckit.implement - AI编写代码
+
+
+问题：
+1. 如何指定Spec文档的语言和风格？
+    - 打开 .specify/memory/constitution.md。
+    - 在文件中添加或修改以下规则（建议放在文件顶部或 "Communication" 部分）
+```
+## Communication Guidelines
+- **Language**: All specifications, plans, tasks, code comments, and commit messages MUST be written in **Simplified Chinese (zh-CN); unless explicitly requested otherwise.
+- **Tone**: Professional, concise, and direct.
+```
 
 ### 6.2 Spec-Kit实践流程示例
 
