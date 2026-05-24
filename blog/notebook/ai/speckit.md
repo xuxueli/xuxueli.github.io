@@ -270,7 +270,7 @@ specs
 
 本次改造项目为正式开源项目，对代码规范性与质量存在要求；另外，该重构需求涉及 “9个功能模块”、“前后端代码逻辑修改”，累计需要修改 130+ 项目文件，为中型颗粒度需求。本次改造需求存在一定复杂度。
 
-#### Step1：Spec-Kit 初始化
+### Step1：Spec-Kit 初始化
 
 进入项目根目录，执行如下命令生成 Spec-Kit 工程契约链：
 ```
@@ -281,7 +281,7 @@ specify init .
 
 ![img](https://www.xuxueli.com/blog/static/images/2026/img_20260524_01.jpg)
 
-#### Step2：Constitution - 生成项目宪法
+### Step2：Constitution - 生成项目宪法
 
 执行如下命令生成 “项目宪法”（例如：项目约定、技术栈与约束、开发工作流等），确保后续规范和代码实现的一致性和可控性。
 ```
@@ -296,7 +296,7 @@ specify init .
 
 ![img](https://www.xuxueli.com/blog/static/images/2026/img_20260524_02.jpg)
 
-#### Step3：Specify - 生成功能规格
+### Step3：Specify - 生成功能规格
 
 执行如下命令 + 填写功能需求描述，生成 “功能规格（Spec）”：
 
@@ -323,7 +323,7 @@ xxl-api-admin/src/main/java/com/xxl/api/admin
 
 ![img](https://www.xuxueli.com/blog/static/images/2026/img_20260524_03.jpg)
 
-#### Step4：Plan - 生成技术规划
+### Step4：Plan - 生成技术规划
 
 执行如下命令，生成 “技术规划”：
 ```
@@ -334,7 +334,7 @@ xxl-api-admin/src/main/java/com/xxl/api/admin
 
 ![img](https://www.xuxueli.com/blog/static/images/2026/img_20260524_04.jpg)
 
-#### Step4：Tasks - 拆解任务
+### Step4：Tasks - 拆解任务
 
 执行如下命令，生成 “任务清单”：
 
@@ -346,7 +346,7 @@ xxl-api-admin/src/main/java/com/xxl/api/admin
 
 ![img](https://www.xuxueli.com/blog/static/images/2026/img_20260524_05.jpg)
 
-#### Step5：Implement - 生成代码实现
+### Step5：Implement - 生成代码实现
 
 执行如下命令，将会按照拆解任务（tasks.md）进行 “代码生成”：
 
