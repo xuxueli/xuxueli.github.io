@@ -269,7 +269,17 @@ brew upgrade --cask cc-switch
 
 可以通过如下命令安装OMO（Oh My OpenAgent）插件：
 ```
+# 安装
 bunx oh-my-openagent install
+
+# 检查版本
+bunx oh-my-openagent version
+
+# 通过 opencode plugin 重装最新版
+opencode plugin oh-my-openagent@latest --global --force
+
+# 检测状态
+bunx oh-my-openagent doctor --status 
 ```
 
 如果提示 `command not found: bunx`，需要通过以下命令先安装`bun`。
