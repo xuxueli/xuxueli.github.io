@@ -97,7 +97,7 @@ docker run -p 2181:2181 --name zookeeper -v $PWD/conf/zoo.cfg:/opt/zookeeper/con
 
 ## 8、打包镜像
 
-#### a、默认镜像打包
+### a、默认镜像打包
 ```
 // 1、Java项目打包
 mvn clean package
@@ -143,7 +143,7 @@ docker run -d \
 配置镜像，ipv6 proxy不生效导致；参考：https://zhuanlan.zhihu.com/p/635984165 
 ```
 
-### b、多架构打包（Docker Buildx）
+### c、多架构打包（Docker Buildx）
 
 ```
 // 1、创建多平台 builder
@@ -167,7 +167,7 @@ docker buildx use default
 ```
 
 
-### c、Docker Compose部署
+### d、Docker Compose部署
 
 Docker Compose 是一个用于定义和运行多容器 Docker 应用程序的工具。你可以使用 YAML 文件来配置应用程序的服务，然后通过单个命令启动或停止所有服务。
 
