@@ -923,7 +923,7 @@ spring.mail.properties.mail.smtp.starttls.enable=true
 spring.mail.properties.mail.smtp.starttls.required=true
 spring.mail.properties.mail.smtp.socketFactory.class=javax.net.ssl.SSLSocketFactory
 
-### 调度中心通讯TOKEN [选填]：非空时启用；
+### 调度中心通讯TOKEN [必填]：安全性校验；
 xxl.job.accessToken=
 
 ### 调度中心通讯超时时间[选填]，单位秒；默认3s；
@@ -1014,29 +1014,31 @@ xuxueli/xxl-job-admin:{指定版本}
 执行器配置，配置内容说明：
 
 ```
-### 调度中心部署根地址 [选填]：如调度中心集群部署存在多个地址则用逗号分隔。执行器将会使用该地址进行"执行器心跳注册"和"任务结果回调"；为空则关闭自动注册；
+### 调度中心部署根地址 [必填]：如调度中心集群部署存在多个地址则用逗号分隔。执行器将会使用该地址进行"执行器心跳注册"和"任务结果回调"；为空则关闭自动注册；
 xxl.job.admin.addresses=http://127.0.0.1:8080
-### 调度中心通讯TOKEN [选填]：非空时启用；
-xxl.job.admin.accessToken=default_token
 ### 调度中心通讯超时时间[选填]，单位秒；默认3s；
 xxl.job.admin.timeout=3
 
-### 执行器启用开关 [选填]：默认开启，关闭时不进行执行器初始化；
+### 执行器启用开关 [必填]：默认开启，关闭时不进行执行器初始化；
 xxl.job.executor.enabled=true
-### 执行器AppName [选填]：执行器心跳注册分组依据；为空则关闭自动注册
+### 执行器AppName [必填]：执行器心跳注册分组依据；为空则关闭自动注册
 xxl.job.executor.appname=xxl-job-executor-sample
-### 执行器注册 [选填]：优先使用该配置作为注册地址，为空时使用内嵌服务 ”IP:PORT“ 作为注册地址。从而更灵活的支持容器类型执行器动态IP和动态映射端口问题。
-xxl.job.executor.address=
+### 调度中心通讯TOKEN [必填]：安全性校验；
+xxl.job.executor.accessToken=default_token
 ### 执行器IP [选填]：默认为空表示自动获取IP，多网卡时可手动设置指定IP，该IP不会绑定Host仅作为通讯使用；地址信息用于 "执行器注册" 和 "调度中心请求并触发任务"；
 xxl.job.executor.ip=
 ### 执行器端口号 [选填]：小于等于0则自动获取；默认端口为9999，单机部署多个执行器时，注意要配置不同执行器端口；
 xxl.job.executor.port=9999
+### 执行器注册 [选填]：优先使用该配置作为注册地址，为空时使用内嵌服务 ”IP:PORT“ 作为注册地址。从而更灵活的支持容器类型执行器动态IP和动态映射端口问题。
+xxl.job.executor.address=
 ### 执行器运行日志文件存储磁盘路径 [选填] ：需要对该路径拥有读写权限；为空则使用默认路径；
 xxl.job.executor.logpath=/data/applogs/xxl-job/jobhandler
 ### 执行器日志文件保存天数 [选填] ： 过期日志自动清理, 限制值大于等于3时生效; 否则, 如-1, 关闭自动清理功能；
 xxl.job.executor.logretentiondays=30
-### 任务扫描排除路径 [选填] ：任务扫描时忽略指定包路径下的Bean；支持配置包路径前缀，多个逗号分隔；
+### 执行器任务扫描排除路径 [选填] ：Bean模式任务扫描时，忽略指定包路径，非空时生效；支持配置包路径前缀，多个逗号分隔；例如"org.package01"或"org.package01,org.package02"
 xxl.job.executor.excludedpackage=org.springframework,spring
+### 执行器GLUE模式启用开关 [选填] ：默认开启，支持全部类型任务；关闭时只支持Bean模式任务、禁用GLUE模式任务；
+xxl.job.executor.glueenabled=true
 ```
 
 #### 步骤三：执行器组件配置
@@ -1936,20 +1938,22 @@ API服务请求参考代码：com.xxl.job.adminbiz.AdminBizTest
 
 Header：
     XXL-JOB-ACCESS-TOKEN : {请求令牌}
- 
+    XXL-JOB-APPNAME : {执行器AppName}
+
 请求数据格式如下，放置在 RequestBody 中，JSON格式：
-    [{
-        "logId":1,              // 本次调度日志ID
-        "logDateTim":0,         // 本次调度日志时间
-        "handleCode":200,       // 200 表示任务执行正常，500表示失败
-        "handleMsg": null
-        }
-    }]
+    {
+        "callbackList":[{
+            "logId":1,              // 本次调度日志ID
+            "logDateTime":0,        // 本次调度日志时间
+            "handleCode":200,       // 200 表示任务执行正常，500表示失败
+            "handleMsg": null
+        }]
+    }
 
 响应数据格式：
     {
       "code": 200,      // 200 表示正常、其他失败
-      "msg": null      // 错误提示消息
+      "msg": null       // 错误提示消息
     }
 ```
 
@@ -1963,7 +1967,8 @@ Header：
 
 Header：
     XXL-JOB-ACCESS-TOKEN : {请求令牌}
- 
+    XXL-JOB-APPNAME : {执行器AppName}
+
 请求数据格式如下，放置在 RequestBody 中，JSON格式：
     {
         "registryGroup":"EXECUTOR",                     // 固定值
@@ -1974,7 +1979,7 @@ Header：
 响应数据格式：
     {
       "code": 200,      // 200 表示正常、其他失败
-      "msg": null      // 错误提示消息
+      "msg": null       // 错误提示消息
     }
 ```
 
@@ -1988,7 +1993,8 @@ Header：
 
 Header：
     XXL-JOB-ACCESS-TOKEN : {请求令牌}
- 
+    XXL-JOB-APPNAME : {执行器AppName}
+
 请求数据格式如下，放置在 RequestBody 中，JSON格式：
     {
         "registryGroup":"EXECUTOR",                     // 固定值
@@ -1999,7 +2005,7 @@ Header：
 响应数据格式：
     {
       "code": 200,      // 200 表示正常、其他失败
-      "msg": null      // 错误提示消息
+      "msg": null       // 错误提示消息
     }
 ```
 
@@ -2018,8 +2024,9 @@ API服务请求参考代码：com.xxl.job.executorbiz.ExecutorBizTest
 
 Header：
     XXL-JOB-ACCESS-TOKEN : {请求令牌}
- 
-请求数据格式如下，放置在 RequestBody 中，JSON格式：
+    XXL-JOB-APPNAME : {执行器AppName}
+
+请求数据：无
 
 响应数据格式：
     {
@@ -2038,7 +2045,8 @@ Header：
 
 Header：
     XXL-JOB-ACCESS-TOKEN : {请求令牌}
- 
+    XXL-JOB-APPNAME : {执行器AppName}
+
 请求数据格式如下，放置在 RequestBody 中，JSON格式：
     {
         "jobId":1       // 任务ID
@@ -2057,11 +2065,12 @@ Header：
 
 ------
 
-地址格式：{执行器内嵌服务根地址}/run
+地址格式：{执行器内嵌服务根地址}/trigger
 
 Header：
     XXL-JOB-ACCESS-TOKEN : {请求令牌}
- 
+    XXL-JOB-APPNAME : {执行器AppName}
+
 请求数据格式如下，放置在 RequestBody 中，JSON格式：
     {
         "jobId":1,                                  // 任务ID
@@ -2085,7 +2094,7 @@ Header：
     }
 ```
 
-#### f、终止任务
+#### d、终止任务
 ```
 说明：终止任务
 
@@ -2095,12 +2104,12 @@ Header：
 
 Header：
     XXL-JOB-ACCESS-TOKEN : {请求令牌}
- 
+    XXL-JOB-APPNAME : {执行器AppName}
+
 请求数据格式如下，放置在 RequestBody 中，JSON格式：
     {
         "jobId":1       // 任务ID
     }
-    
 
 响应数据格式：
     {
@@ -2109,7 +2118,7 @@ Header：
     }
 ```
 
-#### d、查看执行日志
+#### e、查看执行日志
 ```
 说明：查看任务日志，滚动方式加载
 
@@ -2119,11 +2128,12 @@ Header：
 
 Header：
     XXL-JOB-ACCESS-TOKEN : {请求令牌}
- 
+    XXL-JOB-APPNAME : {执行器AppName}
+
 请求数据格式如下，放置在 RequestBody 中，JSON格式：
     {
-        "logDateTim":0,     // 本次调度日志时间
         "logId":0,          // 本次调度日志ID
+        "logDateTime":0,    // 本次调度日志时间
         "fromLineNum":0     // 日志开始行号，滚动加载日志
     }
 
@@ -2900,12 +2910,31 @@ alter table xxl_job_log
 - 3、【安全】任务RollingLog权限校验完善，防止越权查看任务日志；
 
 ### 7.47 版本 v3.5.0 Release Notes[ING]
-- 1、【TODO】AccessToken线上化管理：执行期维度，限制操作当前执行期；
-- 2、【TODO】调度中心OpenAPI增强：提供任务管理能力；封装Agent Skill并推送ClawHub；
-- 3、【TODO】配置线上化：发送邮箱配置线上管理、线程池配置调整；
-- 4、【TODO】任务告警：拆分“告警类型、告警配置”属性，支持Webhook、邮箱多种方式；
-- 5、【TODO】任务说明：拆分“任务名称、任务描述”属性，前者用于任务检索，后者用于补充任务描述，如参数说明、功能详细介绍等。
-- 6、【TODO】GLUE模式开关：执行器新增GLUE模式配置，支持任务维度启停，满足差异化场景需求；
+- 1、【新增】GLUE模式开关：新增GLUE模式开关（xxl.job.executor.glueenabled），支持执行器维度设置是否启用GLUE模式；
+- 2、【新增】执行器AccessToken：执行器维度隔离设置，提升安全性；线上化动态管理，提升操作效率及体验；
+  （注意：因为AccessToken调整为执行器维度，OpenAPI通讯协议部分发生变化，调度中心与执行器需要一并升级至v3.5.0；）
+- 3、【调整】执行器约束规则调整，AppName限制不可重复；
+- 4、【TODO】调度中心OpenAPI增强：提供任务管理能力，包括任务基础管理、状态启停、任务触发等；
+- 5、【TODO】配置线上化：发送邮箱配置线上管理、线程池配置调整；
+- 6、【TODO】任务告警：拆分“告警类型、告警配置”属性，支持Webhook、邮箱多种方式；
+- 7、【TODO】任务说明：拆分“任务名称、任务备注”属性，前者用于任务检索，后者用于补充任务描述。
+
+**备注：**     
+数据库升级脚本：
+```
+-- 1. 添加 access_token 列
+ALTER TABLE `xxl_job_group` 
+ADD COLUMN `access_token` varchar(255) DEFAULT NULL COMMENT '执行器AccessToken' AFTER `address_list`;
+
+-- 2. 创建 app_name 的唯一索引
+ALTER TABLE `xxl_job_group` 
+ADD UNIQUE KEY `i_app_name` (`app_name`) USING BTREE;
+
+-- 3. 将指定 AppName 的 access_token 更新为目标值；
+UPDATE `xxl_job_group`
+SET `access_token` = '<新Token值>'
+WHERE `app_name` = '<目标AppName>';
+```
 
 
 ### TODO LIST
@@ -2931,7 +2960,6 @@ alter table xxl_job_log
     - 重试任务：失败时，新增主任务。所有调度记录，包括入口调度和重试调度，均挂载主任务上。
 - 12、分片任务：全部完成后才会出发后置节点；
 - 13、日期过滤：支持多个时间段排除；
-- 14、提供执行器Docker镜像；
 - 15、脚本任务，支持数据参数，新版本仅支持单参数不支持需要兼容；
 - 17、批量调度：调度请求入queue，调度线程批量获取调度请求并发起远程调度；提高线程效率；
 - 18、执行器端口复用，复用容器端口提供通讯服务；
@@ -2943,8 +2971,6 @@ alter table xxl_job_log
 - 20、日志策略：
     - 调度日志：全局配置：废弃； 新增“调度日志策略”：任务维度自定义，保留3天、7天、1个月、3个月、一年、永久；
     - 执行日志：新增“执行RollingLog开关”：任务维度自定义，支持：RollingLog、普通日志（slf4j输出）、关闭（不输出）；
-- 21、AccessToken：废弃全局配置；支持在线管理，动态生成、动态启停；
-- 22、任务管理OpenAPI;
 - 23、调度中心启动参数线上配置：告警发送邮箱、Token，支持线上配置生效，修改不需重启机器；
 - 24、执行器内嵌server切换tomcat，精简依赖；
 - 25、日志策略新增：
