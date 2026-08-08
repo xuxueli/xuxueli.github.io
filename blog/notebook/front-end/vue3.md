@@ -1013,7 +1013,7 @@ KeepAlive 的生命周期钩子：被缓存的组件会多出 `onActivated`（�
 
 # 六、组合式 API 与生命周期
 
-## 6.1 <script setup> 语法
+## 6.1 script setup 语法
 
 `<script setup>` 是组合式 API 的编译时语法糖，写法更简洁：
 
