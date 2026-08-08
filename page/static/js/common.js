@@ -2,6 +2,12 @@ $(function () {
 
     // ---------------------- Materialize ----------------------
 
+    // 修复：Raphael.js（editormd 流程图依赖）会覆盖全局 Element，导致 Materialize 组件
+    // 初始化时报 "[object HTMLUListElement] is not an HTML Element"；此处恢复原生 Element。
+    if (typeof Element === "function" && !(document.createElement("div") instanceof Element)) {
+        window.Element = Object.getPrototypeOf(window.HTMLElement);
+    }
+
     $('.sidenav').sidenav();            // 侧边栏导航（移动设备可滑动展开/收起）
     $(".dropdown-trigger").dropdown();  // 下拉菜单
 
