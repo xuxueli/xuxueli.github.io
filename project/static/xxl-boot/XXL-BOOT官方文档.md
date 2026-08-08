@@ -78,13 +78,12 @@ XXL-BOOT 定位为 快速开发平台，整合流行前后端技术能力，致�
 
 ```
 /xxl-boot/doc/db/
-    - tables_xxl_boot.sql                   ：系统初始化SQL脚本
-    - tables_xxl_boot_custom.sql            ：系统数据定制SQL脚本  
-        - A、单体项目初始化SQL脚本
-        - B、前后端分离项目初始化SQL脚本
+    - tables_xxl_boot.sql                   ：系统初始化SQL脚本【必须】
+    - tables_xxl_boot_monolith.sql          ：单体项目初始化SQL脚本【可选，部署单体项目时使用】
+    - tables_xxl_boot_modular.sql           ：前后端分离项目初始化SQL脚本【可选，部署前后端分离项目时使用】
 ```
 
-补充说明：如需部署单体项目，只需要执行 `tables_xxl_boot.sql` 即可；如需切换部署 “前后端分离项目/单体项目”，需要执行 `tables_xxl_boot_custom.sql` 中的 A 或者 B 部分。
+补充说明：如需部署单体项目，只需要执行 `tables_xxl_boot.sql` 即可；如需切换部署 “前后端分离项目”或“单体项目”，则需要执行 `tables_xxl_boot_modular.sql` 或 `tables_xxl_boot_monolith.sql`。
 
 ### 2.2 编译源码
 项目为 Monorepo仓库，单体项目 与 前后端分离项目 维护在同一个代码仓库中，通过不同目录模块隔离维护。
@@ -245,6 +244,65 @@ server {
 
 系统首页截图示例：
 ![输入图片说明](https://www.xuxueli.com/project/static/xxl-boot/images/img_015.png "在这里输入图片标题")
+
+
+### 2.5 Docker Compose 部署（单体项目）
+项目支持通过 Docker Compose 方式部署并启动，如下介绍 单体项目 部署方式：
+
+第一步：Clone并进入仓库
+```
+git clone https://github.com/xuxueli/xxl-boot.git
+cd ./xxl-boot
+```
+
+第二步：项目构建
+```
+mvn clean package -Dmaven.test.skip=true
+```
+
+第三步：项目配置
+>注意：支持自定义 .env 配置，如修改 MYSQL_PATH 配置设置Mysql数据持久化目录；
+
+```
+cd ./docker/monolith/
+cat .env
+```
+
+第四步：启动/停止项目
+
+```
+docker compose up -d
+docker compose down
+```
+
+### 2.5 Docker Compose 部署（前后端分离项目）
+项目支持通过 Docker Compose 方式部署并启动，如下介绍 前后端分离项目 部署方式：
+
+第一步：Clone并进入仓库
+```
+git clone https://github.com/xuxueli/xxl-boot.git
+cd ./xxl-boot
+```
+
+第二步：项目构建
+```
+mvn clean package -Dmaven.test.skip=true
+```
+
+第三步：项目配置
+>注意：支持自定义 .env 配置，如修改 MYSQL_PATH 配置设置Mysql数据持久化目录；
+
+```
+cd ./docker/modular/
+cat .env
+```
+
+第四步：启动/停止项目
+
+```
+docker compose up -d
+docker compose down
+```
 
 
 ## 三、操作指南
@@ -415,66 +473,6 @@ public @interface Permission {
 ### 4.4、代码生成
 参考上文 “3.1、代码生成”。
 
-### 4.5、Docker Compose 部署（单体项目）
-支持通过 Docker Compose 方式部署并启动，如下介绍 单体项目 部署方式：
-
-#### 第一步：前往仓库目录
-```
-cd ./xxl-boot
-```
-
-#### 第二步：项目构建
-```
-// 注意：如下命令需要在项目仓库根目录执行
-mvn clean package -Dmaven.test.skip=true
-```
-
-#### 第三步：项目配置
-```
-// 注意：前往docker目录，自定义 .env 配置；如修改 MYSQL_PATH 配置设置Mysql数据持久化目录；
-cd ./docker/monolith/
-cat .env
-```
-
-#### 第四步：启动项目
-
-```
-// 启动 
-docker compose up -d
-
-// 停止
-docker compose down
-```
-
-### 4.6、Docker Compose 部署（前后端分离项目）
-支持通过 Docker Compose 方式部署并启动，如下介绍 前后端分离项目 部署方式：
-
-#### 第一步：前往仓库目录
-```
-cd ./xxl-boot
-```
-
-#### 第二步：项目构建
-```
-// 注意：如下命令需要在项目仓库根目录执行
-mvn clean package -Dmaven.test.skip=true
-```
-
-#### 第三步：项目配置
-```
-// 注意：前往docker目录，自定义 .env 配置；如修改 MYSQL_PATH 配置设置Mysql数据持久化目录；
-cd ./docker/modular/
-cat .env
-```
-
-#### 第四步：启动项目
-```
-// 启动 
-docker compose up -d
-
-// 停止
-docker compose down
-```
 
 ## 五、新增业务模块
 略
@@ -594,26 +592,30 @@ docker compose down
 - 7、【新增】表单构建工具：支持拖拽表单字段动态排序，并生产表单代码；
 - 8、【升级】升级多项依赖至较新版本；
 
-### 版本 v2.0.1 Release Notes[ING]
+### 版本 v2.1.0 Release Notes[ING]
+- 1、【新增】前端UI模块（xxl-boot-ui）升级至 TypeScript;
+- 2、【TODO】代码生成工具升级，兼容支持 TypeScript；支持 type 文件；
+- 3、【TODO】ESLint + Prettier 配置；Agents 规范完善；
+
 
 ### TODO LIST
-- 1、代码生成：支持自定义代码层级目录；
-- 2、前后端分离版本：多技术栈；
-- 3、生图Agent：生图流程设计，集成本地Vision模型；
-- 4、AI模块：Chat对话增强；
-  - 前端SSE交互；
-  - 对话记忆控制；
-  - 代码重构，多模块可扩展设计；
-- 5、知识库：知识库管理，知识库检索；
-- 6、iframe弹框居中优化；
-- 7、【ING】左侧菜单改为JS方式；
-- 8、AI项目独立：
-  - Model配置：Model配置管理，支持多Model类型，包括：基础模型、文本模型、视觉模型...等；支持多模型供应商，包括：Ollama、OpenAI...等。
-  - Chat对话：Chat对话管理，支持自定义Prompt、Model参数；支持历史对话消息持久化，保留历史对话记忆；可基于此支持多场景，包括：智能客服、聊天助手...等；
-  - 知识库：知识库管理，支持知识库管理、索引、检索等；支持多知识库类型，包括：Text、Word、PDF、图片...等；
-  - WorkFlow定义：WorkFlow定义管理，支持工作流及Agent/模型的编排定义；工作流执行及日志记录，支持分布式工作流执行以及执行日志记录；
-  - Agent生图：文生图、图生图；生图流程设计，支持集成多模型供应商；
-  - Agent生视频：文生视频、图生视频；支持集成多模型供应商；
+- 1、单体版本，代码生成 支持自定义代码层级目录；
+- 2、单体版本，iframe弹框居中优化；
+- 3、单体版本，左侧菜单改为JS方式；
+- 4、AI项目独立：
+  - 模块：
+    - Model配置：Model配置管理，支持多Model类型，包括：基础模型、文本模型、视觉模型...等；支持多模型供应商，包括：Ollama、OpenAI...等。
+    - Chat对话：Chat对话管理，支持自定义Prompt、Model参数；支持历史对话消息持久化，保留历史对话记忆；可基于此支持多场景，包括：智能客服、聊天助手...等；
+    - 知识库：知识库管理，支持知识库管理、索引、检索等；支持多知识库类型，包括：Text、Word、PDF、图片...等；
+    - WorkFlow定义：WorkFlow定义管理，支持工作流及Agent/模型的编排定义；工作流执行及日志记录，支持分布式工作流执行以及执行日志记录；
+    - Agent生图：文生图、图生图；生图流程设计，支持集成多模型供应商；
+    - Agent生视频：文生视频、图生视频；支持集成多模型供应商；
+  - Chat对话增强；
+    - 前端SSE交互；
+    - 对话记忆控制；
+    - 代码重构，多模块可扩展设计；
+  - 生图Agent：生图流程设计，集成本地Vision模型；
+
 
 ## 七、其他
 
