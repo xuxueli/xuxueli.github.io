@@ -83,7 +83,7 @@ XXL-BOOT 定位为 快速开发平台，整合流行前后端技术能力，致�
     - tables_xxl_boot_modular.sql           ：前后端分离项目初始化SQL脚本【可选，部署前后端分离项目时使用】
 ```
 
-补充说明：如需部署单体项目，只需要执行 `tables_xxl_boot.sql` 即可；如需切换部署 “前后端分离项目”或“单体项目”，则需要执行 `tables_xxl_boot_vue.sql` 或 `tables_xxl_boot_monolith.sql`。
+补充说明：如需部署单体项目，只需要执行 `tables_xxl_boot.sql` 即可；如需切换部署 “前后端分离项目”或“单体项目”，则需要执行 `tables_xxl_boot_modular_vue.sql` 或 `tables_xxl_boot_monolith.sql`。
 
 ### 2.2 编译源码
 项目为 Monorepo仓库，单体项目 与 前后端分离项目 维护在同一个代码仓库中，通过不同目录模块隔离维护。
