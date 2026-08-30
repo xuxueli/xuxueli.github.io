@@ -24,8 +24,6 @@ XXL-BOOT 是一个快速开发平台，易学易用、AI驱动、开箱即用，
 
 ### 1.2 特性
 
-按“快速开发、账号与安全、系统管理、研发与架构”四个维度组织：
-
 - **快速开发（重点）**
 
 - 1、Monorepo + 三种模式：Monorepo 一套仓库统一托管 单体模式、前后端分离 Vue 模式、前后端分离 React 模式，支持按业务需要自由选型、一键构建、按需部署；
@@ -569,7 +567,109 @@ XXL-BOOT 三种运行模式（单体、前后端分离 Vue、前后端分离 Rea
 
 > 三种方式共用同一套运行模式 Skill 规范（`xxl-boot-vue / xxl-boot-react / xxl-boot-monolith`），落位路径与代码规范完全一致，可自由切换混合使用。
 
-### 4.1 方式一：传统手工开发
+
+
+### 4.1 方式一：AI + SKILL 驱动开发
+
+适合已接入 AI 编程助手（如 opencode、codex 等）的开发团队。仓库内置三大开发 SKILL，AI 助手可自动识别运行模式并加载权威规范，按“需求澄清 → 数据建模 → 后端 → 前端 → 菜单权限 → 验证”标准流程自动完成代码编写与落位，开发效率进一步提升。
+
+#### 工作原理
+
+```
+.agents/
+└── skills/
+    ├── xxl-boot-vue        # 前后端分离 Vue 模式标准作业 Skill
+    ├── xxl-boot-react      # 前后端分离 React 模式标准作业 Skill
+    └── xxl-boot-monolith   # 单体模式标准作业 Skill
+```
+
+每个 SKILL 内置：工程结构说明、后端/前端落位清单、代码骨架模板、菜单权限 SQL 模板、校验清单，以及参考样例文件，保证 AI 产物与平台规范严格一致。
+
+以 opencode + `xxl-boot-vue` 为例，完整开发一个「产品信息管理」业务模块（维护产品名称、介绍、生产时间等）的实操演示如下：
+
+#### 第一步：描述需求
+
+打开 AI 编程助手，将 XXL-BOOT 仓库作为工作目录打开，直接用 `/` 前缀调用对应 Skill，并描述业务诉求：
+
+<p align="center"><img src="https://www.xuxueli.com/project/static/xxl-boot/images/skill/img_skill_1.png" width="900"/></p>
+
+> 需求示例：“`/xxl-boot-vue` 新增一个功能模块，管理产品信息，维护 产品名称、介绍、生产时间 等。”
+
+#### 第二步：需求澄清与确认
+
+Skill 强制 AI 动手前先完成需求澄清，就模块/业务命名、核心字段、页面形态、菜单/按钮权限、出码方式、验证范围等连续提问并确认细节：
+
+<p align="center"><img src="https://www.xuxueli.com/project/static/xxl-boot/images/skill/img_skill_2.png" width="900"/></p>
+
+全部问题确认完毕后，AI 汇总需求细节，形成本需求的数据模型与开发方案：
+
+<p align="center"><img src="https://www.xuxueli.com/project/static/xxl-boot/images/skill/img_skill_3.png" width="800"/></p>
+
+#### 第三步：开发编排与自动执行
+
+AI 按 SKILL 标准流程输出开发 TODO 列表，依次启动“代码现状分析 → 业务模型与菜单/授权 SQL 生成 → 后端 7 件套与状态枚举开发 → 前端 3 文件生成 + barrel 设置 → 前后端工程编辑 → 启动 api 与前端项目，使用脚本本地自动联调”：
+
+<p align="center"><img src="https://www.xuxueli.com/project/static/xxl-boot/images/skill/img_skill_4.png" width="900"/></p>
+
+#### 第四步：交付与验证
+
+开发完成后，AI 交付 SQL、前端、后端全套产物与验证结果摘要，并补充特殊说明（如数据库中遗留 Skill 自动生成的测试数据等）：
+
+<p align="center"><img src="https://www.xuxueli.com/project/static/xxl-boot/images/skill/img_skill_5.png" width="900"/></p>
+
+#### 第五步：联调验收
+
+AI 自动启动 api(8090) 与前端(3000) 完成本地联调后，人工在浏览器刷新登录，从菜单进入「产品管理」页面，即可开展数据查询与增删改操作（含搜索、分页、弹窗表单等）：
+
+<p align="center"><img src="https://www.xuxueli.com/project/static/xxl-boot/images/skill/img_skill_6.png" width="900"/></p>
+
+<p align="center"><img src="https://www.xuxueli.com/project/static/xxl-boot/images/skill/img_skill_7.png" width="900"/></p>
+
+#### 第六步：代码合并
+
+AI 生成的代码经 review 确认后，形成代码 PR 并提交到仓库：
+
+<p align="center"><img src="https://www.xuxueli.com/project/static/xxl-boot/images/skill/img_skill_8.png" width="400"/></p>
+
+#### 与传统方式对比
+
+- 相比「传统手工开发」：代码由 AI 一次性直生并自动落位，省去大量重复编码；
+- 相比「内置代码生成器」：无需登录后台、无需下载复制产物，AI 直接写盘并附自检，且同样输出等价代码 + 菜单 SQL，可无缝与生成器方式切换使用。
+
+
+### 4.2 方式二：内置代码生成器
+
+适合标准化 CRUD 模块，只需准备建表 SQL，即可在后台一键生成前后端全栈代码与菜单权限 SQL。这是平台开箱即用的主力方式，同样适用于三种运行模式（单体模式在后台「工具-代码生成」内置同类生成器）。
+
+#### 第一步：录入建表 SQL
+
+- 进入「系统工具 - 代码生成」页面，点击新增，录入业务建表 SQL（遵循 `xxl_boot_` 前缀规范）；
+- 选择前端模板：Vue3 传 `element-plus-typescript`，React 传 `antd-typescript`（二者等价，按运行模式选择）；
+- 点击生成，平台自动解析表结构、字段与类型，生成代码配置并入库。
+
+#### 第二步：编辑字段配置
+
+对自动解析的字段逐一配置生成规则，可组合配置查询方式、表单控件类型、数据字典/业务枚举、以及 isQuery/isList/isInsert/isEdit/isRequired 等可见性开关，并指定生成作者、包名。
+
+#### 第三步：预览与下载
+
+- 点击「预览」在线逐文件查看生成代码（后端 6 件套 + 前端三文件 + 菜单 SQL）；
+- 点击「批量生成」下载 zip 产物，包含：
+
+```
+{module}-{business}/
+├── xxx.java / xxxMapper.java / xxxMapper.xml    # 后端：Controller/Service/ServiceImpl/Entity
+├── types.ts / api.ts / index.vue                # 前端（Vue3 模式）
+└── xxx-init.sql                                 # 菜单 + 按钮 + 授权 初始化 SQL
+```
+
+#### 第四步：落位与上线
+
+1. 按产物目录结构将代码复制到对应工程（后端 `business/{module}`、资源文件 `resources/mapper/{module}/`；前端 `views|api|types/{module}/{page}`），并在 `src/types/api.ts` barrel 补一行导出；
+2. 执行 `-init.sql` 完成菜单与权限注册；
+3. 重启后端、刷新前端，菜单自动出现，模块即可联调使用。
+
+### 4.3 方式三：传统手工开发
 
 适合字段特殊、交互复杂、需要深度定制的模块。以下以 前后端分离（Vue）模式、业务 `Demo`（模块 `demo`）为例；单体模式与 React 模式落位路径大同小异，详见对应工程规范。
 
@@ -579,12 +679,12 @@ XXL-BOOT 三种运行模式（单体、前后端分离 Vue、前后端分离 Rea
 
 ```sql
 CREATE TABLE `Demo` (
-                        `id`          int(11) NOT NULL AUTO_INCREMENT COMMENT '序号',
-                        `name`        varchar(100) NOT NULL COMMENT '产品名称',
-                        `status`      tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态：0-正常/1-停用',
-                        `add_time`    datetime NOT NULL COMMENT '创建时间',
-                        `update_time` datetime NOT NULL COMMENT '更新时间',
-                        PRIMARY KEY (`id`)
+    `id`          int(11) NOT NULL AUTO_INCREMENT COMMENT '序号',
+    `name`        varchar(100) NOT NULL COMMENT '产品名称',
+    `status`      tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态：0-正常/1-停用',
+    `add_time`    datetime NOT NULL COMMENT '创建时间',
+    `update_time` datetime NOT NULL COMMENT '更新时间',
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Demo业务表';
 ```
 
@@ -646,71 +746,6 @@ VALUES (1, @parentId, now(), now()), (1, @parentId+1, now(), now()), (1, @parent
 
 启动 `xxl-boot-api` + `xxl-boot-ui-vue`（或选择其他运行模式），验证：菜单可见、列表 / 新增 / 修改 / 删除 / 搜索可用、按钮级权限生效（未授权用户对应按钮隐藏）、空参数后端友好提示。
 
-
-### 4.2 方式二：内置代码生成器
-
-适合标准化 CRUD 模块，只需准备建表 SQL，即可在后台一键生成前后端全栈代码与菜单权限 SQL。这是平台开箱即用的主力方式，同样适用于三种运行模式（单体模式在后台「工具-代码生成」内置同类生成器）。
-
-#### 第一步：录入建表 SQL
-
-- 进入「系统工具 - 代码生成」页面，点击新增，录入业务建表 SQL（遵循 `xxl_boot_` 前缀规范）；
-- 选择前端模板：Vue3 传 `element-plus-typescript`，React 传 `antd-typescript`（二者等价，按运行模式选择）；
-- 点击生成，平台自动解析表结构、字段与类型，生成代码配置并入库。
-
-#### 第二步：编辑字段配置
-
-对自动解析的字段逐一配置生成规则，可组合配置查询方式、表单控件类型、数据字典/业务枚举、以及 isQuery/isList/isInsert/isEdit/isRequired 等可见性开关，并指定生成作者、包名。
-
-#### 第三步：预览与下载
-
-- 点击「预览」在线逐文件查看生成代码（后端 6 件套 + 前端三文件 + 菜单 SQL）；
-- 点击「批量生成」下载 zip 产物，包含：
-
-```
-{module}-{business}/
-├── xxx.java / xxxMapper.java / xxxMapper.xml    # 后端：Controller/Service/ServiceImpl/Entity
-├── types.ts / api.ts / index.vue                # 前端（Vue3 模式）
-└── xxx-init.sql                                 # 菜单 + 按钮 + 授权 初始化 SQL
-```
-
-#### 第四步：落位与上线
-
-1. 按产物目录结构将代码复制到对应工程（后端 `business/{module}`、资源文件 `resources/mapper/{module}/`；前端 `views|api|types/{module}/{page}`），并在 `src/types/api.ts` barrel 补一行导出；
-2. 执行 `-init.sql` 完成菜单与权限注册；
-3. 重启后端、刷新前端，菜单自动出现，模块即可联调使用。
-
-
-### 4.3 方式三：AI + SKILL 驱动开发
-
-适合已接入 AI 编程助手（如 opencode、Cursor 等）的开发团队。仓库内置三大开发 SKILL，AI 助手可自动识别运行模式并加载权威规范，按“建表 → 后端 → 前端 → 菜单权限 → 验证”标准流程自动完成代码编写与落位，开发效率进一步提升。
-
-#### 工作原理
-
-```
-.agents/
-└── skills/
-    ├── xxl-boot-vue        # 前后端分离 Vue 模式标准作业 Skill
-    ├── xxl-boot-react      # 前后端分离 React 模式标准作业 Skill
-    └── xxl-boot-monolith   # 单体模式标准作业 Skill
-```
-
-每个 SKILL 内置：工程结构说明、后端/前端落位清单、代码骨架模板、菜单权限 SQL 模板、校验清单，以及参考样例文件，保证 AI 产物与平台规范严格一致。
-
-#### 操作步骤
-
-1. 打开 AI 编程助手，将 XXL-BOOT 仓库作为工作目录打开（确保助手具备仓库读写能力）；
-2. 明确运行模式（单体 / Vue 分离 / React 分离）与业务诉求，向 AI 描述：模块名称、业务字段或建表 SQL；
-3. AI 自动加载匹配的 SKILL（如 `xxl-boot-vue`），并按标准流程作业：
-    - 生成建表 SQL（`xxl_boot_*` 规范），并直接落位到工程对应目录；
-    - 按落位清单生成后端（`business/{module}` 6/7 件套）与前端（`views|api|types/{module}/{page}` 3 文件）全部代码；
-    - 生成 菜单 + 按钮 + 授权 初始化 SQL；
-    - 按 SKILL「校验清单」逐项自检并交付说明；
-4. 人工执行建表 SQL 与菜单 SQL，启动服务，按 AI 交付说明做联调验收即可。
-
-#### 与传统方式对比
-
-- 相比「传统手工开发」：代码由 AI 一次性直生并自动落位，省去大量重复编码；
-- 相比「内置代码生成器」：无需登录后台、无需下载复制产物，AI 直接写盘并附自检，且同样输出等价代码 + 菜单 SQL，可无缝与生成器方式切换使用。
 
 
 ## 五、总体设计
@@ -957,7 +992,7 @@ public @interface Permission {
 - 菜单权限 SQL 模板与「校验清单」；
 - 参考样例文件绝对路径。
 
-工作原理：AI 编程助手检测到任务与某运行模式匹配时自动加载对应 SKILL，按 “建表 → 后端 → 前端 → 菜单权限 → 验证” 标准流程直生代码并落位，最后按校验清单自检交付。SKILL 缺省策略为按内置代码生成模板直生等价代码，同时提示用户可到后台走生成器，两种产出完全一致、可无缝切换。详见 “4.3 方式三：AI + SKILL 驱动开发”。
+工作原理：AI 编程助手检测到任务与某运行模式匹配时自动加载对应 SKILL，按 “建表 → 后端 → 前端 → 菜单权限 → 验证” 标准流程直生代码并落位，最后按校验清单自检交付。SKILL 缺省策略为按内置代码生成模板直生等价代码，同时提示用户可到后台走生成器，两种产出完全一致、可无缝切换。详见 “4.1 方式三：AI + SKILL 驱动开发”。
 
 ## 六、版本更新日志
 
