@@ -950,6 +950,7 @@ public @interface Permission {
 - 平台核心：`framework` 包仅承载平台内置能力（登录、权限、系统管理、工具等），不承载具体业务；
 - 业务扩展：新增业务一律落位到 `business/{module}` 包（后端）、`resources/mapper/{module}/`（Mapper XML）、`templates/business/{module}/`（单体 FTL 页面）；
 - 菜单零路由：前端菜单完全由数据库 `xxl_boot_resource` 驱动，新建页面文件后仅需插入菜单记录（`url` 配置为 `/module/business`）并授权，前端 `loadView` 自动映射页面，全程无需改动路由代码；
+- 模块/业务命名：两级命名 `{module}/{business}`，`{module}` 为业务模块域（对应后端包 `business.{module}`、权限前缀 `{module}:*`，可聚合多个业务页），`{business}` 为具体业务页/实体名（对应 Controller 与菜单 url）；
 - 三种模式落位对照：
 
 ```
@@ -1134,12 +1135,18 @@ public @interface Permission {
     ```
 </details>
 
+### 版本 v2.1.1 Release Notes[ING]
+- 1、【强化】Vue/React 模块化重构：以业务域（Business Domain）为目录进行模块化管理，提升代码可维护性与可扩展性；
+- 2、【重构】I18N 国际化重构：统一国际化资源文件结构，支持多语言配置，并优化前端国际化加载逻辑；
+- 3、【优化】通用代码下沉 Tool 依赖层，代码结构优化；
+
 
 ### TODO LIST
 - 1、单体版本，代码生成 支持自定义代码层级目录；
 - 2、单体版本，iframe弹框居中优化；
 - 3、单体版本，左侧菜单改为JS方式；
-- 4、AI项目独立：
+- 4、菜单API接口重构统一，适配逻辑上提到前端项目；
+- 5、AI项目独立：
     - 模块：
         - Model配置：Model配置管理，支持多Model类型，包括：基础模型、文本模型、视觉模型...等；支持多模型供应商，包括：Ollama、OpenAI...等。
         - Chat对话：Chat对话管理，支持自定义Prompt、Model参数；支持历史对话消息持久化，保留历史对话记忆；可基于此支持多场景，包括：智能客服、聊天助手...等；
@@ -1152,8 +1159,7 @@ public @interface Permission {
         - 对话记忆控制；
         - 代码重构，多模块可扩展设计；
     - 生图Agent：生图流程设计，集成本地Vision模型；
-- 5、菜单API接口重构统一，适配逻辑上提到前端项目；
-- 6、React 功能模块代码重构；
+
 
 ## 七、其他
 
