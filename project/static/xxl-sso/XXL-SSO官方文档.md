@@ -1,4 +1,4 @@
-## 《分布式单点登录框架XXL-SSO》
+## 《单点登录框架XXL-SSO》
 
 [![Actions Status](https://github.com/xuxueli/xxl-sso/workflows/Java%20CI/badge.svg)](https://github.com/xuxueli/xxl-sso/actions)
 [![Maven Central](https://img.shields.io/maven-central/v/com.xuxueli/xxl-sso-core)](https://central.sonatype.com/artifact/com.xuxueli/xxl-sso-core/)

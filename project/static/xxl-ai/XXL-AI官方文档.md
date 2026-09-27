@@ -1,4 +1,4 @@
-## 《AI应用开发平台 XXL-AI》
+## 《AI应用开发平台XXL-AI》
 
 [![Actions Status](https://github.com/xuxueli/xxl-ai/workflows/Java%20CI/badge.svg)](https://github.com/xuxueli/xxl-ai/actions)
 [![GitHub release](https://img.shields.io/github/release/xuxueli/xxl-ai.svg)](https://github.com/xuxueli/xxl-ai/releases)
@@ -16,7 +16,7 @@
 
 > 一个可接工具、可接知识、可一键发布、可生产落地的开源 AI Agent 平台。
 
-XXL-AI 是一个AI Agent 开发平台，易学易用、AI 驱动、可生产落地、开箱即用。支持灵活编排「模型 + 指令 + 知识库 + MCP 工具 + SKILL 技能」，快速构建并一键发布Agent。
+XXL-AI 是一个AI应用开发平台，易学易用、AI 驱动、可生产落地、开箱即用。支持灵活编排「模型 + 指令 + 知识库 + MCP 工具 + SKILL 技能」，快速构建并一键发布Agent。
 底层提供流式对话、断线续传、空间隔离与一键部署等工程化能力，支撑 Agent 从原型验证走向生产落地。现已开放源代码，开箱即用。
 
 ### 1.2 特性
