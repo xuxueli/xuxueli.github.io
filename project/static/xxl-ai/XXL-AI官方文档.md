@@ -285,10 +285,9 @@ docker compose down
 
 - 登录态基于 XXL-SSO 存储于 Redis（key 前缀 `xxl_sso_user:`），支持集群部署共享；登录后默认进入**工作台**（首页）。
 - 工作台聚合 Agent 数量、SKILL 数量、MCP 数量、供应商模型数等关键指标，并提供 Agent 会话消息趋势 / 占比图表，便于快速掌握平台资源与用量。
+- 顶部导航提供 **空间切换器** 与主题 / 语言等全局设置：管理员可见全部空间，普通用户仅见已授权空间；切换空间后前端请求自动携带 `xxl-space-id` 请求头，业务数据按空间隔离。
 
 ![图片](https://www.xuxueli.com/project/static/xxl-ai/images/img_02.png "工作台：资源统计与会话趋势")
-
-- 顶部导航提供 **空间切换器** 与主题 / 语言等全局设置：管理员可见全部空间，普通用户仅见已授权空间；切换空间后前端请求自动携带 `xxl-space-id` 请求头，业务数据按空间隔离。
 
 ### 3.2 业务空间与用户管理
 
@@ -311,10 +310,9 @@ docker compose down
 ![图片](https://www.xuxueli.com/project/static/xxl-ai/images/img_06.png "模型管理：对话模型列表（含自动导入）")
 
 - 在弹出的「选择要导入的模型」中输入模型标识过滤、勾选目标模型后「确定」；已导入的模型会标记「已导入」，避免重复导入。
+- 模型类型区分 **对话模型 / 嵌入模型**：对话模型用于 Agent 对话，嵌入模型用于知识库向量化。
 
 ![图片](https://www.xuxueli.com/project/static/xxl-ai/images/img_07.png "导入模型：勾选远程模型（已导入标记）")
-
-- 模型类型区分 **对话模型 / 嵌入模型**：对话模型用于 Agent 对话，嵌入模型用于知识库向量化。
 
 ### 3.4 接入 MCP 工具
 
@@ -382,7 +380,7 @@ docker compose down
 
 ![图片](https://www.xuxueli.com/project/static/xxl-ai/images/img_19.png "对话实例：多工具协作汇总热点新闻")
 
-- 生成中刷新页面或网络中断会自动**断点续传**，不丢失已生成内容（原理见 5.5）。
+- 生成中刷新页面或网络中断会自动**断点续传**，不丢失已生成内容。
 
 ## 四、功能模块
 
@@ -471,17 +469,33 @@ xxl-ai/
 XXL-AI 采用 前后端分离：后端 API 与前端 UI 独立部署、独立运行，共享同一套数据库与权限体系：
 
 ```
-┌───────────────────────────────────────────────┐
-│               XXL-AI Monorepo                 │
-├───────────────────────────────────────────────┤
-│             前后端分离                  │
-│   xxl-ai-api + xxl-ai-ui                      │
-│                                               │
-│  后端：SpringBoot + MyBatis + XXL-SSO + Redis │
-│  前端：Vue3 + ElementPlus + TypeScript        │
-│                                               │
-│  端口：8090 / 3000（Redis 依赖，独立部署）     │
-└───────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────────────┐
+│                                   浏览器 / 客户端                                    │
+│ 管理端 admin（登录后使用）        ·        公开端访客（/chat/{uuid}，免登录）        │
+└──────────────────────────────────────────────────────────────────────────────────────┘
+                                            │  HTTP / SSE
+┌──────────────────────────────────────────────────────────────────────────────────────┐
+│      前端  xxl-ai-ui   ·   Vue3 + Vite + Element Plus + TypeScript   ·   :3000       │
+│ · 后端下发动态菜单 · 零路由改动 · 中 / 英 i18n                                       │
+│ · 列表 / 表单 CRUD，经 /api 访问后端                                                 │
+│ · SSE 流式对话：思考折叠 · Markdown 渲染 · 断线 / 刷新续传                           │
+└──────────────────────────────────────────────────────────────────────────────────────┘
+                                            │  /api   （开发：Vite 代理   ·   生产：Nginx 反向代理）
+┌──────────────────────────────────────────────────────────────────────────────────────┐
+│          后端  xxl-ai-api   ·   SpringBoot + MyBatis + XXL-SSO   ·   :8090           │
+│ · framework ：登录鉴权 / RBAC 菜单按钮权限 / 系统管理 / 审计日志                     │
+│ · business  ：space · supplier · knowledge · mcp · skill · agent · chat              │
+│ · harness   ：llm · chat · rag · mcp · skill · supplier（运行时支撑，无 Controller） │
+│ · 统一响应 Response{code,msg,data}；@XxlSso 鉴权；按 xxl-space-id 空间隔离           │
+└──────────────────────────────────────────────────────────────────────────────────────┘
+                                            │  JDBC / Redis 协议 / gRPC / HTTP(S)
+┌──────────────────────────────────────────────────────────────────────────────────────┐
+│                                  基础设施与外部依赖                                  │
+│ · MySQL    ：xxl_ai 库 —— 平台表 + 业务表（按 space_id 空间隔离）                    │
+│ · Redis    ：SSO 登录态（xxl_sso_user:）+ 对话任务队列 / 结果流（Redis Stream）      │
+│ · Milvus   ：RAG 向量库（知识库分片向量化，可选）                                    │
+│ · 外部服务 ：OpenAI 兼容供应商（对话 / 嵌入模型）、远程 / 本地 MCP 服务              │
+└──────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 - 后端：`xxl-ai-api`（8090），承载 登录鉴权、RBAC 权限、系统管理、AI 运行时（模型 / RAG / MCP / SKILL）等全部后端能力；
@@ -525,7 +539,7 @@ public Response<PageModel<MessageDTO>> pageList(...) { ... }
 
 工作原理：AI 编程助手检测到任务时自动加载 SKILL，按 “建表 → 后端 → 前端 → 菜单权限 → 验证” 标准流程直生代码并落位，最后按校验清单自检交付。（平台内置代码生成器已下线，统一以 SKILL 直生等价代码。）
 
-### 5.5、流式对话（SSE）技术方案
+### 5.5、流式对话（SSE）方案
 
 `/chat/**` 公开对话用 SSE 流式交互。为支持多节点集群与断线续传，生成与下发解耦：**请求节点只做「校验落库 + 转发」，LLM 生成由 worker 消费 Redis Stream 异步执行**，任一节点可服务任一连接，无需粘性会话。
 
@@ -608,9 +622,7 @@ xxl-ai.chat.sse.max=64              # 单节点 SSE 转发最大并发连接数
 xxl-ai.chat.history.limit=50        # 附加给模型的最近历史消息条数上限
 ```
 
-内部实现（写死/派生，不暴露配置）：XREAD 阻塞窗口 `5000ms`、单次批量 `50` 条；SSE 线程池核心数 `sse.max / 8`、队列容量 `0`（`SynchronousQueue`，确保并发扩到 `max` 且不排队长连接）；宕机认领阈值 = `chat.stream.timeout + 60s`。
-
-> 阻塞窗口固定 5s，须小于 `spring.data.redis.timeout`（默认 10s），否则阻塞读会抛 `RedisCommandTimeoutException`。
+内部实现：XREAD 阻塞窗口 `5000ms`、单次批量 `50` 条；SSE 线程池核心数 `sse.max / 8`、队列容量 `0`（`SynchronousQueue`，确保并发扩到 `max` 且不排队长连接）；宕机认领阈值 = `chat.stream.timeout + 60s`。
 
 ### 5.6、业务数据模型与空间隔离
 
@@ -643,16 +655,45 @@ xxl-ai.chat.history.limit=50        # 附加给模型的最近历史消息条数
 
 ## 六、版本更新日志
 
-### 版本 v1.0.0 Release Notes[ING]
-- 1、【初始化】XXL-AI 基于 XXL-Boot v2.1.1（前后端分离 Vue 模式）初始化成立，项目更名为 XXL-AI；
-- 2、【工程】构建 后端 `xxl-ai-api`（8090）与 前端 `xxl-ai-ui`（3000）双工程，数据库统一托管 `xxl_ai`；
-- 3、【能力】内置 安全登录（XXL-SSO）、RBAC 权限管控、空间隔离、系统管理、AI + SKILL 加速开发 等平台能力；
-- 4、【部署】随带 Docker Compose 一键部署栈（mysql + redis + milvus + api + sample-mcp + ui）；
-- 5、【AI 底座】基于 spring-ai 2.0.1：OpenAI 兼容模型工厂、Milvus 向量库（RAG）、官方 MCP SDK、Skill 工具；全部表随 `doc/db/tables_xxl_ai.sql` 初始化。
-- 6、【功能】新增：空间管理、供应商/模型管理、知识库/文档管理、MCP管理、SKILL管理、Agent管理；
-- 7、【功能】Chat 流式对话 SSE 无状态化改造：Redis Stream 任务队列解耦生成与下发，支持集群部署、断线/刷新续传（详见 5.5）；
-- 8、【功能】Agent 消息占位与生成状态：助手消息落占位（生成中/完成/失败），消息ID复用为结果流标识，支持刷新页面自动续传；
-- 9、【设计】Skill 本地文件简化：目录按 `agent_{agentId}/{skillName}` 物化，变更指纹简化为 `技能ID:更新时间`，变更时整目录重建；
+### v1.0.0 Release Notes[2026-09-27]
+
+> 首个正式版本：一个可接工具、可接知识、可一键发布、可生产落地的开源 AI Agent 平台。
+
+- 1、【新增】**Agent 编排 + 一键发布（重点）**：模型 / 系统指令 / 知识库 / MCP / SKILL 自由组合、多选绑定；发布即生成免登录公开地址 `/chat/{uuid}`，管理端可查看访客对话与消息记录；对话支持思考过程折叠与 Markdown 实时渲染。
+- 2、【新增】**MCP + SKILL + RAG 三位一体（让 Agent 真能干活）**：
+  - MCP工具：支持 远程（Streamable HTTP）/ 本地（stdio）MCP 服务在线管理及连通测试，Agent 运行时自动装配可用工具；
+  - SKILL 技能：支持在线管理 `SKILL.md` 及文件树内容与脚本，自动物化为可执行技能目录，Agent 运行时自动装配可用技能；
+  - RAG 知识库：支持多类型文档托管、解析与向量化，文档分片向量化入 Milvus，对话时自动检索并注入上下文。
+- 3、【新增】**流式对话 SSE 无状态化（架构亮点）**：生成与下发经 Redis Stream 解耦——请求节点只做校验落库与转发，worker 异步生成；支持集群部署与断线 / 刷新续传，助手占位主键 `msgId` 复用为结果流标识，一轮对话一条流，生成结果不丢失（详见 5.5）。
+- 4、【新增】**多模型供应商统一接入**：兼容 OpenAI 协议（Deepseek / 智谱GLM / Ollama / OpenCode 等），供应商 + 模型两级管理，支持连通测试与远程模型自动导入，区分对话模型 / 嵌入模型。
+- 5、【新增】**工程化底座开箱即用**：XXL-SSO 登录、RBAC 菜单 / 按钮权限（动态菜单、零路由改动）、多业务空间隔离、Monorepo 前后端分离。
+- 6、【对话】**Chat SSE 无状态化**：Redis Stream 任务队列解耦生成与下发，支持集群部署、断线 / 刷新续传；
+- 7、【开发】**AI驱动开发**：内置开发 SKILL `.agents/skills/xxl-ai`，AI 编程助手一键加载、按平台规范直生业务代码并落位；
+- 8、【开发】**前后端分离**：前后端分离模式，并采用流行技术栈；前端 Vue3 + Element Plus + TypeScript，后端 SpringBoot + Spring-AI + XXL-SSO；
+- 9、【部署】**Docker Compose 一键部署**：支持 Docker Compose 一键部署应用（mysql + redis + milvus + api/ui）。
+
+Docker Compose部署脚本：
+```
+
+# 第一步：代码clone本部 + 前往仓库目录
+git clone https://github.com/xuxueli/xxl-ai.git
+cd ./xxl-ai
+
+# 第二步：构建后端项目
+mvn clean package -Dmaven.test.skip=true
+
+# 第三步：构建前端项目
+npm install --prefix ./xxl-ai-ui
+
+# 第四步：进入 docker 目录，支持自定义 .env 配置
+cd ./docker/
+cat .env
+
+# 第五步：启动/停止项目
+docker compose up -d
+docker compose down
+```
+
 
 ### TODO LIST
 
@@ -661,17 +702,8 @@ xxl-ai.chat.history.limit=50        # 附加给模型的最近历史消息条数
   - 知识库：多类型文档（Word / PDF / 图片）解析与向量化；
   - Agent 生图：文生图 / 图生图，支持集成多模型供应商；
   - Agent 生视频：文生视频 / 图生视频，支持集成多模型供应商；
-  - 生图 Agent：生图流程设计，集成本地 Vision 模型；
   - Chat 对话增强：对话记忆控制、多模态输入；
-- 2、已完成（v0.0.1）：
-  - 多模型供应商与模型管理（连通性测试、远程模型导入）；
-  - 知识库 + 文档向量化（Milvus RAG，检索注入）；
-  - MCP 接入（远程 Streamable HTTP / 本地 stdio）与工具装配；
-  - SKILL 技能文件树与本地物化（SkillsTool + 执行工具）；
-  - Agent 编排（模型 + 指令 + 知识库 + MCP + SKILL）与一键发布公开访问；
-  - 前端 SSE 交互（流式、思考过程折叠、Markdown 渲染、断线 / 刷新续传）；
-  - 空间隔离与用户授权；
-
+- 2、其他
 
 ## 七、其他
 
