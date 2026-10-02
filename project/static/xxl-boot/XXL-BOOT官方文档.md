@@ -144,7 +144,7 @@ XXL-BOOT 提供三种运行模式，请先明确业务选型，再按对应方�
 ### 2.4 方式一：单体模式
 
 - 部署项目：xxl-boot-admin
-- 项目说明：单体模式 中后台系统，前后端分别选型典型的 “SpringBoot/Mybatis/XXL-SSO/FreeMarker” 与 “AdminLTE/Bootstrap”；内置 “组织权限、系统工具、前后端代码生成、AI” 等能力。
+- 项目说明：单体模式 中后台系统，前后端分别选型典型的 “SpringBoot/Mybatis/XXL-SSO/FreeMarker” 与 “AdminLTE/Bootstrap”；内置 “组织权限、系统工具、前后端代码生成” 等能力。
 
 #### 步骤一：配置文件
 
@@ -412,7 +412,7 @@ docker compose down
 
 ### 3.1 平台能力总览
 
-XXL-BOOT 三种运行模式（单体、前后端分离 Vue、前后端分离 React）能力一致，仅前端技术栈与界面形态不同。平台后台按“组织权限、系统管理、系统工具、AI 能力”四个板块组织：
+XXL-BOOT 三种运行模式（单体、前后端分离 Vue、前后端分离 React）能力一致，仅前端技术栈与界面形态不同。平台后台按“组织权限、系统管理、系统工具”多个板块组织：
 
 | 分类 | 能力 | 说明 |
 |---|---|---|
@@ -665,7 +665,7 @@ AI 生成的代码经 review 确认后，形成代码 PR 并提交到仓库：
 
 #### 第四步：落位与上线
 
-1. 按产物目录结构将代码复制到对应工程（后端 `business/{module}`、资源文件 `resources/mapper/{module}/`；前端 `views|api|types/{module}/{page}`），并在 `src/types/api.ts` barrel 补一行导出；
+1. 按产物目录结构将代码复制到对应工程（后端 `business/{module}`、业务资源文件 `resources/mapper/business/{module}/{business}/`；前端 `views|api|types/{module}/{page}`），并在 `src/types/api.ts` barrel 补一行导出；
 2. 执行 `-init.sql` 完成菜单与权限注册；
 3. 重启后端、刷新前端，菜单自动出现，模块即可联调使用。
 
@@ -679,12 +679,12 @@ AI 生成的代码经 review 确认后，形成代码 PR 并提交到仓库：
 
 ```sql
 CREATE TABLE `Demo` (
-                        `id`          int(11) NOT NULL AUTO_INCREMENT COMMENT '序号',
-                        `name`        varchar(100) NOT NULL COMMENT '产品名称',
-                        `status`      tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态：0-正常/1-停用',
-                        `add_time`    datetime NOT NULL COMMENT '创建时间',
-                        `update_time` datetime NOT NULL COMMENT '更新时间',
-                        PRIMARY KEY (`id`)
+    `id`          int(11) NOT NULL AUTO_INCREMENT COMMENT '序号',
+    `name`        varchar(100) NOT NULL COMMENT '产品名称',
+    `status`      tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态：0-正常/1-停用',
+    `add_time`    datetime NOT NULL COMMENT '创建时间',
+    `update_time` datetime NOT NULL COMMENT '更新时间',
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Demo业务表';
 ```
 
@@ -700,11 +700,11 @@ src/main/java/com/xxl/boot/api/business/demo/
 ├── service/impl/DemoServiceImpl.java# 业务实现（方法顺序 pageList/load/insert/delete/update）
 └── controller/DemoController.java   # @RestController + @RequestMapping("/demo/demo") + @XxlSso
 
-src/main/resources/mapper/demo/DemoMapper.xml   # resultMap 显式映射，add_time/update_time 用 NOW()
+src/main/resources/mapper/business/demo/demo/DemoMapper.xml   # 业务 Mapper XML，resultMap 显式映射，add_time/update_time 用 NOW()
 ```
 
 要点：
-- Controller 全部接口加 `@XxlSso` 鉴权；分页入参统一 `offset`、`pagesize`；删除使用 `@RequestParam("ids[]") List<Integer>` 支持批量；
+- Controller 全部接口加 `@XxlSso` 鉴权，统一 `@RequestMapping`（不限定 HTTP 方法）；分页/查询走 URL 参数（`@RequestParam`，前端 `params`），`insert`/`update` 走 `@RequestBody` 实体、`delete` 走 `@RequestBody List<Integer> ids`（JSON，前端 `data`）；分页入参统一 `offset`、`pagesize`；
 - 参数校验使用 `StringTool / RegexTool / CollectionTool`，失败返回 `Response.ofFail("提示")`；
 - 统一返回 `Response{code,msg,data}`，分页返回 `Response<PageModel>`。
 
@@ -939,6 +939,7 @@ public @interface Permission {
 
 - 统一返回结构 `Response{ code、msg、data }`（`com.xxl.tool.response.Response`），code 200 表示成功；
 - 分页统一返回 `Response<PageModel>`；分页入参统一 `offset`、`pagesize`；
+- CRUD 参数通道：分页与查询条件走 URL（`@RequestParam`）；结构化实体（`insert`/`update`）与集合（`delete` 的 `List<Integer> ids`）走 JSON 请求体（`@RequestBody`）；复合参数（`SortRequest`/`RoleResRequest` 等）可定义 DTO，CRUD 不为 delete 包 `IdsRequest`；
 - 接口路径规范：`/{module}/{business}/pageList|load|insert|delete|update`，业务接口统一 `@RequestMapping("/{module}/{business}")` + `@XxlSso` 鉴权；
 - 前端取值约定：`response.data`（成功数据）、`response.data.data`（列表）、`response.data.total`（总数）；
 - Mapper XML 中显式配置字段映射（resultMap），`add_time` / `update_time` 写入用 `NOW()`。
@@ -948,7 +949,7 @@ public @interface Permission {
 新增业务模块遵循“平台核心不动、业务可插拔”的扩展原则：
 
 - 平台核心：`framework` 包仅承载平台内置能力（登录、权限、系统管理、工具等），不承载具体业务；
-- 业务扩展：新增业务一律落位到 `business/{module}` 包（后端）、`resources/mapper/{module}/`（Mapper XML）、`templates/business/{module}/`（单体 FTL 页面）；
+- 业务扩展：新增业务一律落位到 `business/{module}` 包（后端）、`resources/mapper/business/{module}/`（业务 Mapper XML，平台内置为 `resources/mapper/framework/{module}/`）、`templates/business/{module}/`（单体 FTL 页面）；
 - 菜单零路由：前端菜单完全由数据库 `xxl_boot_resource` 驱动，新建页面文件后仅需插入菜单记录（`url` 配置为 `/module/business`）并授权，前端 `loadView` 自动映射页面，全程无需改动路由代码；
 - 模块/业务命名：两级命名 `{module}/{business}`，`{module}` 为业务模块域（对应后端包 `business.{module}`、权限前缀 `{module}:*`，可聚合多个业务页），`{business}` 为具体业务页/实体名（对应 Controller 与菜单 url）；
 - 三种模式落位对照：
@@ -956,7 +957,7 @@ public @interface Permission {
 ```
                    单体模式              前后端分离（Vue）         前后端分离（React）
 后端   Controller  business/{module}    business/{module}        business/{module}
-后端   Mapper XML  mapper/business/{m}  mapper/{module}          mapper/{module}
+后端   Mapper XML  mapper/business/{m}  mapper/business/{m}/{b} mapper/business/{m}/{b}
 前端   页面        templates/business/{m}/xxx.ftl   views/{m}/{p}/index.vue   pages/{m}/{p}/index.tsx
 前端   接口封装    （服务端渲染）          api/{m}/{p}.ts          services/{m}/{p}.ts
 前端   类型        （服务端渲染）          types/{m}/{p}.ts        types/{m}/{p}.d.ts
@@ -1135,30 +1136,20 @@ public @interface Permission {
     ```
 </details>
 
-### 版本 v2.1.1 Release Notes[ING]
+### 版本 v2.2.0 Release Notes[ING]
 - 1、【强化】Vue/React 模块化重构：以业务域（Business Domain）为目录进行模块化管理，提升代码可维护性与可扩展性；
 - 2、【重构】I18N 国际化重构：统一国际化资源文件结构，支持多语言配置，并优化前端国际化加载逻辑；
 - 3、【优化】通用代码下沉 Tool 依赖层，代码结构优化；
-
+- 4、【调整】AI能力合并至 [XXL-AI](https://github.com/xuxueli/xxl-ai) 项目，后续AI能力持续在 XXL-AI 项目迭代升级；
+- 5、【优化】前后端交互参数规范化：复杂参数统一使用Post请求体传输，非复杂参数使用Get请求URL传输，存量接口统一改造并沉淀SKILL；
+- 6、【优化】I18N 国际化：前后端分离项目，前后端文案内容各自维护，选择语言后端固定配置（本地缓存）、前端语言与后端保持一致；
+- 7、【优化】弹框交互优化：单体版本项目，iframe中内容弹框(modal/layer)，支持自适应性居中并在顶层展示；
 
 ### TODO LIST
-- 1、单体版本，代码生成 支持自定义代码层级目录；
-- 2、单体版本，iframe弹框居中优化；
-- 3、单体版本，左侧菜单改为JS方式；
-- 4、菜单API接口重构统一，适配逻辑上提到前端项目；
-- 5、AI项目独立：
-    - 模块：
-        - Model配置：Model配置管理，支持多Model类型，包括：基础模型、文本模型、视觉模型...等；支持多模型供应商，包括：Ollama、OpenAI...等。
-        - Chat对话：Chat对话管理，支持自定义Prompt、Model参数；支持历史对话消息持久化，保留历史对话记忆；可基于此支持多场景，包括：智能客服、聊天助手...等；
-        - 知识库：知识库管理，支持知识库管理、索引、检索等；支持多知识库类型，包括：Text、Word、PDF、图片...等；
-        - WorkFlow定义：WorkFlow定义管理，支持工作流及Agent/模型的编排定义；工作流执行及日志记录，支持分布式工作流执行以及执行日志记录；
-        - Agent生图：文生图、图生图；生图流程设计，支持集成多模型供应商；
-        - Agent生视频：文生视频、图生视频；支持集成多模型供应商；
-    - Chat对话增强；
-        - 前端SSE交互；
-        - 对话记忆控制；
-        - 代码重构，多模块可扩展设计；
-    - 生图Agent：生图流程设计，集成本地Vision模型；
+- 1、单体版本优化：
+    - 代码生成 支持自定义代码层级目录；
+    - 左侧菜单改为JS方式；
+- 2、菜单API接口重构统一，适配逻辑上提到前端项目；
 
 
 ## 七、其他
