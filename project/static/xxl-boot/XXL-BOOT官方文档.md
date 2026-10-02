@@ -679,12 +679,12 @@ AI 生成的代码经 review 确认后，形成代码 PR 并提交到仓库：
 
 ```sql
 CREATE TABLE `Demo` (
-    `id`          int(11) NOT NULL AUTO_INCREMENT COMMENT '序号',
-    `name`        varchar(100) NOT NULL COMMENT '产品名称',
-    `status`      tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态：0-正常/1-停用',
-    `add_time`    datetime NOT NULL COMMENT '创建时间',
-    `update_time` datetime NOT NULL COMMENT '更新时间',
-    PRIMARY KEY (`id`)
+                        `id`          int(11) NOT NULL AUTO_INCREMENT COMMENT '序号',
+                        `name`        varchar(100) NOT NULL COMMENT '产品名称',
+                        `status`      tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态：0-正常/1-停用',
+                        `add_time`    datetime NOT NULL COMMENT '创建时间',
+                        `update_time` datetime NOT NULL COMMENT '更新时间',
+                        PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Demo业务表';
 ```
 
@@ -1128,22 +1128,29 @@ public @interface Permission {
     （详细操作步骤，参考 “4.1 方式一：AI + SKILL 驱动开发”）
 
     ```
-    // 1、进入仓库：使用 AI 编程助手（如 opencode）打开 XXL-BOOT 仓库，根据项目运行模式选择对应 SKILL（xxl-boot-monolith / xxl-boot-vue / xxl-boot-react）；
-    // 2、输入需求：明确业务诉求，将 诉求 输入给 AI（AI会主动进行需求澄清）
-    // 3、AI完成需求：AI 会自动加载对应 SKILL，按“需求落盘 → 澄清 → 建表 → 后端 → 前端 → 菜单权限 → 验证”标准流程直生代码并落位。
-    // 4、AI验收需求：AI 启动服务联调验收，并按校验清单完整自检交付。
-    // 5、人工复核：人工复核验收，确认无误后合并PR，即可上线交付。
+    1、进入仓库：使用 AI 编程助手（如 opencode）打开 XXL-BOOT 仓库，根据项目运行模式选择对应 SKILL（xxl-boot-monolith / xxl-boot-vue / xxl-boot-react）；
+    2、输入需求：明确业务诉求，将 诉求 输入给 AI（AI会主动进行需求澄清）
+    3、AI完成需求：AI 会自动加载对应 SKILL，按“需求落盘 → 澄清 → 建表 → 后端 → 前端 → 菜单权限 → 验证”标准流程直生代码并落位。
+    4、AI验收需求：AI 启动服务联调验收，并按校验清单完整自检交付。
+    5、人工复核：人工复核验收，确认无误后合并PR，即可上线交付。
     ```
 </details>
 
-### 版本 v2.2.0 Release Notes[ING]
+### 版本 v2.2.0 Release Notes[2026-10-03]
 - 1、【强化】Vue/React 模块化重构：以业务域（Business Domain）为目录进行模块化管理，提升代码可维护性与可扩展性；
-- 2、【重构】I18N 国际化重构：统一国际化资源文件结构，支持多语言配置，并优化前端国际化加载逻辑；
-- 3、【优化】通用代码下沉 Tool 依赖层，代码结构优化；
-- 4、【调整】AI能力合并至 [XXL-AI](https://github.com/xuxueli/xxl-ai) 项目，后续AI能力持续在 XXL-AI 项目迭代升级；
-- 5、【优化】前后端交互参数规范化：复杂参数统一使用Post请求体传输，非复杂参数使用Get请求URL传输，存量接口统一改造并沉淀SKILL；
-- 6、【优化】I18N 国际化：前后端分离项目，前后端文案内容各自维护，选择语言后端固定配置（本地缓存）、前端语言与后端保持一致；
-- 7、【优化】弹框交互优化：单体版本项目，iframe中内容弹框(modal/layer)，支持自适应性居中并在顶层展示；
+- 2、【优化】I18N 国际化逻辑优化及代码重构：
+    - I18N 逻辑优化：前后端分离项目，前后端文案内容各自维护，支持后端配置选中语言、前端与后端保持选中语言一致；
+    - I18N 模块重构：统一国际化资源文件结构，支持多语言配置，并优化前端国际化加载逻辑；
+- 3、【优化】弹框交互优化：单体版本项目，iframe中内容弹框(modal/layer)，支持自适应性居中并在顶层展示；
+- 4、【优化】前后端交互参数规范化：复杂参数统一使用Post请求体传输，非复杂参数使用Get请求URL传输，存量接口统一改造并沉淀SKILL；
+- 5、【优化】通用代码下沉 Tool 依赖层，代码结构优化；
+- 6、【调整】AI能力合并至 [XXL-AI](https://github.com/xuxueli/xxl-ai) 项目，后续AI能力持续在 XXL-AI 项目迭代升级；
+- 7、【升级】升级多项依赖至较新版本。
+- 8、【修复】前后端分离Vue版本，前端复制实效问题修复；
+- 9、【修复】前后端分离React版本，未登录redirect路径拼接问题修复；
+
+### 版本 v2.2.1 Release Notes[ING]
+
 
 ### TODO LIST
 - 1、单体版本优化：
