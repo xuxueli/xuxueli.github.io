@@ -220,19 +220,23 @@ opencode mcp list
 OpenCode V2 提供多种安装方式（Windows 包管理器暂不支持，请下载 Windows 独立二进制包）：
 
 ```bash
-# 一键脚本（macOS / Linux）
-curl -fsSL https://opencode.ai/v2/install | bash
-
 # Homebrew（注意是 opencode-v2）
 brew install anomalyco/tap/opencode-v2
 
 # npm
 npm install -g @opencode/cli
+
+# 一键脚本（macOS / Linux）
+curl -fsSL https://opencode.ai/v2/install | bash
+
+# 升级
+opencode update
 ```
 
 配置使用 JSON 或 JSONC，建议带上 `$schema`。全局配置在 `~/.config/opencode/opencode.json(c)`，项目配置在 `opencode.json(c)` 或 `.opencode/opencode.json(c)`；OpenCode 从当前目录向上搜索到根目录并按“远到近、`.opencode` 覆盖直接配置”的顺序合并。**终端偏好（主题、快捷键）单独放在 `~/.config/opencode/cli.json`**，不再和项目配置混在一起。
 
-```jsonc title="opencode.jsonc"
+```
+# jsonc title="opencode.jsonc"
 {
   "$schema": "https://opencode.ai/config.json",
   "model": "anthropic/claude-sonnet-4-5",
@@ -387,14 +391,17 @@ Pi 会加载项目目录里的 `.pi/`、`AGENTS.md`、项目扩展，这些东�
 安装（Node.js 22.19+）：
 
 ```bash
-# 安装器方式（macOS / Linux）
-curl -fsSL https://pi.dev/install.sh | sh
-
-# 或 npm 方式
+# npm 方式
 npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+
+# 或 安装器方式（macOS / Linux）
+curl -fsSL https://pi.dev/install.sh | sh
 
 # 验证
 pi --version
+
+# 升级
+pi update
 ```
 
 启动并登录模型：
