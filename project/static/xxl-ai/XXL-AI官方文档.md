@@ -1000,9 +1000,9 @@ docker compose down
 - 9、【优化】性能与体验：会话落库增量 + 单事务、运行时增量合批、渲染端按需滚动；生成中切换会话不丢内容；退出时回收运行时与终端进程。
 
 ### v1.1.1 Release Notes[2026-10-08]
-- 1、【新增】Desk版本：命令运行环境（Node/Python）支持自定义PATH设置；Node默认使用内置版本，降低本地环境依赖；Python默认使用系统环境，支持自定义PATH；
-- 2、【强化】Desk版本：终端locale显示设置UTF-8，解决中文乱码问题；
-
+- 1、【强化】Desk命令运行环境（Node/Python）支持自定义PATH设置，提升本地环境兼容性；Node默认使用内置版本，降低本地环境依赖；
+- 2、【强化】Desk终端locale显示设置UTF-8，解决中文乱码问题；
+- 3、【新增】客户端支持自动检测新版本，并引导升级；
 
 ### v1.2.0 Release Notes[ING]
 - 1、【TODO】云版：OpenAPI：针对搭建的Agent提供OpenAPI接口能力，通过agentId + accessToken访问，便于集成到第三方系统应用（提供内置Agent对话能力，可用于功能调试或快速集成应用）。
@@ -1010,7 +1010,6 @@ docker compose down
 - 3、【TODO】云版：可观测：支持Agent可观测，包括Session对话、工具/知识/记忆等Trace明细可观测等。
 - 4、【TODO】Desk版本：支持SKILL/MCP工具；
 - 5、【TODO】Desk版本：支持浏览器工具操作；
-- 6、【TODO】Desk版本：自动更新；
 
 
 ### TODO LIST
