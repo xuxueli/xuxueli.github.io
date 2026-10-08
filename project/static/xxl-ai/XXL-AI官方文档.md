@@ -461,7 +461,7 @@ npm run build:linux
 - 右侧**侧边任务面板**：文件 / 浏览器面板，可放大占满正文区、拖拽宽度；
 - 对话页右下可展开**终端面板**。
 
-![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk_01.jpg)
+![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk/desk_01.jpg)
 
 #### 3.2.2 配置模型供应商
 
@@ -473,7 +473,7 @@ npm run build:linux
 - 请求 Header：可选 JSON 对象，value 支持 `{session}` 占位符，对话时替换为当前会话 ID（如 OpenCode 使用 `{"x-opencode-session":"{session}"}`）；
 - 模型列表：每行一个模型 ID，如 `deepseek-v4-flash`。
 
-![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk_02.jpg)
+![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk/desk_02.jpg)
 
 #### 3.2.3 项目与会话
 
@@ -490,29 +490,29 @@ npm run build:linux
 - 助手消息按**片段发生顺序**渲染时间线（思考 → 工具 → 正文交错），思考运行中实时展开、完成后收起；工具调用独立成行，展示动作、参数、状态与耗时，点击可展开入参 / 结果；
 - 代码块为 GitHub 风格（语言标签 + 复制），接入语法高亮。
 
-![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk_03.jpg)
+![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk/desk_03.jpg)
 
-![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk_04.jpg)
+![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk/desk_04.jpg)
 
 #### 3.2.5 侧边栏
 
 - **侧边栏工具菜单**：工具菜单含 **文件** 与 **浏览器** 两个面板，支持放大占满正文区、拖拽宽度；
 
-![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk_05.jpg)
+![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk/desk_05.jpg)
 
 - **文件面板**：项目目录树（懒加载 / 过滤）+ 代码编辑（行号、高亮、`⌘/Ctrl+S` 保存）+ 预览，随本地文件变更自动刷新，支持「打开所在文件夹 / 用指定应用打开」；
 
-![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk_06.jpg)
+![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk/desk_06.jpg)
 
 - **浏览器面板**：内嵌 `webview`，多标签、前进 / 后退 / 刷新、地址栏搜索兜底、系统浏览器打开；
 
-![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk_07.jpg)
+![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk/desk_07.jpg)
 
 #### 3.2.6 终端
 
 - **终端面板**：基于 node-pty + xterm，支持终端命令行操作。
 
-![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk_08.jpg)
+![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk/desk_08.jpg)
 
 #### 3.2.7 设置与运行数据
 
@@ -520,9 +520,9 @@ npm run build:linux
 - **数据目录**：默认位于系统 userData 下的 `xxl-ai-desk.sqlite`，可在设置中查看 / 浏览 / 打开 / 修改，修改后重启生效；
 - 会话 / 消息 / 供应商 / 项目 / 设置均落本地 SQLite，API Key 本地存储。
 
-![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk_09.jpg)
+![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk/desk_09.jpg)
 
-![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk_10.jpg)
+![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk/desk_10.jpg)
 
 ## 四、云版 vs 本地版
 
@@ -533,7 +533,7 @@ XXL-AI 提供「**云本结合**」两种交付形态，二者同源同品牌、
 
 > 命名说明：官方文档中「云版」对应 Web/服务端版本（部署在服务器、浏览器访问），「本地版」对应 Desk 桌面客户端版本（安装在本机）。两版命名以本章为准，后文统一称 **云版** 与 **本地版（Desk）**。
 
-### 4.1 版本定位一览
+### 4.1 定位说明
 
 | 项 | 云版（Web 服务端） | 本地版（Desk 桌面端） |
 |---|---|---|
@@ -562,7 +562,7 @@ XXL-AI 提供「**云本结合**」两种交付形态，二者同源同品牌、
 | 部署与运维 | 前后端分离开发、前端内嵌单包部署、Docker Compose 一键部署 | electron-builder 三平台打包（dmg / nsis / AppImage 等），免安装可 `pack` |
 | 内核技术栈 | SpringBoot + MyBatis + spring-ai + XXL-SSO + Redis Stream | Electron + Vue3 + **Pi**（`pi-ai` + `pi-agent-core`，独立 `utilityProcess` 运行时） |
 
-### 4.3 核心差异剖析
+### 4.3 差异剖析
 
 1. **架构定位差异**：云版是「平台」——多租户、多用户、多空间，资源（供应商 / 知识库 / MCP / SKILL / Agent）集中管理、统一发布；本地版是「客户端」——单机单用户、本地优先，围绕本机项目目录工作。
 2. **数据与部署差异**：云版依赖 MySQL + Redis + Milvus 三件套，支持集群扩展与高可用；本地版仅需一个 SQLite 单文件，零服务依赖，安装即用、离线可用。
@@ -582,6 +582,32 @@ XXL-AI 提供「**云本结合**」两种交付形态，二者同源同品牌、
 | 想要开箱即用的桌面 Agent 体验（类 ChatGPT Desktop） | **本地版（Desk）** | 跨平台一键安装，预置多供应商，快速开始对话 |
 
 > 组合使用建议：团队用**云版**做统一平台与对外发布，个人上手**本地版（Desk）**做本地编码工作台；两版各自独立、互不依赖，可分别安装使用。
+
+### 4.5 整体架构
+
+XXL-AI 采用「**云本结合**」：云版（Web / 服务端）与本地版（Desk 桌面端）同源互补。整体自上而下分为**入口、前端、应用、运行时、支撑、外部**六层：
+
+```
+┌──────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ 入口层   管理端 admin（浏览器） · 公开端访客 /#/chat/{uuid} · Desk 桌面客户端（mac / win / linux）   │
+├──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 前端层   云版   xxl-ai-ui —— Vue3 + Vite + Element Plus + TS；开发 :3000，生产内嵌进 API（Hash 路由）│
+│          本地版 Desk Renderer —— Vue3 + Element Plus；contextBridge → window.desk.*                  │
+├──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 应用层   云版   xxl-ai-api —— SpringBoot + MyBatis + XXL-SSO，:8080                                  │
+│                  framework：登录鉴权 · RBAC 菜单/按钮 · 系统管理 · 审计日志                          │
+│                  business：空间 · 供应商 · 知识库 · MCP · SKILL · Agent · Chat                       │
+│          本地版 Desk Main —— IPC 网关 · SQLite(Drizzle) 持久化 · Agent 托管 · 越界审批               │
+├──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 运行时层 云版   harness —— llm · chat · rag · mcp · skill · supplier（运行时支撑，无 Controller）    │
+│          本地版 Pi 运行时 —— pi-ai + pi-agent-core，独立 utilityProcess                              │
+├──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 支撑层   云版   MySQL（业务/平台） · Redis（登录态 + 对话流） · Milvus（向量库）                     │
+│          本地版 SQLite 单文件（零依赖） · 本地文件 / 终端 / 浏览器                                   │
+├──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 外部层   OpenAI 兼容供应商（对话/嵌入） · 远程/本地 MCP 服务 · 示例 xxl-ai-sample（可选）            │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
 
 ## 五、总体设计（云版）
 
