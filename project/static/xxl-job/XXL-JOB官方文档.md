@@ -3051,8 +3051,9 @@ public void execute() {
 - 15、【重构】告警组件初始化重构，提升代码可维护性，合并PR-2903；
 - 16、【升级】升级多项maven依赖至较新版本；
 
-**备注：**     
-数据库升级脚本：
+<details>
+    <summary>数据库升级脚本：</summary>    
+
 ``` 
 -- 任务日志表：添加索引
 create index I_jobgroup on xxl_job_log (job_group);
@@ -3074,6 +3075,9 @@ alter table xxl_job_log
     modify executor_param text null comment '任务参数';
 ```
 
+</details>
+
+
 ### 7.45 版本 v3.4.1 Release Notes[2026-06-14]
 - 1、【调整】Docker镜像调整，新增 EXPOSE 8080 指令暴露应用端口，提升容器编排工具操作体验；
 - 2、【调整】任务参数长度调整，最长支持2048字符，支持大参数任务托管执行；
@@ -3093,38 +3097,75 @@ alter table xxl_job_log
 - 2、【修复】调度日志列表日期处理逻辑修复，兼容执行信息为空阻塞列表加载问题；
 - 3、【安全】任务RollingLog权限校验完善，防止越权查看任务日志；
 
-### 7.47 版本 v3.5.0 Release Notes[ING]
-- 1、【新增】GLUE模式开关：新增GLUE模式开关（xxl.job.executor.glueenabled），支持执行器维度设置是否启用GLUE模式；
-- 2、【新增】AccessToken升级：支持执行期维度隔离设置，废弃旧的全局AccessToken，提升系统安全性；
-  （注意：因为AccessToken调整为执行器维度，OpenAPI通讯协议部分发生适配变化，调度中心与执行器需要一并升级至v3.5.0体验）
-- 3、【新增】AccessToken在线管理：支持线上化动态管理，执行期管理UI界面可操作，提升操作效率及体验；
-- 4、【新增】OpenAPI能力增强：提供任务管理能力，包括任务新建/更新/删除、启动/停止、任务触发等；
+### 7.47 版本 v3.5.0 Release Notes[2026-10-01]
+- 1、【新增】OpenAPI能力增强：提供任务管理能力，包括任务新建/更新/删除、启动/停止、任务触发等；
   （注意：任务管理OpenAPI及操作代码示例，详见官方文档）
+- 2、【新增】GLUE模式开关：新增GLUE模式开关（xxl.job.executor.glueenabled），支持执行器维度设置是否启用GLUE模式；
+- 3、【新增】AccessToken升级：支持执行期维度隔离设置，废弃旧的全局AccessToken，提升系统安全性；
+  （注意：因为AccessToken调整为执行器维度，OpenAPI通讯协议部分发生适配变化，调度中心与执行器需要一并升级至v3.5.0体验）
+- 4、【新增】AccessToken在线管理：支持线上化动态管理，执行期管理UI界面可操作，提升操作效率及体验；
 - 5、【重构】数据模型标准化，通用字段命名统一，建表SQL规范性完善；
 - 6、【重构】I18N资源精简，通过配置组合替换重复资源，避免资源配置无序增长；
 - 7、【优化】弹框交互优化：单体版本项目，iframe中内容弹框(modal/layer)，支持自适应性居中并在顶层展示；
-- 8、【TODO】任务日志设置：支持任务级别设置日志保留时间；执行期支持设置执行日志类型，包括Rolling Log 和 普通日志，普通日志不存储本地文件；
-- 9、【TODO】任务告警增强：拆分“告警类型、告警配置”属性，支持Webhook、邮箱多种方式；
-- 10、【TODO】配置线上化：发送邮箱、I18N、线程池配置均线上化配置；
+- 8、【优化】密码修改错误文案修复、gitignore规则优化；合并PR-4011；
+- 9、【修复】调度中心Tab打开XSS问题修复；合并PR-4003；
+- 10、【优化】调度日志表索引优化，提升失败告警巡检查询性能；
+- 11、【升级】升级多项maven依赖至较新版本；
 
+<details>
+    <summary>数据库升级脚本：</summary>    
 
-**备注：**     
-数据库升级脚本：
 ```
--- 1. 添加 access_token 列
+-- 1. 执行器表：添加 access_token 列
 ALTER TABLE `xxl_job_group` 
 ADD COLUMN `access_token` varchar(255) DEFAULT NULL COMMENT '执行器AccessToken' AFTER `address_list`;
 
--- 2. 创建 app_name 的唯一索引
+-- 2. 执行器表：创建 app_name 的唯一索引
 ALTER TABLE `xxl_job_group` ADD UNIQUE KEY `i_app_name` (`app_name`) USING BTREE;
 
--- 3. 将指定 AppName 的 access_token 更新为目标值；（ 默认值为 'default_token'，可自行修改）
+-- 3. 执行器表：将指定 AppName 的 access_token 更新为目标值；（ 默认值为 'default_token'，可自行修改）
 UPDATE `xxl_job_group` SET `access_token` = '<新Token值>' WHERE `app_name` = '<目标AppName>';
 
 -- 4. 执行器与任务表 name 字段标准化调整；
 ALTER TABLE `xxl_job_group` CHANGE `title` `name` VARCHAR(64) NOT NULL COMMENT '执行器名称';                                                                                                                            
 ALTER TABLE `xxl_job_info` CHANGE `job_desc` `name` VARCHAR(255) NOT NULL COMMENT '任务描述'; 
+
+-- 5. 日志表：添加 alarm_status 索引 + 历史数据循环处理（单次处理1W条，防止大表执行压力过大）
+ALTER TABLE `xxl_job_log`
+    ADD INDEX `i_alarm_status` (`alarm_status`);
+
+UPDATE `xxl_job_log`
+SET `alarm_status` = 1
+WHERE `alarm_status` = 0
+  AND `handle_code` = 200
+LIMIT 10000;
 ```
+
+</details>
+
+### 7.48 版本 v3.5.1 Release Notes[ING]
+- 1、【TODO】任务日志重构：
+    - 调度日志：支持任务维度设置 “日志保留时间”（3/7/30天、1/3个月、1年、永久）；
+    - 执行日志：支持任务维度设置 “执行日志类型”（rolling、普通），普通日志不存储本地文件；
+    - 过期清理：调度日志，定期清理DB；执行日志，通过OpenAPI触发执行期端日志清理。持久化时间复用。
+- 2、【TODO】任务告警增强：任务新增 “告警类型、告警配置”属性，支持Webhook、邮箱多种方式；
+- 3、【TODO】UI交互升级：升级前后端分离架构，UI切换为现代化前端框架，提升交互体验；
+- 4、【TODO】任务属性重构：
+    - 基础配置：
+        - 执行器、任务名称
+        - 负责人、描述
+    - 调度配置：
+        - 调度类型、Cron / 频率
+        - 任务模式、JobHandler
+        - 任务参数
+    - 运行策略：
+        - 路由策略、 子任务
+        - 调度过期策略、阻塞处理策略
+        - 任务超时时间、失败重试次数
+    - 观测及告警：
+        - 日志保留策略（永久/3天…）、执行日志类型（rolling、普通） 【TODO】
+        - 告警类型（whook、邮箱） 、告警配置（json） 【TODO】
+- 5、【TODO】调度中心配置线上化：告警发送邮箱、I18N、线程池配置等，支持线上化配置并准实时生效；
 
 
 ### TODO LIST
@@ -3140,38 +3181,20 @@ ALTER TABLE `xxl_job_info` CHANGE `job_desc` `name` VARCHAR(255) NOT NULL COMMEN
     - 广播任务：记录一条主任务，每个分片任务记录一条次任务，关联在主任务上；
     - 重试任务：失败时，新增主任务。所有调度记录，包括入口调度和重试调度，均挂载主任务上。
 - 4、多数据库支持：支持 PG、H2 等多数据支持；
-- 5、任务属性重构：支持 日志设置 + 告警增强；
-    - 基础配置：归属执行器、任务名称、负责人、任务备注【】
-    - 调度配置：调度类型、Cron
-    - 任务配置：
-        - 已有：任务模式、JobHandler、任务参数
-        - 新增-日志配置：日志归档时间【】、执行日志类型（rolling、普通）【】
-    - 高级配置：调整为3列；
-        - 已有：路由策略、子任务、调度过期策略、阻塞处理策略、超时时间、失败重试次数；
-        - 新增-告警配置：告警类型（webhook、邮件）【】、告警配置【】
-- 6、日志设置：
-    - 调度日志策略：默认 DB 存储；
-    - 执行日志策略：rolling、普通；
-    - 日志持久化时间：任务维度自定义，保留3天、7天、1个月、3个月、一年、永久；
-        - 日志清理：调度日志，定期清理DB；执行日志，通过OpenAPI触发执行期端日志清理。持久化时间复用。
-- 7、告警增强：
-    - 邮件告警：支持自定义标题、模板格式；
-    - webhook告警：支持自定义告警URL、请求体格式；
-- 8、执行器端口：
+- 5、执行器端口：
     - 执行器端口复用，复用容器端口提供通讯服务；
     - 内嵌server切换tomcat，精简依赖；
-- 9、Token安全增强，改用加密数据避免AccessToken明文泄漏；
-- 10、调度触发时间：
-    - 日期过滤：支持多个时间段排除；
-- 11、调度逻辑：
+- 6、Token安全增强，改用加密数据避免AccessToken明文泄漏；
+- 7、调度触发时间：日期过滤：支持多个时间段排除；
+- 8、调度隔离及优先级：
     - 调度隔离：调度中心针对不同执行器，各自维护不同的调度和远程触发组件。
     - 任务优先级：调度与执行阶段按照优先级分配资源。
-- 12、任务导入导出工具，灵活支持版本升级、迁移等场景。
-- 13、脚本任务，支持数据参数，新版本仅支持单参数不支持需要兼容；
-- 14、任务标签：方便搜索；
-- 15、GLUE 模式 Web Ide 版本对比功能；
-- 16、自定义失败重试时间间隔；
-- 17、调度中心启动参数线上配置：告警发送邮箱、Token，支持线上配置生效，修改不需重启机器；
+- 9、任务导入导出工具，灵活支持版本升级、迁移等场景。
+- 10、脚本任务，支持数据参数，新版本仅支持单参数不支持需要兼容；
+- 11、任务标签：方便搜索；
+- 12、GLUE 模式 Web Ide 版本对比功能；
+- 13、自定义失败重试时间间隔；
+- 14、OpenAPI处理，防越权强化；
 
 
 ## 八、其他
