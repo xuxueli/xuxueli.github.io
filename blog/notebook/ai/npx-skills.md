@@ -675,6 +675,16 @@ npx skills 为 AI 助手提供了一种标准化的能力扩展机制：
 
 ---
 
+### 九、典型 Skill 推荐
+
+| 名称 | 简介 | 安装脚本 |
+|------|------|------|
+| find-skills | 搜索和发现可用技能 | `npx skills add vercel-labs/agent-skills --skill find-skills` |
+| skill-creator | 快速创建自定义技能模板 | `npx skills add vercel-labs/agent-skills --skill skill-creator` |
+| diagram design | 自动生成流程图和架构图 | `npx skills add cathrynlavery/diagram-design` |
+| frontend-design | 前端设计规范和最佳实践 | `npx skills add anthropics/skills --skill frontend-design` |
+
+
 **参考资料**：
 
 - Vercel Skills CLI: https://github.com/vercel-labs/skills
