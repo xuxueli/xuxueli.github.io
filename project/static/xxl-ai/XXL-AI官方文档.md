@@ -288,7 +288,7 @@ docker compose down
 #### 2.2.1 安装依赖
 
 ```bash
-cd xxl-ai-desk
+cd ./xxl-ai-desk
 npm install                                   # 一次性完成：postinstall 自动下载 Electron 二进制 + 重建原生模块
 ```
 
@@ -824,7 +824,7 @@ SSE 事件协议（`ChatStreamTool` 的 `EVENT_*` 常量）：
 
 - `POST /chat/send?uuid&visitorId&convId&content`：落库用户消息 + 助手占位后投递任务并转发；
 - `POST /chat/resume?msgId&lastEventId`：从结果流 `lastEventId` 之后继续转发，不重新生成；
-- `xxl_ai_chat_msg.status`（0-生成中、1-完成、2-失败）：发送即落助手占位；刷新后前端发现 `status=0` 即按 msgId 自动续传，生成结果不丢失。
+- `xxl_ai_session_msg.status`（0-生成中、1-完成、2-失败）：发送即落助手占位；刷新后前端发现 `status=0` 即按 msgId 自动续传，生成结果不丢失。
 
 集群与可靠性：
 
@@ -860,7 +860,7 @@ xxl-ai.chat.history.limit=50        # 附加给模型的最近历史消息条数
 | 知识库 | `xxl_ai_knowledge_base`、`xxl_ai_knowledge_doc` | 知识库、文档（向量化状态） |
 | MCP | `xxl_ai_mcp` | MCP 服务配置 |
 | SKILL | `xxl_ai_skill`、`xxl_ai_skill_file` | 技能、技能文件树 |
-| Agent | `xxl_ai_agent`、`xxl_ai_chat_conv`、`xxl_ai_chat_msg` | Agent、对话、消息 |
+| Agent | `xxl_ai_agent`、`xxl_ai_session`、`xxl_ai_session_msg`、`xxl_ai_memory` | Agent、对话、消息、长期记忆 |
 
 **空间隔离**：除平台表外，业务表均带 `space_id`；管理端当前空间由请求头 `xxl-space-id` 传入，后端按空间过滤；管理员可见全部空间，普通用户按 `xxl_ai_user_space` 授权。公开对话端以 Agent 的 `uuid` + 访客 `visitorId` 隔离会话。所有关联均为应用层维护（无数据库外键）。
 
@@ -874,6 +874,40 @@ xxl-ai.chat.history.limit=50        # 附加给模型的最近历史消息条数
 - **MCP `McpToolFactory`**：`McpClientTool` 基于官方 Java MCP SDK（stdio / Streamable HTTP），将 MCP 工具转换为 spring-ai `ToolCallback`；仓库内附示例 MCP 服务 `xxl-ai-sample`（spring-ai `@McpTool`，Streamable HTTP），供「MCP管理」连通测试联调；
 - **SKILL `SkillToolFactory`**：将 DB 技能文件树物化为 `{skill.root}/agent_{agentId}/{skillName}/`，构建 `SkillsTool` 及配套 shell / 文件执行工具（bash、Read/Write/Edit、Glob、Grep、List），技能内容变更按更新时间指纹自动重建；
 - **工具装配顺序**：`buildTools` 依次装配 MCP 工具 + Skill 工具 + 执行工具，统一以 `Object` 列表随请求传入，spring-ai 自动解析注册。
+
+### 5.8、长短期记忆
+
+对话记忆分「短期」与「长期」两层协同，兼顾本轮上下文与跨会话长期画像：
+
+| 层 | 载体 | 说明 |
+|---|---|---|
+| 短期记忆 | `xxl_ai_session_msg`（最近 N 条） | 当前对话窗口内的最近消息，按 `xxl-ai.chat.history.limit`（默认 50 条）截断后随请求附给模型，仅覆盖当前会话 |
+| 长期记忆 | `xxl_ai_memory` | 以「Agent × 访客」为维度的持久化记忆（单字段 Markdown，按维度分节），跨会话复用 |
+
+**开关与注入**：Agent 表新增 `memory_status`（0-关闭、1-开启）。对话生成（`ChatStreamTool.generate`）时若开启，按会话所属访客读取该 Agent×访客的长期记忆，经 `MemoryTool.mergePrompt` 以 Markdown 追加到系统指令一并注入；读取失败降级跳过，不影响对话主流程。
+
+**记忆维度**：`用户画像 / 偏好习惯 / 关键事实 / 目标与意图 / 近期进展`；生成时按维度抽取、空维度省略，最终内容按 `memory.content.max.length`（默认 2000 字）定长截断。
+
+**记忆生成**：由 `MemoryArchiveTool`（harness，`SmartLifecycle` + `CyclicThread` 心跳）异步归档：
+
+```
+心跳（默认 60s）
+  └─ Redis SETNX 抢锁（TTL = 心跳间隔，仅作互斥；抢不到忽略，抢到归档、处理完立即解锁）
+       └─ 遍历开启记忆且已发布的 Agent → 其下每个访客
+            ├─ 仅判断：是否存在比水位线 last_msg_id 更新的消息，无则跳过
+            └─ 有 → 取水位线之后的全部新消息 + 历史记忆 → 模型按固定维度生成最新记忆（定长）
+                    → 按唯一键 upsert，水位线推进到最新消息 ID
+```
+
+**组件划分**：
+
+| 层 | 组件（目录） | 职责 |
+|---|---|---|
+| 业务 | `MemoryController` / `MemoryService`（business/memory） | 管理端记忆分页查询、修改正文、批量删除（按空间隔离） |
+| 运行时 | `MemoryTool`（harness/memory） | 读取记忆、合并系统指令、按维度模型生成（定长截断、Markdown 规范化） |
+| 运行时 | `MemoryArchiveTool`（harness/memory） | `CyclicThread` 心跳 + Redis 锁互斥的异步归档 |
+
+**管理端入口**：「对话和记忆 → 长期记忆」，支持按 Agent / 访客过滤查看、查看记忆正文、修改记忆正文、删除。
 
 
 ## 六、总体设计（本地版）
@@ -932,25 +966,34 @@ xxl-ai.chat.history.limit=50        # 附加给模型的最近历史消息条数
 
 ```
 xxl-ai-desk/
-├── electron.vite.config.ts        # 三进程构建配置
+├── electron.vite.config.ts        # 三进程构建配置（主进程双入口：index + agent/worker/worker）
 ├── electron-builder.yml           # 打包配置
 └── src/
     ├── main/                      # 主进程（Node）
     │   ├── index.ts               # 入口：窗口 / 生命周期
-    │   ├── ipc.ts                 # IPC 路由（含 chat:send 编排）
-    │   ├── security.ts            # API Key 本地编解码
+    │   ├── ipc.ts                 # IPC 薄网关（仅透传 + 兜底，编排下沉 services）
+    │   ├── config/paths.ts        # 数据目录 / DB 路径解析（db 与 services 共同依赖）
     │   ├── db/                    # SQLite + Drizzle（schema / 初始化 / 迁移）
-    │   ├── agent/                 # Pi 运行时：runtime / worker / models / tools / sandbox / host
-    │   └── services/              # settings / provider / session / project / fs / watch / terminal
+    │   ├── services/              # 业务：settings/provider/project/session/chat/fs/watch/terminal/openWith/update/env/security
+    │   └── agent/                 # Pi 运行时（harness，按进程分两层）
+    │       ├── host/              # 主进程侧：runtimeHost（托管 utilityProcess）+ approval
+    │       └── worker/            # 运行时进程侧：worker/session/tools/sandbox/models
     ├── preload/index.ts           # contextBridge 暴露 window.desk
-    ├── shared/ipc.ts              # 主/预加载/渲染共享类型
-    └── renderer/src/              # 渲染进程（Vue3）
-        ├── components/            # Sidebar / MessageItem / ChatComposer / TerminalPanel / panel/*
+    ├── shared/                    # 跨进程契约（别名 @shared）
+    │   ├── ipc.ts                 # 聚合：re-export 各域契约 + IPC 常量 + DeskApi
+    │   ├── contracts/*.ts         # 按域拆分 DTO（app/provider/project/session/chat/terminal/fs/shell）
+    │   └── agentProtocol.ts       # 主进程 ⇄ 运行时进程协议
+    └── renderer/src/              # 渲染进程（Vue3，别名 @renderer）
+        ├── modules/{module}/      # 模块自包含：pages/ + components/
+        ├── components/            # 仅跨模块通用件（EmptyState / ApprovalDialog / ShortcutInput）
         ├── stores/                # settings / chat / layout / project
-        ├── modules/               # chat / settings 页面
+        ├── composables/           # 组合式函数（含响应式）
+        ├── utils/                 # 纯函数工具（无 Vue 依赖）
         ├── i18n/                  # zh / en 文案
         └── styles/                # 设计令牌与全局样式
 ```
+
+目录规范要点：**进程即目录**（`agent/host` 可用 electron、`agent/worker` 禁用）；**网关薄化**（业务编排在 `services/*`）；**契约按域** `shared/contracts/*`；**模块自包含**（渲染层模块专属组件入 `modules/{module}/components/`）；**别名优先**（`@renderer/*` / `@shared/*`，禁止 3 层以上 `../`）。
 
 ### 6.5 安全设计
 
@@ -958,6 +1001,20 @@ xxl-ai-desk/
 - **越界审批**：越界操作由主进程弹原生对话框，可选「允许本次 / 本会话允许 / 拒绝」，会话级白名单记入内存；
 - **模式隔离**：Plan 模式不装配写 / 命令工具，从工具层面限制只读；
 - **进程隔离**：渲染进程无 Node 能力，运行时进程无 Electron 能力，敏感能力（密钥、原生弹窗）留在主进程。
+
+### 6.6 安装与分发
+
+打包产物由 electron-builder 生成（mac：`dmg` + `zip`；win：`nsis`；linux：`AppImage` + `deb`），输出目录 `xxl-ai-desk/release/{version}/`。
+
+**macOS 提示「文件损坏」的临时处理**：当前 macOS 包未做代码签名与公证，在其他电脑安装时会被 Gatekeeper 打上隔离标记，提示「XXL-AI Desk 已损坏，无法打开，你应该将它移到废纸篓」。但是，实际上文件并未损坏，去除隔离标记即可：
+
+```
+# 1、把 App 拖入 /Applications（先不要双击运行）
+# 2、终端去除隔离标记（sudo 需输入密码）
+sudo xattr -rd com.apple.quarantine "/Applications/XXL-AI\ Desk.app"
+```
+
+去除后正常打开；若首次仍被拦截，进入「系统设置 → 隐私与安全性 → 仍要打开」放行一次即可。
 
 
 ## 六、版本更新日志
@@ -1031,11 +1088,15 @@ docker compose down
 - 3、【新增】客户端支持自动检测新版本，并引导升级；
 
 ### v1.2.0 Release Notes[ING]
-- 1、【TODO】云版：OpenAPI：针对搭建的Agent提供OpenAPI接口能力，通过agentId + accessToken访问，便于集成到第三方系统应用（提供内置Agent对话能力，可用于功能调试或快速集成应用）。
-- 2、【TODO】云版：Memory：支持跨会话记忆、记忆内容主动沉淀更新、上下文检索及注入等。
-- 3、【TODO】云版：可观测：支持Agent可观测，包括Session对话、工具/知识/记忆等Trace明细可观测等。
-- 4、【TODO】Desk版本：支持SKILL/MCP工具；
-- 5、【TODO】Desk版本：支持浏览器工具操作；
+- 1、【新增】Memory（云版）：支持Agent长期记忆，多维度、跨会话长期记忆主动沉淀，以及上下文会话主动注入；
+- 2、【重构】会话模块重构（云版）：会话管理独立入口，支持跨Agent会话检索；C端会话交互与会话管理逻辑拆分，子模块更KISS、可维护性提升；
+- 3、【优化】Desk版本代码重构，落地进程即目录、网关薄化、契约按域、模块自包含、别名优先等规范化改造；
+- 4、【升级】Docker Compose升级：升级 Redis、Milvus 至最新LTS版本；
+- 5、【新增】会话终止（云版）：支持主动终止会话，终止时清理工具调用进程，避免工具调用进程泄露；
+- 6、【TODO】Desk版本：UI升级，左侧操作栏；
+
+- 【TODO】Desk版本：支持SKILL/MCP，记忆；
+- 【TODO】Desk版本：支持浏览器工具操作；
 
 
 ### TODO LIST
@@ -1045,7 +1106,8 @@ docker compose down
   - Agent 生图：文生图 / 图生图，支持集成多模型供应商；
   - Agent 生视频：文生视频 / 图生视频，支持集成多模型供应商；
   - Chat 对话增强：对话记忆控制、多模态输入；
-- 2、其他
+- 2、云版：OpenAPI：针对搭建的Agent提供OpenAPI接口能力，通过agentId + accessToken访问，便于集成到第三方系统应用（提供内置Agent对话能力，可用于功能调试或快速集成应用）。
+- 3、云版：可观测：支持Agent可观测，包括Session对话、工具/知识/记忆等Trace明细可观测等。
 
 ## 七、其他
 
