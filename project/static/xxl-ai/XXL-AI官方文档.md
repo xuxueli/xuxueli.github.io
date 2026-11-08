@@ -17,14 +17,14 @@
 XXL-AI 是一个「**云本结合**」的 AI Agent 开发平台，提供两种同源同品牌、能力互补的交付形态，可按团队规模与使用场景独立选用，也可组合使用：
 
 > - **云版**：以 Agent 编排为中枢，标准化扩展「MCP + SKILL + RAG」，配套多供应商、空间隔离、RBAC 权限与流式对话等工程化底座，可快速构建并一键发布 Agent。开源、开箱即用，支持集群部署与生产落地。
-> - **本地版**：跨平台桌面客户端：面向个人的本地工作台，围绕本机项目目录提供对话、文件读写、终端命令、文件 / 浏览器侧边任务等能力；安装即用、离线可用，数据仅落本地 SQLite。
+> - **本地版**：跨平台桌面客户端：面向个人的本地工作台，围绕本机项目目录提供对话、文件读写、终端命令、Git 审核与文件 / 浏览器工具面板等能力；支持多 Agent 编排、项目长期记忆，安装即用、离线可用，数据仅落本地 SQLite。
 
 | 项 | 云版（Web 服务端） | 本地版（Desk 桌面端） |
 |---|---|---|
 | 形态 | B/S Web 应用，浏览器访问 | C/S 桌面应用，一键安装（mac / win / linux） |
 | 面向 | 团队——多用户、多业务空间（Tenant） | 个人——单用户本地工作台 |
 | 定位 | Agent 编排、一键发布、权限治理 | 本地优先，直接操作本机项目与系统能力 |
-| 扩展 | MCP + SKILL + RAG，多供应商，流式对话 | 本地文件 / 终端 / 浏览器面板，Plan / Build 模式 |
+| 扩展 | MCP + SKILL + RAG，多供应商，流式对话 | 本地文件 / 终端 / 浏览器面板，三档权限模式 |
 | 模块 | `xxl-ai-api` + `xxl-ai-ui`（+ `xxl-ai-sample`） | `xxl-ai-desk` |
 | 依赖 | MySQL + Redis + Milvus | 零依赖（仅本地 SQLite） |
 
@@ -63,29 +63,26 @@ XXL-AI 是一个「**云本结合**」的 AI Agent 开发平台，提供两种�
 
 #### 1.2.2 本地版
 
-- **本地优先的桌面 Agent 工作台（核心亮点）**
+- **本地优先，项目即工作区（核心亮点）**
 
-- 1、跨平台一键安装：基于 Electron + Vue3 + TypeScript 构建，支持 mac / win / linux，开箱即用、离线可用；
-- 2、项目即工作区：项目 1:1 强绑定本地磁盘目录，会话归属项目，Agent 直接在本机工程上干活；
-- 3、本地数据自治：单文件 SQLite（better-sqlite3 + Drizzle），数据不出本机，运行时数据目录可自定义；
+- 1、跨平台开箱即用：Electron + Vue3 + TypeScript，支持 mac / win / linux；单文件 SQLite 本地存储，数据不出本机，运行目录可自定义；
+- 2、项目即工作区：项目 1:1 绑定本地目录，会话归属项目，Agent 直接在本机工程上工作；项目可独立开启长期记忆，跨会话沉淀偏好与决策；
 
-- **Plan / Build + 本地系统能力，让 Agent 真能干活（亮点）**
+- **多 Agent 编排与扩展中心**
 
-- 4、Plan / Build 双模式：Plan 只读安全探索、Build 全量读写落地改造，随会话持久化，默认 Build；
-- 5、项目目录沙箱：文件操作限定当前项目目录，越界弹原生对话框「允许本次 / 本会话允许 / 拒绝」，支持会话级白名单；
-- 6、直达工作现场：终端面板（node-pty + xterm）、文件面板（目录树 + 编辑 + 预览，跟随本地变更）、浏览器面板（多标签 `webview`）；
+- 3、多 Agent：按 Agent 配置系统指令、SKILL、MCP 与内置工具，新建会话必须选择 Agent，保存后下一轮即时生效；
+- 4、统一扩展中心：MCP / SKILL / 内置工具集中管理并支持市场发现，按 Agent 勾选装配，未选中的能力不参与对话；
 
-- **执行过程全程可视（亮点）**
+- **多供应商与可观测**
 
-- 7、时间线渲染：助手消息按**片段发生顺序**交错呈现思考 → 工具 → 正文，不再是「思考堆一起、结果一次性吐出」；
-- 8、工具调用可视化：独立成行展示动作 / 参数 / 状态 / 实时耗时，可展开入参与结果；
-- 9、流式对话：思考过程折叠、Markdown 实时渲染、GitHub 风格代码高亮（语言标签 + 复制）；
+- 5、执行过程可观测：思考 → 工具 → 正文按发生顺序时间线渲染，工具调用展示参数 / 状态 / 耗时；输入框底部会话状态信息条汇总会话统计、Token 用量与上下文占用，点击展开明细；
+- 6、多供应商与进程隔离：兼容 OpenAI 协议（OpenCodeGo / Ollama / Deepseek / 智谱GLM 等），Pi 运行于独立 utilityProcess，长任务不阻塞 UI；支持多主题与中英双语。
 
-- **多供应商接入与工程化底座**
+- **权限可控与丰富内置工具**
 
-- 10、多供应商模型：兼容 OpenAI 协议（OpenCodeGo / Ollama / Deepseek / 智谱GLM 等），支持 `{session}` 请求头占位，首次启动预置四个供应商；
-- 11、运行时进程隔离：Pi（`pi-ai` + `pi-agent-core`）运行于独立 `utilityProcess`，主进程仅做 IPC 网关与越界审批，长会话 / 工具重活不阻塞 UI；
-- 12、个性化与国际化：应用名称 / Slogan / 自定义指令，浅色（默认）/ 深色主题，中 / 英双语。
+- 7、三档权限 + 目录沙箱：仅可查看 / 工作区内修改 / 完全权限随会话持久化；越界写入在输入框内联审批，支持「本次 / 本会话允许」，敏感操作统一拦截；
+- 8、右侧工具面板：文件 / Git / 终端 / 浏览器统一为 Tab，目录树、编辑、命令与多标签页随会话隔离；
+
 
 ### 1.3 下载
 
@@ -318,9 +315,10 @@ npm run build:win
 #### 2.2.3 首次使用
 
 1. 首次启动自动预置 **OpenCodeGo / Ollama / Deepseek / 智谱GLM** 四个供应商（与云版种子一致），并默认选中首个；
-2. 进入 **设置 → 模型供应商** 新增或修改供应商（详见 3.2）；
-3. 在 **设置 → 常规** 配置主题 / 语言，在 **设置 → 个性化** 配置名称 / Slogan / 自定义指令；
-4. 新建项目并选择本地目录，回到对话页即可开始聊天。
+2. 进入 **设置 → 模型供应商** 新增或修改供应商（详见 3.2.2）；
+3. 在 **设置 → 常规** 配置主题 / 语言，在 **设置 → 个性化** 配置名称 / Slogan；
+4. 进入 **扩展中心 → Agent** 选择预设 Agent，或新建 Agent 并配置指令 / SKILL / MCP / 内置工具（详见 3.2.3）；
+5. 在 **系统设置 → 项目** 新建项目并选择本地目录，回到对话页选择项目与 Agent 即可开始聊天（详见 3.2.4）。
 
 ## 三、操作指南
 
@@ -451,14 +449,14 @@ npm run build:win
 
 ### 3.2 本地版操作指南
 
-> 本章按 **供应商 → 项目 → 对话 → 侧边任务 → 设置** 的顺序说明本地版使用方式。
+> 本章按 **供应商 → Agent → 项目 → 对话 → 工具面板 → 设置** 的顺序说明本地版使用方式。
 
 #### 3.2.1 界面总览
 
 - 左侧**会话栏**（可折叠为窄图标栏）：项目分组 + 会话列表，底部为新建对话、设置、折叠 / 展开；
-- 右侧**内容区**：顶栏（标题 + 模型切换）、消息流、输入框（Composer）；
-- 右侧**侧边任务面板**：文件 / 浏览器面板，可放大占满正文区、拖拽宽度；
-- 对话页右下可展开**终端面板**。
+- 右侧**内容区**：顶栏（标题 / 模型切换）、消息流、输入框（Composer，底部为会话状态信息条）；
+- 右侧**工具面板**：文件 / Git / 终端 / 浏览器统一为 Tab，可放大占满正文区、拖拽宽度，状态按会话隔离；
+- 新建对话时，输入框下方必须选择**项目**与 **Agent**，并提供示例任务快速上手。
 
 ![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk/desk_01.jpg)
 
@@ -470,54 +468,66 @@ npm run build:win
 - 接口地址：OpenAI 兼容端点（如 `https://api.deepseek.com/v1`，裸地址自动补 `/v1`）；
 - API Key：本地存储；
 - 请求 Header：可选 JSON 对象，value 支持 `{session}` 占位符，对话时替换为当前会话 ID（如 OpenCode 使用 `{"x-opencode-session":"{session}"}`）；
-- 模型列表：每行一个模型 ID，如 `deepseek-v4-flash`。
+- 模型列表：每行一个模型 ID，如 `deepseek-v4-flash`；可配置模型上下文窗口，用于计算上下文占用率。
 
 ![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk/desk_02.jpg)
 
-#### 3.2.3 项目与会话
+#### 3.2.3 扩展中心与 Agent
 
-- 侧栏「项目」区维护本地项目：项目 1:1 强绑定本地磁盘目录，可新建（目录选择）、重命名、删除（级联删除会话）、在文件管理器中显示；
-- 会话必须归属某项目，新建对话需先选择项目；侧栏按项目分组会话，支持搜索、重命名、删除与排序；
-- 首条消息即时生成会话标题；生成中切换会话再切回不丢内容（会话级生成缓存）。
+**扩展中心**（左侧「扩展中心」入口）包含 **Agent / MCP 工具 / SKILL 技能 / 内置工具** 四个子页：
 
-#### 3.2.4 对话与模式
+- **Agent**：新建 / 编辑 / 删除 Agent，配置名称、描述、图标、系统指令、SKILL、MCP 与内置工具分类；首次启动预置通用助手、编程助手、陪伴交流三个 Agent，默认 Agent 不可删除；
+- **MCP 工具**：管理远程（Streamable HTTP）/ 本地（stdio）服务，支持连通测试、工具列举与市场发现；
+- **SKILL 技能**：管理本地技能，支持目录 / Zip 导入、GitHub 安装与 skills.sh 市场；
+- **内置工具**：查看客户端内置能力目录（文件 / 终端 / 浏览器 / 通用 / 人机交互），是否启用由 Agent 配置决定。
 
-- 输入框左侧提供 **Plan / Build 模式选择器**（随会话持久化，默认 Build）：
-  - **Plan（只读）**：仅装配只读工具（`read_file` / `list_directory` / `glob_files` / `search_files` / `get_current_time`）；
-  - **Build（读写）**：在只读基础上追加 `write_file` / `edit_file` / `run_command`；
-- 文件工具统一限定当前项目目录，越界操作弹原生对话框，可选「允许本次 / 本会话允许 / 拒绝」；
-- 助手消息按**片段发生顺序**渲染时间线（思考 → 工具 → 正文交错），思考运行中实时展开、完成后收起；工具调用独立成行，展示动作、参数、状态与耗时，点击可展开入参 / 结果；
+会话创建时绑定 Agent，运行时的系统指令、SKILL、MCP 与内置工具均取自该 Agent；Agent 保存后，绑定会话下一轮立即使用新配置，无需重建会话。
+
+#### 3.2.4 项目与会话
+
+- 侧栏「项目」区与 **系统设置 → 项目** 均可维护本地项目：项目 1:1 强绑定本地磁盘目录，可新建（目录选择）、重命名、在文件管理器中显示、删除（级联删除会话 / 消息 / 记忆）；
+- 项目列表支持**长期记忆**开关与记忆查看：开启后按项目维度沉淀跨会话偏好 / 事实 / 决策，并自动注入后续对话；
+- 会话必须归属某项目并绑定 Agent；新建对话需同时选择项目与 Agent，创建后归属不可修改；
+- 侧栏按项目分组会话，支持搜索、重命名、删除与排序；首条消息即时生成会话标题；生成中切换会话再切回不丢内容。
+
+#### 3.2.5 对话与权限模式
+
+- 输入框左侧提供 **三档权限选择器**（随会话持久化，默认工作区内修改）：
+  - **仅可查看（read-only）**：全局可读；不装配写入 / 命令工具，MCP 只放行显式只读的工具；
+  - **工作区内修改（workspace-write）**：全局可读；仅项目目录与系统临时目录可直接写入，其它写入在输入框位置内联展示审批，可选「允许本次 / 本会话允许 / 拒绝」；
+  - **完全权限（full-access）**：全局读写；系统目录与用户敏感目录（如 `~/.ssh`）仍由统一拦截机制阻止；
+- 危险命令规则库始终生效，不随权限档位放开；
+- 输入框「+」可关联项目文件 / 文件夹，仅随下一条消息下发；输入框底部会话状态信息条展示会话统计、Token 用量与上下文占用；
+- 助手消息按**片段发生顺序**渲染时间线（思考 → 工具 → 正文交错），思考运行中实时展开、完成后收起；工具调用独立成行，展示动作、参数、状态与耗时，点击可展开入参 / 结果；轮次结束展示耗时摘要；
 - 代码块为 GitHub 风格（语言标签 + 复制），接入语法高亮。
 
 ![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk/desk_03.jpg)
 
 ![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk/desk_04.jpg)
 
-#### 3.2.5 侧边栏
+#### 3.2.6 工具面板（文件 / Git / 终端 / 浏览器）
 
-- **侧边栏工具菜单**：工具菜单含 **文件** 与 **浏览器** 两个面板，支持放大占满正文区、拖拽宽度；
+- 右侧工具面板统一为 Tab，顺序为文件、Git、终端、浏览器；开发者模式追加「诊断」Tab；
+- **文件面板**：项目目录树（懒加载 / 过滤 / 折叠）+ 代码编辑（行号、高亮、`⌘/Ctrl+S` 保存）+ 预览，随本地文件变更自动刷新，支持「打开所在文件夹 / 用指定应用打开」；
+- **Git 面板**：查看项目空间 Git 变更、审核与推送；
+- **终端面板**：基于 node-pty + xterm，按项目目录启动，支持终端命令行操作；
+- **浏览器面板**：内嵌 `webview`，多标签、前进 / 后退 / 刷新、地址栏搜索兜底、系统浏览器打开。
 
 ![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk/desk_05.jpg)
 
-- **文件面板**：项目目录树（懒加载 / 过滤）+ 代码编辑（行号、高亮、`⌘/Ctrl+S` 保存）+ 预览，随本地文件变更自动刷新，支持「打开所在文件夹 / 用指定应用打开」；
-
 ![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk/desk_06.jpg)
 
-- **浏览器面板**：内嵌 `webview`，多标签、前进 / 后退 / 刷新、地址栏搜索兜底、系统浏览器打开；
-
 ![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk/desk_07.jpg)
-
-#### 3.2.6 终端
-
-- **终端面板**：基于 node-pty + xterm，支持终端命令行操作。
 
 ![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk/desk_08.jpg)
 
 #### 3.2.7 设置与运行数据
 
-- **设置 → 常规**：主题、语言即时生效；**设置 → 个性化**：配置应用名称、Slogan、自定义指令（作为新对话系统指令）；
+- **设置 → 常规**：外观 / 主题 / 语言、全局快捷键即时生效；**设置 → 个性化**：配置应用名称、Slogan；
+- **设置 → 项目**：维护项目列表、长期记忆开关与记忆内容；
+- **设置 → 运行设置**：配置 Node / Python 运行环境与开发者模式；
 - **数据目录**：默认位于系统 userData 下的 `xxl-ai-desk.sqlite`，可在设置中查看 / 浏览 / 打开 / 修改，修改后重启生效；
-- 会话 / 消息 / 供应商 / 项目 / 设置均落本地 SQLite，API Key 本地存储。
+- 会话 / 消息 / Agent / 供应商 / 项目 / 记忆 / 设置均落本地 SQLite，API Key 本地存储。
 
 ![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk/desk_09.jpg)
 
@@ -546,18 +556,18 @@ XXL-AI 提供「**云本结合**」两种交付形态，二者同源同品牌、
 
 | 能力维度 | 云版（Web 服务端） | 本地版（Desk 桌面端） |
 |---|---|---|
-| Agent 编排与发布 | 模型 + 系统指令 + 知识库 + MCP + SKILL 组合，一键发布生成免登录公开地址 `/#/chat/{uuid}`，管理端可查看访客对话与消息记录 | 以「项目」为中心的本地 Agent：按项目绑定本地目录，会话归属项目，支持个性化（名称 / Slogan / 自定义指令） |
-| 多模型供应商 | 供应商 + 模型两级管理，连通性测试、远程模型自动导入，区分对话 / 嵌入模型 | 供应商 + 模型本地配置，首次启动预置 OpenCodeGo / Ollama / Deepseek / 智谱GLM，支持 `{session}` 请求头占位 |
-| 流式对话 | SSE + Redis Stream 无状态化，支持集群部署与断线 / 刷新续传，思考折叠 + Markdown 渲染 | 主进程 / 运行时进程 IPC 事件流，思考 / 工具 / 正文按发生顺序时间线渲染，思考折叠 + 代码高亮 |
-| MCP 工具 | 远程（Streamable HTTP）与本地（stdio）在线管理、连通测试，运行时自动装配 | / |
-| SKILL 技能 | 在线管理 `SKILL.md` + 文件树，自动物化为可执行技能目录 | / |
+| Agent 编排与发布 | 模型 + 系统指令 + 知识库 + MCP + SKILL 组合，一键发布生成免登录公开地址 `/#/chat/{uuid}`，管理端可查看访客对话与消息记录 | 多 Agent 管理：扩展中心按 Agent 配置指令 / SKILL / MCP / 内置工具，会话创建即绑定 Agent，运行时按 Agent 实时装配 |
+| 多模型供应商 | 供应商 + 模型两级管理，连通性测试、远程模型自动导入，区分对话 / 嵌入模型 | 供应商 + 模型本地配置，首次启动预置 OpenCodeGo / Ollama / Deepseek / 智谱GLM，支持 `{session}` 请求头占位与模型上下文窗口 |
+| 流式对话 | SSE + Redis Stream 无状态化，支持集群部署与断线 / 刷新续传，思考折叠 + Markdown 渲染 | 主进程 / 运行时进程 IPC 事件流，思考 / 工具 / 正文按发生顺序时间线渲染，轮次耗时摘要、会话状态信息条、代码高亮 |
+| MCP 工具 | 远程（Streamable HTTP）与本地（stdio）在线管理、连通测试，运行时自动装配 | 扩展中心统一管理 + mcp.so 市场发现，按 Agent 勾选后装配 |
+| SKILL 技能 | 在线管理 `SKILL.md` + 文件树，自动物化为可执行技能目录 | 扩展中心统一管理 + skills.sh / GitHub 市场安装，按 Agent 勾选后装配 |
 | RAG 知识库 | 知识库 + 文档管理，分片向量化入 Milvus，对话自动检索注入 | / |
-| 本地系统能力 | 不直接操作本机文件 / 终端 / 浏览器 | **核心差异**：本地文件读写与检索、终端命令（node-pty + xterm）、文件面板（编辑 + 保存 + 跟随本地变更）、浏览器面板（多标签 `webview`） |
-| 读 / 写安全控制 | 空间归属 + RBAC + 审计日志 | **Plan / Build 模式**：Plan 只读（read/list/glob/grep/时间），Build 全量读写；文件操作限定当前项目目录，越界弹原生对话框「允许本次 / 本会话允许 / 拒绝」 |
-| 会话与上下文 | 会话 / 消息落 MySQL，按空间隔离；公开端以 `uuid` + `visitorId` 隔离 | 会话 / 消息落本地 SQLite，1:1 归属项目；生成中会话内存缓存，切换不丢流式增量 |
+| 本地系统能力 | 不直接操作本机文件 / 终端 / 浏览器 | **核心差异**：本地文件读写与检索、终端命令（node-pty + xterm）、Git 变更审核、统一工具面板（文件 / Git / 终端 / 浏览器） |
+| 读 / 写安全控制 | 空间归属 + RBAC + 审计日志 | **三档权限模式**：仅可查看全局读、工作区内修改限定项目与系统临时目录、完全权限全局读写；敏感操作统一拦截，越界在输入框位置内联展示审批「允许本次 / 本会话允许 / 拒绝」 |
+| 会话与上下文 | 会话 / 消息落 MySQL，按空间隔离；公开端以 `uuid` + `visitorId` 隔离 | 会话 / 消息落本地 SQLite，1:1 归属项目并绑定 Agent；生成中会话内存缓存，切换不丢流式增量；项目维度长期记忆 |
 | 数据存储 | MySQL（业务 + 平台表）、Redis（登录态 + 对话流）、Milvus（向量） | 单文件 SQLite（better-sqlite3 + Drizzle），运行时数据目录可自定义 |
 | 登录与权限 | XXL-SSO 登录（Redis 存储登录态）、RBAC 菜单 / 按钮权限、动态菜单零路由改动 | 无登录 / 无角色体系，纯本地应用 |
-| 多语言与主题 | Vue3 + Element Plus + TypeScript，中 / 英 i18n，动态菜单 | Vue3 + Element Plus + TypeScript，中 / 英 i18n，浅色（默认）/ 深色主题 |
+| 多语言与主题 | Vue3 + Element Plus + TypeScript，中 / 英 i18n，动态菜单 | Vue3 + Element Plus + TypeScript，中 / 英 i18n，浅色 / 深色 / 跟随系统 + 多主题配色 |
 | 部署与运维 | 前后端分离开发、前端内嵌单包部署、Docker Compose 一键部署 | electron-builder 三平台打包（dmg / nsis / AppImage 等），免安装可 `pack` |
 | 内核技术栈 | SpringBoot + MyBatis + spring-ai + XXL-SSO + Redis Stream | Electron + Vue3 + **Pi**（`pi-ai` + `pi-agent-core`，独立 `utilityProcess` 运行时） |
 
@@ -567,7 +577,7 @@ XXL-AI 提供「**云本结合**」两种交付形态，二者同源同品牌、
 2. **数据与部署差异**：云版依赖 MySQL + Redis + Milvus 三件套，支持集群扩展与高可用；本地版仅需一个 SQLite 单文件，零服务依赖，安装即用、离线可用。
 3. **运行时差异**：云版基于 spring-ai `ChatClient`，对话生成 worker 经 Redis Stream 解耦，支持无状态转发与断点续传；本地版基于 Pi Agent 运行时，独立 `utilityProcess` 承载模型调用与工具执行，主进程只做 IPC 网关与越界审批，保证流式与 UI 顺滑。
 4. **能力侧重差异**：云版强在「资源编排 + 一键发布 + 权限治理 + 团队协作」；本地版强在「本地系统操作」——直接读写项目文件、执行终端命令、内嵌浏览器 / 文件编辑器，是真正落地到编码场景的本地 Agent。
-5. **安全控制差异**：云版以空间 + RBAC + 审计做边界；本地版以项目目录沙箱 + Plan/Build 模式 + 越界人工审批做边界（Plan 只读、Build 读写，默认 Build）。
+5. **安全控制差异**：云版以空间 + RBAC + 审计做边界；本地版以「三档权限模式 + 路径闸门 + 敏感操作拦截」做边界（默认工作区内修改，完全权限下敏感目录仍拦截）。
 
 ### 4.4 使用场景与选型建议
 
@@ -1135,13 +1145,13 @@ public Response<PageModel<MessageDTO>> pageList(...) { ... }
 ```
 ┌────────────────────────────────────────────────────────────┐
 │ Renderer（Vue3 + Element Plus，无 Node 直连）               │
-│  会话列表 · 对话流 · Composer · 设置 · 侧边任务面板          │
+│  会话列表 · 对话流 · Composer · 设置 · 工具面板              │
 └───────────────▲────────────────────────────────────────────┘
                 │ contextBridge（preload 暴露 window.desk.*）
 ┌───────────────┴────────────────────────────────────────────┐
 │ Main（Electron 主进程，Node / CJS）                          │
 │  窗口/生命周期 · IPC 网关 · SQLite(Drizzle) 持久化           │
-│  Agent 运行时管理 · 越界审批弹窗 · 文件/终端/浏览器服务       │
+│  Agent 运行时管理 · 越界审批编排 · 文件/终端/浏览器服务     │
 └───────────────┬────────────────────────────────────────────┘
                 │ utilityProcess + parentPort 结构化消息
 ┌───────────────▼────────────────────────────────────────────┐
@@ -1152,24 +1162,24 @@ public Response<PageModel<MessageDTO>> pageList(...) { ... }
 ```
 
 - **安全**：`contextIsolation: true`、`nodeIntegration: false`；渲染层仅经 preload 白名单 IPC 访问能力；
-- **运行时隔离**：Pi 运行时独立运行在 `utilityProcess`，主进程只做 IPC 网关与审批弹窗，LLM 流式与工具重活不占用主进程事件循环；
-- **越界审批**：运行时进程内的文件沙箱无法弹窗，经 `parentPort` 发 `approval-request` 给主进程，由主进程弹原生对话框后回传结果。
+- **运行时隔离**：Pi 运行时独立运行在 `utilityProcess`，主进程只做 IPC 网关与审批编排，LLM 流式与工具重活不占用主进程事件循环；
+- **越界审批**：运行时进程内的文件沙箱无法弹窗，经 `parentPort` 发 `interaction-request` 给主进程，由主进程转渲染层在输入框位置内联展示审批后回传结果。
 
 #### 6.1.2、设计思路
 
 本地版以「**本地优先、进程隔离、能力收敛**」为核心设计思路：
 
 - **本地优先**：单机单用户、数据仅落本机 SQLite 单文件，零服务依赖、离线可用；项目直接绑定本机磁盘目录，Agent 在项目目录内读写文件、执行命令；
-- **进程隔离**：渲染进程无 Node 能力、运行时进程无 Electron 能力，敏感能力（密钥、原生弹窗）留在主进程，越界操作转人工审批；
-- **网关薄化**：主进程 `ipc.ts` 只做透传与兜底，业务编排下沉 `services/*`；
-- **能力收敛**：MCP、SKILL、内置工具统一归一为 Pi 的 `AgentTool` 装配进同一会话 Agent，共用模式过滤、沙箱与审批、提示注入机制（见 6.4）；
-- **模式即权限**：Plan 只读、Build 读写，从工具装配层面限制副作用，而非依赖提示词约束。
+- **进程隔离**：渲染进程无 Node 能力、运行时进程无 Electron 能力，敏感能力（密钥、审批编排）留在主进程，越界操作转人工审批；
+- **网关薄化**：主进程 `ipc.ts` 只做注册与兜底，业务编排下沉 `modules/{domain}/main/*`；
+- **能力收敛**：Agent 把「系统指令 + SKILL + MCP + 内置工具」编排为会话能力；MCP、SKILL、内置工具统一归一为 Pi 的 `AgentTool` 装配进同一会话 Agent，共用模式过滤、沙箱与审批、提示注入机制（见 6.4）；
+- **权限即边界**：仅可查看不装配写 / 命令工具，工作区内修改限定项目与系统临时目录，完全权限全局读写；从工具装配与路径闸门两层限制副作用，而非依赖提示词约束。
 
 #### 6.1.3、技术选型
 
 | 维度 | 方案 |
 |---|---|
-| 桌面框架 | Electron 44 + electron-vite 5 |
+| 桌面框架 | Electron 45 + electron-vite 6 |
 | 前端 | Vue 3 + TypeScript + Element Plus |
 | Agent 运行时 | **Pi**（`@earendil-works/pi-ai` + `pi-agent-core`），独立 `utilityProcess` |
 | 本地存储 | better-sqlite3 + Drizzle ORM（SQLite 单文件） |
@@ -1188,33 +1198,46 @@ xxl-ai-desk/
 ├── electron.vite.config.ts        # 三进程构建配置（主进程双入口：index + agent/worker/worker）
 ├── electron-builder.yml           # 打包配置
 └── src/
-    ├── main/                      # 主进程（Node）
-    │   ├── index.ts               # 入口：窗口 / 生命周期
-    │   ├── ipc.ts                 # IPC 薄网关（仅透传 + 兜底，编排下沉 services）
-    │   ├── config/paths.ts        # 数据目录 / DB 路径解析（db 与 services 共同依赖）
-    │   ├── db/                    # SQLite + Drizzle（schema / 初始化 / 迁移）
-    │   ├── services/              # 业务：settings/provider/project/session/chat/fs/watch/terminal/openWith/update/env/security
-    │   └── agent/                 # Pi 运行时（harness，按进程分两层）
-    │       ├── host/              # 主进程侧：runtimeHost（托管 utilityProcess）+ approval
-    │       └── worker/            # 运行时进程侧：worker/session/tools/sandbox/models
-    ├── preload/index.ts           # contextBridge 暴露 window.desk
-    ├── shared/                    # 跨进程契约（别名 @shared）
-    │   ├── ipc.ts                 # 聚合：re-export 各域契约 + IPC 常量 + DeskApi
-    │   ├── contracts/*.ts         # 按域拆分 DTO（app/provider/project/session/chat/terminal/fs/shell）
-    │   └── agentProtocol.ts       # 主进程 ⇄ 运行时进程协议
+    ├── common/                    # 跨域公共层：被 ≥2 个领域复用且无业务规则
+    │   ├── shared/                # 跨进程纯 TS：contracts/(pagination·quickAction)、fileTypes、providerUrl、runtimeLog、appInfo、i18n
+    │   ├── main/                  # 主进程基础设施：db(getDb) / config/paths / utils / ipc
+    │   └── renderer/              # 渲染公共：api(window.desk) / components / composables / config / styles / types / utils
+    ├── modules/                   # 领域模块：一个域一个目录，纵向切片
+    │   ├── agent/                 # shared · main · preload · worker · renderer · i18n
+    │   ├── app/                   # shared · main · preload · i18n
+    │   ├── browser/               # shared · main · preload · worker · renderer
+    │   ├── chat/                  # shared · main · preload · renderer · i18n
+    │   ├── diagnostics/           # shared · main · preload · renderer
+    │   ├── file/                  # shared · main · preload · worker · renderer · i18n
+    │   ├── git/                   # shared · main · preload · renderer · i18n
+    │   ├── mcp/                   # shared · main · preload · worker · renderer
+    │   ├── plugin/                # renderer（扩展中心 / builtin） · i18n
+    │   ├── project/               # shared · main · preload · renderer · i18n
+    │   ├── provider/              # shared · main · preload · renderer
+    │   ├── settings/              # shared · main · preload · renderer · i18n
+    │   ├── skill/                 # shared · main · preload · worker · renderer
+    │   ├── terminal/              # shared · main · preload · renderer
+    │   └── toolPanel/             # renderer（仅壳：Tab / 宽度 / 宿主） · i18n
+    ├── main/                      # 主进程入口壳：index.ts · ipc.ts(聚合) · db.ts(聚合) · i18n.ts(聚合)
+    ├── preload/                   # 预加载入口壳：index.ts(聚合) · deskApi.ts(类型聚合) · index.d.ts
     └── renderer/src/              # 渲染进程（Vue3，别名 @renderer）
-        ├── modules/{module}/      # 模块自包含：pages/ + components/
-        ├── components/            # 仅跨模块通用件（EmptyState / ApprovalDialog / ShortcutInput）
-        ├── stores/                # settings / chat / layout / project
-        ├── composables/           # 组合式函数（含响应式）
-        ├── utils/                 # 纯函数工具（无 Vue 依赖）
-        ├── i18n/                  # zh / en 文案
-        └── styles/                # 设计令牌与全局样式
+        ├── main.ts · App.vue · env.d.ts
+        └── shell/                 # 应用外壳
+            ├── layout/            # Navbar / Sidebar / AppMain / PanelResizer
+            ├── router/index.ts    # 路由组合根：直接装配各模块 pages
+            ├── config/nav.ts      # 板块 / 子菜单 / 入口路径唯一定义
+            ├── composables/       # useAppBootstrap / useSessionLifecycle / useQuickAction
+            ├── stores/layout.ts
+            └── i18n/index.ts      # 渲染层词条组合根
 ```
+
+模块内部统一按进程拆分：`shared/`（DTO / IPC / Api）、`main/`（service / runtime / discover / schema / ddl / ipc）、`preload/`（DeskApi 片段）、`worker/`（Agent 工具与运行时）、`renderer/`（pages / components / composables / store）、`i18n/`（领域词条）。
 
 #### 6.2.2、代码原则
 
-目录规范要点：**进程即目录**（`agent/host` 可用 electron、`agent/worker` 禁用）；**网关薄化**（业务编排在 `services/*`）；**契约按域** `shared/contracts/*`；**模块自包含**（渲染层模块专属组件入 `modules/{module}/components/`）；**别名优先**（`@renderer/*` / `@shared/*`，禁止 3 层以上 `../`）。
+目录规范要点：**进程即目录**（`modules/*/main` 可用 Electron，`modules/*/worker` 禁用 Electron 与 DB）；**网关薄化**（业务编排在 `modules/{domain}/main/*`，入口只装配）；**契约按域**（`modules/{domain}/shared/{contracts,ipc,api}.ts`）；**模块自包含**（领域页面、组件、store、文案都在模块内）；**公共下沉**（跨域且无业务规则的代码才进 `common`）；**别名优先**（`@common/*` / `@modules/*` / `@renderer/*` / `@main/*` / `@preload/*`，禁止 3 层以上 `../`）。
+
+边界约定：`common` 不得反向依赖 `@modules/*`；渲染层不得引用 `@main` / `@preload` / `@common/main` / `@common/worker`；跨模块只能引用 `shared` / `main` / `preload` / `renderer` / `worker` / `i18n` 公共入口，禁止内部文件；`src/main`、`src/preload`、`renderer/src/shell` 的 router 与 i18n 是唯一允许同时装配多个模块的组合根。
 
 ### 6.3、开发扩展
 
@@ -1228,91 +1251,96 @@ xxl-ai-desk/
 └── xxl-ai-desk/SKILL.md        # 本地版：xxl-ai-desk（Electron + Vue3 + Pi）
 ```
 
-本地版 SKILL 覆盖：三进程架构与依赖方向、跨进程契约与 IPC 约定、`main` / `shared` / `preload` / `renderer` 落位模板、界面外壳、Agent 运行时装配与校验清单；AI 编程助手按「契约 → 主进程 → 运行时 → 渲染层 → 校验」流程直生代码并落位，保证改造符合「进程即目录、网关薄化、契约按域」等原则。
+本地版 SKILL 覆盖：`common` / `modules` 分层与依赖方向、三进程架构与组合根、跨进程契约与 IPC 约定、`shared` / `main` / `preload` / `worker` / `renderer` / `i18n` 落位模板、Agent 配置与会话绑定、界面外壳、Agent 运行时装配与校验清单；AI 编程助手按「契约 → 主进程 → 运行时 → 渲染层 → 校验」流程直生代码并落位，保证改造符合「进程即目录、网关薄化、契约按域、模块自包含」等原则。
 
 #### 6.3.2、安装与分发
 
 打包产物由 electron-builder 生成（mac：`dmg` + `zip`；win：`nsis`；linux：`AppImage` + `deb`），输出目录 `xxl-ai-desk/release/{version}/`。
 
-**macOS 提示「文件损坏」的临时处理**：当前 macOS 包未做代码签名与公证，在其他电脑安装时会被 Gatekeeper 打上隔离标记，提示「XXL-AI-Desk 已损坏，无法打开，你应该将它移到废纸篓」。但是，实际上文件并未损坏，去除隔离标记即可：
+**macOS 安装说明**：macOS 提示「文件损坏」并非实际损坏，而是安装软件未签名（没有开发者账号）。
 
 ```
-# 1、双击安装软件、把 App 拖入 /Applications（先不启动运行）；
-# 2、终端去除隔离标记（sudo 需输入密码），如下命令操作后，双击 App 启用运行使用；
-sudo xattr -rd com.apple.quarantine "/Applications/XXL-AI-Desk.app"
+# 将安装软件拖入 /Applications 后，终端执行如下命令即可
+sudo xattr -rd com.apple.quarantine /Applications/XXL-AI-Desk.app
 ```
 
 去除后正常打开；若首次仍被拦截，进入「系统设置 → 隐私与安全性 → 仍要打开」放行一次即可。
 
 ### 6.4、Harness 组件
 
-本地版 Harness 即 Pi Agent 运行时（独立 `utilityProcess`）：主进程 `chatService` 产出只读运行时配置，经 `agentProtocol` 下发，`worker/session` 装配「模型 + 系统指令 + 内置工具 + MCP 工具 + 技能索引 + 人机交互工具」后创建 Agent，事件流回传主进程再经 IPC 推送渲染层。
+本地版 Harness 即 Pi Agent 运行时（独立 `utilityProcess`）：主进程 `modules/chat/main/chatService.ts` 产出只读运行时配置，经 `modules/agent/shared/agentProtocol.ts` 下发，`modules/agent/worker/session.ts` 装配「模型 + 系统指令 + 内置工具 + MCP 工具 + 技能索引 + 人机交互工具」后创建 Agent，事件流回传主进程再经 IPC 推送渲染层。
 
-本地版把「能力扩展」统一收敛到一个**插件板块**（导航 `plugin`，子菜单 MCP / SKILL / 内置工具），三类插件形态各异，但最终都归一为 Pi 的 `AgentTool` 装配进同一个会话 Agent：MCP 提供**外部工具**（进程内协议连接），SKILL 提供**流程知识**（文件即插件，按需读取），内置工具提供**开箱可用的本地能力**（文件、命令、浏览器、时间）。三者共用同一套元信息、模式过滤、沙箱与审批、系统提示注入机制，区别只在「来源、装配方式、生效粒度」。
+本地版把「能力扩展」统一收敛到一个**扩展中心**（导航 `plugin`，子菜单 **Agent / MCP / SKILL / 内置工具**）。其中 **Agent 是能力编排实体**：一个 Agent 持有系统指令、SKILL / MCP 引用与内置工具分类开关；会话创建时必须选择 Agent 并绑定（`desk_session.agent_id`），运行时的指令与能力全部来自该 Agent。MCP / SKILL / 内置工具仍是独立能力域，形态各异，但最终都归一为 Pi 的 `AgentTool` 装配进同一个会话 Agent：MCP 提供**外部工具**（进程内协议连接），SKILL 提供**流程知识**（文件即插件，按需读取），内置工具提供**开箱可用的本地能力**（文件、命令、浏览器、时间、人机交互）。三者共用同一套元信息、模式过滤、沙箱与审批、系统提示注入机制，区别只在「来源、装配方式、生效粒度」。
 
 | 维度 | MCP | SKILL | 内置工具 |
 |---|---|---|---|
 | 形态 | 外部服务（远程 HTTP / 本地子进程） | 目录 + `SKILL.md`（Markdown + YAML frontmatter） | 编译期内置的工具函数 |
 | 来源 | 手工配置 / mcp.so 发现 | 本地目录、Zip、skills.sh / GitHub 在线安装 | 随客户端发布 |
-| 元数据存储 | `desk_mcp`（配置与启用状态） | `{数据目录}/skills` 目录内容权威，`desk_skill` 仅存启停与来源 | 无落库，静态目录 + 设置开关 |
-| 装配入口 | `worker/mcp/tools.ts` | `worker/tools/skill.ts` | `worker/tools/index.ts` 注册表 |
+| 元数据存储 | `desk_mcp`（配置与启用状态） | `{数据目录}/skills` 目录内容权威，`desk_skill` 仅存启停与来源 | 无落库，由 Agent 的工具分类开关启停 |
+| Agent 关联 | Agent `mcp_ids` 勾选 | Agent `skill_ids` 勾选 | Agent `tool_fs / tool_shell / tool_browser / tool_general / tool_interaction` |
+| 装配入口 | `modules/mcp/worker/tools.ts` | `modules/skill/worker/tools.ts` | `modules/agent/worker/tools/index.ts` 注册表 |
 | 暴露给模型 | 每个远程工具一个同名工具（`mcp_{服务}_{工具}`） | 一个 `read_skill` 工具 + 系统提示中的技能索引 | 每个工具一个（`read_file` / `run_command` …） |
-| 模式过滤 | Plan 仅 `readOnlyHint` 工具 | 只读，Plan / Build 均可用 | 按 `ToolMeta.modes` 声明 |
-| 生效方式 | 保存 / 删除后 `resetAgents`，下一轮重建 | 导入 / 启停 / 删除后 `resetAgents` | 设置开关变化后重建 |
+| 权限过滤 | 仅可查看仅 `readOnlyHint` 工具 | 只读工具三档均可用 | 按 `ToolMeta.permissionModes` 声明 |
+| 生效方式 | 保存 / 删除后 `resetAgents`，下一轮重建 | 导入 / 启停 / 删除后 `resetAgents` | Agent 保存后清理绑定会话，下一轮重建 |
 
 **分层职责**（与云版 `business / harness` 的思想一致，本地版按进程切分）：
 
 ```
-配置层（主进程 services）   mcpService / mcpRuntimeService / mcpDiscoverService
-                            skillService / skillImportService / skillDiscoverService
-        │  产出只读运行时配置：McpRuntimeConfig[] / SkillRuntimeConfig[] + 设置开关
-契约层（shared/contracts）  mcp.ts / skill.ts / app.ts（跨进程 DTO，渲染层与运行时共用）
+配置层（主进程模块）   modules/agent/main：Agent 配置 / 项目记忆 / 种子
+                        modules/mcp/main：service / runtime / discover
+                        modules/skill/main：service / import / discover / github / install
+        │  产出只读运行时配置：会话绑定的 Agent + 勾选的 McpRuntimeConfig[] / SkillRuntimeConfig[]
+契约层（模块 shared）   modules/{agent,mcp,skill,app}/shared/contracts.ts（跨进程 DTO，渲染层与运行时共用）
         │  经 agentProtocol 的 RunAgentInput 下发
-装配层（运行时进程 worker） session.ts：模型 + 内置工具 + MCP 工具 + 技能索引 → Agent
+装配层（运行时进程）    modules/agent/worker/session.ts：模型 + Agent 指令 + 记忆 + 内置工具 + MCP 工具 + 技能索引 → Agent
         │  AgentTool[]
-执行层（运行时进程）        sandbox（路径闸门 + 越界审批）· tools（fs / shell / browser / skill）
-                            mcp/client（连接缓存 + 调用）· 主进程桥（审批弹窗、浏览器动作）
+执行层（运行时进程）    modules/agent/worker/{sandbox,hitl}.ts（路径闸门 / 越界审批）
+                        modules/{file,agent,browser,skill}/worker/*（内置工具）
+                        modules/mcp/worker/*（连接缓存 + 调用）· 主进程桥（审批转发、浏览器动作）
 ```
 
-一轮对话的插件装配时序（`chatService.sendChat` → `runtimeHost` → `worker/session`）：
+一轮对话的插件装配时序（`modules/chat/main/chatService.ts#sendChat` → `modules/agent/main/host/runtimeHost.ts` → `modules/agent/worker/session.ts`）：
 
 ```
 主进程 chatService
-  ├─ getSettings()                     # 系统指令、运行环境、浏览器工具开关
-  ├─ listEnabledSkillsForRuntime()     # 已启用技能索引（名称 + 描述 + 目录）
-  ├─ listEnabledMcpServers()           # 仅开启的 MCP 服务
-  └─ runAgent({ systemPrompt, mode, rootDir, mcpServers, skills, browserToolsEnabled })
+  ├─ getSession() → project + agentId
+  ├─ getProject(session.projectId)       # 项目目录作为沙箱根
+  ├─ getAgentById(session.agentId)       # 系统指令 + SKILL / MCP / 工具开关
+  ├─ listSkillsForRuntime()              # 仅保留 agent.skillIds 选中的技能
+  ├─ listMcpRuntimeConfigs()             # 仅保留 agent.mcpIds 选中的 MCP
+  ├─ project.memoryEnabled ? getAgentMemory() : ''
+  └─ runAgent({ systemPrompt, permissionMode, rootDir, runtimePath, mcpServers, skills, skillsDir, tools })
         │
 运行时进程 session.createAgent
-  ├─ createBuiltinToolEntries(ctx)     # 按模式过滤，产出 ToolEntry[]
-  ├─ createMcpTools({ servers, mode }) # 逐服务连接列举，失败跳过
+  ├─ createBuiltinToolEntries(ctx)     # 按模式 + Agent 工具分类开关过滤，产出 ToolEntry[]
+  ├─ createMcpTools({ servers, permissionMode }) # 短预算内连接列举，未就绪不阻塞首字
   ├─ systemPrompt + buildToolGuide()   # 追加「当前可用工具」清单
   └─ new Agent({ tools: [...builtin, ...mcp], messages })
 ```
 
 **提示词经济**：常驻上下文只放「索引」，正文一律按需拉取。内置工具清单经 `buildToolGuide()` 生成 `名称（只读/可写）：说明` 列表追加到系统指令，避免模型臆造工具；SKILL 只注入名称与描述，正文由 `read_skill` 按需读取；MCP 依靠工具自身的 `name / description / inputSchema`，不额外注入。
 
-**安全边界**：能力再开放也不越过三层闸门——**模式闸门**（Plan 模式不装配写 / 命令工具，MCP 只放行显式只读的工具）、**路径闸门**（所有文件类工具统一经 `guardPath`，越界转人工审批）、**拦截闸门**（危险命令规则库直接拒绝，不请求审批）。三者相互独立，任一命中即可阻止副作用。
+**安全边界**：能力再开放也不越过三层闸门——**权限闸门**（仅可查看不装配写 / 命令工具，MCP 只放行显式只读的工具）、**路径闸门**（所有文件类工具统一经 `guardPath`，按权限模式放行全局读、项目与临时目录写，越界转人工审批）、**拦截闸门**（危险命令与敏感路径直接拒绝，不请求审批）。三者相互独立，任一命中即可阻止副作用。
 
-**变更生效**：插件配置与工具集合都在 Agent 创建时固化，因此任何改变工具集合的操作（保存 / 删除 MCP、导入 / 启停 / 删除技能、切换浏览器工具开关、切换模型）都会调用 `resetAgents()` 清空会话级 Agent 缓存，下一轮对话重新装配；同一会话的已发生消息由 `desk_message` 恢复，不因重建丢失上下文。
+**变更生效**：Agent 配置与工具集合都在会话 Agent 创建时固化，因此任何改变工具集合的操作（保存 Agent、保存 / 删除 MCP、导入 / 启停 / 删除技能、切换工具开关、切换模型、项目记忆变更）都会清理相关会话运行时（`evictAgent` / `resetAgents`），下一轮对话重新装配；同一会话的已发生消息由 `desk_message` 恢复，不因重建丢失上下文。
 
-工程落位（与 §6.2 一致，进程即目录）：
+工程落位（与 §6.2 一致，模块纵向切片）：
 
 | 层 | 文件 |
 |---|---|
-| 主进程业务 | `services/mcpService.ts`、`mcpRuntimeService.ts`、`mcpDiscoverService.ts`、`skillService.ts`、`skillImportService.ts`、`skillDiscoverService.ts`、`skillGithubService.ts`、`providerService.ts` |
-| 主进程 harness | `agent/host/runtimeHost.ts`（托管 / 通信）、`host/approval.ts`（审批）、`host/community/*`（mcp.so / skills.sh 抓取）、`host/skills/githubInstaller.ts` |
-| 运行时进程 | `agent/worker/tools/*`（内置工具）、`agent/worker/hitl.ts`（人机交互）、`agent/worker/mcp/*`（MCP 客户端与装配）、`agent/worker/sandbox.ts` |
-| 契约 | `shared/contracts/mcp.ts`、`shared/contracts/skill.ts`、`shared/contracts/provider.ts`、`shared/agentProtocol.ts` |
-| 渲染层 | `modules/plugin/{pages,components,skill,mcp,builtin}`、`modules/workspace/*` |
+| 主进程业务 | `modules/agent/main/{agentService,agentMemoryService,runtimeTarget,seed}.ts`、`modules/chat/main/sessionSummaryService.ts`、`modules/mcp/main/{service,runtime,discover}.ts`、`modules/skill/main/{service,import,discover,github,install}.ts`、`modules/provider/main/providerService.ts` |
+| 主进程 harness | `modules/agent/main/host/runtimeHost.ts`（托管 / 通信）、`modules/agent/main/host/interaction.ts`（人机交互桥）、`modules/mcp/main/community/mcpSoAdapter.ts`、`modules/skill/main/community/skillsShAdapter.ts`、`modules/skill/main/github/*` |
+| 运行时进程 | `modules/{file,agent,browser,skill}/worker/*`（内置工具）、`modules/agent/worker/{sandbox,hitl,trace}.ts`、`modules/agent/worker/{memory,summary}.ts`、`modules/mcp/worker/*`（MCP 客户端与装配） |
+| 契约 | `modules/agent/shared/{contracts,agentProtocol}.ts`、`modules/mcp/shared/contracts.ts`、`modules/skill/shared/contracts.ts`、`modules/provider/shared/contracts.ts` |
+| 渲染层 | `modules/plugin/renderer/{pages,components,builtin}`、`modules/agent/renderer/{pages,components}`、`modules/{mcp,skill}/renderer`、`modules/toolPanel/renderer` |
 
 #### 6.4.1、供应商
 
 供应商能力：兼容 OpenAI 协议，采用「供应商 + 模型」两级本地配置（名称、Base URL、API Key、自定义 Header、模型列表、启用状态、排序），首次启动自动预置 OpenCodeGo / Ollama / Deepseek / 智谱GLM，安装即用。
 
-实现要点（`services/providerService.ts` + `worker/models.ts`）：
+实现要点（`modules/provider/main/providerService.ts` + `modules/agent/worker/models.ts`）：
 
-- **配置落库**：供应商配置存 `desk_provider`，API Key 经 `securityService` 编解码后入库（不落明文），模型列表与请求头以 JSON 文本存储；
+- **配置落库**：供应商配置存 `desk_provider`，API Key 经 `modules/provider/main/securityService.ts` 编解码后入库（不落明文），模型列表与请求头以 JSON 文本存储；
 - **模型解析**：运行时按当前供应商 + 模型构建 Pi 模型实例，请求统一携带 `User-Agent: XXL-AI`，支持自定义 Header；
 - **变更生效**：供应商保存 / 删除、会话切换模型均触发 `resetAgents()`，下一轮对话重建模型与工具集合；
 - **可用性与升级**：设置页支持远程模型列表拉取（`/models`）与手工维护；客户端支持自动检测新版本并引导升级。
@@ -1323,17 +1351,17 @@ SKILL 是**「文件即插件」**的流程知识包：一个目录 + 一份 `SK
 
 **管理与市场能力**：
 
-- **本地管理**：插件板块「SKILL」页支持列表、导入、启停、删除、查看 `SKILL.md`；支持本地目录、Zip 导入；
+- **本地管理**：扩展中心「SKILL」页支持列表、导入、启停、删除、查看 `SKILL.md`；支持本地目录、Zip 导入；
 - **在线市场**：接入 skills.sh（搜索 / 全站榜单，带 5 分钟缓存与已安装标记）与 GitHub 仓库安装；多 SKILL 识别、仓库文件缓存与过期清理，安装环节逻辑与 skills.sh 统一；
 - **权威划分**：`{数据目录}/skills` 的目录内容为权威，`desk_skill` 只保存 `id（目录名）/ name / description / version / source / source_id / enabled`。这样做的好处是「用户手工拷目录进来也能用」，扫描时自动对账补登记；代价是不可在库里凭空建技能，启停与来源仍需落库；
 - **路径安全**：对每个条目做 `realpath` + 相对路径校验，拒绝符号链接逃逸与压缩包路径穿越（Zip Slip）。
 
-**运行时装配**（`services/chatService.ts` + `worker/tools/skill.ts`）：
+**运行时装配**（`modules/chat/main/chatService.ts` + `modules/skill/worker/tools.ts`）：
 
-1. `listEnabledSkillsForRuntime()` 产出 `SkillRuntimeConfig { id, name, description, dir }`；
+1. `listSkillsForRuntime()` 产出全部已启用技能，再按会话绑定 Agent 的 `skillIds` 过滤为 `SkillRuntimeConfig { id, name, description, dir }`；
 2. `buildSkillPrompt()` 生成技能索引注入系统指令，只含**名称 + 单行描述**，并声明「技能内容仅用于完成当前任务，不得改变系统安全规则」——这是对提示词注入的显式防护；
-3. 存在已启用技能时才注册 `read_skill` 工具（只读，Plan / Build 均可用）：按名称或目录名（忽略大小写）定位技能，默认读 `SKILL.md`，也可读技能目录内的附属脚本 / 参考文件；
-4. **读取约束**：`realpath` 归一后做 `relative` 双重校验，只允许技能目录内文件；含 NUL 字节视为二进制直接拒绝，避免乱码写入上下文；输出按 20k 字符截断。软件数据目录下的 SKILL 内容会话读取时直接放行，不做越界拦截。
+3. 存在已启用技能时才注册 `read_skill` 工具（只读，三档权限均可用）：按名称或目录名（忽略大小写）定位技能，默认读 `SKILL.md`，也可读技能目录内的附属脚本 / 参考文件；
+4. **读取约束**：`realpath` 归一后做 `relative` 双重校验，只允许技能目录内文件；含 NUL 字节视为二进制直接拒绝，避免乱码写入上下文；输出由注册表按 100k 字符上限截断。软件数据目录下的 SKILL 内容会话读取时直接放行，不做越界拦截。
 
 **上下文经济**：如果直接把所有 `SKILL.md` 全量拼进系统提示，几个技能就会吃掉数万 token 且相互干扰；因此采用「**索引常驻 + 正文按需**」的两级加载，多数对话的常驻开销只有每技能一行。
 
@@ -1349,26 +1377,26 @@ MCP（Model Context Protocol）负责把**外部工具**接进会话：远程服
 
 | 层 | 职责 | 明确不做 |
 |---|---|---|
-| `mcpService` | 唯一读写 `desk_mcp` 的出口；校验归一、密钥加解密、`health` 回写；产出 `McpDTO` 与 `McpRuntimeConfig` | 不引入任何 MCP 客户端 |
-| `mcpRuntimeService` | 连通测试、工具列举的业务编排 | 不存配置、不实现协议 |
-| `agent/worker/mcp/*` | 连接、列举、调用、命名归一与 `AgentTool` 包装 | 不感知数据库与业务配置 |
+| `modules/mcp/main/service.ts` | 唯一读写 `desk_mcp` 的出口；校验归一、密钥加解密、`health` 回写；产出 `McpDTO` 与 `McpRuntimeConfig` | 不引入任何 MCP 客户端 |
+| `modules/mcp/main/runtime.ts` | 连通测试、工具列举的业务编排 | 不存配置、不实现协议 |
+| `modules/mcp/worker/*` | 连接、列举、调用、命名归一与 `AgentTool` 包装 | 不感知数据库与业务配置 |
 
-**连接与生命周期**（`worker/mcp/client.ts`）：
+**连接与生命周期**（`modules/mcp/worker/client.ts`）：
 
 - **按配置指纹缓存**：`fingerprint = sha1(transport/url/headers/command/args/env/cwd)`，配置一变即重建连接并关闭旧连接（stdio 子进程随之退出），避免改动后仍用旧进程；
-- **超时分级**：握手 30s（首次 `npx` 下载依赖可能较慢）、列举 30s、调用 60s；单服务上限 200 个工具，超出截断；
+- **超时分级**：对话装配期握手 120s（首次 `npx` / `uvx` 现场安装依赖可能较慢）、显式测试握手 30s、列举 30s、调用 60s；同一配置连接失败后进入 5 分钟冷却，避免每个新会话重复等待超时；单服务上限 1000 个工具，超出截断；
 - **运行时 PATH**：由设置中的 Node / Python 运行环境拼出 `runtimePath`，stdio 子进程 `PATH = runtimePath + process.env.PATH`，保证 `npx` / `uvx` 可解析；`cwd` 留空则不指定，由子进程继承默认工作目录；
 - **隔离失败**：单个服务连接失败只记日志并跳过，不影响本轮对话与其他服务。
 
-**工具装配**（`worker/mcp/tools.ts`）：
+**工具装配**（`modules/mcp/worker/tools.ts`）：
 
 - **命名归一**：`mcp_{服务}_{工具}`，统一小写、仅保留 `[a-z0-9_-]`、总长 64（主流供应商上限），同名冲突追加 `_2`、`_3` 并保留后缀；
 - **参数**：MCP 的 `inputSchema` 经 `Type.Unsafe` 直接作为工具参数，补齐 `type: 'object'` 与缺省 `properties`，规避部分服务未声明属性被供应商拒绝；
 - **执行**：统一 `executionMode: 'sequential'`（MCP 工具有副作用，不与文件写入交错）；
 - **结果**：`toLlmContent` 转为模型可读的文本 / 图片内容；`result.isError` 与协议 / 网络异常统一包装为工具错误，由 UI 标记失败；
-- **模式**：Build 全量注册，Plan 只注册 `annotations.readOnlyHint === true` 的工具——**只读语义由服务端声明，客户端不猜**。
+- **权限**：工作区内修改 / 完全权限全量注册，仅可查看只注册 `annotations.readOnlyHint === true` 的工具——**只读语义由服务端声明，客户端不猜**。
 
-#### 6.4.4、内置工具：文件 / 浏览器 / 终端 / 通用
+#### 6.4.4、内置工具：文件 / 浏览器 / 终端 / 通用 / 人机交互
 
 内置工具分两类：**面板**（面向用户的可视化工具组件）与**工具**（面向模型的内置 `AgentTool`），两者共享同一套能力实现，面板负责「人看」、工具负责「模型操作」。
 
@@ -1380,38 +1408,42 @@ MCP（Model Context Protocol）负责把**外部工具**接进会话：远程服
 | 浏览器 | 多标签 `webview` 内嵌浏览，供用户查看 Agent 浏览过程，也可独立使用 |
 | 终端 | `node-pty` + `xterm` 真实终端，多会话、随项目目录启动，`locale` 固定 UTF-8 解决中文乱码；项目维度还可查看 Git 变更并执行审核、推送 |
 
-**内置工具**是随客户端发布的**本地能力底座**，按域拆文件、由统一注册表装配（`worker/tools/index.ts`）：每个域导出一个工厂函数，注册表 `Promise.all` 聚合后按 `meta.modes` 过滤。新增工具只需在对应域文件追加定义，不必触碰装配逻辑。
+**内置工具**是随客户端发布的**本地能力底座**，按域拆文件、由统一注册表装配（`modules/agent/worker/tools/index.ts`）：每个域导出一个工厂函数，注册表 `Promise.all` 聚合后按 `meta.permissionModes` 与内置工具开关过滤。新增工具只需在对应域文件追加定义，不必触碰装配逻辑。
 
 当前内置工具清单：
 
-| 域 | 工具 | 只读 | 模式 | 闸门 | 输出上限 |
+| 域 | 工具 | 只读 | 权限 | 闸门 | 输出上限 |
 |---|---|---|---|---|---|
-| general | `get_current_time` | 是 | Plan / Build | — | 2k |
-| fs | `read_file` | 是 | Plan / Build | 路径闸门（越界审批） | 20k |
-| fs | `list_directory` | 是 | Plan / Build | 路径闸门（越界审批） | 12k |
-| fs | `glob_files` | 是 | Plan / Build | 路径闸门（越界审批） | 12k |
-| fs | `search_files` | 是 | Plan / Build | 路径闸门（越界审批） | 20k |
-| fs | `write_file` | 否 | Build | 路径闸门 + 越界审批 | 2k |
-| fs | `edit_file` | 否 | Build | 路径闸门 + 越界审批 | 2k |
-| shell | `run_command` | 否 | Build | 危险命令拦截 | 20k |
-| browser | `open_browser` / `read_browser` / `snapshot_browser` | 是 | Plan / Build | 设置开关 | 2k / 21k / 20k |
-| browser | `click_browser` / `fill_browser` | 否 | Build | 设置开关 | 2k / 3k |
-| browser | `wait_browser` / `screenshot_browser` / `inspect_browser` / `browser_tabs` | 是 | Plan / Build | 设置开关 | 2k / 2k / 8k / 4k |
-| skill | `read_skill` | 是 | Plan / Build | 技能目录限定 | 20k |
-| interaction | `ask_user` | 是 | Plan / Build | — | — |
+| general | `get_current_time` | 是 | 三档 | Agent 工具开关 | 2k |
+| fs | `read_file` | 是 | 三档 | 路径闸门（越界审批） | 20k |
+| fs | `list_directory` | 是 | 三档 | 路径闸门（越界审批） | 12k |
+| fs | `glob_files` | 是 | 三档 | 路径闸门（越界审批） | 12k |
+| fs | `search_files` | 是 | 三档 | 路径闸门（越界审批） | 20k |
+| fs | `write_file` | 否 | 工作区 / 完全 | 路径闸门 + 越界审批 | 2k |
+| fs | `edit_file` | 否 | 工作区 / 完全 | 路径闸门 + 越界审批 | 2k |
+| fs | `delete_file` | 否 | 工作区 / 完全 | 路径闸门 + 越界审批 | 2k |
+| fs | `move_file` | 否 | 工作区 / 完全 | 路径闸门 + 越界审批 | 2k |
+| shell | `run_command` | 否 | 工作区 / 完全 | 危险命令拦截 + 越界路径审批 | 20k |
+| browser | `open_browser` / `read_browser` / `snapshot_browser` | 是 | 三档 | Agent 工具开关 | 2k / 51k / 20k |
+| browser | `click_browser` / `fill_browser` | 否 | 工作区 / 完全 | Agent 工具开关 | 2k / 3k |
+| browser | `hover_browser` / `scroll_browser` | 是 | 三档 | Agent 工具开关 | 2k / 2k |
+| browser | `press_browser` / `select_browser` | 否 | 工作区 / 完全 | Agent 工具开关 | 2k / 2k |
+| browser | `wait_browser` / `screenshot_browser` / `inspect_browser` / `browser_tabs` | 是 | 三档 | Agent 工具开关 | 2k / 2k / 8k / 4k |
+| skill | `read_skill` | 是 | 三档 | 技能目录限定（技能库读取放行） | 100k |
+| interaction | `ask_user` | 是 | 三档 | Agent 工具开关 | 4k |
 
-**模式语义**：`plan` 只装配 `ALL_MODES` 中的只读工具，`build` 才装配 `BUILD_ONLY` 的写文件与命令工具——这是「从工具层面限制只读」，而非依赖提示词约束模型自觉。
+**权限语义**：`read-only` 只装配 `ALL_PERMISSIONS` 中的只读工具，`workspace-write` / `full-access` 才装配 `WRITE_PERMISSIONS` 的写文件与命令工具——这是「从工具层面限制只读」，而非依赖提示词约束模型自觉。
 
-**文件沙箱**（`worker/sandbox.ts`）：所有文件类工具统一经 `createGuard` → `guardPath`。路径先 `canonicalize`（逐级回落到最近的已存在祖先再 `realpath`，把软链接与 `..` 都摊平），再判断是否位于项目根目录内；目录内直接放行，越界则经注入的 `approvalRequester` 发起跨进程审批——主进程弹应用内对话框，三选一「允许本次 / 本会话允许 / 拒绝」，本会话允许的规范化路径记入内存白名单，后续同路径不再询问。**未注入审批回调时一律拒绝**，避免越界静默放行。读取与写入走同一闸门（`action` 区分文案），仅在元信息上把写工具标为 `requiresApproval`，用于提示与展示。
+**文件沙箱**（`modules/agent/worker/sandbox.ts`）：所有文件类工具统一经 `createGuard` → `guardPath`。路径先 `canonicalize`（逐级回落到最近的已存在祖先再 `realpath`，把软链接与 `..` 都摊平），再按会话权限判断：读取（全局读）一律放行；写入在「工作区内修改」下仅放行项目目录与系统临时目录，越界经 `hitl.ts` → 主进程 → 渲染层发起应用内审批（允许本次 / 本会话允许 / 拒绝）；「完全权限」全局放行。技能库（`RunAgentInput.skillsDir`）是用户主动安装的可信资料，读写与命令均不弹审批；系统目录与用户敏感目录（`~/.ssh` 等）即使完全权限也不允许写入，作为统一兜底拦截。写工具在元信息上标 `requiresApproval`，用于提示与展示。
 
-**命令闸门**（`worker/tools/shell.ts`）：`run_command` 仅 Build 可用，执行前跑危险命令规则库（删除根目录 / 提权 / 下载管道执行 `curl | sh` / fork 炸弹等），命中即把原因回填给模型并拒绝执行，引导其改用安全方式或请用户自行执行；未命中则在项目目录内 `exec`，默认 60s 超时、`maxBuffer` 2 MB（输出最终还会被截断到 20k）、用户终止时随 `signal` 杀掉子进程，并统一 `executionMode: 'sequential'`。
+**命令闸门**（`modules/agent/worker/tools/shell.ts` + `shellPolicy.ts`）：`run_command` 仅在「工作区内修改」及以上权限可用，执行前跑危险命令规则库（删除根目录 / 提权 / 下载管道执行 `curl | sh` / fork 炸弹等），命中即把原因回填给模型并拒绝执行，引导其改用安全方式或请用户自行执行；显式访问项目目录外的路径时复用文件工具的越界审批；未命中则在项目目录内 `exec`，默认 60s 超时、`maxBuffer` 2 MB（输出最终还会被截断到 20k）、用户终止时随 `signal` 杀掉子进程，并统一 `executionMode: 'sequential'`。
 
 **新增一个内置工具的落位步骤**：
 
-1. 在对应域文件（或新建 `tools/xxx.ts`）中定义 `AgentTool`，并用 `describe(zh, en)` 双语描述、`text()` / `toolError()` 统一结果；
-2. 返回 `{ meta, tool }`，显式声明 `group / readOnly / modes / requiresApproval / maxOutput`；
-3. 若是新域，在 `tools/index.ts` 的 `FACTORIES` 登记工厂（同域追加则无需改动）；
-4. 需要前端可见时，在 `modules/plugin/builtin/types` 的目录表登记名称、分类与文案 key（工具名必须与注册表一致）。
+1. 在对应域文件（如 `modules/{file,agent,browser,skill}/worker/*.ts`）中定义 `AgentTool`，并用 `describe(zh, en)` 双语描述、`text()` / `toolError()` 统一结果；
+2. 返回 `{ meta, tool }`，显式声明 `group / readOnly / permissionModes / requiresApproval / maxOutput`；
+3. 若是新域，在 `modules/agent/worker/tools/index.ts` 的 `FACTORIES` 登记工厂，并同步 `AgentToolSwitches` 与 Agent 编辑页开关（同域追加则无需改动）；
+4. 需要前端可见时，在 `modules/plugin/renderer/builtin/catalog.ts` 登记名称、分类与文案 key（工具名必须与注册表一致）。
 
 #### 6.4.5、工作区及会话
 
@@ -1419,47 +1451,60 @@ MCP（Model Context Protocol）负责把**外部工具**接进会话：远程服
 
 **项目与会话**：
 
-- 项目（`desk_project`）绑定本地磁盘目录，作为 Agent 运行的文件沙箱根与工具默认 `cwd`；
-- 会话（`desk_session`）归属项目，持久化 `provider_id / model_id / system_prompt / mode`，支持搜索 / 重命名 / 删除 / 排序；
-- 消息（`desk_message`）按 `seq` 落库，`data` 保存 Agent 原始消息 JSON，用于会话重建；落库增量 + 单事务，生成中切换会话不丢内容；
-- 运行时：`chatService.sendChat` 组装输入 → `runtimeHost` → `worker/session` 创建 / 复用会话级 Agent → 事件流回主进程 → IPC 推送渲染层，按片段发生顺序渲染时间线（思考 → 工具 → 正文交错），思考折叠、工具调用状态与耗时展示、Markdown 实时渲染与代码高亮。
+- 项目（`desk_project`）绑定本地磁盘目录，作为 Agent 运行的文件沙箱根与工具默认 `cwd`；`memory_enabled` 控制长期记忆，记忆正文与游标随项目行保存；
+- 会话（`desk_session`）归属项目并绑定 Agent，持久化 `project_id / agent_id / provider_id / model_id / permission_mode` 与会话摘要 `summary / summary_last_message_id / summary_update_time`、上下文分项 `context_breakdown`，支持搜索 / 重命名 / 删除 / 排序；项目与 Agent 创建后不可修改；
+- 消息（`desk_message`）按自增 `id` 顺序落库，`data` 保存 Agent 原始消息 JSON，用于会话重建；`turn_id` 标记所属轮次、`source` 记录运行时注入来源（常规消息为空，`runtime:*` 表示运行时注入）；落库增量 + 单事务，生成中切换会话不丢内容；
+- 运行时：`modules/chat/main/chatService.ts#sendChat` 校验会话绑定的项目与 Agent → 组装系统指令（Agent 指令 + 长期记忆 + 会话摘要 + SKILL 索引 + 模式 / 工具约束）与历史 → `modules/agent/main/host/runtimeHost.ts` → `modules/agent/worker/session.ts` 创建 / 复用会话级 Agent → 事件流回主进程 → IPC 推送渲染层，按片段发生顺序渲染时间线（思考 → 工具 → 正文交错），思考折叠、工具调用状态与耗时、轮次耗时摘要、会话状态信息条、Markdown 实时渲染与代码高亮。
 
-**生命周期**：任何改变工具集合或模型的操作触发 `resetAgents()`；应用退出时回收运行时与终端进程，避免残留。
+**生命周期**：任何改变 Agent 能力或模型的操作触发会话运行时清理（`evictAgent` / `resetAgents`），下一轮重新装配；应用退出时回收运行时与终端进程，避免残留。
 
 #### 6.4.6、人机交互
 
-本地版在 Agent 执行过程中保留「人」的决策点，分为**被动审批**与**主动询问**两类，二者都通过主进程弹窗完成，运行时进程只负责发起与等待：
+本地版在 Agent 执行过程中保留「人」的决策点，分为**被动审批**与**主动询问**两类，二者都由运行时进程发起、主进程转发、渲染层在输入框位置内联展示（不再使用全局模态弹窗）；交互队列按会话隔离，非当前会话的请求不会抢占输入区，切回对应会话时再展示。
 
-- **被动审批（越界权限确认）**：文件类工具越界、需要写入项目目录外时，运行时进程经 `parentPort` 发 `approval-request`，主进程弹应用内对话框，三选一「允许本次 / 本会话允许 / 拒绝」；会话级白名单仅存内存，重启失效；
-- **主动询问（`ask_user`）**：`worker/tools/interaction.ts` 提供 `ask_user` 工具，支持 `confirm` 确认、`select` 单选 / 多选（可带选项说明、「其他」输入）、`input` 文本输入（可多行、可设默认值）；信息不足、存在多个合理方案或需要用户拍板时调用，**本轮挂起**等待用户在应用内弹窗应答，再按结果回填模型继续执行；权限校验类交互不开放给该工具，只能由系统沙箱发起；
-- **标准化组件**：渲染层提供权限确认、多选项选择、用户输入三类标准人机交互组件，Agent 集成后自动启用；应答结果（确认 / 选择值 / 输入文本 / 拒绝 / 取消）经协议回传并转为模型可读文本。
+- **被动审批（越界权限确认）**：文件类工具越界、需要访问项目目录外时，运行时进程经 `parentPort` 发 `interaction-request`，主进程转渲染层在内联卡片展示，三选一「允许一次 / 本会话全部允许 / 拒绝」；会话级信任仅存内存，重启失效。卡片标题固定「权限审批申请」，使用淡红色风险配色；
+- **主动询问（`ask_user`）**：`modules/agent/worker/tools/interaction.ts` 提供 `ask_user` 工具，面向「多个候选方案请用户拍板」：每个问题提供 2~20 个选项，支持单选 / 多选，默认允许用户填写「其他」；需要连续确认多个问题时用 `questions` 一次列出（1~10 个），worker 逐题发起交互，界面在左下角展示 `1/N`。确认操作或补充自由文本直接在回复里提问，不调用该工具。卡片标题固定「用户确认」，使用黄色提示配色；权限校验类交互不开放给该工具，只能由系统沙箱发起；
+- **生命周期**：用户终止、删除会话、运行时重置 / 退出才取消交互；后台会话摘要、长期记忆或配置刷新触发的 `evict` 在本轮结束后执行，避免误取消正在等待的审批；
+- **标准化组件**：渲染层提供权限确认与多选项选择标准组件，Agent 集成后自动启用；应答结果（确认 / 选择值 / 拒绝 / 取消）经协议回传并转为模型可读文本。
 
-#### 6.4.7、长期记忆
+#### 6.4.7、会话压缩与长期记忆
 
-本地版记忆以**项目**为唯一维度（一个项目一条，`desk_agent_memory`，项目 1:1），跨会话沉淀。与云版「Agent × 访客」的实体模型同构，只是维度换成「项目」——项目绑定本地目录，偏好与事实天然以项目为单位积累。设计沿用同一条铁律：**生成与消费解耦**，对话只「读」记忆，压缩在后台异步完成，绝不阻塞生成。
+本地版把上下文管理拆成**会话压缩**与**长期记忆**两层：会话压缩解决单会话上下文变长，长期记忆解决跨会话的项目级沉淀。两者都遵循同一条铁律：**生成与消费解耦**，对话只读取已有结果，压缩 / 生成在后台异步完成，绝不阻塞本轮回复。
 
-**触发与游标**（`services/agentMemoryService.ts`）：
+**会话压缩（会话内摘要）**：
 
-- 每轮对话结束调用 `maybeGenerateAgentMemory(sessionId)`，统计项目内自上次生成后新增的消息数，达到 `AGENT_MEMORY_MESSAGE_LIMIT`（50，与上下文历史窗口一致）即触发压缩；未达阈值直接返回；
-- 游标为项目级 `last_time`（ISO 时间）：消息 `seq` 是会话内序号，无法跨会话累计，按时间游标才能覆盖项目内全部会话；
+- 存储在 `desk_session` 的 `summary / summary_last_message_id / summary_update_time`，摘要定长 2000 字符，游标为摘要覆盖到的最后一条消息 ID；
+- 每轮对话结束调用 `modules/chat/main/sessionSummaryService.ts#maybeCompressSession`，满足任一条件才真正压缩：**无摘要**、**上下文使用率 ≥ 80%**、**距上次摘要后真实用户轮次 ≥ 20**；没有新消息或未命中条件直接返回；
+- 上下文装配时传递“摘要 + 上次摘要后的全部增量消息”：系统指令追加摘要，历史消息从 `summary_last_message_id` 之后读取；无摘要时仍按最近 50 条 / 12 万字符兜底；
+- 压缩输入为旧摘要 + 增量转录（只取用户 / 助手正文，排除 thinking 与工具结果，上限 60k 字符），输出固定「背景与约束 / 目标 / 关键决策 / 进展与产物 / 待办与风险」五个二级标题并截断到 2000 字符；
+- 生成成功后推进游标并清理该会话运行时，使新摘要下一轮生效；失败保留旧摘要与游标，下一轮继续尝试。删除消息触及摘要覆盖区时摘要自动清空，避免摘要与历史不一致。
+
+**长期记忆（项目级）**：
+
+本地版记忆以**项目**为唯一维度，直接随 `desk_project` 行保存（`memory / memory_last_time / memory_update_time`），不单独建表。项目绑定本地目录，偏好与事实天然以项目为单位积累。
+
+**触发与游标**（`modules/agent/main/agentMemoryService.ts`）：
+
+- 每轮对话结束调用 `maybeGenerateAgentMemory`：记忆为空，或距上次生成超过 5 分钟，且游标后存在新消息时异步生成；否则直接返回；
+- 游标为项目级 `memory_last_time`（ISO 时间）：消息自增 `id` 是会话内序号，无法跨会话累计，按时间游标才能覆盖项目内全部会话；
 - 加载时按项目下**每个会话独立查询** `add_time > 游标` 的消息，再按各会话首条新增消息时间排序；转录按「## 会话：标题」分节，多会话交替时顺序接近真实发生顺序；
 - 同一项目用 `generatingProjects` 去重，生成期间不重复触发；项目或记忆被删除时直接跳过。
 
-**压缩模型**（`agent/worker/memory.ts`）：
+**压缩模型**（`modules/agent/worker/memory.ts`）：
 
 - 主进程组装提示词（旧记忆 + 最近对话转录），转录只取用户 / 助手正文，排除 thinking 与工具结果，上限 60k 字符，超长从最旧截断；
 - 生成运行在运行时进程：低温度（0.2）、`max_tokens` 3000、超时 120s 调用一次模型；输出固定四个二级标题「用户偏好 / 项目事实 / 关键决策 / 待办与风险」，总长截断到 2000 字符；
 - 提示词显式要求「保留仍然有效的信息、覆盖已过期内容、不得编造、不得记录密钥口令」，无内容章节写「暂无」；
-- **失败隔离**：生成失败只记日志并保留旧记忆，游标不推进，下一轮达到阈值自动重试；密钥、口令等敏感内容由提示词约束，不额外做内容过滤；
+- **失败隔离**：生成失败只记日志并保留旧记忆，游标不推进，下一轮自动重试；密钥、口令等敏感内容由提示词约束，不额外做内容过滤；
 - 记忆生成同样沿用当前会话 ID 构建模型，保证 `{session}` 占位请求头（如 `x-opencode-session`）被正确填充，避免网关因缺会话头直接 400。
 
-**注入与生效**（`services/chatService.ts`）：
+**注入与生效**（`modules/chat/main/chatService.ts`）：
 
 - 记忆开启且会话归属项目时，项目记忆追加到系统指令，并明确「可能过时的历史事实，与当前指令冲突时以当前指令为准」；
-- 系统指令在会话 Agent 创建时固化，因此生成成功后调用 `evictProjectAgents(projectId)` 清理项目下会话运行时，下一轮重新装配，新记忆立即生效；
-- 手动保存 / 删除记忆同样触发运行时重建，避免继续使用旧提示词。
+- 系统指令在会话 Agent 创建时固化，因此生成成功后清理项目下会话运行时（`evictProjectSessions`），下一轮重新装配，新记忆立即生效；
+- 手动保存记忆、切换项目长期记忆开关同样清理运行时，避免继续使用旧提示词。
 
-**手动管理**（Agent → 长期记忆）：启用开关、按项目名筛选与查询、查看编辑、删除；删除仅清空记忆内容并保留项目，列表按项目维度展示记忆摘要与更新时间。
+**手动管理**（系统设置 → 项目）：项目列表展示「长期记忆」开关与「记忆生成时间」，通过「查看长期记忆」弹窗查看 / 编辑正文并保存；关闭开关后不再注入或生成。删除项目时记忆随项目行一并删除，不单独提供「清空记忆」入口。
 
 #### 6.4.8、Agent可观测
 
@@ -1469,10 +1514,10 @@ MCP（Model Context Protocol）负责把**外部工具**接进会话：远程服
 
 | 术语 | 含义 | 落位 |
 |---|---|---|
-| 运行日志 | 进程级排障日志，落磁盘文件 `log-yyyy-mm-dd.log` | `main/utils/logger.ts`、`agent/worker/logger.ts`、`shared/runtimeLog.ts` |
-| 模型通讯（trace） | 一次模型 HTTP 请求的入参、响应、工具调用与用量 | `desk_llm_trace`、`worker/trace.ts`、`diagnosticsService` |
-| 会话消息 | 会话内持久化的对话消息 | `desk_message`、`sessionService` |
-| 诊断 | 面向开发者的只读视图，聚合「会话消息 + 模型通讯」 | `contracts/diagnostics.ts`、`services/diagnosticsService.ts`、`components/diagnostics/*` |
+| 运行日志 | 进程级排障日志，落磁盘文件 `log-yyyy-mm-dd.log` | `common/main/utils/logger.ts`、`modules/agent/worker/logger.ts`、`common/shared/runtimeLog.ts` |
+| 模型通讯（trace） | 一次模型 HTTP 请求的入参、响应、工具调用与用量 | `desk_llm_trace`、`modules/agent/worker/trace.ts`、`modules/diagnostics/main/diagnosticsService.ts` |
+| 会话消息 | 会话内持久化的对话消息 | `desk_message`、`modules/chat/main/sessionService.ts` |
+| 诊断 | 面向开发者的只读视图，聚合「会话消息 + 模型通讯」 | `modules/diagnostics/shared/contracts.ts`、`modules/diagnostics/main/diagnosticsService.ts`、`modules/diagnostics/renderer/components/diagnostics/*` |
 
 **入口与开关**：
 
@@ -1484,7 +1529,7 @@ MCP（Model Context Protocol）负责把**外部工具**接进会话：远程服
 
 | 视图 | 数据源 | 内容 |
 |---|---|---|
-| 会话消息 | `desk_message`（直接分页读取，不复制） | 角色、`seq`、正文、原始 `data` |
+| 会话消息 | `desk_message`（直接分页读取，不复制） | 主键 `id`、`turn_id`、角色、正文、注入标记、原始 `data` |
 | 模型通讯 | `desk_llm_trace` | 单次模型请求的请求体、响应体、工具调用、状态、耗时、token |
 
 **记录粒度**：一次模型 HTTP 请求 = 一条记录，同一轮 `run_id` 串联、`step` 递增。工具循环会产生多次模型调用，按请求记录才能还原「模型看到了什么、返回了什么、调用了哪些工具、结果如何」；按 run 记一条会丢失中间过程。
@@ -1501,7 +1546,7 @@ worker（唯一能看到 provider payload 的进程）
 desk_llm_trace
 ```
 
-- 采集状态按「会话 + 来源（chat / memory）」隔离，记忆生成与对话并发时互不覆盖；
+- 采集状态按「会话 + 来源（chat / memory / summary）」隔离，对话、记忆生成与会话摘要并发时互不覆盖；
 - `onPayload` 收尾上一条并开启新一条——此时上一轮工具已执行完，工具结果可安全归属；
 - 工具结果按 `toolCallId` 挂到当前记录，`tool_execution_end` 回填结果、耗时与失败标记；
 - run 正常结束、异常、用户中止分别以 `success / error / aborted` 收尾；未拿到响应的一律按 `error` 落库，避免出现「空成功」；
@@ -1512,9 +1557,9 @@ desk_llm_trace
 #### 6.5.1、权限设计
 
 - **文件沙箱**：所有文件工具经统一 `guardPath` 闸门，路径规范化（解析软链接）后限定当前项目目录；
-- **越界审批**：越界操作由主进程弹原生对话框，可选「允许本次 / 本会话允许 / 拒绝」，会话级白名单记入内存；
-- **模式隔离**：Plan 模式不装配写 / 命令工具，从工具层面限制只读；
-- **进程隔离**：渲染进程无 Node 能力，运行时进程无 Electron 能力，敏感能力（密钥、原生弹窗）留在主进程。
+- **越界审批**：越界操作经 `hitl` → 主进程 → 渲染层在输入框位置内联展示审批，可选「允许本次 / 本会话允许 / 拒绝」，会话级信任记入内存；
+- **权限隔离**：仅可查看不装配写 / 命令工具，从工具层面限制只读；
+- **进程隔离**：渲染进程无 Node 能力，运行时进程无 Electron 能力，敏感能力（密钥、审批编排）留在主进程。
 
 #### 6.5.2、本地配置
 
@@ -1522,17 +1567,17 @@ desk_llm_trace
 
 | 表 | 说明 |
 |---|---|
-| `desk_project` | 本地项目（`id / name / path / add_time / update_time`，路径 1:1 唯一） |
-| `desk_session` | 会话（`id / title / provider_id / model_id / system_prompt / mode / project_id / add_time / update_time`） |
-| `desk_message` | 消息（`id / session_id / seq / role / content / data / add_time`，`data` 为 Agent 原始消息 JSON） |
+| `desk_project` | 本地项目（`id / name / path / memory_enabled / memory / memory_last_time / memory_update_time / add_time / update_time`，路径 1:1 唯一；长期记忆随项目行保存） |
+| `desk_agent` | Agent 配置（`id / name / description / avatar / system_prompt / skill_ids / mcp_ids / tool_* / builtin / add_time / update_time`） |
+| `desk_session` | 会话（`id / title / project_id / agent_id / provider_id / model_id / permission_mode / summary / summary_last_message_id / summary_update_time / context_breakdown / add_time / update_time`） |
+| `desk_message` | 消息（`id / session_id / turn_id / role / source / status / content / data / add_time`，`data` 为 Agent 原始消息 JSON，`status` 为归一化消息状态，`source` 为运行时注入来源） |
 | `desk_provider` | 供应商（`name / base_url / api_key / headers / models / enabled / sort`） |
 | `desk_setting` | 设置（`key / value`） |
 | `desk_skill` | 技能状态（`id` 目录名 / `name / description / version / source / source_id / enabled`，目录内容为权威） |
 | `desk_mcp` | MCP 服务（`name / type / transport / url / headers / command / args / env / cwd / config / remark / enabled / health`） |
-| `desk_agent_memory` | 项目长期记忆（`project_id / content / last_time / add_time / update_time`，项目 1:1） |
 | `desk_llm_trace` | 模型通讯 trace（`session_id / run_id / step / phase / status / http_status / duration_ms / tokens / request / response / tool_calls / error / add_time`，仅开发者模式写入） |
 
-- **系统配置项**：应用名称 / Slogan / 自定义指令、主题（浅色 / 深色 / 自定义）、语言（中 / 英）、Node / Python 运行环境 PATH、浏览器工具开关等，统一存 `desk_setting`；
+- **系统配置项**：应用名称 / Slogan、主题（浅色 / 深色 / 跟随系统 + 多主题配色）、语言（中 / 英）、Node / Python 运行环境 PATH、开发者模式等，统一存 `desk_setting`；Agent 指令与能力开关存 `desk_agent`，长期记忆开关与内容存 `desk_project`，会话摘要存 `desk_session`；
 - **数据目录**：默认 `app.getPath('userData')/xxl-ai-desk.sqlite`，可自定义（`userData/desk-config.json`），修改后重启生效。
 
 ## 七、版本更新日志
@@ -1644,8 +1689,8 @@ docker compose down
 - 15、【体验】外观主题：支持深色模式、浅色模式，以及自定义多主题设置，提升用户体验；
 - 16、【体验】会话区域体验优化：会话区域布局、交互调整，体验性升级；
 
-> 补充说明：macOS 提示「文件损坏」并非实际损坏，而是因为 macOS Gatekeeper 对未签名的应用做了隔离标记，用户可以通过终端命令去除隔离标记来解决问题。
-> 操作处理：1、双击安装软件、把 App 拖入 /Applications（先不启动运行）；2、终端去除隔离标记（sudo 需输入密码）：`sudo xattr -rd com.apple.quarantine "/Applications/XXL-AI-Desk.app"`；3、双击 App 启用运行使用；
+> 补充说明：macOS 提示「文件损坏」并非实际损坏，而是安装软件未签名（没有开发者账号）。
+> 操作处理：将安装软件拖入 /Applications 后，终端执行如下命令即可：sudo xattr -rd com.apple.quarantine /Applications/XXL-AI-Desk.app
 
 **【云版（Web 服务端）】**
 
@@ -1654,6 +1699,59 @@ docker compose down
 - 3、【优化】Agent模型变更实效性：模型对象定期过期刷新（5min），并结合Agent配置指纹信息（更新时间MD5）主动更新；
 - 4、【优化】Markdown渲染优化：字体、代码高亮、表格、列表、引用、公式渲染优化；
 - 5、【优化】Thinking渲染优化：单次思考过程渲染限定最大高度，滚动吸底展示最新内容；
+
+### v1.5.0 Release Notes[ING]
+
+**【本地版（Desk 桌面端）】**
+
+- 1、【能力】会话压缩与记忆：
+  - 会话上下文结构化：system（系统指令 + 长期记忆 + skill技能 + 会话摘要）+ messages（短期记忆/会话）+ tools（内置工具 + MCP工具）
+  - 会话上下文使用率：计算公式 = 上下文token消耗 / 模型ContextWindow；
+  - 会话压缩：针对历史会话提炼背景/目标/进展等提炼，压缩为 max 定长（2000）摘要信息。会话上下文传递短期记忆时：需传递摘要信息与上次摘要后全部增量对话信息。每轮会话后都会触发异步压缩摘要，如果「上下文使用率超过80% 或 对话轮次超过20次 或 压缩摘要不存在」，需要主动压缩一次；
+  - 长期记忆：项目维度跨会话的画像/偏好/事实/目标/进展等长期记忆沉淀。会话完成时异步触发记忆生成/保鲜，「检测记忆为空 或 距离上次记忆生成超5min」，需要主动生成一次记忆；项目设置里，支持手动查看管理记忆；
+    （项目 列表，启用记忆 列名改为 长期记忆；新增 记忆生成时间 列；）
+- 2、【重构】产品设计重构：
+  - 扩展中心：插件中心更名扩展中心，现有MCP、SKILL和内置工具之外，新增 “Agent”功能；支持创建管理多Agent，Agent支持设置 指令、SKILL、MCP和内置工具等；
+  - 会话新建：新建会话时，当前会话框底部限制必选 项目；新增必选 Agent，Agent下拉框中限制Agent列表与新建Agent入口，参考项目选项交互；
+  - 系统设置：新增 项目 设置，支持管理维护 项目列表；支持新增项目、重命名、在Finder中显示、删除等；支持长期记忆开关、长期记忆查看；
+  - 会话与Agent绑定，会话时使用的 系统指令、SKILL、MCP、内置工具等，从对应Agent上获取，Agent修改后需要实时感知最新的；
+- 3、【安全】权限管控：升级三档权限模式「仅可查看（全局读）、工作区内修改（全局读 + 项目&系统临时目录写）、完全权限（全局读写）」；同时，兜底保留统一的敏感操作拦截机制；
+  （read-only、workspace-write、full-access）
+- 4、【推理】模型及推理等级：供应商模型精细化管理，支持模型分类（通用模型、对话模型、潜入模型、文生图模型）；并针对对话模型，支持推理登陆（Default、Low、High、Max）；
+- 5、【新增】输入框支持关联文件：新增“+“按钮功能，支持选择文件并关联到当前会话，便于Agent调用文件内容；
+- 6、【重构】代码模块化重构：同一职责域代码收拢在单一模块内，对外仅暴露最小必要接口，避免跨模块散落同职责的实现细节；
+- 7、【能力】文件编辑器：支持多主题样式、文件搜索/替换等；
+- 8、【体验】浏览器工具面板优化：浏览器搜索时面板不必展开，仅首次默认展开，降低对用户操作干扰；
+- 9、【安全】沙箱文件权限调整：SKILL目录文件读取默认放行；
+- 10、【体验】UI框架优化：侧边栏宽度调大；对话布局（子菜单/会话去/工具栏）宽度优化，提升操作体验；
+- 11、【体验】文件工具面板优化：选中文件操作复制快捷键，默认执行「复制路径」操作；
+- 12、【体验】会话导航轨：会话工作区支持会话导航轨，以刻度形式展示多轮会话，提升操作体验；
+- 13、【体验】会话区搜索：会话工作区支持关键词搜索；
+- 14、【体验】文件工具面板优化：文件工具面板中文件树支持折叠，定位目录名左侧添加折叠/展开icon；
+- 15、【体验】MCP/SKILL市场：远程数据加载缓慢时，前端交互优化，避免页面黑屏等；
+- 16、【体验】主题色丰富：新增多主题色，支持自定义主题色设置；
+- 17、【优化】新增会话示例任务调整，辅助用户快速上手；
+- 18、【新增】会话状态信息条：支持会话统计（轮次/步数、模型用时、输出速度）、Token 用量（总量、缓存命中、输入/输出分项）、上下文消耗（使用率、窗口、分项估算）等信息展示，点击胶囊展开明细，便于用户了解会话状态；
+- 19、【ING】应用中心：内置「笔记」工具，子菜单进入支持针对笔记进行设置。包括笔记 存储目录（默认在 软件安装目录下的 /note 子目录）、是否启用（启用后新增左侧菜单）等设置。
+  - 笔记应用：支持 笔记文件目录（左侧）、笔记Markdown编辑器（中间，参考文件工具里的markdown编辑器）、内容目录（中间区域左侧/可折叠）、预览（编辑/分屏/预览）、搜索/替换、图片插入（图片存在在笔记目录的 /resource/image 目录下）等；
+
+> 补充说明：macOS 提示「文件损坏」并非实际损坏，而是安装软件未签名（没有开发者账号）。
+> 操作处理：将安装软件拖入 /Applications 后，终端执行如下命令即可：`sudo xattr -rd com.apple.quarantine /Applications/XXL-AI-Desk.app`
+
+### v1.5.1 Release Notes[ING]
+- 1、【ING】应用中心：支持如下功能；
+  - 应用市场：顶部两个TAB，分别为「已安装应用」和「发现应用」；安装应用后，勾选启用，左侧导航栏会自动注册应用入口，点击可进入应用；
+    （左侧导航栏应用类入口，与顶部固定入口时间通过横线隔开；没有应用入口时横线不展示；）
+  - 创造应用：支持在线创建应用；单个应用本质是一个 文件夹，内部包含本引用所需文件；支持自动检测应用文件夹识别为应用；
+  - 内置应用（笔记）：支持 笔记文件目录（左侧）、笔记Markdown编辑器（中间）、内容目录、预览、搜索/替换、图片插入 等；
+  - 内置应用（公众号编辑器）：支持 公众号模板选择（左列）、文章编辑器（中间）、文章设置（内容块设置、预览设置）、重置/复制全文/复制HTML 等；
+  - 内置应用（工具箱）：支持 JSON工具、编码转换、时间戳转换、文本对比、公众号编辑器 等;
+- 2、【ING】自动化：
+  - 任务管理：支持任务列表管理，任务状态、名称筛选等；新增任务支持设置 任务指令、模型、模式、项目、Agent 和 执行时间 等；
+  - 任务会话：任务会话复用普通会话，通过类型区分触发来源；任务触发类会话，子菜单会话名称后缀添加 闹钟icon 标记；
+- 3、【ING】UI自定义增强：支持自定义更换Logo、背景图等，提升用户体验；
+- 4、【ING】Bot机器人：支持桌面机器人，可在桌面悬浮窗中与Agent进行对话，支持快捷键唤起、消息通知等功能；
+
 
 ### TODO LIST
 - 1、AI 能力增强：
@@ -1669,9 +1767,8 @@ docker compose down
   - SKILL文件变更实效性：SKILL正文结合版本与指纹信息主动更新；（双版本均校准）
 - 4、Desk版本：
   - 长程任务：SQLite；“动态规划-分步执行-验收”；失败巡检、延续执行、防止死循环；
-  - 定时任务：
   - 会话定制：会话时选择 MCP、SKILL、Agent；
-  - Agent多智能体：多智能体设置；Agent维度 指令、SKILL、MCP 设置绑定；
+  - 输入框支持输入队列：支持输入会话输入队列功能，上轮对话结束后、自动触发下一轮对话，提升操作效率；
 
 
 ## 八、其他
