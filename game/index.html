@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Game Center — 游戏中心</title>
+<style>
+  :root {
+    --bg:#ffffff; --surface:#f5f7fa; --border:#e5e9ec;
+    --accent:#6366f1; --accent2:#ec4899;
+    --text:#1f2937; --muted:#6b7280;
+    --radius:12px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+
+  /* ── Header ── */
+  header{
+    padding:20px 24px 16px;
+    text-align:center;
+    background:linear-gradient(135deg,#f5f7fa 0%,#ffffff 100%);
+    border-bottom:1px solid var(--border);
+  }
+  header .logo{font-size:1.4rem;font-weight:900;letter-spacing:-1px}
+  header .logo span{color:var(--accent)}
+  header p{color:var(--muted);margin-top:4px;font-size:.82rem}
+  .back-home{
+    display:inline-flex;align-items:center;gap:6px;
+    margin-bottom:8px;
+    color:var(--muted);font-size:.85rem;text-decoration:none;
+    padding:5px 12px;border-radius:99px;
+    border:1px solid var(--border);background:#fff;
+    transition:color .2s,border-color .2s,box-shadow .2s;
+  }
+  .back-home:hover{color:var(--accent);border-color:var(--accent);box-shadow:0 2px 8px rgba(99,102,241,.12)}
+
+  /* ── Search ── */
+  .search-wrap{
+    max-width:480px;margin:12px auto 0;
+    position:relative;
+  }
+  .search-wrap input{
+    width:100%;padding:12px 44px 12px 16px;
+    background:#fff;border:1px solid var(--border);
+    border-radius:999px;color:var(--text);font-size:.95rem;outline:none;
+    transition:border-color .2s;
+    box-shadow:0 1px 3px rgba(0,0,0,.04);
+  }
+  .search-wrap input:focus{border-color:var(--accent)}
+  .search-wrap svg{position:absolute;right:14px;top:50%;transform:translateY(-50%);opacity:.4;pointer-events:none}
+
+  /* ── Main ── */
+  main{max-width:960px;margin:0 auto;padding:16px 20px 32px}
+
+  /* ── Category ── */
+  .category{margin-bottom:16px}
+  .category-header{
+    display:flex;align-items:center;gap:8px;
+    margin-bottom:6px;
+  }
+  .category-icon{
+    width:22px;height:22px;border-radius:5px;
+    display:flex;align-items:center;justify-content:center;font-size:.75rem;
+  }
+  .category-title{font-size:.82rem;font-weight:700;letter-spacing:.5px}
+  .category-count{font-size:.65rem;color:var(--muted);
+    background:var(--surface);border:1px solid var(--border);
+    padding:1px 6px;border-radius:99px;margin-left:2px}
+
+  /* ── Cards grid ── */
+  .cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+    gap:8px;
+  }
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:8px;padding:10px 14px;
+    text-decoration:none;color:inherit;
+    transition:border-color .2s,transform .15s,box-shadow .2s;
+    display:flex;align-items:center;gap:10px;
+    position:relative;overflow:hidden;
+  }
+  .card::before{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(135deg,var(--card-color,var(--accent)) 0%,transparent 60%);
+    opacity:0;transition:opacity .25s;
+  }
+  .card:hover{border-color:var(--card-color,var(--accent));transform:translateY(-1px);
+    box-shadow:0 4px 16px rgba(0,0,0,.07);}
+  .card:hover::before{opacity:.08}
+  .card .card-icon{font-size:1.2rem;flex-shrink:0}
+  .card .card-info{flex:1;min-width:0}
+  .card .card-name{font-weight:600;font-size:.84rem;margin-bottom:2px}
+  .card .card-desc{font-size:.7rem;color:var(--muted);line-height:1.35;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    display:block}
+  .card .card-tag{
+    flex-shrink:0;
+    font-size:.6rem;padding:1px 7px;border-radius:99px;
+    background:rgba(0,0,0,.05);color:var(--muted);
+  }
+
+  /* ── Footer ── */
+  footer{text-align:center;padding:24px;color:var(--muted);font-size:.8rem;border-top:1px solid var(--border)}
+
+  /* hide filtered */
+  .card.hidden{display:none}
+  .category.all-hidden{display:none}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="back-home" href="../index.html">
+    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"></path></svg>
+    返回社区主页
+  </a>
+  <div class="logo"><span>{</span> Game Center <span>}</span></div>
+  <p>精选网页小游戏 · 纯前端 · 打开即玩</p>
+  <div class="search-wrap">
+    <input type="text" id="search" placeholder="搜索游戏…" autocomplete="off"/>
+    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+    </svg>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ── 动作射击 ── -->
+  <div class="category" data-cat="动作射击">
+    <div class="category-header">
+      <div class="category-icon" style="background:#ef444422;color:#ef4444">🎯</div>
+      <span class="category-title">动作射击</span>
+      <span class="category-count">1</span>
+    </div>
+    <div class="cards">
+
+      <a class="card" href="cf.html" style="--card-color:#ef4444" data-name="运输船 FPS 射击 3D 第一人称 枪战 Three.js" title="单文件 3D FPS，集装箱货轮甲板激战，击杀得分与爆头奖励">
+        <div class="card-icon">🔫</div>
+        <div class="card-info"><div class="card-name">运输船 FPS</div><div class="card-desc">单文件 3D 第一人称射击，货轮甲板激战与爆头奖励</div></div>
+        <span class="card-tag">FPS</span>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ── 益智休闲 ── -->
+  <div class="category" data-cat="益智休闲">
+    <div class="category-header">
+      <div class="category-icon" style="background:#8b5cf622;color:#8b5cf6">🧩</div>
+      <span class="category-title">益智休闲</span>
+      <span class="category-count">1</span>
+    </div>
+    <div class="cards">
+
+      <a class="card" href="tetris.html" style="--card-color:#8b5cf6" data-name="3D 俄罗斯方块 Tetris 益智 消除 方块 移动端" title="立体俄罗斯方块，流畅动画与触屏操作，支持桌面与手机">
+        <div class="card-icon">🧱</div>
+        <div class="card-info"><div class="card-name">3D 俄罗斯方块</div><div class="card-desc">立体方块消除，流畅动画，支持桌面与手机触屏</div></div>
+        <span class="card-tag">Tetris</span>
+      </a>
+
+    </div>
+  </div>
+
+</main>
+
+<footer>Game Center · 纯静态前端 · 打开即玩</footer>
+
+<script>
+const searchEl = document.getElementById('search');
+searchEl.addEventListener('input', () => {
+  const q = searchEl.value.trim().toLowerCase();
+  document.querySelectorAll('.card').forEach(c => {
+    const txt = (c.dataset.name + ' ' + c.textContent).toLowerCase();
+    c.classList.toggle('hidden', q.length > 0 && !txt.includes(q));
+  });
+  document.querySelectorAll('.category').forEach(cat => {
+    const visible = [...cat.querySelectorAll('.card')].some(c => !c.classList.contains('hidden'));
+    cat.classList.toggle('all-hidden', !visible);
+  });
+});
+</script>
+</body>
+</html>
