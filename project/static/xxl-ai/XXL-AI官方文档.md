@@ -65,24 +65,27 @@ XXL-AI 是一个「**云本结合**」的 AI Agent 开发平台，提供两种�
 
 - **本地优先，项目即工作区（核心亮点）**
 
-- 1、跨平台开箱即用：Electron + Vue3 + TypeScript，支持 mac / win / linux；单文件 SQLite 本地存储，数据不出本机，运行目录可自定义；
-- 2、项目即工作区：项目 1:1 绑定本地目录，会话归属项目，Agent 直接在本机工程上工作；项目可独立开启长期记忆，跨会话沉淀偏好与决策；
+- 1、安装即用：mac / win / linux 三平台一键安装，零服务依赖，断网也能正常对话；
+- 2、数据不出本机：会话、消息与配置只落单文件 SQLite，运行目录可自定义，不连接任何外部数据库；
+- 3、项目即工作区：项目 1:1 绑定本地目录、会话归属项目，Agent 直接在本机工程内工作；项目可单独开启长期记忆，跨会话沉淀偏好与决策；
+- 4、会话不丢：提问发送即落库，完成消息按快照落库，流式草稿定时落库；异常退出后重开会话可恢复到最近一次完整内容；
 
-- **多 Agent 编排与扩展中心**
+- **Agent 编排与扩展装配**
 
-- 3、多 Agent：按 Agent 配置系统指令、SKILL、MCP 与内置工具，新建会话必须选择 Agent，保存后下一轮即时生效；
-- 4、统一扩展中心：MCP / SKILL / 内置工具集中管理并支持市场发现，按 Agent 勾选装配，未选中的能力不参与对话；
+- 5、多 Agent 编排：按 Agent 组合系统指令、SKILL、MCP 与内置工具，新建会话即绑定，保存后下一轮生效；
+- 6、统一扩展中心：MCP / SKILL / 内置工具集中管理并支持市场发现，未勾选的能力不参与对话；
+- 7、运行可靠：模型调用与工具执行跑在独立进程，长任务不阻塞界面；兼容 OpenAI 协议，供应商与模型两级管理；
 
-- **多供应商与可观测**
+- **本机执行与安全可控**
 
-- 5、执行过程可观测：思考 → 工具 → 正文按发生顺序时间线渲染，工具调用展示参数 / 状态 / 耗时；输入框底部会话状态信息条汇总会话统计、Token 用量与上下文占用，点击展开明细；
-- 6、多供应商与进程隔离：兼容 OpenAI 协议（OpenCodeGo / Ollama / Deepseek / 智谱GLM 等），Pi 运行于独立 utilityProcess，长任务不阻塞 UI；支持多主题与中英双语。
+- 8、本机直接干活：文件、Git、终端、浏览器统一为右侧 Tab，目录树与命令随会话隔离，浏览器操作带光标与动作反馈；
+- 9、三档权限：仅可查看 / 工作区内修改 / 完全权限随会话持久化；越界写入在输入框位置内联审批，敏感目录始终拦截；
+- 10、过程可观测：思考 → 工具 → 正文按发生顺序成时间线，工具调用带参数、状态与耗时；状态条汇总 Token 用量与上下文占用；
 
-- **权限可控与丰富内置工具**
+- **定时任务与个性化**
 
-- 7、三档权限 + 目录沙箱：仅可查看 / 工作区内修改 / 完全权限随会话持久化；越界写入在输入框内联审批，支持「本次 / 本会话允许」，敏感操作统一拦截；
-- 8、右侧工具面板：文件 / Git / 终端 / 浏览器统一为 Tab，目录树、编辑、命令与多标签页随会话隔离；
-
+- 11、定时任务：支持自定义定时任务、定时启动会话，支持会话复用与阻塞策略、立即运行、运行日志、任务超时、并发上限、巡检兜底与保持电脑不休眠；
+- 12、品牌与语言：应用名称、Slogan、Logo、会话区背景图与不透明度仅存本机；支持多主题与中英文切换；
 
 ### 1.3 下载
 
@@ -449,11 +452,11 @@ npm run build:win
 
 ### 3.2 本地版操作指南
 
-> 本章按 **供应商 → Agent → 项目 → 对话 → 工具面板 → 设置** 的顺序说明本地版使用方式。
+> 本章按 **供应商 → Agent → 项目 → 对话 → 工具面板 → 设置 → 定时任务 → 应用中心 → 个性化** 的顺序说明本地版使用方式。
 
 #### 3.2.1 界面总览
 
-- 左侧**会话栏**（可折叠为窄图标栏）：项目分组 + 会话列表，底部为新建对话、设置、折叠 / 展开；
+- 左侧**图标栏**（常驻）：首页、定时任务、应用中心、扩展中心、系统设置，以及已启用的应用入口；首页可展开为**会话栏**（项目分组 + 会话列表，可折叠 / 拖拽宽度）；
 - 右侧**内容区**：顶栏（标题 / 模型切换）、消息流、输入框（Composer，底部为会话状态信息条）；
 - 右侧**工具面板**：文件 / Git / 终端 / 浏览器统一为 Tab，可放大占满正文区、拖拽宽度，状态按会话隔离；
 - 新建对话时，输入框下方必须选择**项目**与 **Agent**，并提供示例任务快速上手。
@@ -468,7 +471,8 @@ npm run build:win
 - 接口地址：OpenAI 兼容端点（如 `https://api.deepseek.com/v1`，裸地址自动补 `/v1`）；
 - API Key：本地存储；
 - 请求 Header：可选 JSON 对象，value 支持 `{session}` 占位符，对话时替换为当前会话 ID（如 OpenCode 使用 `{"x-opencode-session":"{session}"}`）；
-- 模型列表：每行一个模型 ID，如 `deepseek-v4-flash`；可配置模型上下文窗口，用于计算上下文占用率。
+- 模型列表：每行一个模型 ID，如 `deepseek-v4-flash`；可配置模型上下文窗口与模型类型，列表允许为空（后续再补充）；
+- 编辑入口为右侧抽屉，名称与接口地址分别校验并去除首尾空格，保存后立即刷新列表。
 
 ![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk/desk_02.jpg)
 
@@ -511,7 +515,7 @@ npm run build:win
 - **文件面板**：项目目录树（懒加载 / 过滤 / 折叠）+ 代码编辑（行号、高亮、`⌘/Ctrl+S` 保存）+ 预览，随本地文件变更自动刷新，支持「打开所在文件夹 / 用指定应用打开」；
 - **Git 面板**：查看项目空间 Git 变更、审核与推送；
 - **终端面板**：基于 node-pty + xterm，按项目目录启动，支持终端命令行操作；
-- **浏览器面板**：内嵌 `webview`，多标签、前进 / 后退 / 刷新、地址栏搜索兜底、系统浏览器打开。
+- **浏览器面板**：内嵌 `webview`，多标签、前进 / 后退 / 刷新、地址栏搜索兜底、系统浏览器打开；工具栏支持常用操作与快捷键；Agent 操作时在页面上叠加虚拟光标与动作提示，实时展示点击、输入、滚动等状态；
 
 ![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk/desk_05.jpg)
 
@@ -523,15 +527,61 @@ npm run build:win
 
 #### 3.2.7 设置与运行数据
 
-- **设置 → 常规**：外观 / 主题 / 语言、全局快捷键即时生效；**设置 → 个性化**：配置应用名称、Slogan；
+- **设置 → 常规**：外观 / 主题 / 语言、全局快捷键即时生效；
+- **设置 → 个性化**：配置应用名称、Slogan，以及品牌资源（Logo、会话区背景图与背景不透明度），详见 3.2.10；
 - **设置 → 项目**：维护项目列表、长期记忆开关与记忆内容；
 - **设置 → 运行设置**：配置 Node / Python 运行环境与开发者模式；
-- **数据目录**：默认位于系统 userData 下的 `xxl-ai-desk.sqlite`，可在设置中查看 / 浏览 / 打开 / 修改，修改后重启生效；
-- 会话 / 消息 / Agent / 供应商 / 项目 / 记忆 / 设置均落本地 SQLite，API Key 本地存储。
+- **应用设置**：已安装应用在「应用中心 → 我的应用」中点击「设置」打开各自配置（如笔记的存储目录与启用开关）；
+- **数据目录**：macOS / Linux 默认 `~/.config/xxl-ai-desk`，Windows 默认 `%APPDATA%\xxl-ai-desk`；可在设置中查看 / 浏览 / 打开 / 修改，修改后重启生效；自定义目录记录在固定引导目录下的 `xxl-ai-desk-config.json`；
+- 会话 / 消息 / Agent / 供应商 / 项目 / 记忆 / 定时任务 / 应用状态 / 设置均落本地 SQLite，API Key 本地存储。
 
 ![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk/desk_09.jpg)
 
 ![图片](https://www.xuxueli.com/project/static/xxl-ai/images/desk/desk_10.jpg)
+
+#### 3.2.8 定时任务
+
+左侧「定时任务」板块用于按触发规则定时启动会话，包含 **任务列表 / 运行日志 / 调度设置** 三个子页：
+
+- **任务列表**：按关键词、项目、Agent 与启停状态筛选；行内支持立即运行、查看运行日志、编辑与删除，启停开关即时生效。
+- **运行日志**：每次触发一条记录（含失败跳过），支持按任务与触发日期范围筛选、分页（10 / 20 / 50，默认 10 条）；「日志清理」按任务与触发时间范围删除日志，「查看会话」直接进入对话详情。
+- **调度设置**：保持电脑不睡眠、最大并发任务数与任务巡检间隔（30 ~ 600 秒，默认 60 秒），修改即保存生效，并展示上次 / 下次巡检时间。
+
+**运行原理**
+
+- 触发规则为 Cron 表达式（秒 分 时 日 月 周 年，本地时区）；主进程为每个启用任务挂计时器，到点创建会话并复用对话链路执行任务指令。
+- 仅在应用运行期间触发：启动不补跑历史计划，系统唤醒后重新对齐，错过与跳过的触发记入运行日志。
+- 同一任务串行执行：上一轮未结束时按会话阻塞策略「忽略本次 / 强制调度」处理；所有任务受最大并发数限制。
+- 任务维度设置超时时间（不限时 / N 分钟），超过后由巡检主动终止本轮；运行态悬挂由巡检兜底结算，避免任务永久卡在运行中。
+
+**内置示例**
+
+- 首次初始化写入「每日早报」（每天 8:00，复用会话）与「每周行业观察」（每周一 9:00，每次新建）两个示例任务，默认停用，供参考规则与指令写法。
+- 示例只在从未播种且任务表为空时写入：用户删除后不再回填，已有任务的升级用户不注入。
+
+**会话复用**
+
+- **每次新建会话**：每个周期创建一条新会话，标题为「任务名 · 月-日 时:分」。
+- **复用上次会话**：沿用上次会话继续对话，标题随本次运行刷新；会话已删除、不属于该任务时自动新建。
+- 定时会话固定 `trigger_type='schedule'`，侧栏显示闹钟标记，创建后不可改为手动会话。
+
+**与手动会话的差异**
+
+- 完全一致：执行链路、流式渲染、消息落库、摘要与记忆；定时轮次由主进程发起，界面同样实时展示思考 / 工具 / 正文。
+- 唯一行为差异：定时会话无人值守，越界写入 / 命令自动拒绝，`ask_user` 回填「自行决策」；手动会话弹出审批面板。
+- 额外记录：运行日志、任务行的上次运行结果、运行中状态，以及并发与超时控制；删除任务保留历史会话，运行日志一并清理。
+
+#### 3.2.9 应用中心与笔记
+
+左侧「应用中心」入口 提供 应用管理 和 应用市场 能力，支持应用的发现、安装、卸载、配置管理等操作。
+
+#### 3.2.10 个性化与品牌
+
+「设置 → 个性化」在应用名称与 Slogan 之外，支持自定义品牌资源：
+
+- **Logo**：用于运行期窗口 / Dock 图标、会话空态与关于页；支持 PNG / JPG / WEBP / GIF / BMP / ICO，最大 2MB；可恢复默认；安装包图标不受影响；
+- **背景图**：仅作用于会话内容区，支持 PNG / JPG / WEBP / GIF / BMP / ICO / SVG，最大 15MB；可移除；
+- **背景不透明度**：仅在设置背景图后展示，拖动时实时预览，释放后自动保存；
 
 ## 四、云版 vs 本地版
 
@@ -565,6 +615,10 @@ XXL-AI 提供「**云本结合**」两种交付形态，二者同源同品牌、
 | 本地系统能力 | 不直接操作本机文件 / 终端 / 浏览器 | **核心差异**：本地文件读写与检索、终端命令（node-pty + xterm）、Git 变更审核、统一工具面板（文件 / Git / 终端 / 浏览器） |
 | 读 / 写安全控制 | 空间归属 + RBAC + 审计日志 | **三档权限模式**：仅可查看全局读、工作区内修改限定项目与系统临时目录、完全权限全局读写；敏感操作统一拦截，越界在输入框位置内联展示审批「允许本次 / 本会话允许 / 拒绝」 |
 | 会话与上下文 | 会话 / 消息落 MySQL，按空间隔离；公开端以 `uuid` + `visitorId` 隔离 | 会话 / 消息落本地 SQLite，1:1 归属项目并绑定 Agent；生成中会话内存缓存，切换不丢流式增量；项目维度长期记忆 |
+| 会话可靠性 | SSE + Redis Stream，断线 / 刷新可续传 | 用户提问发送即落库，完成消息按快照落库，流式回复草稿定时落库；异常退出后可恢复到最近一次完整内容 |
+| 定时任务 | / | 定时任务：Cron触发规则、任务列表 / 运行日志 / 调度设置、立即运行、会话复用与阻塞策略、任务超时、最大并发、巡检兜底、保持电脑不休眠、定时会话交互自动结算 |
+| 应用中心与内置应用 | / | 应用中心 + 内置笔记：安装 / 启用 / 配置分离，应用设置面板按应用注册，卸载不清除本地业务文件 |
+| 界面自定义 | 主题与 i18n | 应用名称 / Slogan、Logo、会话区背景图与不透明度、浅色 / 深色 / 跟随系统 + 多主题配色、中 / 英双语 |
 | 数据存储 | MySQL（业务 + 平台表）、Redis（登录态 + 对话流）、Milvus（向量） | 单文件 SQLite（better-sqlite3 + Drizzle），运行时数据目录可自定义 |
 | 登录与权限 | XXL-SSO 登录（Redis 存储登录态）、RBAC 菜单 / 按钮权限、动态菜单零路由改动 | 无登录 / 无角色体系，纯本地应用 |
 | 多语言与主题 | Vue3 + Element Plus + TypeScript，中 / 英 i18n，动态菜单 | Vue3 + Element Plus + TypeScript，中 / 英 i18n，浅色 / 深色 / 跟随系统 + 多主题配色 |
@@ -1199,21 +1253,24 @@ xxl-ai-desk/
 ├── electron-builder.yml           # 打包配置
 └── src/
     ├── common/                    # 跨域公共层：被 ≥2 个领域复用且无业务规则
-    │   ├── shared/                # 跨进程纯 TS：contracts/(pagination·quickAction)、fileTypes、providerUrl、runtimeLog、appInfo、i18n
+    │   ├── shared/                # 跨进程纯 TS：contracts/(pagination·quickAction)、fileTypes、model、permission、providerUrl、runtimeLog、appInfo、i18n
     │   ├── main/                  # 主进程基础设施：db(getDb) / config/paths / utils / ipc
     │   └── renderer/              # 渲染公共：api(window.desk) / components / composables / config / styles / types / utils
     ├── modules/                   # 领域模块：一个域一个目录，纵向切片
     │   ├── agent/                 # shared · main · preload · worker · renderer · i18n
-    │   ├── app/                   # shared · main · preload · i18n
+    │   ├── appCenter/             # shared · main · preload · renderer · i18n（应用注册 / 安装启用 / 市场）
+    │   ├── apps/note/             # shared · main · preload · renderer · i18n（内置笔记应用）
     │   ├── browser/               # shared · main · preload · worker · renderer
     │   ├── chat/                  # shared · main · preload · renderer · i18n
     │   ├── diagnostics/           # shared · main · preload · renderer
     │   ├── file/                  # shared · main · preload · worker · renderer · i18n
     │   ├── git/                   # shared · main · preload · renderer · i18n
     │   ├── mcp/                   # shared · main · preload · worker · renderer
-    │   ├── plugin/                # renderer（扩展中心 / builtin） · i18n
+    │   ├── platform/              # shared · main · preload · renderer · i18n（外壳 / 更新 / 运行时 / 文件协议）
+    │   ├── plugin/                # renderer（扩展中心 / 内置工具目录） · i18n
     │   ├── project/               # shared · main · preload · renderer · i18n
     │   ├── provider/              # shared · main · preload · renderer
+    │   ├── schedule/              # shared · main · preload · renderer · i18n（定时任务）
     │   ├── settings/              # shared · main · preload · renderer · i18n
     │   ├── skill/                 # shared · main · preload · worker · renderer
     │   ├── terminal/              # shared · main · preload · renderer
@@ -1228,6 +1285,7 @@ xxl-ai-desk/
             ├── config/nav.ts      # 板块 / 子菜单 / 入口路径唯一定义
             ├── composables/       # useAppBootstrap / useSessionLifecycle / useQuickAction
             ├── stores/layout.ts
+            ├── appSettings.ts     # 应用设置面板注册表装配
             └── i18n/index.ts      # 渲染层词条组合根
 ```
 
@@ -1337,6 +1395,8 @@ sudo xattr -rd com.apple.quarantine /Applications/XXL-AI-Desk.app
 
 供应商能力：兼容 OpenAI 协议，采用「供应商 + 模型」两级本地配置（名称、Base URL、API Key、自定义 Header、模型列表、启用状态、排序），首次启动自动预置 OpenCodeGo / Ollama / Deepseek / 智谱GLM，安装即用。
 
+模型在供应商下按用途分类（通用模型 / 对话模型 / 嵌入模型 / 文生图模型）：只有对话模型可用于会话，嵌入 / 文生图模型在模型选择器中不参与会话选择；对话模型额外支持推理等级 Default / Low / High / Max，随会话持久化，Default 交由供应商决定，Max 由 Pi 按模型能力自动降级。
+
 实现要点（`modules/provider/main/providerService.ts` + `modules/agent/worker/models.ts`）：
 
 - **配置落库**：供应商配置存 `desk_provider`，API Key 经 `modules/provider/main/securityService.ts` 编解码后入库（不落明文），模型列表与请求头以 JSON 文本存储；
@@ -1407,6 +1467,8 @@ MCP（Model Context Protocol）负责把**外部工具**接进会话：远程服
 | 浏览器 | 多标签 `webview` 内嵌浏览，供用户查看 Agent 浏览过程，也可独立使用 |
 | 终端 | `node-pty` + `xterm` 真实终端，多会话、随项目目录启动，`locale` 固定 UTF-8 解决中文乱码；项目维度还可查看 Git 变更并执行审核、推送 |
 
+**浏览器操作可视化**：Agent 操作内嵌浏览器时，渲染层在 `webview` 上叠加动作提示，而非只在消息流里显示工具参数：`BrowserCursorLayer` 绘制虚拟光标，`BrowserAgentOverlay` 展示当前操作与目标，`BrowserActionBar` 汇总本次动作；工具执行期间实时展示鼠标移动、点击、输入、滚动等状态，便于用户确认 Agent 正在操作哪个页面元素。对应实现位于 `modules/browser/renderer/components/browser/` 与 `composables/browserCursor.ts`，动作队列与渲染层 `webview` 桥接复用 `modules/browser` 的既有契约。
+
 **内置工具**是随客户端发布的**本地能力底座**，按域拆文件、由统一注册表装配（`modules/agent/worker/tools/index.ts`）：每个域导出一个工厂函数，注册表 `Promise.all` 聚合后按 `meta.permissionModes` 与内置工具开关过滤。新增工具只需在对应域文件追加定义，不必触碰装配逻辑。
 
 当前内置工具清单：
@@ -1424,16 +1486,17 @@ MCP（Model Context Protocol）负责把**外部工具**接进会话：远程服
 | fs | `move_file` | 否 | 工作区 / 完全 | 路径闸门 + 越界审批 | 2k |
 | shell | `run_command` | 否 | 工作区 / 完全 | 危险命令拦截 + 越界路径审批 | 20k |
 | browser | `open_browser` / `read_browser` / `snapshot_browser` | 是 | 三档 | Agent 工具开关 | 2k / 51k / 20k |
-| browser | `click_browser` / `fill_browser` | 否 | 工作区 / 完全 | Agent 工具开关 | 2k / 3k |
-| browser | `hover_browser` / `scroll_browser` | 是 | 三档 | Agent 工具开关 | 2k / 2k |
-| browser | `press_browser` / `select_browser` | 否 | 工作区 / 完全 | Agent 工具开关 | 2k / 2k |
+| browser | `click_browser` / `fill_browser` / `type_browser` | 否 | 工作区 / 完全 | Agent 工具开关 | 2k / 3k / 3k |
+| browser | `move_browser` | 是 | 三档 | Agent 工具开关 | 2k |
+| browser | `scroll_browser` | 是 | 三档 | Agent 工具开关 | 2k |
+| browser | `press_browser` | 否 | 工作区 / 完全 | Agent 工具开关 | 2k |
 | browser | `wait_browser` / `screenshot_browser` / `inspect_browser` / `browser_tabs` | 是 | 三档 | Agent 工具开关 | 2k / 2k / 8k / 4k |
 | skill | `read_skill` | 是 | 三档 | 技能目录限定（技能库读取放行） | 100k |
 | interaction | `ask_user` | 是 | 三档 | Agent 工具开关 | 4k |
 
 **权限语义**：`read-only` 只装配 `ALL_PERMISSIONS` 中的只读工具，`workspace-write` / `full-access` 才装配 `WRITE_PERMISSIONS` 的写文件与命令工具——这是「从工具层面限制只读」，而非依赖提示词约束模型自觉。
 
-**文件沙箱**（`modules/agent/worker/sandbox.ts`）：所有文件类工具统一经 `createGuard` → `guardPath`。路径先 `canonicalize`（逐级回落到最近的已存在祖先再 `realpath`，把软链接与 `..` 都摊平），再按会话权限判断：读取（全局读）一律放行；写入在「工作区内修改」下仅放行项目目录与系统临时目录，越界经 `hitl.ts` → 主进程 → 渲染层发起应用内审批（允许本次 / 本会话允许 / 拒绝）；「完全权限」全局放行。技能库（`RunAgentInput.skillsDir`）是用户主动安装的可信资料，读写与命令均不弹审批；系统目录与用户敏感目录（`~/.ssh` 等）即使完全权限也不允许写入，作为统一兜底拦截。写工具在元信息上标 `requiresApproval`，用于提示与展示。
+**文件沙箱**（`modules/agent/worker/sandbox.ts`）：所有文件类工具统一经 `createGuard` → `guardPath`（多目标场景用 `guardPaths`）。路径先 `canonicalize`（逐级回落到最近的已存在祖先再 `realpath`，把软链接与 `..` 都摊平），再按会话权限判断：读取（全局读）一律放行；写入在「工作区内修改」下仅放行项目目录与系统临时目录，越界经 `hitl.ts` → 主进程 → 渲染层发起应用内审批（允许本次 / 本会话允许 / 拒绝）；「完全权限」全局放行。同一次工具调用的多个越界目标合并为一张卡片、一次应答覆盖全部，目标为磁盘根目录时额外标注「全盘」并提示扫描耗时。技能库（`RunAgentInput.skillsDir`）是用户主动安装的可信资料，读写与命令均不弹审批；系统目录与用户敏感目录（`~/.ssh` 等）即使完全权限也不允许写入，作为统一兜底拦截。写工具在元信息上标 `requiresApproval`，用于提示与展示。
 
 **命令闸门**（`modules/agent/worker/tools/shell.ts` + `shellPolicy.ts`）：`run_command` 仅在「工作区内修改」及以上权限可用，执行前跑危险命令规则库（删除根目录 / 提权 / 下载管道执行 `curl | sh` / fork 炸弹等），命中即把原因回填给模型并拒绝执行，引导其改用安全方式或请用户自行执行；显式访问项目目录外的路径时复用文件工具的越界审批；未命中则在项目目录内 `exec`，默认 60s 超时、`maxBuffer` 2 MB（输出最终还会被截断到 20k）、用户终止时随 `signal` 杀掉子进程，并统一 `executionMode: 'sequential'`。
 
@@ -1451,8 +1514,8 @@ MCP（Model Context Protocol）负责把**外部工具**接进会话：远程服
 **项目与会话**：
 
 - 项目（`desk_project`）绑定本地磁盘目录，作为 Agent 运行的文件沙箱根与工具默认 `cwd`；`memory_enabled` 控制长期记忆，记忆正文与游标随项目行保存；
-- 会话（`desk_session`）归属项目并绑定 Agent，持久化 `project_id / agent_id / provider_id / model_id / permission_mode` 与会话摘要 `summary / summary_last_message_id / summary_update_time`、上下文分项 `context_breakdown`，支持搜索 / 重命名 / 删除 / 排序；项目与 Agent 创建后不可修改；
-- 消息（`desk_message`）按自增 `id` 顺序落库，`data` 保存 Agent 原始消息 JSON，用于会话重建；`turn_id` 标记所属轮次、`source` 记录运行时注入来源（常规消息为空，`runtime:*` 表示运行时注入）；落库增量 + 单事务，生成中切换会话不丢内容；
+- 会话（`desk_session`）归属项目并绑定 Agent，持久化 `project_id / agent_id / provider_id / model_id / permission_mode` 与会话摘要 `summary / summary_last_message_id / summary_update_time`、上下文分项 `context_breakdown`，支持搜索 / 重命名 / 删除 / 排序；项目与 Agent 创建后不可修改；定时任务触发的会话额外记录 `trigger_type='schedule'` 与 `schedule_task_id`；
+- 消息（`desk_message`）按自增 `id` 顺序落库，`data` 保存 Agent 原始消息 JSON，用于会话重建；`turn_id` 标记所属轮次、`source` 记录运行时注入来源（常规消息为空，`runtime:*` 表示运行时注入）；用户提问在发送时立即落库，模型每完成一条消息按本轮快照落库，流式正文另有草稿定时落库，异常退出后可恢复到最近一次完整内容（详见 6.5.4）；
 - 运行时：`modules/chat/main/chatService.ts#sendChat` 校验会话绑定的项目与 Agent → 组装系统指令（Agent 指令 + 长期记忆 + 会话摘要 + SKILL 索引 + 模式 / 工具约束）与历史 → `modules/agent/main/host/runtimeHost.ts` → `modules/agent/worker/session.ts` 创建 / 复用会话级 Agent → 事件流回主进程 → IPC 推送渲染层，按片段发生顺序渲染时间线（思考 → 工具 → 正文交错），思考折叠、工具调用状态与耗时、轮次耗时摘要、会话状态信息条、Markdown 实时渲染与代码高亮。
 
 **生命周期**：任何改变 Agent 能力或模型的操作触发会话运行时清理（`evictAgent` / `resetAgents`），下一轮重新装配；应用退出时回收运行时与终端进程，避免残留。
@@ -1461,7 +1524,7 @@ MCP（Model Context Protocol）负责把**外部工具**接进会话：远程服
 
 本地版在 Agent 执行过程中保留「人」的决策点，分为**被动审批**与**主动询问**两类，二者都由运行时进程发起、主进程转发、渲染层在输入框位置内联展示（不再使用全局模态弹窗）；交互队列按会话隔离，非当前会话的请求不会抢占输入区，切回对应会话时再展示。
 
-- **被动审批（越界权限确认）**：文件类工具越界、需要访问项目目录外时，运行时进程经 `parentPort` 发 `interaction-request`，主进程转渲染层在内联卡片展示，三选一「允许一次 / 本会话全部允许 / 拒绝」；会话级信任仅存内存，重启失效。卡片标题固定「权限审批申请」，使用淡红色风险配色；
+- **被动审批（越界权限确认）**：文件类工具越界、需要访问项目目录外时，运行时进程经 `parentPort` 发 `interaction-request`，主进程转渲染层在内联卡片展示，三选一「允许一次 / 本会话全部允许 / 拒绝」；同一次工具调用的多个越界目标合并为一张卡片（路径逐条列出），「允许一次」覆盖本次调用的全部目标，目标为磁盘根目录时标注「全盘」并提示扫描耗时；会话级信任仅存内存，重启失效。卡片标题固定「权限审批申请」，使用淡红色风险配色；
 - **主动询问（`ask_user`）**：`modules/agent/worker/tools/interaction.ts` 提供 `ask_user` 工具，面向「多个候选方案请用户拍板」：每个问题提供 2~20 个选项，支持单选 / 多选，默认允许用户填写「其他」；需要连续确认多个问题时用 `questions` 一次列出（1~10 个），worker 逐题发起交互，界面在左下角展示 `1/N`。确认操作或补充自由文本直接在回复里提问，不调用该工具。卡片标题固定「用户确认」，使用黄色提示配色；权限校验类交互不开放给该工具，只能由系统沙箱发起；
 - **生命周期**：用户终止、删除会话、运行时重置 / 退出才取消交互；后台会话摘要、长期记忆或配置刷新触发的 `evict` 在本轮结束后执行，避免误取消正在等待的审批；
 - **标准化组件**：渲染层提供权限确认与多选项选择标准组件，Agent 集成后自动启用；应答结果（确认 / 选择值 / 拒绝 / 取消）经协议回传并转为模型可读文本。
@@ -1551,16 +1614,32 @@ desk_llm_trace
 - run 正常结束、异常、用户中止分别以 `success / error / aborted` 收尾；未拿到响应的一律按 `error` 落库，避免出现「空成功」；
 - 回传为 fire-and-forget：worker 不访问数据库，落库失败只记运行日志，不阻断对话。
 
+#### 6.4.9、定时任务调度
+
+- **运行实例即会话**：触发时创建或复用 `desk_session`（`trigger_type='schedule'` + `schedule_task_id`），执行直接调用对话域 `sendChat`；消息、流式、终止、历史、摘要、记忆全部复用，不另建运行实例表。
+- **前台实时渲染**：主进程发起的一轮通过 `turn-start` 事件携带用户提问与开始时刻下发；渲染层没有本地发送动作，收到后补建本轮用户 / 助手消息并接入同一流式状态机，未打开过该会话时先回读历史拼到本轮之前。手动发送与定时触发共用该事件，渲染层以 `streamingIds` 去重，后台定时会话也能实时展示思考 / 工具 / 正文。
+- **运行日志**：`desk_scheduled_log` 为每次触发（含失败跳过 / 超时）落一条记录；`(task_id, slot_at)` 局部唯一索引保证同一计划时刻只执行一次（立即运行的 `slot_at` 为空，不参与唯一）。日志不自动裁剪：按任务 + 触发时间范围分页查询（默认每页 10 条），并由运行日志页「日志清理」按相同维度删除（删除后不可恢复，历史会话不受影响）；应用启动时把上次进程遗留的「进行中」日志统一结算为失败。
+- **调度**：每个启用任务挂一个到下次触发时刻的计时器，触发后写回运行结果并重算下一次；系统唤醒后全量重排，启动不补跑，停用不挂计时器；删除任务先终止在跑轮次并清空进程内运行态，历史会话保留、运行日志一并清理。
+- **巡检兜底**：全局唯一的巡检通道，间隔可配置（默认 60 秒，范围 30 ~ 600 秒）——应挂未挂的计时器重排、停用 / 删除任务的计时器清理、计划时刻已过仍挂旧计时器的记账后重排、计时器目标晚于规则时重排；任务运行超过任务级超时时间主动终止，终止后仍未收尾或运行态悬挂（无在跑轮次超过 5 分钟）强制结算。巡检采用单链 `setTimeout`（不重入）+ 10 秒存活看护，任何异常都续排下一轮，链意外丢失会被看护自动拉起。
+- **调度设置**：不休眠 / 最大并发 / 巡检间隔统一存 `desk_setting`（`scheduleKeepAwake` / `scheduleMaxConcurrency` / `scheduleWatchdogInterval`）；保存时越界直接报错，读取侧只对脏数据做 clamp，巡检间隔变更立即重建巡检链。
+- **任务超时**：任务维度配置 `timeout_minutes`（0 表示不限时），超时由巡检主动终止本轮。
+- **规则**：Cron 段表达式（秒 分 时 日 月 周 年），主进程保存时解析归一，最小间隔 1 分钟；日与周同时指定取交集，不存在的日期自动跳过。
+- **会话选择**：`reuse` 在会话存在、归属该任务且空闲时复用，否则新建；`new` 每次新建。同任务串行：超过全局并发上限、或阻塞策略为「本次调度忽略」时记为失败跳过。
+- **会话阻塞策略**（仅 `reuse`）：`skip` 复用会话进行中时跳过本次调度并记失败跳过；`force` 终止进行中会话，待本轮收尾后按原计划时刻重新触发。
+- **无人值守**：由 `chat/main/interactionPolicy.ts` 在推送渲染层前统一结算——权限审批返回 `denied`（越界写入 / 命令自动拒绝），`ask_user` 返回 `auto`（不伪造用户选择，工具提示模型基于已有信息自行决策并继续后续问题），工具拿到明确结果后继续，不会挂起。
+
+对应实现：`modules/schedule/main/{scheduledTaskService,scheduler,runner,runLog,runState,keepAwake}.ts`、`modules/chat/main/interactionPolicy.ts`、`modules/chat/renderer/store/index.ts`、`modules/schedule/renderer/pages/{tasks,logs,dispatch}.vue`。
+
 ### 6.5、重点设计
 
-#### 6.5.1、权限设计
+#### 6.5.1、权限安全设计
 
 - **文件沙箱**：所有文件工具经统一 `guardPath` 闸门，路径规范化（解析软链接）后限定当前项目目录；
 - **越界审批**：越界操作经 `hitl` → 主进程 → 渲染层在输入框位置内联展示审批，可选「允许本次 / 本会话允许 / 拒绝」，会话级信任记入内存；
 - **权限隔离**：仅可查看不装配写 / 命令工具，从工具层面限制只读；
 - **进程隔离**：渲染进程无 Node 能力，运行时进程无 Electron 能力，敏感能力（密钥、审批编排）留在主进程。
 
-#### 6.5.2、本地配置
+#### 6.5.2、业务数据模型
 
 本地版全部配置与业务数据落单个 SQLite 文件（better-sqlite3 + Drizzle ORM），零服务依赖。
 
@@ -1568,16 +1647,113 @@ desk_llm_trace
 |---|---|
 | `desk_project` | 本地项目（`id / name / path / memory_enabled / memory / memory_last_time / memory_update_time / add_time / update_time`，路径 1:1 唯一；长期记忆随项目行保存） |
 | `desk_agent` | Agent 配置（`id / name / description / avatar / system_prompt / skill_ids / mcp_ids / tool_* / builtin / add_time / update_time`） |
-| `desk_session` | 会话（`id / title / project_id / agent_id / provider_id / model_id / permission_mode / summary / summary_last_message_id / summary_update_time / context_breakdown / add_time / update_time`） |
-| `desk_message` | 消息（`id / session_id / turn_id / role / source / status / content / data / add_time`，`data` 为 Agent 原始消息 JSON，`status` 为归一化消息状态，`source` 为运行时注入来源） |
+| `desk_session` | 会话（`id / title / project_id / agent_id / provider_id / model_id / reasoning_level / permission_mode / trigger_type / schedule_task_id / summary / summary_last_message_id / summary_update_time / context_breakdown / add_time / update_time`；`trigger_type` 区分手动 / 定时，`schedule_task_id` 关联定时任务） |
+| `desk_message` | 消息（`id / session_id / turn_id / role / source / status / content / data / add_time`，`data` 为 Agent 原始消息 JSON，`status` 为归一化消息状态，`source` 为运行时注入来源；用户提问发送即落库，助手 / 工具消息按本轮快照落库） |
 | `desk_provider` | 供应商（`name / base_url / api_key / headers / models / enabled / sort`） |
 | `desk_setting` | 设置（`key / value`） |
 | `desk_skill` | 技能状态（`id` 目录名 / `name / description / version / source / source_id / enabled`，目录内容为权威） |
 | `desk_mcp` | MCP 服务（`name / type / transport / url / headers / command / args / env / cwd / config / remark / enabled / health`） |
+| `desk_scheduled_task` | 定时任务（`id / name / prompt / project_id / agent_id / provider_id / model_id / reasoning_level / permission_mode / schedule_expression / session_mode / session_block_policy / timeout_minutes / enabled / last_run_at / last_run_status / last_error / last_session_id / add_time / update_time`） |
+| `desk_scheduled_log` | 运行日志（`id / task_id / trigger_type / slot_at / status / session_id / error / add_time / update_time`；`(task_id, slot_at)` 局部唯一，记录每次触发与失败跳过原因；不自动裁剪，按任务 + 时间范围手动清理，删除任务时一并清理） |
+| `desk_app_setting` | 应用状态（`app_id / installed / enabled / config / add_time / update_time`，安装与启用分离，`config` 为应用各自 JSON） |
 | `desk_llm_trace` | 模型通讯 trace（`session_id / run_id / step / phase / status / http_status / duration_ms / tokens / request / response / tool_calls / error / add_time`，仅开发者模式写入） |
 
-- **系统配置项**：应用名称 / Slogan、主题（浅色 / 深色 / 跟随系统 + 多主题配色）、语言（中 / 英）、Node / Python 运行环境 PATH、开发者模式等，统一存 `desk_setting`；Agent 指令与能力开关存 `desk_agent`，长期记忆开关与内容存 `desk_project`，会话摘要存 `desk_session`；
-- **数据目录**：默认 `app.getPath('userData')/xxl-ai-desk.sqlite`，可自定义（`userData/desk-config.json`），修改后重启生效。
+- **系统配置项**：应用名称 / Slogan / 品牌资源、主题（浅色 / 深色 / 跟随系统 + 多主题配色）、语言（中 / 英）、Node / Python 运行环境 PATH、开发者模式、定时任务不休眠 / 最大并发 / 巡检间隔等，统一存 `desk_setting`；Agent 指令与能力开关存 `desk_agent`，长期记忆开关与内容存 `desk_project`，会话摘要存 `desk_session`，定时任务存 `desk_scheduled_task`，应用安装 / 启用 / 配置存 `desk_app_setting`；
+- **数据目录**：macOS / Linux 默认 `~/.config/xxl-ai-desk`，Windows 默认 `%APPDATA%\xxl-ai-desk`；可自定义，配置写入固定引导目录下的 `xxl-ai-desk-config.json`，修改后重启生效。
+
+#### 6.5.3、数据目录设计
+
+本地版数据按「是否用户数据、是否需要备份、是否可清理」分为三层：业务数据目录、本机数据目录、系统缓存目录。
+
+##### 1、三类目录
+
+| 类型 | 内容 | 备份 | 可清理 | 随数据目录切换 |
+|---|---|---|---|---|
+| 业务数据目录 | SQLite、SKILL、项目、笔记、tmp | 需要 | 不可随意清理 | 是 |
+| 本机数据目录 | runtime（Node shim、shell 集成） | 不需要 | 可重建 | 否 |
+| 系统缓存目录 | Electron / Chromium 缓存与本地存储 | 不需要 | 可随时清理 | 否 |
+
+| 平台 | 业务数据目录 | 本机数据目录 | 系统缓存目录 |
+|---|---|---|---|
+| macOS | `~/.config/xxl-ai-desk` | `~/Library/Application Support/xxl-ai-desk` | `~/Library/Caches/xxl-ai-desk` |
+| Linux | `~/.config/xxl-ai-desk` | `~/.local/share/xxl-ai-desk` | `~/.cache/xxl-ai-desk` |
+| Windows | `%APPDATA%\xxl-ai-desk` | `%LOCALAPPDATA%\xxl-ai-desk` | `%LOCALAPPDATA%\xxl-ai-desk\cache` |
+
+Linux 分别遵循 `XDG_CONFIG_HOME` / `XDG_DATA_HOME` / `XDG_CACHE_HOME`；目录名统一小写。
+
+##### 2、目录结构
+
+```text
+<业务数据目录>/
+├── xxl-ai-desk.sqlite   # 数据库
+├── skills/              # SKILL
+├── projects/default/    # 项目根目录（含默认项目空间）
+├── notes/               # 笔记
+└── tmp/log/             # 临时文件与日志（便于用户直接查看）
+
+<本机数据目录>/
+└── runtime/
+    ├── bin/             # 内置 Node shim
+    └── shell/           # 终端 shell 集成
+
+<系统缓存目录>/
+├── Cache/               # Chromium 缓存
+├── Code Cache/
+├── GPUCache/
+├── Cookies
+└── Local Storage/
+```
+
+##### 3、边界与生命周期
+
+- **业务数据目录**：唯一需要备份、迁移和跨设备保留的目录；只放用户数据与应用数据库。支持在设置中切换，切换后是独立数据空间。
+- **本机数据目录**：只放与当前机器/安装路径绑定、且可自动重建的运行文件。不随业务数据目录切换，系统清理缓存也不影响；缺失时按需重建。
+- **系统缓存目录**：Electron 的 `userData` / `sessionData` 指向此处，承载 Cache、Cookies、Local Storage 等。可随时清空，仅丢失界面状态与站点登录态，不影响业务数据。
+- `tmp/` 按要求保留在业务数据目录，用于下载、解压与日志，便于用户排查；清理它不影响数据库与笔记。
+
+##### 4、配置与切换
+
+- 配置与切换：配置文件固定为 `<引导目录>/xxl-ai-desk-config.json`（引导目录即默认业务数据目录）；仅自定义数据目录时生成，只有 `dataDir` 字段；默认目录生效时不生成，切回默认时删除。
+- 权限与默认项目：业务数据目录初始化或重启时，若项目表为空则创建 `projects/default` 及默认项目记录，名称「默认项目空间 / Default Workspace」，保证始终至少有一个可用项目。macOS / Linux 三类目录均创建为 `0700`，配置文件 `0600`；Windows 使用用户级 ACL。
+
+
+#### 6.5.4、对话持久化与断点恢复
+
+本地版的对话落库目标是「**已产生的内容尽量不丢**」，而不是等整轮结束再一次性写入。持久化分三层：
+
+1. **用户提问即时落库**：`chatService#sendChat` 校验会话后，先调用 `sessionService#startTurn` 写入用户消息并取得本轮 `turnId`，再解析模型目标、组装历史与执行运行时；模型调用、工具执行、冷启动期间异常退出，用户已发送内容都能恢复；
+2. **完成消息快照落库**：worker 在 `message_end` 回传 `checkpoint` 事件（本轮截至当前的全部新增消息）。主进程按 `turnId` 幂等重写本轮助手 / 工具消息：保留用户提问行，删除本轮其余旧行后按最新快照重建（`replaceTurnMessages`），因此工具调用与工具结果都在完成时立即持久化；
+3. **流式草稿定时落库**：主进程聚合 `delta / thinking`，每 3 秒把当前未结束的回复作为草稿写入本轮，草稿只包含正文 / 思考，不包含未完成的工具调用；长回复执行中途异常时仍能恢复已输出内容。
+
+**主进程发起的轮次**：定时任务 / 立即运行由主进程调用 `sendChat`，渲染层通过 `turn-start` 事件补建本轮消息并接入同一流式状态机（见 6.4.9）；因此后台定时会话的落库、恢复与展示与手动发送完全一致。
+
+**收尾与恢复**：
+
+- 正常结束时用最终完整消息快照再覆盖一次，保证草稿、中间快照与最终结果不重复；
+- 失败只向本轮追加可读错误提示，不再重复写用户提问；应用退出导致的中断先补写草稿，再追加终止备注；
+- 崩溃可能留下「有工具调用、无工具结果」的半轮消息。历史装配时 `chat/shared/history.ts#stripUnpairedToolCalls` 会剔除没有对应工具结果的 `toolCall`，避免下一轮请求因上下文非法被供应商拒绝；
+- 快照重写会改变本轮助手 / 工具消息的自增 `id`（用户提问行与 `turnId` 不变）。生成期间渲染层使用内存中的实时消息，本轮结束后再回读数据库，因此不影响界面。
+
+对应实现：`modules/chat/main/chatService.ts`（落库编排）、`modules/chat/main/sessionService.ts`（`startTurn / replaceTurnMessages / appendTurnMessages`）、`modules/agent/shared/agentProtocol.ts`（`checkpoint` 事件）、`modules/agent/worker/session.ts`（`message_end` 回传快照）、`modules/chat/shared/history.ts`（悬空工具调用清理）。
+
+#### 6.5.5、数据升级与兼容
+
+本地版启动时由 `common/main/db#initDatabase` 统一做结构校验，避免升级后带旧表结构运行导致白屏或写入失败。
+
+**校验方式**：
+
+- 先在内存库执行聚合后的 DDL，得到期望表结构；再读取实际 SQLite 的表与字段做对比；
+- 表缺失、字段缺失，或残留旧版「必填且无默认值」字段，判定为结构不兼容；
+- 打开库、建表或种子执行抛出异常，判定为数据库损坏 / 无法打开。
+
+**恢复流程**：
+
+1. 关闭当前连接，先复制旧库到同目录备份文件 `{原文件名}-backup-{yyyyMMdd-HHmmss}{后缀}`；同一秒多次重建时追加序号，避免覆盖；
+2. 删除数据库文件及其 `-wal` / `-shm` / `-journal`，按最新 DDL 重建并执行各域种子；
+3. 业务数据目录初始化时补齐 `projects/default` 等默认数据，保证启动后至少有一个可用项目；
+4. 重建成功后弹出启动提示，说明原因、结构差异、备份文件路径与日志目录；重建失败则弹出启动失败提示并退出，避免停留在白屏。
+
+按仓库约定，本地版**不为历史字段做迁移脚本**：结构不兼容时以备份 + 重建恢复可用性，旧数据保留在备份文件中。升级前的重要数据由用户按备份文件自行恢复；默认项目、数据目录与权限规则由初始化流程统一兜底。
 
 ## 七、版本更新日志
 
@@ -1686,13 +1862,7 @@ docker compose down
 - 13、【优化】Markdown渲染优化：字体、代码高亮、表格、列表、引用、公式渲染优化；
 - 14、【优化】Thinking渲染优化：单次思考过程渲染限定最大高度，滚动吸底展示最新内容；
 - 15、【体验】外观主题：支持深色模式、浅色模式，以及自定义多主题设置，提升用户体验；
-- 16、【体验】会话区域体验优化：会话区域布局、交互调整，体验性升级； 
-
-> **MacOS 安装说明**：macOS 提示「文件损坏」并非实际损坏，而是安装软件未签名（没有开发者账号）。将安装软件拖入 /Applications 后，终端执行如下命令即可。
-
-```
-sudo xattr -rd com.apple.quarantine /Applications/XXL-AI-Desk.app
-```
+- 16、【体验】会话区域体验优化：会话区域布局、交互调整，体验性升级；
 
 **【云版（Web 服务端）】**
 
@@ -1739,21 +1909,53 @@ sudo xattr -rd com.apple.quarantine /Applications/XXL-AI-Desk.app
 
 > **MacOS 安装说明**：macOS 提示「文件损坏」并非实际损坏，而是安装软件未签名（没有开发者账号）。将安装软件拖入 /Applications 后，终端执行如下命令即可。
 
+### v1.6.0 Release Notes[2026-11-15]
+- 1、【新增】定时任务：
+  - 任务管理（定时）：支持定时任务的新增 / 编辑 / 启停 / 删除 / 立即运行，按关键词、项目、Agent、状态筛选；任务配置包含任务指令、触发规则、会话设置方式与会话属性；
+  - 任务会话（实例）：任务运行触发会话，通过新增的“触发类型”区分触发来源；支持每次新建会话 / 复用上次会话；定时任务触发的会话，子菜单会话名称后缀添加 闹钟icon 标记；定时轮次由主进程发起，界面实时展示思考 / 工具 / 正文；
+  - 运行日志：每次触发一条记录，含触发方式 / 状态 / 会话 / 失败跳过原因；支持按任务与触发时间范围筛选、分页，以及按任务 + 时间范围手动清理；删除任务时日志一并清理，历史会话保留；
+  - 会话阻塞策略：复用上次会话时，可配置「本次调度忽略」（记失败跳过）或「强制调度执行」（终止进行中会话后重新触发）；
+  - 任务超时：任务维度设置超时时间（不限时 / N 分钟），超时后由巡检主动终止本轮；
+  - 调度兜底：巡检间隔可配置（默认 60 秒，范围 30 ~ 600 秒），自动补偿丢失的计时器、记录系统休眠 / 时间跳变错过的触发，并对运行超时与运行态悬挂强制结算；巡检采用单链 + 存活看护，异常必续排、中断可自愈；
+  - 电脑休眠：任务界面支持设置「保持系统不睡眠」（屏幕仍可关闭），避免打断任务；
+  - 无人值守：定时会话中的权限审批自动拒绝，`ask_user` 交回模型自行决策，避免工具调用永久挂起；
+- 2、【新增】UI自定义增强：支持自定义应用名称、Slogan、Logo、会话区背景图与背景不透明度，提升用户体验；
+- 3、【新增】浏览器操作动作可视化，工具操作时实时展示操作动作以及状态信息；
+- 4、【新增】会话正在思考时，新增思考内容跑马灯展示交互；
+- 5、【体验】数据目录规范化：macOS / Linux 统一至 `~/.config/xxl-ai-desk`，Windows 统一至 `%APPDATA%\xxl-ai-desk`；SKILL默认位置为 「数据目录/skills」；项目默认位置为 「数据目录/projects」（项目表为空时自动创建 `projects/default` 默认项目空间）；笔记默认位置为 「数据目录/notes」；
+- 6、【安全】权限拦截逻辑调整：支持合并多次权限拦截人记交互，降低人工介入操作复杂度。
+- 7、【安全】终端命令策略优化：过滤无害设备路径（/dev/null 等），避免无效越界与危险判定中断任务。
+- 8、【体验】笔记应用交互调整：笔记根目录隐藏；笔记与目录支持拖动；目录树支持展开/折叠快捷操作；笔记目录/文件快捷操作功能丰富；笔记文件名限制非法字符；
+- 9、【重构】笔记重构：新增底部状态栏；主题样式升级，选中和未选中内容调整区分度；编辑器左侧显示行号列紧凑调整；编辑器操作组件和快捷键丰富；编辑区与预览区滚动联动；
+- 10、【体验】文件工具交互优化：文件根目录隐藏；文件编辑器左侧显示行号列紧凑调整；
+- 11、【体验】文件工具：工具栏组件重构；组件样式规范统一；
+- 12、【体验】全局按钮浮动文案优化，取消延迟文案展示；
+- 13、【体验】浏览器：工具栏操作组件丰富、且新支持快捷键；
+- 14、【重构】浏览器Tool重构丰富，开放Agent使用；
+- 15、【修复】会话输入框宽度兼容性调整，底部组件支持缩放避免布局错乱；会话模式/模型切换，本轮会话不中断、下轮会话生效；
+- 16、【修复】会话轮次多步运行中，偶发中断失败问题修复；
+- 17、【优化】内置工具输出上限调大，避免输出受限剪裁必要信息；
+- 18、【修复】升级兼容性问题解决，优化提示并备份旧数据、初始化新数据（sqlite），避免升级后白屏问题；
+- 19、【体验】UI显示宽高：适配多宽高显示器，提升体验；
+- 20、【优化】对话持久化与断点恢复：发送会话后立即落库用户提问；模型每完成一条消息按本轮快照落库；流式回复草稿每 3 秒落库。长轮次或异常退出后重新打开会话，可恢复到最近一次完整内容，不再出现整轮空白。
+
+**MacOS 安装说明**：macOS 提示「文件损坏」并非实际损坏，而是安装软件未签名（没有开发者账号）。将安装软件拖入 /Applications 后，终端执行如下命令即可。
 ```
 sudo xattr -rd com.apple.quarantine /Applications/XXL-AI-Desk.app
 ```
 
-### v1.5.1 Release Notes[ING]
+### v1.6.1 Release Notes[ING]
 - 1、【ING】应用中心：
-  - 应用中心：设计应用统一契约（app.manifest），建设应用契约收集与应用注册能力；搭建应用宿主能力，提供路由挂载、i18n注册等等能力，支持内部及动态外部应用托管注册；
+  - 应用中心：设计应用统一契约（app.manifest），建设应用契约收集与应用注册能力；搭建应用宿主托管能力，提供路由挂载、i18n注册等能力，支持内部及动态外部应用托管注册；
   - 内置应用：丰富内置应用集合，基于统一契约简化开发；
-  - 外部应用：提供应用开发规范及SKILL，支持外部应用开发及动态加载注册（安装路径下制定目录动态扫描）；
-- 2、【ING】自动化：
-  - 任务管理：支持任务列表管理，任务状态、名称筛选等；新增任务支持设置 任务指令、模型、模式、项目、Agent 和 执行时间 等；
-  - 任务会话：任务会话复用普通会话，通过类型区分触发来源；任务触发类会话，子菜单会话名称后缀添加 闹钟icon 标记；
-- 3、【ING】UI自定义增强：支持自定义更换Logo、背景图等，提升用户体验；
-- 4、【ING】Bot机器人：支持桌面机器人，可在桌面悬浮窗中与Agent进行对话，支持快捷键唤起、消息通知等功能；
-
+  - 外部应用：提供应用开发规范及SKILL，支持外部应用开发及动态加载注册（安装路径下制定目录动态扫描、自动注册托管运行）；
+- 2、【ING】Bot机器人：Super Agent 方案；桌面机器人，可在桌面悬浮窗中进行互动；体现工作状态，同步消息通知；
+- 3、【ING】长程任务：Goal模式 方案；
+  - 任务规划（定义）：任务目标 + 验收标准 + 动态规划步骤；
+  - 任务执行（实例）：任务实例 + 当前步骤 + 进展；失败巡检，避免中断；循环检测，避免死循环；
+- 4、【ING】任务分类标准：触发方式（手动/定时/续跑）、运行模式（普通/goal&长程）、状态（排队/运行中/等待确认/完成/失败/取消/中断）；
+- 5、【ING】工具调用步骤调整：当前主要有执行命名、打开网页等内置工具；新增 SKILL调用、MCP调用 等工具调用过程记录；
+- 6、【ING】任务及会话重构：会话、任务数据结构，枚举状态重构标准化；
 
 ### TODO LIST
 - 1、AI 能力增强：
@@ -1762,15 +1964,16 @@ sudo xattr -rd com.apple.quarantine /Applications/XXL-AI-Desk.app
   - Agent 生图：文生图 / 图生图，支持集成多模型供应商；
   - Agent 生视频：文生视频 / 图生视频，支持集成多模型供应商；
   - Chat 对话增强：对话记忆控制、多模态输入；
-- 2、云本结合：skill/mcp/rag对接。saas。
+- 2、云本结合：skill/mcp/rag对接。saas模式。
 - 3、云版：
   - OpenAPI：针对搭建的Agent提供OpenAPI接口能力，通过agentId + accessToken访问，便于集成到第三方系统应用（提供内置Agent对话能力，可用于功能调试或快速集成应用）。
   - 可观测：支持Agent可观测，包括Session对话、工具/知识/记忆等Trace明细可观测等。
   - SKILL文件变更实效性：SKILL正文结合版本与指纹信息主动更新；（双版本均校准）
 - 4、Desk版本：
   - 长程任务：SQLite；“动态规划-分步执行-验收”；失败巡检、延续执行、防止死循环；
-  - 会话定制：会话时选择 MCP、SKILL、Agent；
   - 输入框支持输入队列：支持输入会话输入队列功能，上轮对话结束后、自动触发下一轮对话，提升操作效率；
+- 5、云&本功能对齐：Agent、扩展（SKILL/MCP/内置工具）、会话与记忆、知识库、应用中心、供应商模型；定时任务。
+- 6、云版多版本：Mysql&Redis&Milvus or ALL-In-SQLite;
 
 
 ## 八、其他
