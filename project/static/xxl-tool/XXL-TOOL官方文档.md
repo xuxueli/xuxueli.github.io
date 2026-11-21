@@ -206,6 +206,10 @@ RegexTool.extract("(\\d+)-(\\d+)", "phone: 123-456", 0);        // 提取匹配�
 RegexTool.replaceAll("xyz", "hello world", "test");             // 替换所有匹配正则表达式的子串
 RegexTool.split(",", "apple,banana,orange");                    // 按照正则表达式分割字符串
 
+// EnumTool
+EnumTool.getEnumItemList({enumClass});                          // 获取枚举类的枚举项列表
+
+
 // …… 更多请查阅API
 ```
 
@@ -446,7 +450,7 @@ Assertions.assertEquals(response2.getCode(), ResponseCode.CODE_200.getCode());
 </dependency>
 ```
 
-- b、定义Java对象
+- b、定义Java对象    
 
 ```java
 @ExcelSheet(name = "商户列表", headColor = IndexedColors.LIGHT_GREEN)
@@ -471,7 +475,7 @@ public class ShopDTO {
 
 - c、Excel导入、导出代码
 
-常规方式：
+常规方式：   
 ```
 // 参考测试代码：com.xxl.tool.test.excel.ExcelToolTest
 
@@ -549,7 +553,7 @@ public static List<String> findEmojis(String input) | 查找输入字符转中�
 
 **使用指南**
 
-- a、使用示例
+- a、使用示例  
 
 ```java
 // 参考测试代码：com.xxl.tool.test.emoji.EmojiToolTest
@@ -574,7 +578,7 @@ System.out.println("hexdecimal decode: " + EmojiTool.decodeToUnicode(hexdecimal,
         
 ```
 
-- b、运行日志输出
+- b、运行日志输出    
 
 ```text
 aliases encode: 一朵美丽的茉莉:rose:
@@ -670,7 +674,7 @@ RespDTO result = HttpTool.createPost("https://news.baidu.com/widget?ajax=json&id
 ```
 
 - **c、接口&注解编程**：
-
+  
 基于接口&注解编程，极致提效Http请求：定义请求接口，支持注解式设置请求参数，工具底层自动处理请求地址生成、参数设置，以及出入参序列化/反序列化等工作；
 
 使用示例01：
@@ -738,7 +742,7 @@ IPTool.toAddressString(new InetSocketAddress(host, port)));
 IPTool.toAddress(address));
 ```
 
-### 2.11、JsonRpc
+### 2.11、JsonRpc  
 
 **功能定位**
 一个轻量级、跨语言远程过程调用实现，基于json、http实现（传统RPC框架对比：[XXL-RPC](https://github.com/xuxueli/xxl-rpc)）。
@@ -894,7 +898,7 @@ double cost = smoothBursty.acquire();
 boolean result = smoothBursty.tryAcquire(100, TimeUnit.MILLISECONDS);
 ```
 
-### 2.13、Auth模块
+### 2.13、Auth模块   
 一系列权限认证相关工具
 
 **Jwt认证：**    
@@ -1162,12 +1166,12 @@ trie.startsWith("app");
 - 5、导入时支持空Excel；导出时限制非空，否则无法进行类型推导。
 
 ### v1.2.0 Release Notes[2020-04-16]
-- 将 XXL-EXCEL 和 XXL-Emoji 两个单独项目，统一合并至 XXL-TOOL，方便统一迭代维护；
+- 将 XXL-EXCEL 和 XXL-Emoji 两个单独项目，统一合并至 XXL-TOOL，方便统一迭代维护； 
 - excel模块：
-  - 1、Excel 多版本导入导出兼容支持，包括：HSSFWorkbook=2003/xls、XSSFWorkbook=2007/xlsx ；
-  - 2、升级POI至4.1.2版本；
+    - 1、Excel 多版本导入导出兼容支持，包括：HSSFWorkbook=2003/xls、XSSFWorkbook=2007/xlsx ；
+    - 2、升级POI至4.1.2版本；
 - emoji模块：
-  - 1、json组件调整为调整为gson；
+    - 1、json组件调整为调整为gson；
 
 ### v1.3.0 Release Notes[2024-06-09]
 - 1、开源协议变更，由 GPLv3 调整为 Apache2.0 开源协议；
@@ -1200,7 +1204,7 @@ trie.startsWith("app");
 
 ### v1.4.2 Release Notes[2025-05-17]
 - 1、【强化】强化 ExcelTool 工具：一个基于注解的 Excel 与 Java对象 相互转换及导入导出工具；一行代码完成Java对象和Excel之间的转换。
-  - a、Excel转换注解强化，支持忽略期望不导出的列：@ExcelField.ignore
+  - a、Excel转换注解强化，支持忽略期望不导出的列：@ExcelField.ignore 
   - b、Excel列数据 与 Java对象Field 映射逻辑强化，支持根据 fieldName 与 注解名称 匹配，不强要求字段顺序必须保持一致；
   - c、Excel读取逻辑优化，降低小概率文件释放延迟问题。
 - 2、【新增】新增 CsvTool 工具，提供Csv文件读写操作能力
@@ -1298,14 +1302,31 @@ trie.startsWith("app");
 - 2、【强化】HttpTool 强化：支持文件数据本地下载；
 - 3、【升级】升级多项依赖至较新版本；
 
-### v2.5.2 Release Notes[ING]
+### v2.5.2 Release Notes[2026-08-08]
+- 1、【修复】CaptchaTool 算式验证码中的除法题仅生成可整除场景，避免出现非整除题目与整数答案不一致的问题；
+- 2、【新增】EnumTool：枚举工具，支持枚举结构约束、枚举类反射获取数据等；
+- 3、【升级】升级多项依赖至较新版本；
+
+### v2.6.0 Release Notes[2026-11-22]
+- 1、【AI】Agent项目规范：新增 Agents.md，提供Agent编程规范，约束并提升Agent开发质量；
+- 2、【强化】CyclicThread：新增 isRunning 方法，用于判断线程运行状态。
+- 3、【兼容】GsonTool 显式设置数字解析策略，保持反序列化到 Object 时整数/浮点的既有输出行为。
+- 4、【修复】BeanTool.convertBeanFieldToMap：修复嵌套 Map 转换时键值取值与转换错误的问题；
+- 5、【优化】DateTool.betweenYear / betweenMonth：由固定 365 天/30 天换算调整为按自然日历年、月计算完整差值；
+- 6、【优化】ReflectionTool.makeAccessible：改用 trySetAccessible，替换已废弃的 isAccessible 调用。
+- 7、【优化】工具类完善注释：提升工具类可读性，便于开发者理解和使用。
+- 8、【优化】ExcelTool 读取时改用 Constructor.newInstance 实例化行对象，替换已废弃的 Class.newInstance；
+- 9、【升级】升级多项依赖至较新版本；CI 构建 Actions 升级至较新版本；
+
+### v2.6.1 Release Notes[ING]
+- 1、【TODO】HttpTool新增支持代理设置；
 
 
 ### TODO LIST
 - Excel模块
-  - 1、自定义默认行高
-  - 2、单表行数限制：2003/xls=65536，2007/xlsx=1048576；行数限制内进行性能测试和优化；
-  - 3、Java已经支持全基础数据类型导入导出，但是Excel仅支持STRING类型CELL，需要字段属性支持定义CELL类型；
+    - 1、自定义默认行高
+    - 2、单表行数限制：2003/xls=65536，2007/xlsx=1048576；行数限制内进行性能测试和优化；
+    - 3、Java已经支持全基础数据类型导入导出，但是Excel仅支持STRING类型CELL，需要字段属性支持定义CELL类型；
 - emoji模块:升级Emoji版本至最新Release版本：Unicode Emoji 11.0；
 - 升级JDK原生HttpClient；
 
