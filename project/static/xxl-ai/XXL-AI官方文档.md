@@ -25,7 +25,7 @@ XXL-AI 是一个「**云本结合**」的 AI Agent 开发平台，提供两种�
 | 面向 | 团队——多用户、多业务空间（Tenant） | 个人——单用户本地工作台 |
 | 定位 | Agent 编排、一键发布、权限治理 | 本地优先，直接操作本机项目与系统能力 |
 | 扩展 | MCP + SKILL + RAG，多供应商，流式对话 | 本地文件 / 终端 / 浏览器面板，三档权限模式 |
-| 模块 | `xxl-ai-api` + `xxl-ai-ui`（+ `xxl-ai-sample`） | `xxl-ai-desk` |
+| 模块 | `xxl-ai-api` + `xxl-ai-ui` | `xxl-ai-desk` |
 | 依赖 | MySQL + Redis + Milvus | 零依赖（仅本地 SQLite） |
 
 
@@ -549,7 +549,7 @@ npm run build:win
 
 **运行原理**
 
-- 触发规则为 Cron 表达式（秒 分 时 日 月 周 年，本地时区）；主进程为每个启用任务挂计时器，到点创建会话并复用对话链路执行任务指令。
+- 触发规则为 Cron 表达式（秒 分 时 日 月 周 年，本地时区）；主进程为每个启用任务维护一个 croner 调度器，触发回调只做准入与派发，会话轮次异步执行，不阻塞计时器。
 - 仅在应用运行期间触发：启动不补跑历史计划，系统唤醒后重新对齐，错过与跳过的触发记入运行日志。
 - 同一任务串行执行：上一轮未结束时按会话阻塞策略「忽略本次 / 强制调度」处理；所有任务受最大并发数限制。
 - 任务维度设置超时时间（不限时 / N 分钟），超过后由巡检主动终止本轮；运行态悬挂由巡检兜底结算，避免任务永久卡在运行中。
@@ -596,7 +596,7 @@ XXL-AI 提供「**云本结合**」两种交付形态，二者同源同品牌、
 
 | 项 | 云版（Web 服务端） | 本地版（Desk 桌面端） |
 |---|---|---|
-| 仓库模块 | `xxl-ai-api` + `xxl-ai-ui`（Monorepo，含 `xxl-ai-sample`） | `xxl-ai-desk`（独立子工程） |
+| 仓库模块 | `xxl-ai-api` + `xxl-ai-ui`（Monorepo） | `xxl-ai-desk`（独立子工程） |
 | 产品形态 | B/S Web 应用，浏览器访问（开发 `:3000`，部署 `:8080` 单包） | C/S 桌面应用，Electron 一键安装（mac / win / linux） |
 | 运行位置 | 服务器（集群可水平扩展） | 用户本机（单机本地优先） |
 | 服务对象 | 多用户 / 多业务空间（Tenant）团队 | 单用户本地工作台 |
@@ -1249,7 +1249,7 @@ public Response<PageModel<MessageDTO>> pageList(...) { ... }
 
 ```
 xxl-ai-desk/
-├── electron.vite.config.ts        # 三进程构建配置（主进程双入口：index + agent/worker/worker）
+├── electron.vite.config.ts        # 三进程构建配置（主进程双入口：index + chat/harness/worker/worker）
 ├── electron-builder.yml           # 打包配置
 └── src/
     ├── common/                    # 跨域公共层：被 ≥2 个领域复用且无业务规则
@@ -1325,7 +1325,7 @@ sudo xattr -rd com.apple.quarantine /Applications/XXL-AI-Desk.app
 
 ### 6.4、Harness 组件
 
-本地版 Harness 即 Pi Agent 运行时（独立 `utilityProcess`）：主进程 `modules/chat/main/chatService.ts` 产出只读运行时配置，经 `modules/agent/shared/agentProtocol.ts` 下发，`modules/agent/worker/session.ts` 装配「模型 + 系统指令 + 内置工具 + MCP 工具 + 技能索引 + 人机交互工具」后创建 Agent，事件流回传主进程再经 IPC 推送渲染层。
+本地版 Harness 即 Pi Agent 运行时（独立 `utilityProcess`）：主进程 `modules/chat/main/chatService.ts` 产出只读运行时配置，经 `modules/agent/shared/agentProtocol.ts` 下发，`modules/chat/harness/worker/loop.ts` 装配「模型 + 系统指令 + 内置工具 + MCP 工具 + 技能索引 + 人机交互工具」后创建 Agent，事件流回传主进程再经 IPC 推送渲染层。
 
 本地版把「能力扩展」统一收敛到一个**扩展中心**（导航 `plugin`，子菜单 **Agent / MCP / SKILL / 内置工具**）。其中 **Agent 是能力编排实体**：一个 Agent 持有系统指令、SKILL / MCP 引用与内置工具分类开关；会话创建时必须选择 Agent 并绑定（`desk_session.agent_id`），运行时的指令与能力全部来自该 Agent。MCP / SKILL / 内置工具仍是独立能力域，形态各异，但最终都归一为 Pi 的 `AgentTool` 装配进同一个会话 Agent：MCP 提供**外部工具**（进程内协议连接），SKILL 提供**流程知识**（文件即插件，按需读取），内置工具提供**开箱可用的本地能力**（文件、命令、浏览器、时间、人机交互）。三者共用同一套元信息、模式过滤、沙箱与审批、系统提示注入机制，区别只在「来源、装配方式、生效粒度」。
 
@@ -1338,7 +1338,7 @@ sudo xattr -rd com.apple.quarantine /Applications/XXL-AI-Desk.app
 | 装配入口 | `modules/mcp/worker/tools.ts` | `modules/skill/worker/tools.ts` | `modules/agent/worker/tools/index.ts` 注册表 |
 | 暴露给模型 | 每个远程工具一个同名工具（`mcp_{服务}_{工具}`） | 一个 `read_skill` 工具 + 系统提示中的技能索引 | 每个工具一个（`read_file` / `run_command` …） |
 | 权限过滤 | 仅可查看仅 `readOnlyHint` 工具 | 只读工具三档均可用 | 按 `ToolMeta.permissionModes` 声明 |
-| 生效方式 | 保存 / 删除后 `resetAgents`，下一轮重建 | 导入 / 启停 / 删除后 `resetAgents` | Agent 保存后清理绑定会话，下一轮重建 |
+| 生效方式 | 保存 / 删除只落数据，下一轮按装配指纹重建 | 导入 / 启停 / 删除只落数据，下一轮按装配指纹重建 | Agent 保存只落数据，下一轮按装配指纹重建 |
 
 **分层职责**（与云版 `business / harness` 的思想一致，本地版按进程切分）：
 
@@ -1349,14 +1349,14 @@ sudo xattr -rd com.apple.quarantine /Applications/XXL-AI-Desk.app
         │  产出只读运行时配置：会话绑定的 Agent + 勾选的 McpRuntimeConfig[] / SkillRuntimeConfig[]
 契约层（模块 shared）   modules/{agent,mcp,skill,app}/shared/contracts.ts（跨进程 DTO，渲染层与运行时共用）
         │  经 agentProtocol 的 RunAgentInput 下发
-装配层（运行时进程）    modules/agent/worker/session.ts：模型 + Agent 指令 + 记忆 + 内置工具 + MCP 工具 + 技能索引 → Agent
+装配层（运行时进程）    modules/chat/harness/worker/loop.ts：模型 + Agent 指令 + 记忆 + 内置工具 + MCP 工具 + 技能索引 → Agent
         │  AgentTool[]
 执行层（运行时进程）    modules/agent/worker/{sandbox,hitl}.ts（路径闸门 / 越界审批）
                         modules/{file,agent,browser,skill}/worker/*（内置工具）
                         modules/mcp/worker/*（连接缓存 + 调用）· 主进程桥（审批转发、浏览器动作）
 ```
 
-一轮对话的插件装配时序（`modules/chat/main/chatService.ts#sendChat` → `modules/agent/main/host/runtimeHost.ts` → `modules/agent/worker/session.ts`）：
+一轮对话的插件装配时序（`modules/chat/main/chatService.ts#sendChat` → `modules/chat/harness/main/runtimeHost.ts` → `modules/chat/harness/worker/loop.ts`）：
 
 ```
 主进程 chatService
@@ -1379,32 +1379,77 @@ sudo xattr -rd com.apple.quarantine /Applications/XXL-AI-Desk.app
 
 **安全边界**：能力再开放也不越过三层闸门——**权限闸门**（仅可查看不装配写 / 命令工具，MCP 只放行显式只读的工具）、**路径闸门**（所有文件类工具统一经 `guardPath`，按权限模式放行全局读、项目与临时目录写，越界转人工审批）、**拦截闸门**（危险命令与敏感路径直接拒绝，不请求审批）。三者相互独立，任一命中即可阻止副作用。
 
-**变更生效**：Agent 配置与工具集合都在会话 Agent 创建时固化，因此任何改变工具集合的操作（保存 Agent、保存 / 删除 MCP、导入 / 启停 / 删除技能、切换工具开关、切换模型、项目记忆变更）都会清理相关会话运行时（`evictAgent` / `resetAgents`），下一轮对话重新装配；同一会话的已发生消息由 `desk_message` 恢复，不因重建丢失上下文。
+**变更生效**：Agent 配置与工具集合在会话 Agent 创建时固化，会话 Loop 以运行时装配指纹（Agent / 记忆 / 摘要 / SKILL / MCP / 权限 / 工具 / 供应商）判断是否重建。保存 Agent、保存 / 删除 MCP、导入 / 启停 / 删除技能、切换工具开关 / 模型、项目记忆变更均只落数据，下一轮自动重建；同一会话的已发生消息由 `desk_message` 恢复，不因重建丢失上下文。
 
 工程落位（与 §6.2 一致，模块纵向切片）：
 
 | 层 | 文件 |
 |---|---|
 | 主进程业务 | `modules/agent/main/{agentService,agentMemoryService,runtimeTarget,seed}.ts`、`modules/chat/main/sessionSummaryService.ts`、`modules/mcp/main/{service,runtime,discover}.ts`、`modules/skill/main/{service,import,discover,github,install}.ts`、`modules/provider/main/providerService.ts` |
-| 主进程 harness | `modules/agent/main/host/runtimeHost.ts`（托管 / 通信）、`modules/agent/main/host/interaction.ts`（人机交互桥）、`modules/mcp/main/community/mcpSoAdapter.ts`、`modules/skill/main/community/skillsShAdapter.ts`、`modules/skill/main/github/*` |
-| 运行时进程 | `modules/{file,agent,browser,skill}/worker/*`（内置工具）、`modules/agent/worker/{sandbox,hitl,trace}.ts`、`modules/agent/worker/{memory,summary}.ts`、`modules/mcp/worker/*`（MCP 客户端与装配） |
+| 主进程 harness | `modules/chat/harness/main/runtimeHost.ts`（托管 / 通信）、`modules/chat/harness/main/interaction.ts`（人机交互桥）、`modules/mcp/main/community/mcpSoAdapter.ts`、`modules/skill/main/community/skillsShAdapter.ts`、`modules/skill/main/github/*` |
+| 运行时进程 | `modules/{file,agent,browser,skill}/worker/*`（内置工具）、`modules/agent/worker/{sandbox,hitl}.ts`、`modules/chat/harness/worker/{loop,model,memory,summary,trace}.ts`、`modules/mcp/worker/*`（MCP 客户端与装配） |
 | 契约 | `modules/agent/shared/{contracts,agentProtocol}.ts`、`modules/mcp/shared/contracts.ts`、`modules/skill/shared/contracts.ts`、`modules/provider/shared/contracts.ts` |
 | 渲染层 | `modules/plugin/renderer/{pages,components,builtin}`、`modules/agent/renderer/{pages,components}`、`modules/{mcp,skill}/renderer`、`modules/toolPanel/renderer` |
 
-#### 6.4.1、供应商
+#### 6.4.1、会话 Loop 设计
+
+本地版会话 Loop 统一收敛在 `modules/chat/harness`：`chat/main` 负责会话生命周期、上下文落库与状态回写，`agent` 只保存 Agent 配置，扩展中心 / 应用中心 / 系统设置只提供配置与文件数据，不参与 Loop 逻辑。
+
+**一、会话 Loop 架构**
+
+```
+chat/main/chatService        校验会话 / 项目 / Agent，装配 SKILL、MCP、记忆、摘要与历史
+        │  RunAgentInput + runtimeFingerprint
+chat/harness/main/runtimeHost  托管 utilityProcess、转发流式事件、配对交互
+        │
+chat/harness/worker/loop       会话级 Agent 缓存 → 模型请求 → 工具 / MCP / SKILL → 事件回传
+        └─ model / memory / summary：统一模型通道
+```
+
+- **主进程**：`runtimeHost` 管进程与协议；`interaction` 把权限审批 / 提问转渲染层并联动会话状态；`systemPrompt` 统一生成提示词。
+- **运行时进程**：`loop` 按会话创建 / 缓存 Agent，完成模型请求、工具调用、MCP 装配与 SKILL 索引注入；事件流经主进程推送渲染层。
+- **一轮链路**：`chatService` 校验会话、项目与 Agent → 读取 Agent 选中的 SKILL / MCP、项目记忆与会话摘要 → 生成系统提示与历史 → 交 `runAgent` → 流式事件回传 → 落库并回写 `desk_session.status`。
+- **配置失效**：`runtimeFingerprint` 覆盖 Agent 指令、记忆、摘要、SKILL、MCP、权限、工具开关、模型与供应商配置；变化时 `loop` 下一轮自动重建 Agent，配置模块无需调用运行时清理。
+- **边界**：MCP / SKILL / 文件 / 浏览器 / 终端仍是独立能力域；权限模式、路径闸门、危险命令拦截与越界审批在工具执行层统一收口。
+
+**二、会话模型标准化**
+
+| 属性 | 枚举 | 默认 | 对 Loop 的影响 |
+|---|---|---|---|
+| 触发来源 `triggerType` | `manual` / `schedule` / `resume` | `manual` | 仅备注；`schedule` 固定关闭人机模式 |
+| 权限模式 `permissionMode` | `read-only` / `workspace-write` / `full-access` | `workspace-write` | 决定工具装配与读写 / 命令范围 |
+| 人机模式 `humanMode` | `on` / `off` | `on` | `on` 时审批 / 提问进入渲染层；`off` 时审批自动拒绝、提问交回模型 |
+| Loop 模式 `loopMode` | `normal` / `goal` | `normal` | 本期仅落属性，Goal 预留 |
+| 会话状态 `status` | `idle` / `running` / `waiting-confirm` / `completed` / `failed` / `aborted` | `idle` | Loop 状态唯一对外感知入口，实时落 `desk_session` |
+
+- 状态流转：`idle → running → completed / failed / aborted`；人机交互入队进入 `waiting-confirm`，结算后恢复 `running`。
+- 应用启动时将遗留的 `running` / `waiting-confirm` 结算为 `failed`，避免外部长期看到运行中。
+- 定时任务只传 `triggerType='schedule'`，会话创建与 Loop 判定统一将该会话的生效人机模式收敛为 `off`。
+
+**三、模型提示词结构化**
+
+系统提示词由 `harness/main/systemPrompt.ts` 统一装配，`SystemPromptSources` 一个字段对应一类业务事实：
+
+- Agent 指令、项目长期记忆、会话摘要、SKILL 索引、MCP 服务索引、权限模式、内置工具开关。
+- 按固定顺序渲染，空段自动省略：**Agent 指令 → 记忆 → 摘要 → SKILL 索引 → MCP 索引 → 权限说明 → 工具使用约束 → 人机交互说明**。
+- SKILL / MCP 常驻上下文只放索引：SKILL 正文由 `read_skill` 按需读取，MCP 工具由本轮工具列表提供，避免上下文膨胀。
+- 内置工具清单由运行时按实际装配结果经 `buildToolGuide()` 追加，模型只能调用本轮真实提供的工具。
+- 提示词变化计入 `runtimeFingerprint`，与工具 / 模型配置变化共用同一套重建机制。
+
+#### 6.4.2、供应商
 
 供应商能力：兼容 OpenAI 协议，采用「供应商 + 模型」两级本地配置（名称、Base URL、API Key、自定义 Header、模型列表、启用状态、排序），首次启动自动预置 OpenCodeGo / Ollama / Deepseek / 智谱GLM，安装即用。
 
 模型在供应商下按用途分类（通用模型 / 对话模型 / 嵌入模型 / 文生图模型）：只有对话模型可用于会话，嵌入 / 文生图模型在模型选择器中不参与会话选择；对话模型额外支持推理等级 Default / Low / High / Max，随会话持久化，Default 交由供应商决定，Max 由 Pi 按模型能力自动降级。
 
-实现要点（`modules/provider/main/providerService.ts` + `modules/agent/worker/models.ts`）：
+实现要点（`modules/provider/main/providerService.ts` + `modules/chat/harness/worker/model.ts`）：
 
 - **配置落库**：供应商配置存 `desk_provider`，API Key 经 `modules/provider/main/securityService.ts` 编解码后入库（不落明文），模型列表与请求头以 JSON 文本存储；
 - **模型解析**：运行时按当前供应商 + 模型构建 Pi 模型实例，请求统一携带 `User-Agent: XXL-AI`，支持自定义 Header；
-- **变更生效**：供应商保存 / 删除、会话切换模型均触发 `resetAgents()`，下一轮对话重建模型与工具集合；
+- **变更生效**：供应商保存 / 删除、会话切换模型均由运行时装配指纹识别，下一轮对话重建模型与工具集合；
 - **可用性与升级**：设置页支持远程模型列表拉取（`/models`）与手工维护；客户端支持自动检测新版本并引导升级。
 
-#### 6.4.2、SKILL 技能：市场与管理
+#### 6.4.3、SKILL 技能：市场与管理
 
 SKILL 是**「文件即插件」**的流程知识包：一个目录 + 一份 `SKILL.md`（YAML frontmatter 提供 `name / description / version`，正文是操作手册与脚本）。它的价值不在「新增函数」，而在**把领域流程按需注入上下文**——模型先看到技能目录，判断任务匹配后再读正文。
 
@@ -1424,9 +1469,9 @@ SKILL 是**「文件即插件」**的流程知识包：一个目录 + 一份 `SK
 
 **上下文经济**：如果直接把所有 `SKILL.md` 全量拼进系统提示，几个技能就会吃掉数万 token 且相互干扰；因此采用「**索引常驻 + 正文按需**」的两级加载，多数对话的常驻开销只有每技能一行。
 
-**生效**：导入、启停、删除均调用 `resetAgents()`；删除时同时移除目录与记录。
+**生效**：导入、启停、删除只更新目录与记录，下一轮由装配指纹重建；删除时同时移除目录与记录。
 
-#### 6.4.3、MCP 工具：市场与管理
+#### 6.4.4、MCP 工具：市场与管理
 
 MCP（Model Context Protocol）负责把**外部工具**接进会话：远程服务走 Streamable HTTP，本地服务以 stdio 子进程拉起。客户端只依赖 Pi 官方 `@earendil-works/pi-mcp`，不自行实现协议。
 
@@ -1455,7 +1500,7 @@ MCP（Model Context Protocol）负责把**外部工具**接进会话：远程服
 - **结果**：`toLlmContent` 转为模型可读的文本 / 图片内容；`result.isError` 与协议 / 网络异常统一包装为工具错误，由 UI 标记失败；
 - **权限**：工作区内修改 / 完全权限全量注册，仅可查看只注册 `annotations.readOnlyHint === true` 的工具——**只读语义由服务端声明，客户端不猜**。
 
-#### 6.4.4、内置工具：文件 / 浏览器 / 终端 / 通用 / 人机交互
+#### 6.4.5、内置工具：文件 / 浏览器 / 终端 / 通用 / 人机交互
 
 内置工具分两类：**面板**（面向用户的可视化工具组件）与**工具**（面向模型的内置 `AgentTool`），两者共享同一套能力实现，面板负责「人看」、工具负责「模型操作」。
 
@@ -1507,7 +1552,7 @@ MCP（Model Context Protocol）负责把**外部工具**接进会话：远程服
 3. 若是新域，在 `modules/agent/worker/tools/index.ts` 的 `FACTORIES` 登记工厂，并同步 `AgentToolSwitches` 与 Agent 编辑页开关（同域追加则无需改动）；
 4. 需要前端可见时，在 `modules/plugin/renderer/builtin/catalog.ts` 登记名称、分类与文案 key（工具名必须与注册表一致）。
 
-#### 6.4.5、工作区及会话
+#### 6.4.6、工作区及会话
 
 **工作区（Workspace）**：以会话为单位组织「对话区 + 右侧工具面板」，覆盖会话、工具与终端；会话之间工作区内容（面板状态、终端、浏览器标签）相互隔离，面板统一收敛到右侧并可折叠切换。
 
@@ -1516,20 +1561,20 @@ MCP（Model Context Protocol）负责把**外部工具**接进会话：远程服
 - 项目（`desk_project`）绑定本地磁盘目录，作为 Agent 运行的文件沙箱根与工具默认 `cwd`；`memory_enabled` 控制长期记忆，记忆正文与游标随项目行保存；
 - 会话（`desk_session`）归属项目并绑定 Agent，持久化 `project_id / agent_id / provider_id / model_id / permission_mode` 与会话摘要 `summary / summary_last_message_id / summary_update_time`、上下文分项 `context_breakdown`，支持搜索 / 重命名 / 删除 / 排序；项目与 Agent 创建后不可修改；定时任务触发的会话额外记录 `trigger_type='schedule'` 与 `schedule_task_id`；
 - 消息（`desk_message`）按自增 `id` 顺序落库，`data` 保存 Agent 原始消息 JSON，用于会话重建；`turn_id` 标记所属轮次、`source` 记录运行时注入来源（常规消息为空，`runtime:*` 表示运行时注入）；用户提问在发送时立即落库，模型每完成一条消息按本轮快照落库，流式正文另有草稿定时落库，异常退出后可恢复到最近一次完整内容（详见 6.5.4）；
-- 运行时：`modules/chat/main/chatService.ts#sendChat` 校验会话绑定的项目与 Agent → 组装系统指令（Agent 指令 + 长期记忆 + 会话摘要 + SKILL 索引 + 模式 / 工具约束）与历史 → `modules/agent/main/host/runtimeHost.ts` → `modules/agent/worker/session.ts` 创建 / 复用会话级 Agent → 事件流回主进程 → IPC 推送渲染层，按片段发生顺序渲染时间线（思考 → 工具 → 正文交错），思考折叠、工具调用状态与耗时、轮次耗时摘要、会话状态信息条、Markdown 实时渲染与代码高亮。
+- 运行时：`modules/chat/main/chatService.ts#sendChat` 校验会话绑定的项目与 Agent → 组装系统指令（Agent 指令 + 长期记忆 + 会话摘要 + SKILL 索引 + 模式 / 工具约束）与历史 → `modules/chat/harness/main/runtimeHost.ts` → `modules/chat/harness/worker/loop.ts` 创建 / 复用会话级 Agent → 事件流回主进程 → IPC 推送渲染层，按片段发生顺序渲染时间线（思考 → 工具 → 正文交错），思考折叠、工具调用状态与耗时、轮次耗时摘要、会话状态信息条、Markdown 实时渲染与代码高亮。
 
-**生命周期**：任何改变 Agent 能力或模型的操作触发会话运行时清理（`evictAgent` / `resetAgents`），下一轮重新装配；应用退出时回收运行时与终端进程，避免残留。
+**生命周期**：任何改变 Agent 能力或模型的操作只更新数据，会话 Loop 下一轮按装配指纹重新装配；应用退出时回收运行时与终端进程，避免残留。
 
-#### 6.4.6、人机交互
+#### 6.4.7、人机交互
 
 本地版在 Agent 执行过程中保留「人」的决策点，分为**被动审批**与**主动询问**两类，二者都由运行时进程发起、主进程转发、渲染层在输入框位置内联展示（不再使用全局模态弹窗）；交互队列按会话隔离，非当前会话的请求不会抢占输入区，切回对应会话时再展示。
 
 - **被动审批（越界权限确认）**：文件类工具越界、需要访问项目目录外时，运行时进程经 `parentPort` 发 `interaction-request`，主进程转渲染层在内联卡片展示，三选一「允许一次 / 本会话全部允许 / 拒绝」；同一次工具调用的多个越界目标合并为一张卡片（路径逐条列出），「允许一次」覆盖本次调用的全部目标，目标为磁盘根目录时标注「全盘」并提示扫描耗时；会话级信任仅存内存，重启失效。卡片标题固定「权限审批申请」，使用淡红色风险配色；
 - **主动询问（`ask_user`）**：`modules/agent/worker/tools/interaction.ts` 提供 `ask_user` 工具，面向「多个候选方案请用户拍板」：每个问题提供 2~20 个选项，支持单选 / 多选，默认允许用户填写「其他」；需要连续确认多个问题时用 `questions` 一次列出（1~10 个），worker 逐题发起交互，界面在左下角展示 `1/N`。确认操作或补充自由文本直接在回复里提问，不调用该工具。卡片标题固定「用户确认」，使用黄色提示配色；权限校验类交互不开放给该工具，只能由系统沙箱发起；
-- **生命周期**：用户终止、删除会话、运行时重置 / 退出才取消交互；后台会话摘要、长期记忆或配置刷新触发的 `evict` 在本轮结束后执行，避免误取消正在等待的审批；
+- **生命周期**：用户终止、删除会话、运行时释放 / 退出才取消交互；后台会话摘要、长期记忆与配置变化不清理运行态，由装配指纹在下一轮重建，避免误取消正在等待的审批；
 - **标准化组件**：渲染层提供权限确认与多选项选择标准组件，Agent 集成后自动启用；应答结果（确认 / 选择值 / 拒绝 / 取消）经协议回传并转为模型可读文本。
 
-#### 6.4.7、会话压缩与长期记忆
+#### 6.4.8、会话压缩与长期记忆
 
 本地版把上下文管理拆成**会话压缩**与**长期记忆**两层：会话压缩解决单会话上下文变长，长期记忆解决跨会话的项目级沉淀。两者都遵循同一条铁律：**生成与消费解耦**，对话只读取已有结果，压缩 / 生成在后台异步完成，绝不阻塞本轮回复。
 
@@ -1563,12 +1608,12 @@ MCP（Model Context Protocol）负责把**外部工具**接进会话：远程服
 **注入与生效**（`modules/chat/main/chatService.ts`）：
 
 - 记忆开启且会话归属项目时，项目记忆追加到系统指令，并明确「可能过时的历史事实，与当前指令冲突时以当前指令为准」；
-- 系统指令在会话 Agent 创建时固化，因此生成成功后清理项目下会话运行时（`evictProjectSessions`），下一轮重新装配，新记忆立即生效；
-- 手动保存记忆、切换项目长期记忆开关同样清理运行时，避免继续使用旧提示词。
+- 系统指令在会话 Agent 创建时固化；记忆生成成功后只更新项目记忆，下一轮按装配指纹重建，新记忆立即生效；
+- 手动保存记忆、切换项目长期记忆开关同样只落数据，避免继续使用旧提示词。
 
 **手动管理**（系统设置 → 项目）：项目列表展示「长期记忆」开关与「记忆生成时间」，通过「查看长期记忆」弹窗查看 / 编辑正文并保存；关闭开关后不再注入或生成。删除项目时记忆随项目行一并删除，不单独提供「清空记忆」入口。
 
-#### 6.4.8、Agent可观测
+#### 6.4.9、Agent可观测
 
 可观测定位为**开发者模式下的本地排障能力**，不是常驻监控：默认关闭，开启后采集模型通讯并开放「诊断」入口，关闭时零采集、零写入。
 
@@ -1614,21 +1659,21 @@ desk_llm_trace
 - run 正常结束、异常、用户中止分别以 `success / error / aborted` 收尾；未拿到响应的一律按 `error` 落库，避免出现「空成功」；
 - 回传为 fire-and-forget：worker 不访问数据库，落库失败只记运行日志，不阻断对话。
 
-#### 6.4.9、定时任务调度
+#### 6.4.10、定时任务调度
 
 - **运行实例即会话**：触发时创建或复用 `desk_session`（`trigger_type='schedule'` + `schedule_task_id`），执行直接调用对话域 `sendChat`；消息、流式、终止、历史、摘要、记忆全部复用，不另建运行实例表。
 - **前台实时渲染**：主进程发起的一轮通过 `turn-start` 事件携带用户提问与开始时刻下发；渲染层没有本地发送动作，收到后补建本轮用户 / 助手消息并接入同一流式状态机，未打开过该会话时先回读历史拼到本轮之前。手动发送与定时触发共用该事件，渲染层以 `streamingIds` 去重，后台定时会话也能实时展示思考 / 工具 / 正文。
 - **运行日志**：`desk_scheduled_log` 为每次触发（含失败跳过 / 超时）落一条记录；`(task_id, slot_at)` 局部唯一索引保证同一计划时刻只执行一次（立即运行的 `slot_at` 为空，不参与唯一）。日志不自动裁剪：按任务 + 触发时间范围分页查询（默认每页 10 条），并由运行日志页「日志清理」按相同维度删除（删除后不可恢复，历史会话不受影响）；应用启动时把上次进程遗留的「进行中」日志统一结算为失败。
-- **调度**：每个启用任务挂一个到下次触发时刻的计时器，触发后写回运行结果并重算下一次；系统唤醒后全量重排，启动不补跑，停用不挂计时器；删除任务先终止在跑轮次并清空进程内运行态，历史会话保留、运行日志一并清理。
-- **巡检兜底**：全局唯一的巡检通道，间隔可配置（默认 60 秒，范围 30 ~ 600 秒）——应挂未挂的计时器重排、停用 / 删除任务的计时器清理、计划时刻已过仍挂旧计时器的记账后重排、计时器目标晚于规则时重排；任务运行超过任务级超时时间主动终止，终止后仍未收尾或运行态悬挂（无在跑轮次超过 5 分钟）强制结算。巡检采用单链 `setTimeout`（不重入）+ 10 秒存活看护，任何异常都续排下一轮，链意外丢失会被看护自动拉起。
+- **调度**：每个启用任务在 `Map<taskId, Cron>` 中持有一个 croner 实例；表达式或启停变化只重建对应任务，触发回调只做准入与派发，长轮次异步执行。系统休眠时暂停全部调度器，唤醒后先补记错过的触发再全量重建；启动不补跑，停用不创建调度器；删除任务先终止在跑轮次并清空进程内运行态，历史会话保留、运行日志一并清理。
+- **巡检兜底**：全局唯一的巡检通道，间隔可配置（默认 60 秒，范围 30 ~ 600 秒）——与任务表对账（缺失 / 已停止 / 表达式漂移 / 时钟调整时重建）、清理停用与删除任务的调度器、计划时刻已过仍未触发时记跳过并重建；任务运行超过任务级超时时间主动终止，终止后仍未收尾或运行态悬挂（无在跑轮次超过 5 分钟）强制结算。巡检采用单链 `setTimeout`（不重入）+ 10 秒存活看护，任何异常都续排下一轮，链意外丢失会被看护自动拉起。
 - **调度设置**：不休眠 / 最大并发 / 巡检间隔统一存 `desk_setting`（`scheduleKeepAwake` / `scheduleMaxConcurrency` / `scheduleWatchdogInterval`）；保存时越界直接报错，读取侧只对脏数据做 clamp，巡检间隔变更立即重建巡检链。
 - **任务超时**：任务维度配置 `timeout_minutes`（0 表示不限时），超时由巡检主动终止本轮。
 - **规则**：Cron 段表达式（秒 分 时 日 月 周 年），主进程保存时解析归一，最小间隔 1 分钟；日与周同时指定取交集，不存在的日期自动跳过。
 - **会话选择**：`reuse` 在会话存在、归属该任务且空闲时复用，否则新建；`new` 每次新建。同任务串行：超过全局并发上限、或阻塞策略为「本次调度忽略」时记为失败跳过。
 - **会话阻塞策略**（仅 `reuse`）：`skip` 复用会话进行中时跳过本次调度并记失败跳过；`force` 终止进行中会话，待本轮收尾后按原计划时刻重新触发。
-- **无人值守**：由 `chat/main/interactionPolicy.ts` 在推送渲染层前统一结算——权限审批返回 `denied`（越界写入 / 命令自动拒绝），`ask_user` 返回 `auto`（不伪造用户选择，工具提示模型基于已有信息自行决策并继续后续问题），工具拿到明确结果后继续，不会挂起。
+- **无人值守**：由 `chat/harness/main/interactionPolicy.ts` 在推送渲染层前统一结算——权限审批返回 `denied`（越界写入 / 命令自动拒绝），`ask_user` 返回 `auto`（不伪造用户选择，工具提示模型基于已有信息自行决策并继续后续问题），工具拿到明确结果后继续，不会挂起。
 
-对应实现：`modules/schedule/main/{scheduledTaskService,scheduler,runner,runLog,runState,keepAwake}.ts`、`modules/chat/main/interactionPolicy.ts`、`modules/chat/renderer/store/index.ts`、`modules/schedule/renderer/pages/{tasks,logs,dispatch}.vue`。
+对应实现：`modules/schedule/main/{scheduledTaskService,scheduler,runner,runLog,runState,keepAwake}.ts`、`modules/chat/harness/main/interactionPolicy.ts`、`modules/chat/renderer/store/index.ts`、`modules/schedule/renderer/pages/{tasks,logs,dispatch}.vue`。
 
 ### 6.5、重点设计
 
@@ -1725,7 +1770,7 @@ Linux 分别遵循 `XDG_CONFIG_HOME` / `XDG_DATA_HOME` / `XDG_CACHE_HOME`；目�
 2. **完成消息快照落库**：worker 在 `message_end` 回传 `checkpoint` 事件（本轮截至当前的全部新增消息）。主进程按 `turnId` 幂等重写本轮助手 / 工具消息：保留用户提问行，删除本轮其余旧行后按最新快照重建（`replaceTurnMessages`），因此工具调用与工具结果都在完成时立即持久化；
 3. **流式草稿定时落库**：主进程聚合 `delta / thinking`，每 3 秒把当前未结束的回复作为草稿写入本轮，草稿只包含正文 / 思考，不包含未完成的工具调用；长回复执行中途异常时仍能恢复已输出内容。
 
-**主进程发起的轮次**：定时任务 / 立即运行由主进程调用 `sendChat`，渲染层通过 `turn-start` 事件补建本轮消息并接入同一流式状态机（见 6.4.9）；因此后台定时会话的落库、恢复与展示与手动发送完全一致。
+**主进程发起的轮次**：定时任务 / 立即运行由主进程调用 `sendChat`，渲染层通过 `turn-start` 事件补建本轮消息并接入同一流式状态机（见 6.4.10）；因此后台定时会话的落库、恢复与展示与手动发送完全一致。
 
 **收尾与恢复**：
 
@@ -1734,7 +1779,7 @@ Linux 分别遵循 `XDG_CONFIG_HOME` / `XDG_DATA_HOME` / `XDG_CACHE_HOME`；目�
 - 崩溃可能留下「有工具调用、无工具结果」的半轮消息。历史装配时 `chat/shared/history.ts#stripUnpairedToolCalls` 会剔除没有对应工具结果的 `toolCall`，避免下一轮请求因上下文非法被供应商拒绝；
 - 快照重写会改变本轮助手 / 工具消息的自增 `id`（用户提问行与 `turnId` 不变）。生成期间渲染层使用内存中的实时消息，本轮结束后再回读数据库，因此不影响界面。
 
-对应实现：`modules/chat/main/chatService.ts`（落库编排）、`modules/chat/main/sessionService.ts`（`startTurn / replaceTurnMessages / appendTurnMessages`）、`modules/agent/shared/agentProtocol.ts`（`checkpoint` 事件）、`modules/agent/worker/session.ts`（`message_end` 回传快照）、`modules/chat/shared/history.ts`（悬空工具调用清理）。
+对应实现：`modules/chat/main/chatService.ts`（落库编排）、`modules/chat/main/sessionService.ts`（`startTurn / replaceTurnMessages / appendTurnMessages`）、`modules/agent/shared/agentProtocol.ts`（`checkpoint` 事件）、`modules/chat/harness/worker/loop.ts`（`message_end` 回传快照）、`modules/chat/shared/history.ts`（悬空工具调用清理）。
 
 #### 6.5.5、数据升级与兼容
 
@@ -1939,42 +1984,140 @@ docker compose down
 - 19、【体验】UI显示宽高：适配多宽高显示器，提升体验；
 - 20、【优化】对话持久化与断点恢复：发送会话后立即落库用户提问；模型每完成一条消息按本轮快照落库；流式回复草稿每 3 秒落库。长轮次或异常退出后重新打开会话，可恢复到最近一次完整内容，不再出现整轮空白。
 
+### v1.7.0 Release Notes[2026-11-22]
+
+**【本地版（Desk 桌面端）】**
+
+- 1、【架构】Harness模块独立：针对会话Loop，包含模型请求、工具调用、MCP调用、SKILL加载等等，统一闭环在chat模块下独立的 harness 模块中，提升可维护性和可扩展性；
+- 2、【模型】会话模型标准化：针对会话模型进行标准化，会话Loop差异化行为统一通过“会话属性”扩展设置；会话属性进行枚举化设计，显示在会话属性配置。会话Loop关注的主要会话属性包括：
+  - 触发来源：手动、定时、续跑；（不影响Loop，仅备注；）
+  - 权限模式：只读、工作区、不限制。（影响Loop，当前逻辑；）
+  - 人机模式：开启、关闭（影响Loop；新增属性；默认开启，支持人机交互；定时任务触发会话，固定传递 “关闭”，Loop过程中尽量回归人机交互，如权限审批直接替代拒绝）。
+  - Loop模式：普通、Goal模式；（影响Loop；预留，本期不实现；）
+  - 会话状态：运行中/等待确认/完成/失败……等；（体现Loop状态；完整设计一下，Loop状态需要及时落到 session 表里，外部只通过这个感知状态；）
+- 3、【模型】模型交互提示词标准化：模型交互提示词结构化，提供标准化提示词生成工具统一处理提示词，提升提示词处理的可维护性与扩展性；
+- 4、【重构】模块职责规范：会话Loop统一闭环在harness模块；扩展中心、应用中心、系统设置模块只负责本模块数据操作及配置管理，为会话Loop提供数据/文件支撑、不参与会话Loop逻辑。
+- 5、【重构】定时任务会话触发调整：任务仅负责触发；会话的定制逻辑，在会话Loop内部闭环（目前差异为 “人机模式”，任务触发的会话“人机模式” 固定为 关闭）；
+- 6、【强化】定时任务调度逻辑重构：定时任务线程模型规范化，采用 “统一巡检线程 + 任务维度调度器Map + 会话异步执行” 方案。调度器升级为 croner 库；
+- 7、【体验】会话区工具步骤渲染优化：当执行 内置命名、SKILL、MCP时，现在每一项会展示 “icon + 读取文件 + 辅助文案”，挺好。检查下 SKILL、MCP、内置命令完整展示逻辑，给我check确认下。
+- 8、【体验】会话区步骤内容渲染优化：单轮次多个步骤内容，点击单个步骤自动折叠其他步骤内容，提升会话区操作体验；
+- 9、【体验】定时任务会话标题优化：定时任务触发的会话，标题显示为「任务名称 + 触发时间」，标题固定不随后续会话复用而变化；
+
+**【云版（Web 服务端）】**
+
+- 1、【重构】UI项目重构：跟进XXL-BOOT升级项目SKILL，代码做针对性强化升级；
+- 2、【体验】菜单整合优化：整合功能菜单，提升操作效率、优化体验；
+
 **MacOS 安装说明**：macOS 提示「文件损坏」并非实际损坏，而是安装软件未签名（没有开发者账号）。将安装软件拖入 /Applications 后，终端执行如下命令即可。
 ```
 sudo xattr -rd com.apple.quarantine /Applications/XXL-AI-Desk.app
 ```
 
-### v1.6.1 Release Notes[ING]
+### v1.7.1 Release Notes[ING]
 - 1、【ING】应用中心：
   - 应用中心：设计应用统一契约（app.manifest），建设应用契约收集与应用注册能力；搭建应用宿主托管能力，提供路由挂载、i18n注册等能力，支持内部及动态外部应用托管注册；
   - 内置应用：丰富内置应用集合，基于统一契约简化开发；
   - 外部应用：提供应用开发规范及SKILL，支持外部应用开发及动态加载注册（安装路径下制定目录动态扫描、自动注册托管运行）；
-- 2、【ING】Bot机器人：Super Agent 方案；桌面机器人，可在桌面悬浮窗中进行互动；体现工作状态，同步消息通知；
-- 3、【ING】长程任务：Goal模式 方案；
-  - 任务规划（定义）：任务目标 + 验收标准 + 动态规划步骤；
-  - 任务执行（实例）：任务实例 + 当前步骤 + 进展；失败巡检，避免中断；循环检测，避免死循环；
-- 4、【ING】任务分类标准：触发方式（手动/定时/续跑）、运行模式（普通/goal&长程）、状态（排队/运行中/等待确认/完成/失败/取消/中断）；
-- 5、【ING】工具调用步骤调整：当前主要有执行命名、打开网页等内置工具；新增 SKILL调用、MCP调用 等工具调用过程记录；
-- 6、【ING】任务及会话重构：会话、任务数据结构，枚举状态重构标准化；
+- 2、【ING】SKILL本地上传：支持本地上传SKILL压缩包，自动解析识别并保存技能；
+- 3、【ING】云版本地运行时目录结构设计：SKILL共享，使用时结合Agent按需加载；工作区用户&Agent隔离；临时目录设计；提升云版沙箱操作安全行及体验；
+
+```
+{xxl-ai.runtime.root}/
+└── space_{spaceId}/
+    ├── skills/
+    │   ├── .locks/skill_{skillId}.lock
+    │   └── skill_{skillId}/           # SKILL全局共享，使用时按需加载多个SKILL目录；（守护线程，定期检测版本、同步）
+    │       ├── .fingerprint
+    │       └── SKILL.md ...
+    ├── projects/
+    │   └── agent_{agentId}/user_{subjectKey}/      # Agent-用户维度工作区隔离； 
+    └── tmp/{SKILL上传解析 ｜ 知识无聊上传}
+```
+
+- 4、【ING】调度过期处理策略：如电脑休眠错过时间，启动之后如何处理策略；
+- 5、【ING】安装包压缩；
 
 ### TODO LIST
-- 1、AI 能力增强：
+- 1、Bot机器人：Super Agent 方案；桌面机器人，可在桌面悬浮窗中进行互动；体现工作状态，同步消息通知；
+- 2、长程任务：Goal模式 方案；
+  - 任务规划（定义）：任务目标 + 验收标准 + 动态规划步骤；
+  - 任务执行（实例）：任务实例 + 当前步骤 + 进展；失败巡检，避免中断；循环检测，避免死循环；
+- 3、会话队列：输入框支持输入队列，上轮对话结束后、自动触发下一轮对话，提升操作效率；
+- 4、多存储：
+  - 云版：Mysql&Redis&Milvus or ALL-In-SQLite;
+  - 本地：SQLite；
+- 5、OpenAPI：云版，针对搭建的Agent提供OpenAPI接口能力，通过agentId + accessToken访问，便于集成到第三方系统应用（提供内置Agent对话能力，可用于功能调试或快速集成应用）。
+- 6、云本结合：云版Saas模式 与 Desk版集成；复用 账号体系、Agent、SKILL、MCP、RAG、工具、模型等能力；Desk版可作为云版的客户端，支持本地Agent运行和云端Agent运行。
+- 7、AI 能力增强：
   - WorkFlow 定义：工作流及 Agent/模型编排定义、执行与日志、分布式执行；
   - 知识库：多类型文档（Word / PDF / 图片）解析与向量化；
   - Agent 生图：文生图 / 图生图，支持集成多模型供应商；
   - Agent 生视频：文生视频 / 图生视频，支持集成多模型供应商；
   - Chat 对话增强：对话记忆控制、多模态输入；
-- 2、云本结合：skill/mcp/rag对接。saas模式。
-- 3、云版：
-  - OpenAPI：针对搭建的Agent提供OpenAPI接口能力，通过agentId + accessToken访问，便于集成到第三方系统应用（提供内置Agent对话能力，可用于功能调试或快速集成应用）。
-  - 可观测：支持Agent可观测，包括Session对话、工具/知识/记忆等Trace明细可观测等。
-  - SKILL文件变更实效性：SKILL正文结合版本与指纹信息主动更新；（双版本均校准）
-- 4、Desk版本：
-  - 长程任务：SQLite；“动态规划-分步执行-验收”；失败巡检、延续执行、防止死循环；
-  - 输入框支持输入队列：支持输入会话输入队列功能，上轮对话结束后、自动触发下一轮对话，提升操作效率；
-- 5、云&本功能对齐：Agent、扩展（SKILL/MCP/内置工具）、会话与记忆、知识库、应用中心、供应商模型；定时任务。
-- 6、云版多版本：Mysql&Redis&Milvus or ALL-In-SQLite;
+- 8、可观测：支持Agent可观测，包括Session对话、工具/知识/记忆等Trace明细可观测等。
+- 9、云&本功能对齐：
 
+| 功能	     | 说明	                     | 云版	 | Desk |
+|----------|--------------------------|------|------|
+| Agent    | 指令、工具、rag	          | Yes  | Yes  |
+| Skill    | 管理、发现	               | Yes	  | Yes  |
+| Mcp	      | 管理、发现	               | Yes	  | Yes  |
+| 工具	     | 文件、bash	               | Yes  | Yes  |
+| Rag	      | 资料、知识向量化	         | Yes  | No   |
+| 模型	     | 对话、内嵌	               | Yes  | Yes  |
+| 项目	     | 项目、模式、文件	         | Yes  | Yes  |
+| 会话	     | 消息、压缩，+文件		  | Yes    | Yes |
+| 记忆	     | 长期记忆，		 | Yes项目   | Yes项目  |
+| 定时任务	 | 任务		                | No | Yes  |
+
+- 10、产品功能/菜单设计：
+
+```
+========= 云版：
+首页：
+Agent智能体：
+对话和记忆：
+    - 对话管理：（用户、Agent筛选，session 独立表筛选）
+    - 长期记忆：（用户 x Agent维度，memory独立表维护）
+定时任务：                                               【+功能：任务管理、任务日志】
+扩展中心：                                              
+    SKILL技能
+    MCP工具：
+    内置工具：                                           【+菜单：工具维护、按需配置】
+RAG知识库：                                             【+展示：资料管理/RAG展示】
+供应商模型：（对话/内嵌/多模态）
+系统管理：
+    - 业务空间：
+    - 用户管理：
+    - 配置管理：
+    - 审计日志：
+帮助中心：
+
+========= Desk：
+会话：（项目/会话）
+定时任务：
+    任务列表
+    运行日志
+    调度设置
+扩展中心：
+    Agent智能体：                    
+    MCP工具：
+    SKILL技能：
+    内置工具：
+应用中心：
+    我的应用：
+    应用市场：
+系统设置：
+    模型供应商：（对话/内嵌/多模态）
+    会话和记忆：
+        - 对话管理：（项目、Agent筛选，session；操作管理）    【+待重构，session表，配置】
+        - 长期记忆：（项目列表，memory属性；开关、管理）      【+待重构，独立表】
+    运行设置：
+    ---
+    常规：
+    个性化：
+    关于我们：
+```
 
 ## 八、其他
 
