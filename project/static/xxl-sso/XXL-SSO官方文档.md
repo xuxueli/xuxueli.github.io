@@ -43,7 +43,7 @@ XXL-SSO 是一个 单点登录框架，只需要登录一次就可以访问所�
 - 14、记住密码：支持记住密码功能；记住密码时，支持登录态自动延期；未记住密码时，关闭浏览器则登录态失效；
 - 15、登录态自动延期：支持自定义登录态有效期窗口，当登录态有效期窗口过半时自动顺延一个周期；
 
-### 1.3 发展
+### 1.3 发展  
 于2018年初，我在github上创建XXL-SSO项目仓库并提交第一个commit，随之进行系统结构设计，UI选型，交互设计……
 
 于2018-12-05，XXL-SSO参与"[2018年度最受欢迎中国开源软件](https://www.oschina.net/project/top_cn_2018?sort=1)"评比，在当时已录入的一万多个国产开源项目中角逐，最终排名第55名。
@@ -67,7 +67,7 @@ XXL-SSO 是一个 单点登录框架，只需要登录一次就可以访问所�
 
 ### 1.4 下载
 
-#### 文档地址
+#### 文档地址   
 - [中文文档](https://www.xuxueli.com/xxl-sso/)
 
 #### 源码仓库地址
@@ -101,7 +101,7 @@ XXL-SSO 是一个 单点登录框架，只需要登录一次就可以访问所�
 
 ## 二、快速入门
 
-### 2.1、项目编译
+### 2.1、项目编译    
 XXL-SSO 作为单点登录框架，支持业务渐进式集成接入使用。结合系统及业务特征差异，仓库代码提供三种业务中接入示例：
 
 **1、Web常规登录**：适用于常规“单体系统”场景；限制相关Web系统部署在相同域名下，登录凭证存储在公共域名下；
@@ -122,7 +122,7 @@ XXL-SSO 作为单点登录框架，支持业务渐进式集成接入使用。结
     - xxl-sso-sample-filter-filtr-cas: CAS单点登录
 ```
 
-### 2.2、环境配置
+### 2.2、环境配置    
 为模拟并体验生产环境多种登录认证方式，需要修改Host文件，以域名方式访问示例项目：
 
 ```
@@ -132,7 +132,7 @@ XXL-SSO 作为单点登录框架，支持业务渐进式集成接入使用。结
 127.0.0.1 xxlssoclient2.com
 ```
 
-### 2.3、接入项目示例（Web常规登录）
+### 2.3、接入项目示例（Web常规登录） 
 **Web常规登录**：适用于常规“单体系统”场景；限制相关Web系统部署在相同域名下，登录凭证存储在公共域名下；
 **接入示例项目**：xxl-sso-sample-interceptor-web
 
@@ -144,9 +144,9 @@ XXL-SSO 作为单点登录框架，支持业务渐进式集成接入使用。结
 
 ```
 ### xxl-sso 登录凭证/token传输key, 用于cookie、header登录凭证传输；
-xxl-sso.token.key=xxl_sso_token
-### xxl-sso 登录凭证/token超时时间，单位毫秒；
-xxl-sso.token.timeout=604800000
+xxl-sso.token.key=xxl-sso-token
+### xxl-sso 登录凭证/token超时时间，单位秒；
+xxl-sso.token.timeout=604800
 ### xxl-sso 登录态持久化配置，如下为Redis组件相关配置；
 xxl-sso.store.redis.nodes=127.0.0.1:6379
 xxl-sso.store.redis.user=
@@ -357,9 +357,9 @@ public Response<String> test41(HttpServletRequest request) {
 
 ```
 ### xxl-sso 登录凭证/token传输key, 用于cookie、header登录凭证传输；
-xxl-sso.token.key=xxl_sso_token
-### xxl-sso 登录凭证/token超时时间，单位毫秒；
-xxl-sso.token.timeout=604800000
+xxl-sso.token.key=xxl-sso-token
+### xxl-sso 登录凭证/token超时时间，单位秒；
+xxl-sso.token.timeout=604800
 ### xxl-sso 登录态持久化配置，如下为Redis组件相关配置；
 xxl-sso.store.redis.nodes=127.0.0.1:6379
 xxl-sso.store.redis.user=
@@ -408,11 +408,11 @@ public void addInterceptors(InterceptorRegistry registry) {
 }
 ```
 
-#### 第四步、代码中进行 XXL-SSO 登录验证、权限验证
+#### 第四步、代码中进行 XXL-SSO 登录验证、权限验证    
 忽略。
 > 该示例场景与章节 “2.3、接入项目示例（Web常规登录） 》 第四步、代码中进行 XXL-SSO 登录验证、权限验证” 使用方式一致，如有诉求可参考上文章节，此处不赘述。
 
-#### 第五步、Native登录认证 OpenAPI
+#### 第五步、Native登录认证 OpenAPI 
 Native登录认证 OpenAPI 代码位置：xxl-sso-sample-interceptor-native/src/main/java/com/xxl/sso/sample/openapi/controller/NativeOpenAPIController
 Native登录认证 OpenAPI 接口列表：
 
@@ -479,7 +479,7 @@ Native登录认证 OpenAPI 接口列表：
 
 #### 第六步、验证
 
-经过上述配置之后，启动示例项目；然后，可通过 测试用例/验证代码 模拟 “Native登录” 相关操作：
+经过上述配置之后，启动示例项目；然后，可通过 测试用例/验证代码 模拟 “Native登录” 相关操作： 
 - **启动项目**：xxl-sso-sample-interceptor-native
 - **Native登录认证，测试用例/验证代码位置**：xxl-sso-sample-interceptor-native/src/test/java/com/xxl/app/sample/test/NativeClientTest
 
@@ -497,9 +497,9 @@ Native登录认证 OpenAPI 接口列表：
 测试用例运行结果：
 ```
 15:39:42.831 logback [main] INFO  NativeClientTest - 登录成功：token = eyJ1c2VySWQiOiIxMDAwIiwiZXhwaXJlVGltZSI6MCwidmVyc2lvbiI6IjA2ZmRhOGFhZmU2MzRhMzBhYzYzZWQ4ZjM1YjBjNTExIiwiYXV0b1JlbmV3IjpmYWxzZX0
-15:39:42.838 logback [main] INFO  NativeClientTest - 当前为登录状态：登陆用户 = LoginInfo{userId='1000', userName='user', realName='null', extraInfo=null, roleList=[role01], permissionList=[user:query, user:add], expireTime='1753601982825', signature=06fda8aafe634a30ac63ed8f35b0c511, autoRenew=false}
-15:39:42.841 logback [main] INFO  NativeClientTest - 模拟请求APP应用接口：请求成功，登陆用户 = LoginInfo{userId='1000', userName='user', realName='null', extraInfo=null, roleList=[role01], permissionList=[user:query, user:add], expireTime='1753601982825', signature=06fda8aafe634a30ac63ed8f35b0c511, autoRenew=false}
-15:39:43.174 logback [main] INFO  NativeClientTest - 模拟请求APP应用接口：请求成功，登陆用户 = LoginInfo{userId='1000', userName='user', realName='null', extraInfo=null, roleList=[role01], permissionList=[user:query, user:add], expireTime='1753601982825', signature=06fda8aafe634a30ac63ed8f35b0c511, autoRenew=false}
+15:39:42.838 logback [main] INFO  NativeClientTest - 当前为登录状态：登陆用户 = LoginInfo{userId='1000', userName='user', realName='null', extraInfo=null, roleList=[role01], permissionList=[user:query, user:add], expireTime='1753601982', signature=06fda8aafe634a30ac63ed8f35b0c511, autoRenew=false}
+15:39:42.841 logback [main] INFO  NativeClientTest - 模拟请求APP应用接口：请求成功，登陆用户 = LoginInfo{userId='1000', userName='user', realName='null', extraInfo=null, roleList=[role01], permissionList=[user:query, user:add], expireTime='1753601982', signature=06fda8aafe634a30ac63ed8f35b0c511, autoRenew=false}
+15:39:43.174 logback [main] INFO  NativeClientTest - 模拟请求APP应用接口：请求成功，登陆用户 = LoginInfo{userId='1000', userName='user', realName='null', extraInfo=null, roleList=[role01], permissionList=[user:query, user:add], expireTime='1753601982', signature=06fda8aafe634a30ac63ed8f35b0c511, autoRenew=false}
 15:39:43.177 logback [main] INFO  NativeClientTest - 注销成功
 15:39:43.180 logback [main] INFO  NativeClientTest - 当前为注销状态
 15:39:43.181 logback [main] INFO  NativeClientTest - 模拟请求APP应用接口：请求失败：not login for path:/
@@ -513,20 +513,35 @@ Native登录认证 OpenAPI 接口列表：
 - CAS认证中心: xxl-sso-server
 - 接入示例项目: xxl-sso-sample-interceptor-cas
 
-#### 第一步、部署 CAS认证中心
+#### 第一步、部署 CAS认证中心 
 CAS单点登录 依赖 CAS认证中心，CAS认证中心提供单点登录基础能力；因此需要先行启动 CAS认证中心（xxl-sso-server）。
 
-#### 第一步、示例项目引入Maven依赖
+配置文件位置：xxl-sso-server/src/main/resources/application.properties
+
+```
+### xxl-sso 登录凭证/token传输key, 用于cookie、header登录凭证传输；
+xxl-sso.token.key=xxl-sso-token
+### xxl-sso 登录凭证/token超时时间，单位秒；
+xxl-sso.token.timeout=604800
+### xxl-sso 登录态持久化配置，如下为Redis组件相关配置；
+xxl-sso.store.redis.nodes=127.0.0.1:6379
+xxl-sso.store.redis.user=
+xxl-sso.store.redis.keyprefix=xxl_sso_user
+### CAS 登录跳转白名单，为空不校验，逗号分隔，支持 AntPathMatcher；
+xxl-sso.cas.redirect-whitelist=http://xxlssoclient1.com:8081/**,http://*.example.com:8081/app/**
+```
+
+#### 第二步、示例项目引入Maven依赖
 参考章节 “1.4 下载”，pom引入 “xxl-sso-core” 相关maven依赖；
 
-#### 第二步、添加 XXL-SSO 配置
+#### 第三步、添加 XXL-SSO 配置
 配置文件位置：xxl-sso-sample-interceptor-cas/src/main/resources/application.properties
 
 ```
 ### xxl-sso 登录凭证/token传输key, 用于cookie、header登录凭证传输；
-xxl-sso.token.key=xxl_sso_token
-### xxl-sso 登录凭证/token超时时间，单位毫秒；
-xxl-sso.token.timeout=604800000
+xxl-sso.token.key=xxl-sso-token
+### xxl-sso 登录凭证/token超时时间，单位秒；
+xxl-sso.token.timeout=604800
 ### xxl-sso 登录态持久化配置，如下为Redis组件相关配置；
 xxl-sso.store.redis.nodes=127.0.0.1:6379
 xxl-sso.store.redis.user=
@@ -543,7 +558,7 @@ xxl.sso.server.logout.path=/logout
 xxl-sso.client.excluded.paths=
 ```
 
-#### 第三步、添加 XXL-SSO 组件
+#### 第四步、添加 XXL-SSO 组件
 配置组件位置：xxl-sso-sample-interceptor-cas/src/main/java/com/xxl/sso/sample/config/XxlSsoConfig
 
 ```
@@ -581,11 +596,11 @@ public void addInterceptors(InterceptorRegistry registry) {
 }
 ```
 
-#### 第四步、代码中进行 XXL-SSO 登录验证、权限验证
+#### 第五步、代码中进行 XXL-SSO 登录验证、权限验证
 忽略。
 > 该示例场景与章节 “2.3、接入项目示例（Web常规登录） 》 第四步、代码中进行 XXL-SSO 登录验证、权限验证” 使用方式一致，如有诉求可参考上文章节，此处不赘述。
 
-#### 第五步、验证
+#### 第六步、验证
 经过上述配置之后，启动示例项目。整体项目模块，以及可访问域名地址如下。
 **启动项目**：
 - CAS认证中心: xxl-sso-server
@@ -654,23 +669,23 @@ XXL-SSO 支持多种登录类型，支持渐进式集成接入使用，从简单
 ![输入图片说明](https://www.xuxueli.com/project/static/xxl-sso/images/img_07.png "在这里输入图片标题")
 
 a、登录信息实体：
-- token：登录态标识信息，根据登录态信息（LoginInfo）结合算法生成；
-- LoginInfo：登录态数据，包括登录 用户信息、权限/角色信息、设置类信息 等；
+  - token：登录态标识信息，根据登录态信息（LoginInfo）结合算法生成；
+  - LoginInfo：登录态数据，包括登录 用户信息、权限/角色信息、设置类信息 等；
 
 b、登录信息存储：
-- 客户端（Web）：存储在 统一域名Cookie中；
-- 服务端（后端）：存储在 LoginStore 中，原生提供 LocalLoginStore（本地缓存） 、RedisLoginStore（Redis） 等多种实现可选用，也可以自定义定制实现；
+  - 客户端（Web）：存储在 统一域名Cookie中；
+  - 服务端（后端）：存储在 LoginStore 中，原生提供 LocalLoginStore（本地缓存） 、RedisLoginStore（Redis） 等多种实现可选用，也可以自定义定制实现；
 
 c、登录态识别：
-- cookie：统一域名下存储认证“cookie”（key支持自定义，value为登录token），服务端解析并识别登录态；
+  - cookie：统一域名下存储认证“cookie”（key支持自定义，value为登录token），服务端解析并识别登录态；
 
 d、核心流程：
-- 登录流程：
-  - a、访问系统应用（xxl-sso-sample-interceptor-web），未登录将通过 Interceptor 拦截，并主动跳转 “/login” 路径进入登录页面；
-  - b、登录成功，服务端构建 LoginInfo 写入 LoginStore；生成登录 token 写入 统一域名 Cookie中；
-  - c、跳转返回来源页面，Interceptor 拦截器校验 统一域名 Cookie 中 token ，校验通过放行；
-- 注销流程：客户端访问 “/logout” 路径，进行注销登录，并跳转登录页面；
-- 认证流程：客户端请求，将携带域名下认证 “cookie”，服务端解析token，从 LoginStore 中获取登录态信息；
+  - 登录流程：
+      - a、访问系统应用（xxl-sso-sample-interceptor-web），未登录将通过 Interceptor 拦截，并主动跳转 “/login” 路径进入登录页面；
+      - b、登录成功，服务端构建 LoginInfo 写入 LoginStore；生成登录 token 写入 统一域名 Cookie中；
+      - c、跳转返回来源页面，Interceptor 拦截器校验 统一域名 Cookie 中 token ，校验通过放行；
+  - 注销流程：客户端访问 “/logout” 路径，进行注销登录，并跳转登录页面；
+  - 认证流程：客户端请求，将携带域名下认证 “cookie”，服务端解析token，从 LoginStore 中获取登录态信息；
 
 #### 4.5.2、登录类型：“Native登录”
 适用于“移动端、小程序、前后端分离、客户端”等系统场景；适用于无Cookie场景，天然不受限域名。支持多端登录、以及登录态共享，但是登录凭证需要客户端管理维护；
@@ -678,20 +693,20 @@ d、核心流程：
 ![输入图片说明](https://www.xuxueli.com/project/static/xxl-sso/images/img_08.png "在这里输入图片标题")
 
 a、登录信息实体：
-- token：登录态标识信息，根据登录态信息（LoginInfo）结合算法生成；
-- LoginInfo：登录态数据，包括登录 用户信息、权限/角色信息、设置类信息 等；
+  - token：登录态标识信息，根据登录态信息（LoginInfo）结合算法生成；
+  - LoginInfo：登录态数据，包括登录 用户信息、权限/角色信息、设置类信息 等；
 
 b、登录信息存储：
-- 客户端（APP/Web）：自定义存储介质，如 localStorage（Web）、Sqlite（APP）；针对登录后获取的 token 进行存储管理；
-- 服务端（后端）：存储在 LoginStore 中，原生提供 LocalLoginStore（本地缓存） 、RedisLoginStore（Redis） 等多种实现可选用，也可以自定义定制实现；
-
+  - 客户端（APP/Web）：自定义存储介质，如 localStorage（Web）、Sqlite（APP）；针对登录后获取的 token 进行存储管理；
+  - 服务端（后端）：存储在 LoginStore 中，原生提供 LocalLoginStore（本地缓存） 、RedisLoginStore（Redis） 等多种实现可选用，也可以自定义定制实现；
+    
 c、登录态识别：
-- header：客户端请求设置认证 “header”（key支持自定义，value为登录token），服务端解析 header 识别登录态；
-
+  - header：客户端请求设置认证 “header”（key支持自定义，value为登录token），服务端解析 header 识别登录态；
+ 
 d、核心流程：
-- 登录流程：客户端请求 “登录openapi接口”进行登录。服务端构建 LoginInfo 并生成登录 token；服务端通过LoginStore存储LoginInfo；客户端获取 “登录token”并存储管理；
-- 注销流程：客户端请求 “注销openapi接口”进行注销。服务端解析认证header，从 LoginStore 中移除登录态信息；客户端移除维护的登录token；
-- 认证流程：客户端请求设置认证 “header”，服务端解析token，从 LoginStore 中获取登录态信息；
+  - 登录流程：客户端请求 “登录openapi接口”进行登录。服务端构建 LoginInfo 并生成登录 token；服务端通过LoginStore存储LoginInfo；客户端获取 “登录token”并存储管理；
+  - 注销流程：客户端请求 “注销openapi接口”进行注销。服务端解析认证header，从 LoginStore 中移除登录态信息；客户端移除维护的登录token；
+  - 认证流程：客户端请求设置认证 “header”，服务端解析token，从 LoginStore 中获取登录态信息；
 
 #### 4.5.3、登录类型：“CAS单点登录”
 适用于“多系统跨域、企业多系统统一登录”等系统场景；解决了系统 跨域登录认证、统一登录认证 问题；但是需要单独部署CAS认证中心、提供单点登录相关基础能力；
@@ -699,23 +714,23 @@ d、核心流程：
 ![输入图片说明](https://www.xuxueli.com/project/static/xxl-sso/images/img_09.png "在这里输入图片标题")
 
 a、登录信息实体：
-- token：登录态标识信息，根据登录态信息（LoginInfo）结合算法生成；
-- LoginInfo：登录态数据，包括登录 用户信息、权限/角色信息、设置类信息 等；
+  - token：登录态标识信息，根据登录态信息（LoginInfo）结合算法生成；
+  - LoginInfo：登录态数据，包括登录 用户信息、权限/角色信息、设置类信息 等；
 
 b、登录信息存储：
-- 客户端（Web）：存储在 域名Cookie中；在 CasSercer 域名、业务域名下，登录Cookie进行存储以及数据同步；
-- 服务端（后端）：存储在 LoginStore 中，原生提供 LocalLoginStore（本地缓存） 、RedisLoginStore（Redis） 等多种实现可选用，也可以自定义定制实现；
+  - 客户端（Web）：存储在 域名Cookie中；在 CasSercer 域名、业务域名下，登录Cookie进行存储以及数据同步；
+  - 服务端（后端）：存储在 LoginStore 中，原生提供 LocalLoginStore（本地缓存） 、RedisLoginStore（Redis） 等多种实现可选用，也可以自定义定制实现；
 
 c、登录态识别：
-- cookie：客户端域名下存储认证“cookie”（key支持自定义，value为登录token），服务端解析并识别登录态；
+  - cookie：客户端域名下存储认证“cookie”（key支持自定义，value为登录token），服务端解析并识别登录态；
 
 d、核心流程：
-- 登录流程：
-  - a、访问 “Client应用（xxl-sso-sample-interceptor-cas）”，未登录将通过 Interceptor 拦截，并主动跳转 “CasServer（xxl-sso-server）” 进入登录页面；
-  - b、登录成功，服务端构建 LoginInfo 写入 LoginStore，生成登录 token 写入 CasServer 域名 Cookie中；然后，携带登录token 并跳转返回； “Client应用（xxl-sso-sample-interceptor-cas）”；
-  - c、跳转返回 “Client应用（xxl-sso-sample-interceptor-cas）”，校验所携带登录token，写入 Client应用 域名 Cookie 中；
-- 注销流程：客户端访问 “CasServer（xxl-sso-server）” 注销登录页面；将跳转 “CasServer（xxl-sso-server）” 进入登录页面；
-- 认证流程：客户端请求，将携带域名下认证 “cookie”，服务端解析token，从 LoginStore 中获取登录态信息；
+  - 登录流程：
+      - a、访问 “Client应用（xxl-sso-sample-interceptor-cas）”，未登录将通过 Interceptor 拦截，并主动跳转 “CasServer（xxl-sso-server）” 进入登录页面；
+      - b、登录成功，服务端构建 LoginInfo 写入 LoginStore，生成登录 token 写入 CasServer 域名 Cookie中；然后，携带登录token 并跳转返回； “Client应用（xxl-sso-sample-interceptor-cas）”；
+      - c、跳转返回 “Client应用（xxl-sso-sample-interceptor-cas）”，校验所携带登录token，写入 Client应用 域名 Cookie 中；
+  - 注销流程：客户端访问 “CasServer（xxl-sso-server）” 注销登录页面；将跳转 “CasServer（xxl-sso-server）” 进入登录页面；
+  - 认证流程：客户端请求，将携带域名下认证 “cookie”，服务端解析token，从 LoginStore 中获取登录态信息；
 
 
 ### 4.6、XXL-SSO核心组件
@@ -761,7 +776,7 @@ Response<String> result = XxlSsoHelper.hasPermission(LoginInfo loginInfo, String
 #### 4.6.2、注解：@XxlSso
 “@XxlSso” 是XXL-SSO的核心注解，可结合SpringBoot等框架便捷使用；提供 登录认证、权限认证、角色认证 等功能。
 
-注解属性说明：
+注解属性说明： 
 
 | 注解属性         | 注解说明          | 示例               |
 |--------------|---------------|------------------| 
@@ -777,7 +792,7 @@ Response<String> result = XxlSsoHelper.hasPermission(LoginInfo loginInfo, String
 @XxlSso(role = "admin")				// 限制需要登录；限制需要拥有指定角色
 ```
 
-### 4.7、登录认证
+### 4.7、登录认证  
 XXL-SSO 支持灵活的登录认证能力；系统实现上，当前提供 注解、API 多种方式支持。
 
 注解 使用示例：（如下示例参考项目“xxl-sso-sample-interceptor-web”）
@@ -792,7 +807,7 @@ API 使用示例：
 Response<LoginInfo> result = XxlSsoHelper.loginCheck(token);
 ```
 
-### 4.8、权限认证
+### 4.8、权限认证    
 XXL-SSO 支持 权限、角色 多个维度进行权限认证：
 
 - 权限认证：在用户身份认证通过后，校验用户是否具备访问特定资源的权限，决定“你能做什么”；认证维度是“权限”；
@@ -814,10 +829,10 @@ Response<String> result = XxlSsoHelper.hasRole(LoginInfo loginInfo, String role)
 Response<String> result = XxlSsoHelper.hasPermission(LoginInfo loginInfo, String permission);
 ```
 
-### 4.9、记住密码
+### 4.9、记住密码  
 支持记住密码功能；记住密码时，支持登录态自动延期；未记住密码时，关闭浏览器则登录态失效；
 
-### 4.10、登录态自动延期
+### 4.10、登录态自动延期 
 支持自定义登录态有效期窗口，当登录态有效期窗口过半时自动顺延一个周期；
 
 
@@ -896,16 +911,35 @@ Response<String> result = XxlSsoHelper.hasPermission(LoginInfo loginInfo, String
 - 1、【优化】SSO操作提示优化，明确错误提示原因，提升问题的定位效率；
 - 2、【升级】升级多项依赖至较新版本，如 jedis、xxl-tool、spring 等；
 
-### v2.4.1 Release Notes [ING]
-- 1、【ING】集成WebFlux、Spring-Cloud-Gateway，并提供接入示例；（支持 interceptor、filter、webflux、gateway）
-- 2、【ING】增强用户增强安全性：登陆用户数据中，新增客户端信息如ip、ua等，防止token被窃取；
+### v2.4.1 Release Notes [2026-08-08]
+- 1、【新增】WebFlux 支持：登录认证组件（Auth）新增WebFlux相关组件，并提供接入示例项目（xxl-sso-sample-reactive-cas/web/native）；
+- 2、【重构】项目结构重构，提升项目可读性与可维护性；
+- 3、【新增】新增基于Header的登出功能，支持前后端分离、移动端场景操作体验；
+- 4、【修复】票据超时时间单位问题修复；
+- 5、【升级】升级多项依赖至较新版本；
+
+### v2.5.0 Release Notes [2026-11-22]
+- 1、【AI】AI编程规范：新增 Agents.md，提供Agent编程规范，约束并提升Agent开发质量；
+- 2、【安全】CAS客户端来源防护：CAS登录跳转新增客户端来源白名单校验（支持AntPathMatcher），规避开放重定向导致票据泄露风险；
+- 3、【安全】CAS票据安全防护：CAS登陆票据改为一次性使用，防止重放攻击；
+- 4、【安全】登出安全增强：登陆请求二次进行token验证，防止恶意登出；合并PR-91；
+- 5、【调整】SSO认证Token兼容：XXL_SSO_TOKEN下划线间隔改为中划线，避免Nginx等默认不支持问题；
+- 6、【安全】CAS登录地址构建优化：客户端跳转CAS登录页时，redirect_url统一URL编码，避免地址中的&、=等字符截断参数；同时丢弃原地址query，避免票据参数累积导致重定向循环；
+- 7、【优化】LocalLoginStore优化：升级为LRU有界缓存：默认容量10000，支持构造器自定义容量；容量满时淘汰最久未使用登录态，避免本地登录态无界增长；
+- 8、【调整】登陆有效期TTL标准化：过期时间单位统一为秒，规范化时间单位，避免误解；
+- 9、【修复】RedisLoginStore有效期修复：登录态有效期不足1秒时TTL限制为最小1秒，避免Redis TTL取整为0导致登录态提前过期问题；
+- 10、【优化】组件稳定性优化：XxlSsoBootstrap未配置LoginStore时启动快速失败，stop容错；JedisTool的start/stop支持幂等与重启；hasRole/hasPermission在loginInfo为空时返回失败，避免NPE；
+- 11、【优化】未登录请求识别统一：Ajax/JSON请求判定支持Accept、X-Requested-With与Content-Type，Servlet与WebFlux分别抽取WebTool、ReactiveWebTool，保持两端行为一致；
+- 12、【升级】升级多项依赖至较新版本；CI 构建 Actions 升级至较新版本；AntPathMatcher升级，提升路径匹配效率；
+
+### v2.5.1 Release Notes [ING]
 
 
 ### TODO LIST
 - 1、增强用户增强安全性：登陆用户数据中，新增客户端信息如ip、ua等，防止token被窃取；
 - 2、认证中心与接入端交互数据加密，临时AccessToken阅后即焚，增强安全性；
 - 3、CAS认证中心，支持维护客户端应用；防止跳转非法第三方导致登陆信息泄露；
-- 4、集成网关支持；集成WebFlux, Spring-Cloud-Gateway等；
+- 4、集成 Spring-Cloud-Gateway，并提供接入示例；（支持 interceptor、filter、webflux、gateway）
 - 5、分组隔离：分组内共享登陆状态，分组之间登录态隔离；
   - 租户：store数据，前后端key 隔离；
   - 多端：隔离登陆态，map存多token（用户最长有效期，map维护本次有效期）；
@@ -922,6 +956,7 @@ Response<String> result = XxlSsoHelper.hasPermission(LoginInfo loginInfo, String
     - client：统一身份管控客户端。sso接入；用户登陆、权限检验。
     - core：依赖；
     - sample：示例。
+- 7、【ING】增强用户增强安全性：登陆用户数据中，新增客户端信息如ip、ua等，防止token被窃取；
 
 
 ## 六、其他
